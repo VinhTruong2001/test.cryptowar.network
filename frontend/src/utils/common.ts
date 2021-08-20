@@ -8,7 +8,7 @@ BigNumber.config({ EXPONENTIAL_AT: 100 });
 export const apiUrl = (url: string) => `${process.env.VUE_APP_API_URL || 'https://api.cryptoblades.io'}/${url}`;
 export const defaultOptions = {
   headers :{
-    authorization: `Secret ${process.env.API_SECRET}`
+    authorization: `Secret ${process.env.GAME_SECRET}`
   }
 };
 export const getCurrentGasPrices = async () => {
