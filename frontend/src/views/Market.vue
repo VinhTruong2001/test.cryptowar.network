@@ -1258,7 +1258,7 @@ export default Vue.extend({
       };
 
       url.search = new URLSearchParams(params).toString();
-
+      console.log({defaultOptions});
       const weaponsData = await fetch(url.toString(),defaultOptions);
       const weapons = await weaponsData.json();
 
