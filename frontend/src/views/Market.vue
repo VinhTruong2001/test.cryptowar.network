@@ -1335,6 +1335,7 @@ export default Vue.extend({
       });
       this.searchResultsOwned = nftSeller === this.defaultAccount;
       const url = new URL('https://api.cryptoblades.io/static/wallet/banned/' + nftSeller);
+      console.log({defaultOptions});
       const data = await fetch(url.toString(),defaultOptions);
       const banned = await data.json();
       if(banned.banned) {
