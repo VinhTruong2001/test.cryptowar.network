@@ -672,7 +672,7 @@ import { CharacterTransactionHistoryData, ICharacterHistory,
   IWeaponHistory, WeaponTransactionHistoryData,
   IShieldHistory, ShieldTransactionHistoryData } from '@/interfaces/History';
 import { getShieldNameFromSeed } from '@/shield-name';
-import { fromWeiEther, apiUrl } from '../utils/common';
+import { fromWeiEther, apiUrl, defaultOptions } from '../utils/common';
 import NftList, { NftIdType } from '@/components/smart/NftList.vue';
 import { getCleanName } from '../rename-censor';
 
@@ -1182,7 +1182,7 @@ export default Vue.extend({
 
       url.search = new URLSearchParams(params).toString();
 
-      const charactersData = await fetch(url.toString());
+      const charactersData = await fetch(url.toString(),defaultOptions);
       const characters = await charactersData.json();
 
       this.allListingsAmount = characters.page.total;
@@ -1259,7 +1259,7 @@ export default Vue.extend({
 
       url.search = new URLSearchParams(params).toString();
 
-      const weaponsData = await fetch(url.toString());
+      const weaponsData = await fetch(url.toString(),defaultOptions);
       const weapons = await weaponsData.json();
 
       this.allListingsAmount = weapons.page.total;
@@ -1317,7 +1317,7 @@ export default Vue.extend({
 
       url.search = new URLSearchParams(params).toString();
 
-      const shieldsData = await fetch(url.toString());
+      const shieldsData = await fetch(url.toString(),defaultOptions);
       const shields = await shieldsData.json();
 
       this.allListingsAmount = shields.page.total;
@@ -1335,7 +1335,7 @@ export default Vue.extend({
       });
       this.searchResultsOwned = nftSeller === this.defaultAccount;
       const url = new URL('https://api.cryptoblades.io/static/wallet/banned/' + nftSeller);
-      const data = await fetch(url.toString());
+      const data = await fetch(url.toString(),defaultOptions);
       const banned = await data.json();
       if(banned.banned) {
         (this as any).$dialog.notify.error('Item not available!');
@@ -1443,7 +1443,7 @@ export default Vue.extend({
 
       url.search = new URLSearchParams(params).toString();
 
-      const charactersData = await fetch(url.toString());
+      const charactersData = await fetch(url.toString(),defaultOptions);
       const characters = await charactersData.json();
       return characters.idResults;
     },
@@ -1464,7 +1464,7 @@ export default Vue.extend({
 
       url.search = new URLSearchParams(params).toString();
 
-      const weaponsData = await fetch(url.toString());
+      const weaponsData = await fetch(url.toString(),defaultOptions);
       const weapons = await weaponsData.json();
       return weapons.idResults;
     },
@@ -1483,7 +1483,7 @@ export default Vue.extend({
 
       url.search = new URLSearchParams(params).toString();
 
-      const shieldsData = await fetch(url.toString());
+      const shieldsData = await fetch(url.toString(),defaultOptions);
       const shields = await shieldsData.json();
       return shields.idResults;
     },
@@ -1491,7 +1491,7 @@ export default Vue.extend({
     async searchItemsSoldBySeller(sellerAddress: string): Promise<any[]>{
       const url = new URL(apiUrl(`static/market/transactions/${sellerAddress}`));
 
-      const weaponsData = await fetch(url.toString());
+      const weaponsData = await fetch(url.toString(),defaultOptions);
       const weapons = await weaponsData.json();
       return weapons.results;
     },

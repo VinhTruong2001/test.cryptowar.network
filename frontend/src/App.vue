@@ -72,7 +72,7 @@ import BigButton from './components/BigButton.vue';
 import SmallButton from './components/SmallButton.vue';
 import NavBar from './components/NavBar.vue';
 import CharacterBar from './components/CharacterBar.vue';
-import { apiUrl } from './utils/common';
+import { apiUrl, defaultOptions } from './utils/common';
 
 Vue.directive('visible', (el, bind) => {
   el.style.visibility = bind.value ? 'visible' : 'hidden';
@@ -314,7 +314,7 @@ export default {
     },
 
     async checkNotifications() {
-      const response = await fetch(apiUrl('static/notifications'));
+      const response = await fetch(apiUrl('static/notifications'),defaultOptions);
       const notifications = await response.json();
 
       const lastHash = localStorage.getItem('lastnotification');

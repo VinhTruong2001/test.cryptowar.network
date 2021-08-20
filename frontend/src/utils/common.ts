@@ -6,7 +6,11 @@ BigNumber.config({ ROUNDING_MODE: BigNumber.ROUND_DOWN });
 BigNumber.config({ EXPONENTIAL_AT: 100 });
 
 export const apiUrl = (url: string) => `${process.env.VUE_APP_API_URL || 'https://api.cryptoblades.io'}/${url}`;
-
+export const defaultOptions = {
+  headers :{
+    authorization: `Secret ${process.env.API_SECRET}`
+  }
+};
 export const getCurrentGasPrices = async () => {
   const response = await axios.get('https://www.gasnow.org/api/v3/gas/price');
   return {

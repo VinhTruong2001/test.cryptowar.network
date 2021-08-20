@@ -36,7 +36,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { apiUrl } from '../utils/common';
+import { apiUrl, defaultOptions } from '../utils/common';
 
 export default {
   data() {
@@ -48,7 +48,7 @@ export default {
 
   async created() {
     this.waitingLeaderboardOutcome = true;
-    const leaderboardData = await fetch(apiUrl('static/leaderboard'));
+    const leaderboardData = await fetch(apiUrl('static/leaderboard'),defaultOptions);
     const leaderboards = await leaderboardData.json();
 
     this.leaderboards = leaderboards.leaderboard;
