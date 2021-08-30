@@ -12,8 +12,12 @@ contract xBlade is ERC20PausableUpgradeable, OwnableUpgradeable {
     mapping(address => bool) tokenBlacklist;
     mapping(address => bool) private _sellAddresses;
     mapping(address => bool) private _exceptionAddresses;
+    mapping(address => uint256) private _nextClaimTime;
     uint256 public sellFeeRate;
     address public feeAddress;
+    bool public canClaim;
+    uint256 public rewardCycleBlock;
+    address public stakerAddress;
 
     event Blacklist(address indexed blackListed, bool value);
     event Mint(address indexed from, address indexed to, uint256 value);
@@ -22,6 +26,17 @@ contract xBlade is ERC20PausableUpgradeable, OwnableUpgradeable {
     event AddSellAddress(address sellAddress);
     event RemoveSellAddress(address sellAddress);
     event UpdateExceptionAddress(address exceptionAddress);
+    event UpdateNextClaimTime(address account, uint256 timestamp);
+
+    modifier canClaimReward() {
+        require(canClaim, "Cannot claim when canClaim is paused");
+        _;
+    }
+
+    modifier onlyStaker() {
+        require(msg.sender == stakerAddress, "Only staker address");
+        _;
+    }
 
     function initialize(address owner_) public initializer {
         ERC20Upgradeable.__ERC20_init("xBlade", "xBlade");
@@ -29,6 +44,8 @@ contract xBlade is ERC20PausableUpgradeable, OwnableUpgradeable {
         ERC20PausableUpgradeable.__ERC20Pausable_init();
         feeAddress = owner_;
         sellFeeRate = 8;
+        canClaim = false;
+        rewardCycleBlock = 7 days;
         _mint(address(this), INITIAL_SUPPLY);
         _approve(address(this), msg.sender, totalSupply());
     }
@@ -54,7 +71,7 @@ contract xBlade is ERC20PausableUpgradeable, OwnableUpgradeable {
         return super.transfer(_to, amount);
     }
 
-    function totalSupply() override public view returns(uint256){
+    function totalSupply() public view override returns (uint256) {
         return super.totalSupply();
     }
 
@@ -160,6 +177,21 @@ contract xBlade is ERC20PausableUpgradeable, OwnableUpgradeable {
 
     function isExceptionAddress(address account) public view returns (bool) {
         return _exceptionAddresses[account];
+    }
+
+    function isAvailableToClaim(address account) public view returns (bool) {
+        if (_nextClaimTime[account] == 0) {
+            return true;
+        }
+        return _nextClaimTime[account] < block.timestamp;
+    }
+
+    function setNextAvailableClaimTime(address account) public onlyStaker() {
+        _nextClaimTime[account] = block.timestamp + rewardCycleBlock;
+    }
+
+    function setStakerAddress(address account) public onlyOwner(){
+        stakerAddress = account;
     }
 
     function getValuesWithSellRate(
