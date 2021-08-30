@@ -20,7 +20,7 @@ contract Characters is Initializable, ERC721Upgradeable, AccessControlUpgradeabl
     uint256 public constant TRANSFER_COOLDOWN = 1 days;
 
     function initialize () public initializer {
-        __ERC721_init("CryptoBlades character", "CBC");
+        __ERC721_init("CryptoWars Character", "CWC");
         __AccessControl_init_unchained();
 
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);

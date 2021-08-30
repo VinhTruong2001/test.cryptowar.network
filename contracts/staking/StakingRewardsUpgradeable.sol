@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/math/Math.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 
-import "../cryptoblades.sol";
+import "../CryptoWars.sol";
 
 // Inheritance
 import "./interfaces/IStakingRewards.sol";
@@ -45,7 +45,7 @@ contract StakingRewardsUpgradeable is
     mapping(address => uint256) private _stakeTimestamp;
 
     // used only by the SKILL-for-SKILL staking contract
-    CryptoBlades internal __game;
+    CryptoWars internal __game;
 
     uint256 public override minimumStakeAmount;
 

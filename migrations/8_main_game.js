@@ -5,20 +5,20 @@ const BasicPriceOracle = artifacts.require("BasicPriceOracle");
 const DummyRandoms = artifacts.require("DummyRandoms");
 const ChainlinkRandoms = artifacts.require("ChainlinkRandoms");
 
-const SkillToken = artifacts.require("SkillToken");
+const xBlade = artifacts.require("xBlade");
 const IERC20 = artifacts.require("IERC20");
 const Characters = artifacts.require("Characters");
 const Weapons = artifacts.require("Weapons");
-const CryptoBlades = artifacts.require("CryptoBlades");
+const CryptoWars = artifacts.require("CryptoWars");
 
 const RaidBasic = artifacts.require("RaidBasic");
 
 module.exports = async function (deployer, network) {
-  let randoms, skillToken;
+  let randoms, xBladeToken;
   if (network === 'development' || network === 'development-fork') {
     randoms = await deployProxy(DummyRandoms, [], { deployer });
 
-    skillToken = await SkillToken.deployed();
+    xBladeToken = await xBlade.deployed();
   }
   else if (network === 'bsctestnet' || network === 'bsctestnet-fork') {
     const linkToken = '0x84b9B910527Ad5C03A9Ca831909E21e236EA7b06';
@@ -29,15 +29,15 @@ module.exports = async function (deployer, network) {
     await deployer.deploy(ChainlinkRandoms, vrfCoordinator, linkToken, keyHash, fee);
     randoms = await ChainlinkRandoms.deployed();
 
-    skillToken = await SkillToken.deployed();
+    xBladeToken = await xBlade.deployed();
   }
   else if (network === 'bscmainnet' || network === 'bscmainnet-fork') {
     randoms = await ChainlinkRandoms.deployed();
 
-    skillToken = await IERC20.at('0x154a9f9cbd3449ad22fdae23044319d6ef2a1fab');
+    xBladeToken = await IERC20.at('0x154a9f9cbd3449ad22fdae23044319d6ef2a1fab');
   }
 
-  assert(skillToken != null, 'Expected skillToken to be set to a contract');
+  assert(xBladeToken != null, 'Expected xBlade to be set to a contract');
   assert(randoms != null, 'Expected random to be set to a contract');
 
   const priceOracle = await deployProxy(BasicPriceOracle, [], { deployer });
@@ -46,7 +46,7 @@ module.exports = async function (deployer, network) {
 
   const weps = await deployProxy(Weapons, [], { deployer });
 
-  const game = await deployProxy(CryptoBlades, [skillToken.address, charas.address, weps.address, priceOracle.address, randoms.address], { deployer });
+  const game = await deployProxy(CryptoWars, [xBladeToken.address, charas.address, weps.address, priceOracle.address, randoms.address], { deployer });
 
   const charas_GAME_ADMIN = await charas.GAME_ADMIN();
   await charas.grantRole(charas_GAME_ADMIN, game.address);
