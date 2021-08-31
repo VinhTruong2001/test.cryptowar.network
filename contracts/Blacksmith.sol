@@ -6,7 +6,7 @@ import "./interfaces/IRandoms.sol";
 import "./shields.sol";
 import "./Consumables.sol";
 import "./weapons.sol";
-import "./cryptoblades.sol";
+import "./CryptoWars.sol";
 
 contract Blacksmith is Initializable, AccessControlUpgradeable {
     /* ========== CONSTANTS ========== */
@@ -30,7 +30,7 @@ contract Blacksmith is Initializable, AccessControlUpgradeable {
     mapping(address => uint32) public tickets;
 
     Shields public shields;
-    CryptoBlades public game;
+    CryptoWars public game;
 
     // keys: ITEM_ constant
     mapping(uint256 => address) public itemAddresses;
@@ -55,7 +55,7 @@ contract Blacksmith is Initializable, AccessControlUpgradeable {
         randoms = _newRandoms;
     }
 
-    function migrateTo_61c10da(Shields _shields, CryptoBlades _game) external {
+    function migrateTo_61c10da(Shields _shields, CryptoWars _game) external {
         require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "Not admin");
 
         shields = _shields;
@@ -98,7 +98,7 @@ contract Blacksmith is Initializable, AccessControlUpgradeable {
     //     for (uint256 i = 0; i < _num; i++) {
     //         weapons.mint(
     //             msg.sender,
-    //             // TODO: Do the thing we do in cryptoblades.sol to "lock in" the user into a given blockhash
+    //             // TODO: Do the thing we do in CryptoWars.sol to "lock in" the user into a given blockhash
     //         );
     //     }
     // }
@@ -140,7 +140,7 @@ contract Blacksmith is Initializable, AccessControlUpgradeable {
     }
 
     /* ========== Character Rename ========== */
-    
+
     function setCharacterRenamePrice(uint256 newPrice) external isAdmin {
         require(newPrice > 0, 'invalid price');
         itemFlatPrices[ITEM_CHARACTER_RENAME] = newPrice;
@@ -155,13 +155,13 @@ contract Blacksmith is Initializable, AccessControlUpgradeable {
         game.payContractTokenOnly(msg.sender, itemFlatPrices[ITEM_CHARACTER_RENAME]);
         Consumables(itemAddresses[ITEM_CHARACTER_RENAME]).giveItem(msg.sender, 1);
     }
-    
+
     function purchaseCharacterRenameTagDeal(uint256 paying) public { // 4 for the price of 3
         require(paying == itemFlatPrices[ITEM_CHARACTER_RENAME] * 3, 'Invalid price');
         game.payContractTokenOnly(msg.sender, itemFlatPrices[ITEM_CHARACTER_RENAME] * 3);
         Consumables(itemAddresses[ITEM_CHARACTER_RENAME]).giveItem(msg.sender, 4);
     }
-    
+
     /* ========== Weapon Rename ========== */
 
     function setWeaponRenamePrice(uint256 newPrice) external isAdmin {

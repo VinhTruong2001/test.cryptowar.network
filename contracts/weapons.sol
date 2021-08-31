@@ -17,7 +17,7 @@ contract Weapons is Initializable, ERC721Upgradeable, AccessControlUpgradeable {
     bytes32 public constant RECEIVE_DOES_NOT_SET_TRANSFER_TIMESTAMP = keccak256("RECEIVE_DOES_NOT_SET_TRANSFER_TIMESTAMP");
 
     function initialize () public initializer {
-        __ERC721_init("CryptoBlades weapon", "CBW");
+        __ERC721_init("CryptoWars weapon", "CWW");
         __AccessControl_init_unchained();
 
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
@@ -51,7 +51,7 @@ contract Weapons is Initializable, ERC721Upgradeable, AccessControlUpgradeable {
         // Hence, we keep registering the interface despite not actually implementing the interface.
         _registerInterface(0xe62e6974); // TransferCooldownableInterfaceId.interfaceId()
     }
-    
+
     function migrateTo_surprise(Promos _promos) public {
         require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "Not admin");
 
@@ -627,7 +627,7 @@ contract Weapons is Initializable, ERC721Upgradeable, AccessControlUpgradeable {
         else {
             durabilityTimestamp[id] = uint64(durabilityTimestamp[id] + drainTime);
         }
-        
+
         Weapon storage wep = tokens[id];
         return (
             oneFrac.add(powerMultPerPointBasic.mul(

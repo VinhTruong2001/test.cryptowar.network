@@ -16,7 +16,7 @@ contract Shields is Initializable, ERC721Upgradeable, AccessControlUpgradeable {
     bytes32 public constant GAME_ADMIN = keccak256("GAME_ADMIN");
 
     function initialize () public initializer {
-        __ERC721_init("CryptoBlades shield", "CBS");
+        __ERC721_init("CryptoWars shield", "CBS");
         __AccessControl_init_unchained();
 
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
@@ -380,7 +380,7 @@ contract Shields is Initializable, ERC721Upgradeable, AccessControlUpgradeable {
         else {
             durabilityTimestamp[id] = uint64(durabilityTimestamp[id] + drainTime);
         }
-        
+
         Shield storage shd = tokens[id];
         return (
             shieldBaseMultiplier.add(defenseMultPerPointBasic.mul(
@@ -438,7 +438,7 @@ contract Shields is Initializable, ERC721Upgradeable, AccessControlUpgradeable {
     function getDurabilityMaxWait() public pure returns (uint64) {
         return uint64(maxDurability * secondsPerDurability);
     }
-    
+
     function _beforeTokenTransfer(address from, address to, uint256 tokenId) internal override {
         require(promos.getBit(from, 4) == false && promos.getBit(to, 4) == false);
     }

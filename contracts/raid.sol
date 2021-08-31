@@ -2,7 +2,7 @@ pragma solidity ^0.6.0;
 
 import "@openzeppelin/contracts-upgradeable/proxy/Initializable.sol";
 import "./multiAccessUpgradeable.sol";
-import "./cryptoblades.sol";
+import "./CryptoWars.sol";
 import "./characters.sol";
 import "./weapons.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
@@ -15,7 +15,7 @@ abstract contract Raid is Initializable, MultiAccessUpgradeable {
     bool internal completed;
     uint256 internal expectedFinishTime; // not a guarantee since we don't automate this (atm)
 
-    CryptoBlades internal game;
+    CryptoWars internal game;
     Characters internal characters;
     Weapons internal weapons;
 
@@ -36,7 +36,7 @@ abstract contract Raid is Initializable, MultiAccessUpgradeable {
         MultiAccessUpgradeable.initialize();
 
         grantAccess(gameContract);
-        game = CryptoBlades(gameContract);
+        game = CryptoWars(gameContract);
         // maybe just use extra params for NFT addresses?
         characters = Characters(game.characters());
         weapons = Weapons(game.weapons());

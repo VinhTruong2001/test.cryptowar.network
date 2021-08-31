@@ -2,18 +2,18 @@ pragma solidity ^0.6.2;
 
 import "./staking/StakingRewardsUpgradeable.sol";
 import "./interfaces/IStakeFromGame.sol";
-import "./cryptoblades.sol";
+import "./CryptoWars.sol";
 
 contract SkillStakingRewardsUpgradeable is IStakeFromGame, StakingRewardsUpgradeable {
     /* ========== VIEWS ========== */
 
-    function game() external view returns (CryptoBlades) {
+    function game() external view returns (CryptoWars) {
         return __game;
     }
 
     /* ========== RESTRICTED FUNCTIONS ========== */
 
-    function migrateTo_23b3a8b(CryptoBlades _game) external onlyOwner {
+    function migrateTo_23b3a8b(CryptoWars _game) external onlyOwner {
         __game = _game;
     }
 

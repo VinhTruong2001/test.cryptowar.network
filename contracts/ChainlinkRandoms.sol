@@ -16,7 +16,7 @@ struct SeedState {
 contract ChainlinkRandoms is IRandoms, Pausable, AccessControl, VRFConsumerBase {
     using SafeERC20 for IERC20;
 
-    uint256 constant VRF_MAGIC_SEED = uint256(keccak256("CryptoBlades"));
+    uint256 constant VRF_MAGIC_SEED = uint256(keccak256("CryptoWars"));
 
     bytes32 public constant RANDOMNESS_REQUESTER = keccak256("RANDOMNESS_REQUESTER");
 

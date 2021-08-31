@@ -1,7 +1,7 @@
 const util = require("util");
 const fs = require("fs");
 
-const SkillToken = artifacts.require("SkillToken");
+const xBlade = artifacts.require("xBlade");
 const ExperimentToken = artifacts.require("ExperimentToken");
 const ExperimentToken2 = artifacts.require("ExperimentToken2");
 
@@ -15,8 +15,8 @@ module.exports = async function (deployer, network, accounts) {
     network === "bsctestnet-fork"
   ) {
     // tokens
-    await deployer.deploy(SkillToken);
-    const token = await SkillToken.deployed();
+    // await deployer.deploy(SkillToken);
+    const token = await xBlade.deployed();
 
     await deployer.deploy(ExperimentToken);
     const expToken = await ExperimentToken.deployed();
