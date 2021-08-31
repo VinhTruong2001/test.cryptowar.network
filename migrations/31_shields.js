@@ -17,6 +17,7 @@ module.exports = async function (deployer, network, accounts) {
 
   const shields_GAME_ADMIN = await shields.GAME_ADMIN();
   await shields.grantRole(shields_GAME_ADMIN, blacksmith.address);
+  await shields.migrateTo_surprise(promos.address);
 
   const game_GAME_ADMIN = await game.GAME_ADMIN();
   await game.grantRole(game_GAME_ADMIN, blacksmith.address);

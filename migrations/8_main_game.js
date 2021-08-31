@@ -63,4 +63,7 @@ module.exports = async function (deployer, network) {
 
   const GAME_ADMIN = await game.GAME_ADMIN();
   await game.grantRole(GAME_ADMIN, raid.address);
+
+  // Migrations for save fee
+  await game.migrateTo_801f279();
 };
