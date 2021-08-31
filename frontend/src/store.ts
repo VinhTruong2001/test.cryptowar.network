@@ -879,7 +879,7 @@ export function createStore(web3: Web3) {
           subscriptions.push(
             state
               .contracts()
-              .CryptoBlades!.events.FightOutcome(
+              .CryptoWars!.events.FightOutcome(
               { filter: { owner: state.defaultAccount } },
               async (err: Error, data: any) => {
                 if (err) {
@@ -898,7 +898,7 @@ export function createStore(web3: Web3) {
           subscriptions.push(
             state
               .contracts()
-              .CryptoBlades!.events.InGameOnlyFundsGiven(
+              .CryptoWars!.events.InGameOnlyFundsGiven(
               { filter: { to: state.defaultAccount } },
               async (err: Error, data: any) => {
                 if (err) {
@@ -1019,11 +1019,11 @@ export function createStore(web3: Web3) {
         ] = await Promise.all([
           state
             .contracts()
-            .CryptoBlades!.methods.getMyCharacters()
+            .CryptoWars!.methods.getMyCharacters()
             .call(defaultCallOptions(state)),
           state
             .contracts()
-            .CryptoBlades!.methods.getMyWeapons()
+            .CryptoWars!.methods.getMyWeapons()
             .call(defaultCallOptions(state)),
           state
             .contracts()
@@ -1063,7 +1063,7 @@ export function createStore(web3: Web3) {
 
         const ownedWeaponIds = await state
           .contracts()
-          .CryptoBlades!.methods.getMyWeapons()
+          .CryptoWars!.methods.getMyWeapons()
           .call(defaultCallOptions(state));
         commit('updateUserDetails', {
           ownedWeaponIds: Array.from(ownedWeaponIds)
@@ -1076,7 +1076,7 @@ export function createStore(web3: Web3) {
 
         const ownedCharacterIds = await state
           .contracts()
-          .CryptoBlades!.methods.getMyCharacters()
+          .CryptoWars!.methods.getMyCharacters()
           .call(defaultCallOptions(state));
         commit('updateUserDetails', {
           ownedCharacterIds: Array.from(ownedCharacterIds)
@@ -1132,7 +1132,7 @@ export function createStore(web3: Web3) {
       },
 
       async fetchInGameOnlyFunds({ state, commit }) {
-        const { CryptoBlades } = state.contracts();
+        const { CryptoWars: CryptoBlades } = state.contracts();
         if (!CryptoBlades || !state.defaultAccount) return;
 
         const inGameOnlyFunds = await CryptoBlades.methods
@@ -1148,7 +1148,7 @@ export function createStore(web3: Web3) {
 
         await state
           .contracts()
-          .CryptoBlades!.methods.recoverSkill(skillToAdd)
+          .CryptoWars!.methods.recoverSkill(skillToAdd)
           .send({
             from: state.defaultAccount
           });
@@ -1283,7 +1283,7 @@ export function createStore(web3: Web3) {
         const [ownedWeaponIds] = await Promise.all([
           state
             .contracts()
-            .CryptoBlades!.methods.getMyWeapons()
+            .CryptoWars!.methods.getMyWeapons()
             .call(defaultCallOptions(state))
         ]);
 
@@ -1310,7 +1310,7 @@ export function createStore(web3: Web3) {
         const [ownedWeaponIds] = await Promise.all([
           state
             .contracts()
-            .CryptoBlades!.methods.getMyWeapons()
+            .CryptoWars!.methods.getMyWeapons()
             .call(defaultCallOptions(state))
         ]);
 
@@ -1342,7 +1342,7 @@ export function createStore(web3: Web3) {
         const [ownedCharacterIds] = await Promise.all([
           state
             .contracts()
-            .CryptoBlades!.methods.getMyCharacters()
+            .CryptoWars!.methods.getMyCharacters()
             .call(defaultCallOptions(state))
         ]);
 
@@ -1368,7 +1368,7 @@ export function createStore(web3: Web3) {
         const [ownedCharacterIds] = await Promise.all([
           state
             .contracts()
-            .CryptoBlades!.methods.getMyCharacters()
+            .CryptoWars!.methods.getMyCharacters()
             .call(defaultCallOptions(state))
         ]);
 
@@ -1402,7 +1402,7 @@ export function createStore(web3: Web3) {
         if (featureFlagStakeOnly || !state.defaultAccount) return;
 
         await approveFee(
-          state.contracts().CryptoBlades!,
+          state.contracts().CryptoWars!,
           state.contracts().SkillToken,
           state.defaultAccount,
           state.skillRewards,
@@ -1413,7 +1413,7 @@ export function createStore(web3: Web3) {
 
         await state
           .contracts()
-          .CryptoBlades!.methods.mintCharacter()
+          .CryptoWars!.methods.mintCharacter()
           .send(defaultCallOptions(state));
 
         await Promise.all([
@@ -1424,7 +1424,7 @@ export function createStore(web3: Web3) {
       },
 
       async mintWeaponN({ state, dispatch }, { num }) {
-        const { CryptoBlades, SkillToken, Weapons } = state.contracts();
+        const { CryptoWars: CryptoBlades, SkillToken, Weapons } = state.contracts();
         if (!CryptoBlades || !SkillToken || !Weapons || !state.defaultAccount)
           return;
 
@@ -1452,7 +1452,7 @@ export function createStore(web3: Web3) {
       },
 
       async mintWeapon({ state, dispatch }) {
-        const { CryptoBlades, SkillToken, Weapons } = state.contracts();
+        const { CryptoWars: CryptoBlades, SkillToken, Weapons } = state.contracts();
         if (!CryptoBlades || !SkillToken || !Weapons || !state.defaultAccount)
           return;
 
@@ -1490,7 +1490,7 @@ export function createStore(web3: Web3) {
           return;
 
         await approveFee(
-          state.contracts().CryptoBlades!,
+          state.contracts().CryptoWars!,
           state.contracts().SkillToken,
           state.defaultAccount,
           state.skillRewards,
@@ -1501,7 +1501,7 @@ export function createStore(web3: Web3) {
 
         await state
           .contracts()
-          .CryptoBlades!.methods.reforgeWeapon(reforgeWeaponId, burnWeaponId)
+          .CryptoWars!.methods.reforgeWeapon(reforgeWeaponId, burnWeaponId)
           .send({
             from: state.defaultAccount
           });
@@ -1525,7 +1525,7 @@ export function createStore(web3: Web3) {
           return;
 
         await approveFee(
-          state.contracts().CryptoBlades!,
+          state.contracts().CryptoWars!,
           state.contracts().SkillToken,
           state.defaultAccount,
           state.skillRewards,
@@ -1536,7 +1536,7 @@ export function createStore(web3: Web3) {
 
         await state
           .contracts()
-          .CryptoBlades!.methods.reforgeWeaponWithDust(
+          .CryptoWars!.methods.reforgeWeaponWithDust(
           reforgeWeaponId,
           lesserDust,
           greaterDust,
@@ -1563,7 +1563,7 @@ export function createStore(web3: Web3) {
           return;
 
         await approveFee(
-          state.contracts().CryptoBlades!,
+          state.contracts().CryptoWars!,
           state.contracts().SkillToken,
           state.defaultAccount,
           state.skillRewards,
@@ -1574,7 +1574,7 @@ export function createStore(web3: Web3) {
 
         await state
           .contracts()
-          .CryptoBlades!.methods.burnWeapon(burnWeaponId)
+          .CryptoWars!.methods.burnWeapon(burnWeaponId)
           .send({
             from: state.defaultAccount
           });
@@ -1596,7 +1596,7 @@ export function createStore(web3: Web3) {
           return;
 
         await approveFee(
-          state.contracts().CryptoBlades!,
+          state.contracts().CryptoWars!,
           state.contracts().SkillToken,
           state.defaultAccount,
           state.skillRewards,
@@ -1608,7 +1608,7 @@ export function createStore(web3: Web3) {
 
         await state
           .contracts()
-          .CryptoBlades!.methods.burnWeapons(burnWeaponIds)
+          .CryptoWars!.methods.burnWeapons(burnWeaponIds)
           .send({
             from: state.defaultAccount
           });
@@ -1631,7 +1631,7 @@ export function createStore(web3: Web3) {
 
         const targets = await state
           .contracts()
-          .CryptoBlades!.methods.getTargets(characterId, weaponId)
+          .CryptoWars!.methods.getTargets(characterId, weaponId)
           .call(defaultCallOptions(state));
 
         commit('updateTargets', {
@@ -1649,7 +1649,7 @@ export function createStore(web3: Web3) {
 
         const res = await state
           .contracts()
-          .CryptoBlades!.methods.fight(
+          .CryptoWars!.methods.fight(
           characterId,
           weaponId,
           targetString,
@@ -1841,7 +1841,7 @@ export function createStore(web3: Web3) {
       ) {
         if (stakeType !== stakeTypeThatCanHaveUnclaimedRewardsStakedTo) return;
 
-        const { CryptoBlades } = state.contracts();
+        const { CryptoWars: CryptoBlades } = state.contracts();
         if (!CryptoBlades) return;
 
         await CryptoBlades.methods
@@ -2265,7 +2265,7 @@ export function createStore(web3: Web3) {
       },
 
       async fetchFightGasOffset({ state, commit }) {
-        const { CryptoBlades } = state.contracts();
+        const { CryptoWars: CryptoBlades } = state.contracts();
         if (!CryptoBlades) return;
 
         const fightGasOffset = await getFeeInSkillFromUsd(
@@ -2279,7 +2279,7 @@ export function createStore(web3: Web3) {
       },
 
       async fetchFightBaseline({ state, commit }) {
-        const { CryptoBlades } = state.contracts();
+        const { CryptoWars: CryptoBlades } = state.contracts();
         if (!CryptoBlades) return;
 
         const fightBaseline = await getFeeInSkillFromUsd(
@@ -2293,7 +2293,7 @@ export function createStore(web3: Web3) {
       },
 
       async fetchFightRewardSkill({ state, commit, dispatch }) {
-        const { CryptoBlades } = state.contracts();
+        const { CryptoWars: CryptoBlades } = state.contracts();
         if (!CryptoBlades) return;
 
         const [skillRewards] = await Promise.all([
@@ -2313,7 +2313,7 @@ export function createStore(web3: Web3) {
       },
 
       async fetchRewardsClaimTax({ state, commit }) {
-        const { CryptoBlades } = state.contracts();
+        const { CryptoWars: CryptoBlades } = state.contracts();
         if (!CryptoBlades) return;
 
         const [rewardsClaimTax, maxRewardsClaimTax] = await Promise.all([
@@ -2332,7 +2332,7 @@ export function createStore(web3: Web3) {
       },
 
       async fetchFightRewardXp({ state, commit }) {
-        const { CryptoBlades } = state.contracts();
+        const { CryptoWars: CryptoBlades } = state.contracts();
         if (!CryptoBlades) return;
 
         const xpCharaIdPairs = await Promise.all(
@@ -2350,7 +2350,7 @@ export function createStore(web3: Web3) {
       },
 
       async purchaseShield({ state, dispatch }) {
-        const { CryptoBlades, SkillToken, Blacksmith } = state.contracts();
+        const { CryptoWars: CryptoBlades, SkillToken, Blacksmith } = state.contracts();
         if (!CryptoBlades || !Blacksmith || !state.defaultAccount) return;
 
         await SkillToken.methods
@@ -2374,7 +2374,7 @@ export function createStore(web3: Web3) {
       },
 
       async claimTokenRewards({ state, dispatch }) {
-        const { CryptoBlades } = state.contracts();
+        const { CryptoWars: CryptoBlades } = state.contracts();
         if (!CryptoBlades) return;
 
         await CryptoBlades.methods.claimTokenRewards().send({
@@ -2388,7 +2388,7 @@ export function createStore(web3: Web3) {
       },
 
       async claimXpRewards({ state, dispatch }) {
-        const { CryptoBlades } = state.contracts();
+        const { CryptoWars: CryptoBlades } = state.contracts();
         if (!CryptoBlades) return;
 
         await CryptoBlades.methods.claimXpRewards().send({
@@ -2459,7 +2459,7 @@ export function createStore(web3: Web3) {
       },
       async purchaseRenameTag({ state, dispatch }) {
         const {
-          CryptoBlades,
+          CryptoWars: CryptoBlades,
           SkillToken,
           CharacterRenameTagConsumables,
           Blacksmith
@@ -2500,7 +2500,7 @@ export function createStore(web3: Web3) {
       },
       async purchaseRenameTagDeal({ state, dispatch }) {
         const {
-          CryptoBlades,
+          CryptoWars: CryptoBlades,
           SkillToken,
           CharacterRenameTagConsumables,
           Blacksmith
@@ -2541,7 +2541,7 @@ export function createStore(web3: Web3) {
       },
       async renameCharacter({ state, dispatch }, { id, name }) {
         const {
-          CryptoBlades,
+          CryptoWars: CryptoBlades,
           SkillToken,
           CharacterRenameTagConsumables
         } = state.contracts();
@@ -2571,7 +2571,7 @@ export function createStore(web3: Web3) {
       },
       async purchaseWeaponRenameTag({ state, dispatch }) {
         const {
-          CryptoBlades,
+          CryptoWars: CryptoBlades,
           SkillToken,
           WeaponRenameTagConsumables,
           Blacksmith
@@ -2612,7 +2612,7 @@ export function createStore(web3: Web3) {
       },
       async purchaseWeaponRenameTagDeal({ state, dispatch }) {
         const {
-          CryptoBlades,
+          CryptoWars: CryptoBlades,
           SkillToken,
           WeaponRenameTagConsumables,
           Blacksmith
@@ -2653,7 +2653,7 @@ export function createStore(web3: Web3) {
       },
       async renameWeapon({ state, dispatch }, { id, name }) {
         const {
-          CryptoBlades,
+          CryptoWars: CryptoBlades,
           SkillToken,
           WeaponRenameTagConsumables
         } = state.contracts();
@@ -2683,7 +2683,7 @@ export function createStore(web3: Web3) {
       },
       async purchaseCharacterFireTraitChange({ state, dispatch }) {
         const {
-          CryptoBlades,
+          CryptoWars: CryptoBlades,
           SkillToken,
           CharacterFireTraitChangeConsumables,
           Blacksmith
@@ -2724,7 +2724,7 @@ export function createStore(web3: Web3) {
       },
       async changeCharacterTraitFire({ state, dispatch }, { id }) {
         const {
-          CryptoBlades,
+          CryptoWars: CryptoBlades,
           SkillToken,
           CharacterFireTraitChangeConsumables
         } = state.contracts();
@@ -2756,7 +2756,7 @@ export function createStore(web3: Web3) {
       },
       async purchaseCharacterEarthTraitChange({ state, dispatch }) {
         const {
-          CryptoBlades,
+          CryptoWars: CryptoBlades,
           SkillToken,
           CharacterEarthTraitChangeConsumables,
           Blacksmith
@@ -2797,7 +2797,7 @@ export function createStore(web3: Web3) {
       },
       async changeCharacterTraitEarth({ state, dispatch }, { id }) {
         const {
-          CryptoBlades,
+          CryptoWars: CryptoBlades,
           SkillToken,
           CharacterEarthTraitChangeConsumables
         } = state.contracts();
@@ -2829,7 +2829,7 @@ export function createStore(web3: Web3) {
       },
       async purchaseCharacterWaterTraitChange({ state, dispatch }) {
         const {
-          CryptoBlades,
+          CryptoWars: CryptoBlades,
           SkillToken,
           CharacterWaterTraitChangeConsumables,
           Blacksmith
@@ -2870,7 +2870,7 @@ export function createStore(web3: Web3) {
       },
       async changeCharacterTraitWater({ state, dispatch }, { id }) {
         const {
-          CryptoBlades,
+          CryptoWars: CryptoBlades,
           SkillToken,
           CharacterWaterTraitChangeConsumables
         } = state.contracts();
@@ -2902,7 +2902,7 @@ export function createStore(web3: Web3) {
       },
       async purchaseCharacterLightningTraitChange({ state, dispatch }) {
         const {
-          CryptoBlades,
+          CryptoWars: CryptoBlades,
           SkillToken,
           CharacterLightningTraitChangeConsumables,
           Blacksmith
@@ -2943,7 +2943,7 @@ export function createStore(web3: Web3) {
       },
       async changeCharacterTraitLightning({ state, dispatch }, { id }) {
         const {
-          CryptoBlades,
+          CryptoWars: CryptoBlades,
           SkillToken,
           CharacterLightningTraitChangeConsumables
         } = state.contracts();

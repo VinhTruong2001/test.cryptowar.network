@@ -11,7 +11,7 @@
           <h1 class="no-margin center-text">Rewards are available!</h1>
           <p class="center-text">You have:</p>
           <p class="center-text selectable">
-            {{ currentRewardEarned.toFixed(18) }} SKILL
+            {{ currentRewardEarned.toFixed(18) }} xBlade
           </p>
           <p class="center-text">to be claimed.</p>
           <button
@@ -138,7 +138,7 @@
             Loading...
           </span>
           <span class="gold-text" v-else-if="canStakeUnclaimedRewards">
-            Stake all of unclaimed rewards ({{ formattedSkillRewards }} SKILL)
+            Stake all of unclaimed rewards ({{ formattedSkillRewards }} xBlade)
           </span>
           <span class="gold-text" v-else>
             No unclaimed rewards to stake
@@ -218,7 +218,7 @@ export default {
     unlockTimeLeftInternal() { return this.stakeData.unlockTimeLeft; },
 
     stakingTokenName() {
-      return this.stakeType === 'skill' || this.stakeType === 'skill2' ? 'SKILL' : 'SKILL-WBNB';
+      return this.stakeType === 'skill' || this.stakeType === 'skill2' ? 'xBlade' : 'xBlade-WBNB';
     },
 
     minimumStakeTimeFormatted() {

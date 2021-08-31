@@ -14,8 +14,8 @@
         Waiting for transaction results...
       </div>
       <div class="blank-slate" v-if="userAccount === null && !has5SkillBalance">
-        In order to use the Portal, you will need at least <b>5 SKILL!</b> Please add some here:
-        <a v-bind:href="`${getExchangeUrl}`" target="_blank">Swap SKILL/BNB</a>
+        In order to use the Portal, you will need at least <b>5 xBlade!</b> Please add some here:
+        <a v-bind:href="`${getExchangeUrl}`" target="_blank">Swap xBlade/BNB</a>
       </div>
       <div class="blank-slate" v-if="userAccount === null && has5SkillBalance">
         Connect WAX wallet

@@ -50,15 +50,15 @@
     </b-modal>
     <b-modal class="centered-modal" ref="stake-suggestion-modal" title="Stake Skill"
       @ok="$router.push({ name: 'select-stake-type' })" ok-only ok-title="Go to Stake" >
-        You can avoid paying the 15% tax by staking unclaimed skill rewards for 7 days. If you stake your SKILL now, we'll give you a
-        50% bonus in-game only SKILL that you can use right away!
+        You can avoid paying the 15% tax by staking unclaimed skill rewards for 7 days. If you stake your xBlade now, we'll give you a
+        50% bonus in-game only xBlade that you can use right away!
       <a href="#" @click="claimSkill(ClaimStage.Claim)"> <br>No thanks, I'd rather {{ (this.rewardsClaimTaxAsFactorBN > 0)?"pay " +
         this.formattedTaxAmount + " in taxes and " : ""  }}forfeit my bonus </a>
     </b-modal>
     <b-modal class="centered-modal" ref="claim-confirmation-modal" title="Claim Skill" ok-title="I am sure"
       @ok="onClaimTokens()"> You are about to {{ (this.rewardsClaimTaxAsFactorBN > 0)?"pay " + formattedRewardsClaimTax +
-      " tax for early withdrawal, costing you " + this.formattedTaxAmount + " SKILL. You will also " : "" }}
-      miss out on {{formattedBonusLost}} bonus SKILL. Are you sure
+      " tax for early withdrawal, costing you " + this.formattedTaxAmount + " xBlade. You will also " : "" }}
+      miss out on {{formattedBonusLost}} bonus xBlade. Are you sure
       you wish to continue? <b>This action cannot be undone.</b>
     </b-modal>
   </div>

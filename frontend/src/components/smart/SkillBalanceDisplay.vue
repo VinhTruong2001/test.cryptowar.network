@@ -1,6 +1,6 @@
 <template>
   <div class="skill-balance-display">
-    <div size="sm" class="my-2 my-sm-0 mr-3" variant="primary" v-tooltip="'Buy SKILL'" @click="onBuySkill">
+    <div size="sm" class="my-2 my-sm-0 mr-3" variant="primary" v-tooltip="'Buy xBlade'" @click="onBuySkill">
       <!-- <i class="fa fa-plus gtag-link-others" tagname="buy_skill"></i> -->
       <img src="../../assets/addButton.png" class="add-button gtag-link-others"  tagname="buy_skill">
     </div>
@@ -58,12 +58,12 @@ export default Vue.extend({
     formattedTotalSkillBalance(): string {
       const skillBalance = fromWeiEther(Bignumber.sum(toBN(this.skillBalance), toBN(this.inGameOnlyFunds), toBN(this.skillRewards)));
 
-      return `${toBN(skillBalance).toFixed(4)} SKILL`;
+      return `${toBN(skillBalance).toFixed(4)} xBlade`;
     },
 
     formattedSkillBalance(): string {
       const skillBalance = fromWeiEther(this.skillBalance);
-      return `${toBN(skillBalance).toFixed(4)} SKILL`;
+      return `${toBN(skillBalance).toFixed(4)} xBlade`;
     },
 
     hasBnbAvailableToWithdraw(): boolean {
@@ -99,21 +99,21 @@ export default Vue.extend({
     },
     formattedInGameOnlyFunds(): string {
       const skillBalance = fromWeiEther(this.inGameOnlyFunds);
-      return `${toBN(skillBalance).toFixed(4)} SKILL`;
+      return `${toBN(skillBalance).toFixed(4)} xBlade`;
     },
     totalSkillTooltipHtml() {
       const inGameOnlyFundsBalance = fromWeiEther(this.inGameOnlyFunds);
       const skillRewards = fromWeiEther(this.skillRewards);
       const skillBalance = fromWeiEther(this.skillBalance);
 
-      let html =  toBN(skillBalance).toFixed(4) + ' SKILL';
+      let html =  toBN(skillBalance).toFixed(4) + 'xBlade';
 
       if(parseFloat(skillRewards) !== 0){
-        html += '<br>+ WITHDRAWABLE ' + toBN(skillRewards).toFixed(4) + ' SKILL';
+        html += '<br>+ WITHDRAWABLE ' + toBN(skillRewards).toFixed(4) + 'xBlade';
       }
 
       if(parseFloat(inGameOnlyFundsBalance) !== 0){
-        html += '<br>+ IN GAME ONLY ' + toBN(inGameOnlyFundsBalance).toFixed(4) + ' SKILL';
+        html += '<br>+ IN GAME ONLY ' + toBN(inGameOnlyFundsBalance).toFixed(4) + 'xBlade';
       }
 
       return html;

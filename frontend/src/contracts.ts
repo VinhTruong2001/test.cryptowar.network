@@ -1,6 +1,6 @@
 import { abi as erc20Abi } from '../../build/contracts/IERC20.json';
 
-import { networks as skillStakingRewardsNetworks } from '../../build/contracts/SkillStakingRewardsUpgradeable.json';
+import { networks as xBladeStakingRewardsNetworks } from '../../build/contracts/XBladeStakingRewardsUpgradeable.json';
 import { networks as lpStakingRewardsNetworks } from '../../build/contracts/LPStakingRewardsUpgradeable.json';
 import { networks as lp2StakingRewardsNetworks } from '../../build/contracts/LP2StakingRewardsUpgradeable.json';
 import { networks as skillTokenNetworks } from '../../build/contracts/SkillToken.json';
@@ -8,7 +8,7 @@ import { networks as lpTokenNetworks } from '../../build/contracts/ExperimentTok
 import { networks as lp2TokenNetworks } from '../../build/contracts/ExperimentToken2.json';
 import { abi as stakingRewardsAbi } from '../../build/contracts/IStakingRewards.json';
 
-import { abi as cryptoBladesAbi, networks as cryptoBladesNetworks } from '../../build/contracts/CryptoBlades.json';
+import { abi as cryptoWarsAbi, networks as cryptoWarsNetworks } from '../../build/contracts/CryptoWars.json';
 import { abi as raidAbi, networks as raidNetworks } from '../../build/contracts/RaidBasic.json';
 import { abi as charactersAbi } from '../../build/contracts/Characters.json';
 import { abi as weaponsAbi } from '../../build/contracts/Weapons.json';
@@ -51,7 +51,7 @@ type Abi = any[];
 
 const stakingContractAddressesFromBuild: Partial<Record<StakeType, Partial<StakingContractEntry>>> = {
   skill: {
-    stakingRewardsAddress: (skillStakingRewardsNetworks as Networks)[networkId]?.address,
+    stakingRewardsAddress: (xBladeStakingRewardsNetworks as Networks)[networkId]?.address,
     stakingTokenAddress: (skillTokenNetworks as Networks)[networkId]?.address
   },
   lp: {
@@ -116,9 +116,9 @@ export async function setUpContracts(web3: Web3): Promise<Contracts> {
     return stakingContracts;
   }
 
-  const cryptoBladesContractAddr = process.env.VUE_APP_CRYPTOBLADES_CONTRACT_ADDRESS || (cryptoBladesNetworks as Networks)[networkId]!.address;
+  const cryptoBladesContractAddr = process.env.VUE_APP_CRYPTOBLADES_CONTRACT_ADDRESS || (cryptoWarsNetworks as Networks)[networkId]!.address;
 
-  const CryptoBlades = new web3.eth.Contract(cryptoBladesAbi as Abi, cryptoBladesContractAddr);
+  const CryptoBlades = new web3.eth.Contract(cryptoWarsAbi as Abi, cryptoBladesContractAddr);
   const [charactersAddr, weaponsAddr, randomsAddr, blacksmithAddr] = await Promise.all([
     CryptoBlades.methods.characters().call(),
     CryptoBlades.methods.weapons().call(),
@@ -179,7 +179,7 @@ export async function setUpContracts(web3: Web3): Promise<Contracts> {
 
   return {
     ...stakingContracts,
-    CryptoBlades, Randoms, Characters, Weapons, Blacksmith, Shields, WeaponRenameTagConsumables, CharacterRenameTagConsumables,
+    CryptoWars: CryptoBlades, Randoms, Characters, Weapons, Blacksmith, Shields, WeaponRenameTagConsumables, CharacterRenameTagConsumables,
     CharacterFireTraitChangeConsumables, CharacterEarthTraitChangeConsumables, CharacterWaterTraitChangeConsumables, CharacterLightningTraitChangeConsumables,
     ...raidContracts,
     ...marketContracts,

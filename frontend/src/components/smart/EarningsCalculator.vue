@@ -44,7 +44,7 @@
                        BNB: <b-form-label class="price-input" type="number" v-model="bnbPrice" /> <span class="text-white"> ${{bnbPrice }}</span>
                     </div>
                     <div class="token-price-div">
-                     SKILL:  <b-form-label class="price-input" type="number" v-model="skillPrice" /> <span class="text-white"> ${{skillPrice }}</span>
+                     xBlade:  <b-form-label class="price-input" type="number" v-model="skillPrice" /> <span class="text-white"> ${{skillPrice }}</span>
                     </div>
                   </div>
                 </div>

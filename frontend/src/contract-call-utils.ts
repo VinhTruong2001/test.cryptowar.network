@@ -2,14 +2,14 @@ import BigNumber from 'bignumber.js';
 import { Web3JsCallOptions, Web3JsAbiCall, Web3JsSendOptions } from '../../abi-common';
 import { Contract, Contracts } from './interfaces';
 
-export type CryptoBladesAlias = NonNullable<Contracts['CryptoBlades']>;
+export type CryptoWarsAlias = NonNullable<Contracts['CryptoWars']>;
 export type NFTMarketAlias = NonNullable<Contracts['NFTMarket']>;
 
 type MethodsFunction<T extends Contract<unknown>> = (contract: T['methods']) => Web3JsAbiCall<string>;
-type CryptoBladesMethodsFunction = MethodsFunction<CryptoBladesAlias>;
+type CryptoBladesMethodsFunction = MethodsFunction<CryptoWarsAlias>;
 
 export async function getFeeInSkillFromUsdFromAnyContract<T extends Contract<unknown>>(
-  cryptoBladesContract: CryptoBladesAlias,
+  cryptoBladesContract: CryptoWarsAlias,
   feeContract: T,
   opts: Web3JsCallOptions,
   fn: MethodsFunction<T>
@@ -24,7 +24,7 @@ export async function getFeeInSkillFromUsdFromAnyContract<T extends Contract<unk
 }
 
 export async function getFeeInSkillFromUsd(
-  cryptoBladesContract: CryptoBladesAlias,
+  cryptoBladesContract: CryptoWarsAlias,
   opts: Web3JsCallOptions,
   fn: CryptoBladesMethodsFunction
 ): Promise<string> {
@@ -39,7 +39,7 @@ export async function getFeeInSkillFromUsd(
 type WithOptionalFrom<T extends { from: unknown }> = Omit<T, 'from'> & Partial<Pick<T, 'from'>>;
 
 export async function approveFeeFromAnyContract<T extends Contract<unknown>>(
-  cryptoBladesContract: CryptoBladesAlias,
+  cryptoBladesContract: CryptoWarsAlias,
   feeContract: T,
   skillToken: Contracts['SkillToken'],
   from: NonNullable<Web3JsCallOptions['from']>,
@@ -94,7 +94,7 @@ export async function approveFeeFromAnyContract<T extends Contract<unknown>>(
 }
 
 export async function approveFee(
-  cryptoBladesContract: CryptoBladesAlias,
+  cryptoBladesContract: CryptoWarsAlias,
   skillToken: Contracts['SkillToken'],
   from: NonNullable<Web3JsCallOptions['from']>,
   skillRewardsAvailable: string,

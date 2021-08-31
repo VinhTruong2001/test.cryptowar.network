@@ -50,25 +50,25 @@ interface HumanReadableDetailsForStakeType {
 
 const defaultHumanReadableDetailsForStakeTypes: Record<StakeType, HumanReadableDetailsForStakeType> = {
   skill: {
-    stakeTokenName: 'SKILL',
-    rewardTokenName: 'SKILL',
-    stakeTitle: 'SKILL for SKILL (Old)',
+    stakeTokenName: 'xBlade',
+    rewardTokenName: 'xBlade',
+    stakeTitle: 'xBlade for xBlade (Old)',
     deprecated: true
   },
   skill2: {
-    stakeTokenName: 'SKILL',
-    rewardTokenName: 'SKILL',
-    stakeTitle: 'SKILL for SKILL'
+    stakeTokenName: 'xBlade',
+    rewardTokenName: 'xBlade',
+    stakeTitle: 'xBlade for xBlade'
   },
   lp: {
-    stakeTokenName: 'SKILL-WBNB',
-    rewardTokenName: 'SKILL',
-    stakeTitle: 'SKILL-WBNB for SKILL'
+    stakeTokenName: 'xBlade-WBNB',
+    rewardTokenName: 'xBlade',
+    stakeTitle: 'xBlade-WBNB for xBlade'
   },
   lp2: {
-    stakeTokenName: 'SKILL-BNB',
-    rewardTokenName: 'SKILL',
-    stakeTitle: 'SKILL-BNB for SKILL V2'
+    stakeTokenName: 'xBlade-BNB',
+    rewardTokenName: 'xBlade',
+    stakeTitle: 'xBlade-BNB for xBlade V2'
   },
 };
 

@@ -16,7 +16,7 @@
             class="shop-button"
             @click="buyItem(nft)">
             <span class="gtag-link-others">
-              Buy ({{ nft.nftPrice }} SKILL)
+              Buy ({{ nft.nftPrice }} xBlade)
             </span>
           </b-button>
         </li>

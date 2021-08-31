@@ -15,7 +15,7 @@
           <br>
           <span class="title">Total Power</span> 69k
           <br>
-          <span class="title">Bounty</span> 10 SKILL
+          <span class="title">Bounty</span> 10 xBlade
         </div>
 
         <div class="drops">

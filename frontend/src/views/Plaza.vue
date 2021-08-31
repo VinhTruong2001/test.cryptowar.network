@@ -13,14 +13,14 @@
       </div>
       <big-button
         class="button"
-        :mainText="`Recruit character for ${recruitCost} SKILL`"
+        :mainText="`Recruit character for ${recruitCost} xBlade`"
         :disabled="!canRecruit()"
         @click="onMintCharacter"
         tagname="recruit_character"
       />
       <div v-if="formatSkill() < recruitCost" >
         <br>
-        You can buy more SKILL from <a v-bind:href="`${getExchangeUrl}`" target="_blank">here</a>.
+        You can buy more xBlade from <a v-bind:href="`${getExchangeUrl}`" target="_blank">here</a>.
       </div>
     </div>
     <div class="row mt-3" v-if="ownCharacters.length > 0">
@@ -51,7 +51,7 @@
               class="ml-auto gtag-link-others"
               @click="onMintCharacter"
               v-tooltip="'Recruit new character'" tagname="recruit_character">
-              Recruit ({{ recruitCost }} NON-IGO SKILL) <i class="fas fa-plus"></i>
+              Recruit ({{ recruitCost }} NON-IGO xBlade) <i class="fas fa-plus"></i>
             </b-button>
           </div>
 
