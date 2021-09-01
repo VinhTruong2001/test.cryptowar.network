@@ -256,7 +256,7 @@ export function createStore(web3: Web3) {
         };
       },
       getExchangeUrl() {
-        return 'https://pancakeswap.ibhagwan.workers.dev/#/swap?outputCurrency=0x9e6f470ef29157770e8ff64e565320081d9d6b2d';
+        return 'https://pancakeswap.ibhagwan.workers.dev/#/swap?outputCurrency=0x34d9f27a34376decbce17ca18b10cd850186b4f1';
       },
 
       ownCharacters(state, getters) {
