@@ -20,9 +20,9 @@
       v-if="!hideWalletWarning && !showMetamaskWarning && (errorMessage || (ownCharacters.length === 0 && skillBalance === '0' && !hasStakedBalance))"
     >
       <div class="starter-panel">
-        <img class="mini-icon-starter" src="./assets/placeholder/sword-placeholder-6.png" alt="" srcset="" />
+        <img class="mini-icon-starter" src="./assets/sword/sword-air-04.png" alt="" srcset="" />
         <span class="starter-panel-heading">{{ errorMessage || 'Get Started With CryptoBlades' }}</span>
-        <img class="mini-icon-starter" src="./assets/placeholder/sword-placeholder-6.png" alt="" srcset="" />
+        <img class="mini-icon-starter" src="./assets/sword/sword-air-04.png" alt="" srcset="" />
         <div>
           <big-button class="button mm-button" :mainText="`Configure MetaMask`" @click="configureMetaMask" />
           <big-button v-bind:class="[isConnecting ? 'disabled' : '']" class="button mm-button" :mainText="`Connect to MetaMask`" @click="connectMetamask" />

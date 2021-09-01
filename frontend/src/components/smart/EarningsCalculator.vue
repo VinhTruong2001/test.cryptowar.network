@@ -87,7 +87,7 @@
 
               <div class="calculator-weapon">
                 <span class="calculator-subheader">Weapon</span>
-                <img src="../../assets/placeholder/sword-placeholder-0.png" class="wep-placeholder">
+                <img src="../../assets/sword/sword-air-04.png" class="wep-placeholder">
                 <span>Stars</span>
                 <b-form-rating @change="refreshWeaponStats" class="stars-picker" variant="warning" v-model="starsValue" size="sm"></b-form-rating>
                 <span>Element</span>

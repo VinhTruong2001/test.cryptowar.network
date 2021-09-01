@@ -19,7 +19,7 @@ import heroWater04 from './assets/hero/hero-water-04.png';
 import { ICharacter } from './interfaces';
 
 const art = {
-  Air: [heroAir01,heroAir02,heroAir03,heroAir04],
+  Lightning: [heroAir01,heroAir02,heroAir03,heroAir04],
   Water:[heroWater01, heroWater02, heroWater03, heroWater04],
   Earth: [heroEarth01,heroEarth02,heroEarth03,heroEarth04],
   Fire: [heroFire01,heroFire02,heroFire03,heroFire04]
@@ -29,9 +29,10 @@ export function getCharacterArt(character: ICharacter) {
   if (!character) {
     return null;
   }
+  console.log(character);
   const { traitName } = character;
 
-  if (!['Air', 'Water','Earth', 'Fire'].includes(traitName)){
+  if (!['Lightning', 'Water', 'Earth', 'Fire'].includes(traitName)){
     return null;
   }
   // @ts-ignore
