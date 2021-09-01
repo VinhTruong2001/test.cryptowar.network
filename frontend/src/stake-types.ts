@@ -16,7 +16,7 @@ export interface StakingContractEntry {
 export const stakingContractsInfo: Partial<Record<StakeType, Partial<StakingContractEntry>>> = {
   skill: {
     stakingRewardsAddress: process.env.VUE_APP_SKILL_STAKING_REWARDS_CONTRACT_ADDRESS,
-    stakingTokenAddress: process.env.VUE_APP_SKILL_TOKEN_CONTRACT_ADDRESS
+    stakingTokenAddress: process.env.VUE_APP_XBLADE_TOKEN_CONTRACT_ADDRESS
   }
 };
 

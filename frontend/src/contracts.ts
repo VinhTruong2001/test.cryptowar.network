@@ -99,7 +99,7 @@ async function setUpStakingContracts(web3: Web3) {
     };
   }
 
-  const skillTokenAddress = process.env.VUE_APP_SKILL_TOKEN_CONTRACT_ADDRESS || (skillTokenNetworks as Networks)[networkId]!.address;
+  const skillTokenAddress = process.env.VUE_APP_XBLADE_TOKEN_CONTRACT_ADDRESS || (skillTokenNetworks as Networks)[networkId]!.address;
   const SkillToken = new web3.eth.Contract(erc20Abi as Abi, skillTokenAddress);
 
   return {
@@ -116,7 +116,7 @@ export async function setUpContracts(web3: Web3): Promise<Contracts> {
     return stakingContracts;
   }
 
-  const cryptoBladesContractAddr = process.env.VUE_APP_CRYPTOBLADES_CONTRACT_ADDRESS || (cryptoWarsNetworks as Networks)[networkId]!.address;
+  const cryptoBladesContractAddr = process.env.VUE_APP_CRYPTOWARS_CONTRACT_ADDRESS || (cryptoWarsNetworks as Networks)[networkId]!.address;
 
   const CryptoBlades = new web3.eth.Contract(cryptoWarsAbi as Abi, cryptoBladesContractAddr);
   const [charactersAddr, weaponsAddr, randomsAddr, blacksmithAddr] = await Promise.all([
