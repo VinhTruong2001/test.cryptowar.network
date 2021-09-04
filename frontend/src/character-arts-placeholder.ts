@@ -29,12 +29,12 @@ export function getCharacterArt(character: ICharacter) {
   if (!character) {
     return null;
   }
-  console.log(character);
+
   const { traitName } = character;
 
   if (!['Lightning', 'Water', 'Earth', 'Fire'].includes(traitName)){
     return null;
   }
   // @ts-ignore
-  return art[traitName][Number(character.trait) - 1];
+  return art[traitName][Number(character.trait)];
 }

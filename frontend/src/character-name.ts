@@ -7,7 +7,7 @@ const names: Record<string, string[]> = (characterNames as any).default || chara
 const getRandom = (rng: any, arr: string[]): string => arr[Math.floor(rng() * arr.length)];
 
 export const getCharacterNameFromSeed = (seed: number) => {
-  const rng = seedrandom(seed.toString());
+  const rng = seedrandom((seed * 5).toString());
 
   const firstKey = getRandom(rng, ['one', 'two', 'three', 'more']);
   const secondKey = getRandom(rng, ['one', 'two', 'three', 'more']);
