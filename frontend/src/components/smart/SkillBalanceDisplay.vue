@@ -2,7 +2,8 @@
   <div class="skill-balance-display">
     <div size="sm" class="my-2 my-sm-0 mr-3" variant="primary" v-tooltip="'Buy xBlade'" @click="onBuySkill">
       <!-- <i class="fa fa-plus gtag-link-others" tagname="buy_skill"></i> -->
-      <img src="../../assets/addButton.png" class="add-button gtag-link-others"  tagname="buy_skill">
+      <div class="add-button gtag-link-others" tagname="buy_skill"> BUY xBlade </div>
+      <!-- <img src="../../assets/addButton.png" class="add-button gtag-link-others"  tagname="buy_skill"> -->
     </div>
 
     <div class="balance-container">
@@ -164,8 +165,16 @@ export default Vue.extend({
   color : #BFA765;
 }
 .add-button {
-  width : 30px;
+  width : 100%;
   height: 100%;
+  border: none;
+  border-radius: 50px;
+  box-shadow: inset 0px 0px 10px 7px #fea036;
+  background: #fea036;
+  transition: all 0.3s ease-in;
+  font-weight: 600;
+  padding: 8px 16px;
+  color: #FFF;
 }
 .add-button:hover {
   cursor: pointer;

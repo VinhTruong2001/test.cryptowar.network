@@ -234,7 +234,12 @@ export default {
   background-size: 115%;
   background-color: #2e2e30cc;
   background-image: url('../../assets/cardCharacterFrame.png');
-  border: 1px solid #a28d54;
+  /* border-radius: 10px; */
+  text-align: center;
+  /* padding: 40px 20px; */
+  box-shadow: inset 0px 0px 12px 7px #9a13d2;
+  transition: all 0.3s ease-in;
+  /* border: 1px solid #9a13d2; */
   border-radius: 15px;
   padding: 0.5rem;
   cursor: pointer;
@@ -263,7 +268,8 @@ export default {
 }
 
 .character.selected {
-  box-shadow: 0 0 8px #ffd400;
+
+    box-shadow: inset 0px 0px 12px 7px #fea036;
 }
 
 .above-wrapper {

@@ -21,7 +21,7 @@
     >
       <div class="starter-panel">
         <img class="mini-icon-starter" src="./assets/sword/sword-air-04.png" alt="" srcset="" />
-        <span class="starter-panel-heading">{{ errorMessage || 'Get Started With CryptoBlades' }}</span>
+        <span class="starter-panel-heading">{{ errorMessage || 'Get Started With CryptoWars' }}</span>
         <img class="mini-icon-starter" src="./assets/sword/sword-air-04.png" alt="" srcset="" />
         <div>
           <big-button class="button mm-button" :mainText="`Configure MetaMask`" @click="configureMetaMask" />
@@ -376,7 +376,7 @@ export default {
     try {
       await this.initializeStore();
     } catch (e) {
-      this.errorMessage = 'Welcome to CryptoBlades. Here is how you can get started.';
+      this.errorMessage = 'Welcome to CryptoWars. Here is how you can get started.';
       if (e.code === 4001) {
         this.errorMessage = 'Error: MetaMask could not get permissions.';
       }
@@ -473,7 +473,7 @@ body {
 }
 
 .dark-bg-text {
-  color: #9e8a57;
+  color: #fff;
 }
 
 .body {

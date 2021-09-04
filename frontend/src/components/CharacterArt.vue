@@ -597,7 +597,7 @@ export default {
 
 .placeholder {
   max-width: 100%;
-  top: -15px;
+  top: 0;
   position: relative;
   height: 75%;
   padding-top: 0;
