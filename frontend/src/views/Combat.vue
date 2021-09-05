@@ -320,7 +320,7 @@ export default {
 
     formattedSkill(skill) {
       const skillBalance = fromWeiEther(skill, 'ether');
-      return `${toBN(skillBalance).toFixed(6)} SKILL`;
+      return `${toBN(skillBalance).toFixed(6)} xBlade`;
     },
 
     getPotentialXp(targetToFight) {
@@ -587,7 +587,7 @@ h1 {
 
 .enemy-img {
   position: relative;
-  top: -50px;
+  top: -24px;
 }
 
 @media (max-width: 1334px) {

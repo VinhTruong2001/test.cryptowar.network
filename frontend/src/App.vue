@@ -20,9 +20,9 @@
       v-if="!hideWalletWarning && !showMetamaskWarning && (errorMessage || (ownCharacters.length === 0 && skillBalance === '0' && !hasStakedBalance))"
     >
       <div class="starter-panel">
-        <img class="mini-icon-starter" src="./assets/placeholder/sword-placeholder-6.png" alt="" srcset="" />
-        <span class="starter-panel-heading">{{ errorMessage || 'Get Started With CryptoBlades' }}</span>
-        <img class="mini-icon-starter" src="./assets/placeholder/sword-placeholder-6.png" alt="" srcset="" />
+        <img class="mini-icon-starter" src="./assets/sword/sword-air-04.png" alt="" srcset="" />
+        <span class="starter-panel-heading">{{ errorMessage || 'Get Started With CryptoWars' }}</span>
+        <img class="mini-icon-starter" src="./assets/sword/sword-air-04.png" alt="" srcset="" />
         <div>
           <big-button class="button mm-button" :mainText="`Configure MetaMask`" @click="configureMetaMask" />
           <big-button v-bind:class="[isConnecting ? 'disabled' : '']" class="button mm-button" :mainText="`Connect to MetaMask`" @click="connectMetamask" />
@@ -30,17 +30,17 @@
         <div class="seperator"></div>
         <div class="instructions-list">
           <p>
-            Get started in less than 10 minutes! To recruit your first character you need {{ recruitCost }} SKILL and .001 BNB for gas. You will also need .0015
-            BNB to do your first few battles, but don't worry, you earn the battle fees back in SKILL rewards immediately!
+            To recruit your first character you need {{ recruitCost }} xBlade and .001 BNB for gas. You will also need .0015
+            BNB to do your first few battles, but don't worry, you earn the battle fees back in xBlade rewards immediately!
           </p>
           <ul class="unstyled-list">
             <li>1. Buying BNB with fiat: <a href="https://youtu.be/6-sUDUE2RPA" target="_blank" rel="noopener noreferrer">Watch Video</a></li>
             <li>
-              2. Once you have BNB, go to ApeSwap to obtain SKILL tokens:<br />
-              <a v-bind:href="`${getExchangeUrl}`" target="_blank">Trade SKILL/BNB</a>
+              2. Once you have BNB, go to ApeSwap to obtain xBlade tokens:<br />
+              <a v-bind:href="`${getExchangeUrl}`" target="_blank">Trade xBlade/BNB</a>
             </li>
             <li>
-              3. Follow this tutorial to swap BNB for SKILL: <a href="https://youtu.be/_zitrvJ7Hl4" target="_blank" rel="noopener noreferrer">Watch Video</a>
+              3. Follow this tutorial to swap BNB for xBlade: <a href="https://youtu.be/_zitrvJ7Hl4" target="_blank" rel="noopener noreferrer">Watch Video</a>
             </li>
             <li>
               4. That's it! Now you can create your first character: (<a href="https://youtu.be/ZcNq0jCa28c" target="_blank" rel="noopener noreferrer"
@@ -209,7 +209,7 @@ export default {
               type: 'ERC20',
               options: {
                 address: '0xcaf53066e36eef55ed0663419adff6e503bd134f',
-                symbol: 'SKILL',
+                symbol: 'xBlade',
                 decimals: 18,
                 image: 'https://app.cryptoblades.io/android-chrome-512x512.png',
               },
@@ -255,7 +255,7 @@ export default {
                 type: 'ERC20',
                 options: {
                   address: '0x154a9f9cbd3449ad22fdae23044319d6ef2a1fab',
-                  symbol: 'SKILL',
+                  symbol: 'xBlade',
                   decimals: 18,
                   image: 'https://app.cryptoblades.io/android-chrome-512x512.png',
                 },
@@ -376,7 +376,7 @@ export default {
     try {
       await this.initializeStore();
     } catch (e) {
-      this.errorMessage = 'Welcome to CryptoBlades. Here is how you can get started.';
+      this.errorMessage = 'Welcome to CryptoWars. Here is how you can get started.';
       if (e.code === 4001) {
         this.errorMessage = 'Error: MetaMask could not get permissions.';
       }
@@ -473,7 +473,7 @@ body {
 }
 
 .dark-bg-text {
-  color: #9e8a57;
+  color: #fff;
 }
 
 .body {

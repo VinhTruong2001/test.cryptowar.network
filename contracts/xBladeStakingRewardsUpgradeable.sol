@@ -4,7 +4,7 @@ import "./staking/StakingRewardsUpgradeable.sol";
 import "./interfaces/IStakeFromGame.sol";
 import "./CryptoWars.sol";
 
-contract SkillStakingRewardsUpgradeable is IStakeFromGame, StakingRewardsUpgradeable {
+contract XBladeStakingRewardsUpgradeable is IStakeFromGame, StakingRewardsUpgradeable {
     /* ========== VIEWS ========== */
 
     function game() external view returns (CryptoWars) {

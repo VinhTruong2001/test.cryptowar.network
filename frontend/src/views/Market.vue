@@ -66,7 +66,7 @@
                       @mouseover="hover = !isMobile() || true"
                       @mouseleave="hover = !isMobile()"
                       >
-                        <strong>Price</strong>: {{ convertWeiToSkill(nftPricesById[id]) | dynamicDecimals(2, 4) }} SKILL
+                        <strong>Price</strong>: {{ convertWeiToSkill(nftPricesById[id]) | dynamicDecimals(2, 4) }} xBlade
                       </span>
                     </span>
                     <span class="d-block text-center" v-else>Loading price...</span>
@@ -104,7 +104,7 @@
                       @mouseover="hover = !isMobile() || true"
                       @mouseleave="hover = !isMobile()"
                       >
-                      {{ convertWeiToSkill(nftPricesById[id]) | dynamicDecimals(2, 4) }} SKILL
+                      {{ convertWeiToSkill(nftPricesById[id]) | dynamicDecimals(2, 4) }} xBlade
                       </span>
                     </span>
 
@@ -146,7 +146,7 @@
                       @mouseover="hover = !isMobile() || true"
                       @mouseleave="hover = !isMobile()"
                       >
-                        <strong>Price</strong>: {{ convertWeiToSkill(nftPricesById[id]) | dynamicDecimals(2, 4) }} SKILL
+                        <strong>Price</strong>: {{ convertWeiToSkill(nftPricesById[id]) | dynamicDecimals(2, 4) }} xBlade
                       </span>
                     </span>
                     <span class="d-block text-center" v-else>Loading price...</span>
@@ -303,7 +303,7 @@
                       @mouseover="hover = !isMobile() || true"
                       @mouseleave="hover = !isMobile()"
                       >
-                        <strong>Price</strong>: {{ convertWeiToSkill(nftPricesById[id]) | dynamicDecimals(2, 4) }} SKILL
+                        <strong>Price</strong>: {{ convertWeiToSkill(nftPricesById[id]) | dynamicDecimals(2, 4) }} xBlade
                       </span>
                     </span>
                     <span class="d-block text-center" v-else>Loading price...</span>
@@ -340,7 +340,7 @@
                       @mouseover="hover = !isMobile() || true"
                       @mouseleave="hover = !isMobile()"
                       >
-                        {{ convertWeiToSkill(nftPricesById[id]) | dynamicDecimals(2, 4) }} SKILL
+                        {{ convertWeiToSkill(nftPricesById[id]) | dynamicDecimals(2, 4) }} xBlade
                       </span>
                     </span>
                     <span class="d-block text-center" v-else>Loading price...</span>
@@ -382,7 +382,7 @@
                       @mouseover="hover = !isMobile() || true"
                       @mouseleave="hover = !isMobile()"
                       >
-                        <strong>Price</strong>: {{ convertWeiToSkill(nftPricesById[id]) | dynamicDecimals(2, 4) }} SKILL
+                        <strong>Price</strong>: {{ convertWeiToSkill(nftPricesById[id]) | dynamicDecimals(2, 4) }} xBlade
                       </span>
                     </span>
                     <span class="d-block text-center" v-else>Loading price...</span>
@@ -476,11 +476,11 @@
                     {{!priceChangeModal ? `Sell ${activeType}` : `Change ${activeType} price`}}
                   </template>
                   <b-form-input type="number" :max="10000"
-                    class="modal-input" v-model="listingSellPrice" placeholder="Sell Price (SKILL)" />
+                    class="modal-input" v-model="listingSellPrice" placeholder="Sell Price (xBlade)" />
 
-                  <span v-if="listingSellPrice">Do you want to sell your {{activeType}} for {{Math.min(+listingSellPrice, 10000)}} SKILL?<br>
+                  <span v-if="listingSellPrice">Do you want to sell your {{activeType}} for {{Math.min(+listingSellPrice, 10000)}} xBlade?<br>
                   <i>The buyer will pay an extra {{activeListingMarketTax()}}% market fee for a total of
-                  {{calculatedBuyerCost(Math.min(+listingSellPrice, 10000))}} SKILL</i></span>
+                  {{calculatedBuyerCost(Math.min(+listingSellPrice, 10000))}} xBlade</i></span>
                 </b-modal>
               </div>
 
@@ -1055,7 +1055,7 @@ export default Vue.extend({
       this.selectedNftId = null;
       this.waitingMarketOutcome = false;
       this.marketOutcome = 'Successfully listed '
-        +this.activeType+' '+results.nftID+' for '+this.convertWeiToSkill(results.price)+' SKILL';
+        +this.activeType+' '+results.nftID+' for '+this.convertWeiToSkill(results.price)+' xBlade';
     },
 
     async updateNftListingPrice() {
@@ -1079,7 +1079,7 @@ export default Vue.extend({
       this.selectedNftId = null;
       this.waitingMarketOutcome = false;
       this.marketOutcome = 'Successfully changed price for '
-        +this.activeType+' '+results.nftID+' to '+this.convertWeiToSkill(results.newPrice)+' SKILL';
+        +this.activeType+' '+results.nftID+' to '+this.convertWeiToSkill(results.newPrice)+' xBlade';
     },
 
     async purchaseNft() {
@@ -1119,7 +1119,7 @@ export default Vue.extend({
 
       this.waitingMarketOutcome = false;
       this.marketOutcome = 'Successfully purchased '
-        +this.activeType+' '+results.nftID+' for '+this.convertWeiToSkill(results.price)+' SKILL'
+        +this.activeType+' '+results.nftID+' for '+this.convertWeiToSkill(results.price)+' xBlade'
           +' from '+results.seller;
     },
 

@@ -513,15 +513,7 @@ export default {
     },
 
     async fetchScore() {
-      /*
-      try {
-        const scoreData = await fetch(`https://api.cryptoblades.io/static/character/score/${this.character.id}`);
-        const { score } = await scoreData.json();
-        this.heroScore = score;
-      } catch {
-        console.error(`Could not fetch score for ID ${this.character.id}`);
-      }
-      */
+
     }
   },
   mounted() {
@@ -597,7 +589,7 @@ export default {
 
 .placeholder {
   max-width: 100%;
-  top: -15px;
+  top: 0;
   position: relative;
   height: 75%;
   padding-top: 0;

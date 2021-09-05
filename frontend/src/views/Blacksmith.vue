@@ -10,7 +10,7 @@
           <br>
           <big-button
             class="button"
-            :mainText="`Forge sword for ${forgeCost} SKILL`"
+            :mainText="`Forge sword for ${forgeCost} xBlade`"
             @click="onForgeWeapon"
           />
         </div>
@@ -51,7 +51,8 @@
                         :disabled="disableForge"
                         v-tooltip="'Forge new weapon'">
                   <span v-if="disableForge">Cooling forge...</span>
-                  <span v-if="!disableForge" class="gtag-link-others" tagname="forge_weapon">Forge x1 ({{ forgeCost }} SKILL) <i class="fas fa-plus"></i></span>
+                  <span v-if="!disableForge" class="gtag-link-others" tagname="forge_weapon">Forge x1 ({{ forgeCost }} xBlade) <i class="fas fa-plus"></i>
+                  </span>
                 </b-button>
                 <b-button
                         variant="primary"
@@ -60,7 +61,7 @@
                         :disabled="disableForge"
                         v-tooltip="'Forge new weapon'">
                   <span v-if="disableForge">Cooling forge...</span>
-                  <span v-if="!disableForge" class="gtag-link-others" tagname="forge_weapon">x10 ({{ forgeCost*10 }} SKILL) <i class="fas fa-plus"></i></span>
+                  <span v-if="!disableForge" class="gtag-link-others" tagname="forge_weapon">x10 ({{ forgeCost*10 }} xBlade) <i class="fas fa-plus"></i></span>
                 </b-button>
 
                 <b-icon-question-circle class="centered-icon" scale="1.5"
@@ -68,16 +69,16 @@
 
                 <b-modal hide-footer ref="forge-details-modal" title="Forge Percentages">
                   <div>
-                    5+ star @ 1% chance. Estimated cost {{Number.parseFloat(forgeCost * (1/0.01)).toFixed(2)}} SKILL.
+                    5+ star @ 1% chance. Estimated cost {{Number.parseFloat(forgeCost * (1/0.01)).toFixed(2)}} xBlade.
                   </div>
                   <div>
-                    4+ star @ 6% chance. Estimated cost {{Number.parseFloat(forgeCost * (1/0.06)).toFixed(2)}} SKILL.
+                    4+ star @ 6% chance. Estimated cost {{Number.parseFloat(forgeCost * (1/0.06)).toFixed(2)}} xBlade.
                   </div>
                   <div>
-                    3+ star @ 21% chance. Estimated cost {{Number.parseFloat(forgeCost * (1/0.21)).toFixed(2)}} SKILL.
+                    3+ star @ 21% chance. Estimated cost {{Number.parseFloat(forgeCost * (1/0.21)).toFixed(2)}} xBlade.
                   </div>
                   <div>
-                    2+ star @ 56% chance. Estimated cost {{Number.parseFloat(forgeCost * (1/0.56)).toFixed(2)}} SKILL.
+                    2+ star @ 56% chance. Estimated cost {{Number.parseFloat(forgeCost * (1/0.56)).toFixed(2)}} xBlade.
                   </div>
                   <div>
                     1+ star @ 100% chance.
@@ -122,7 +123,7 @@
                         v-tooltip="'Reforge selected weapon with dust'">
                   Mass Burn
                   <br>
-                  ({{burnCost * burnWeaponIds.length }} SKILL)
+                  ({{burnCost * burnWeaponIds.length }} xBlade)
                 </b-button>
                 <b-button
                         variant="primary"
@@ -232,7 +233,7 @@
                           <br>
                           Use: {{powerfulDust}} Powerful
                           <br>
-                          ({{ dustReforgeCost }} SKILL)
+                          ({{ dustReforgeCost }} xBlade)
                         </b-button>
                         <b-button
                                 variant="primary"
@@ -496,21 +497,21 @@ export default Vue.extend({
   },
 
   async created() {
-    if(!this.contracts.CryptoBlades) return;
-    const forgeCost = await this.contracts.CryptoBlades.methods.mintWeaponFee().call({ from: this.defaultAccount });
-    const skillForgeCost = await this.contracts.CryptoBlades.methods.usdToSkill(forgeCost).call({ from: this.defaultAccount });
+    if(!this.contracts.CryptoWars) return;
+    const forgeCost = await this.contracts.CryptoWars.methods.mintWeaponFee().call({ from: this.defaultAccount });
+    const skillForgeCost = await this.contracts.CryptoWars.methods.usdToSkill(forgeCost).call({ from: this.defaultAccount });
     this.forgeCost = new BN(skillForgeCost).div(new BN(10).pow(18)).toFixed(4);
 
-    const reforgeCost = await this.contracts.CryptoBlades.methods.reforgeWeaponFee().call({ from: this.defaultAccount });
-    const skillReforgeCost = await this.contracts.CryptoBlades.methods.usdToSkill(reforgeCost).call({ from: this.defaultAccount });
+    const reforgeCost = await this.contracts.CryptoWars.methods.reforgeWeaponFee().call({ from: this.defaultAccount });
+    const skillReforgeCost = await this.contracts.CryptoWars.methods.usdToSkill(reforgeCost).call({ from: this.defaultAccount });
     this.reforgeCost = new BN(skillReforgeCost).div(new BN(10).pow(18)).toFixed(4);
 
-    const reforgeDustCost = await this.contracts.CryptoBlades.methods.reforgeWeaponWithDustFee().call({ from: this.defaultAccount });
-    const skillDustReforgeCost = await this.contracts.CryptoBlades.methods.usdToSkill(reforgeDustCost).call({ from: this.defaultAccount });
+    const reforgeDustCost = await this.contracts.CryptoWars.methods.reforgeWeaponWithDustFee().call({ from: this.defaultAccount });
+    const skillDustReforgeCost = await this.contracts.CryptoWars.methods.usdToSkill(reforgeDustCost).call({ from: this.defaultAccount });
     this.dustReforgeCost = new BN(skillDustReforgeCost).div(new BN(10).pow(18)).toFixed(4);
 
-    const burnCost = await this.contracts.CryptoBlades.methods.burnWeaponFee().call({ from: this.defaultAccount });
-    const skillBurnCost = await this.contracts.CryptoBlades.methods.usdToSkill(burnCost).call({ from: this.defaultAccount });
+    const burnCost = await this.contracts.CryptoWars.methods.burnWeaponFee().call({ from: this.defaultAccount });
+    const skillBurnCost = await this.contracts.CryptoWars.methods.usdToSkill(burnCost).call({ from: this.defaultAccount });
     this.burnCost = new BN(skillBurnCost).div(new BN(10).pow(18)).toFixed(4);
 
     if(!this.contracts.WeaponRenameTagConsumables) return;

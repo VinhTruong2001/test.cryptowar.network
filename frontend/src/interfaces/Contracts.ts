@@ -1,7 +1,7 @@
 import { Contract as Web3EthContract } from 'web3-eth-contract';
 import type {
   IERC20, IStakingRewards,
-  CryptoBlades, Characters, Weapons, RaidBasic, IRandoms,
+  CryptoWars, Characters, Weapons, RaidBasic, IRandoms,
   NFTMarket, WaxBridge, Blacksmith, Shields, CharacterRenameTagConsumables,
   WeaponRenameTagConsumables, CharacterFireTraitChangeConsumables, CharacterEarthTraitChangeConsumables,
   CharacterWaterTraitChangeConsumables, CharacterLightningTraitChangeConsumables
@@ -23,7 +23,7 @@ export interface Contracts {
   SkillToken: Contract<IERC20>;
   staking: StakingContracts;
 
-  CryptoBlades?: Contract<CryptoBlades>;
+  CryptoWars?: Contract<CryptoWars>;
   Randoms?: Contract<IRandoms>;
   Characters?: Contract<Characters>;
   Weapons?: Contract<Weapons>;
