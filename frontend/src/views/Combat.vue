@@ -587,7 +587,7 @@ h1 {
 
 .enemy-img {
   position: relative;
-  top: -50px;
+  top: -24px;
 }
 
 @media (max-width: 1334px) {
