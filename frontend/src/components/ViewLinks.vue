@@ -10,7 +10,7 @@
 
     <router-link :to="{ name: 'blacksmith' }" exact class="nav-link"   v-if="!featureFlagStakeOnly">
       <li class="nav-item nav-top-links" >
-        <span class="gtag-link-others" tagname="blacksmith_screen">Blacksmith</span>
+        <span class="gtag-link-others" tagname="blacksmith_screen">Inventory</span>
       </li>
     </router-link>
 
@@ -64,7 +64,7 @@ a {
 }
 
 .nav-top-links > span {
-  color : #BFA765;
+  color : #ffffff;
   font-size: 1.1em;
   padding: 0px 5px 0px 5px;
 }

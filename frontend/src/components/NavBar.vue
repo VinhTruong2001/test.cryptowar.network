@@ -2,7 +2,7 @@
   <div class="main-nav-div">
     <b-navbar class="main-nav" toggleable="sm" type="dark" variant="dark">
       <b-navbar-brand href="#" class="nav-logo">
-        <img src="../assets/logo_Text_Source.png" class="logo d-inline-block align-top" alt="Logo">
+        <img src="../assets/xBlade-logo-02.png" class="logo d-inline-block align-top" alt="Logo">
       </b-navbar-brand>
 
       <view-links class="view-links"></view-links>
@@ -91,8 +91,8 @@ a {
 
 a:hover,
 a.router-link-active {
-  color: #f2e3bc;
-  text-shadow: 0 0 5px #333, 0 0 10px #333, 0 0 15px #e1bb34, 0 0 10px #e1bb34;
+  color: #ffb4ef;
+  text-shadow: 0 0 5px rgb(74, 2, 88), 0 0 10px rgb(78, 3, 94), 0 0 15px #9d17af, 0 0 10px #9a23a5;
   text-decoration: none !important;
 }
 
@@ -133,7 +133,7 @@ a.router-link-active {
 
 <style scoped>
 .logo {
-  max-width: 230px;
+  max-width: 80px;
   padding-top: 7px;
 }
 
@@ -145,7 +145,7 @@ a.router-link-active {
   flex : 2.3;
 }
 .nav-logo {
-  flex : 0.5;
+  flex : 0.3;
 }
 
 .expand-collapse-icon {
