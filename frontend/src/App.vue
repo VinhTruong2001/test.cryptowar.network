@@ -33,7 +33,7 @@
             To recruit your first character you need {{ recruitCost }} xBlade and .001 BNB for gas. You will also need .0015
             BNB to do your first few battles, but don't worry, you earn the battle fees back in xBlade rewards immediately!
           </p>
-          <ul class="unstyled-list">
+          <!-- <ul class="unstyled-list">
             <li>1. Buying BNB with fiat: <a href="https://youtu.be/6-sUDUE2RPA" target="_blank" rel="noopener noreferrer">Watch Video</a></li>
             <li>
               2. Once you have BNB, go to ApeSwap to obtain xBlade tokens:<br />
@@ -47,10 +47,10 @@
                 >Watch 'Getting Started' Video</a
               >)
             </li>
-          </ul>
+          </ul> -->
           <p>
             If you have any questions, please join our Discord:
-            <a href="https://discord.gg/cryptoblades" target="_blank" rel="noopener noreferrer">https://discord.gg/cryptoblades</a>
+            <a href="https://discord.com/invite/wxRB7qQQ" target="_blank" rel="noopener noreferrer">https://discord.gg/cryptoblades</a>
           </p>
         </div>
         <div class="seperator"></div>
