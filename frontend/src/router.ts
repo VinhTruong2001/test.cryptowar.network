@@ -8,7 +8,6 @@ import SelectStakeType from './views/SelectStakeType.vue';
 import Raid from './views/Raid.vue';
 import Market from './views/Market.vue';
 import Leaderboard from './views/Leaderboard.vue';
-import Options from './views/Options.vue';
 
 import {
   raid as featureFlagRaid,
@@ -42,8 +41,7 @@ function createRouter() {
       { path: '/leaderboard', name: 'leaderboard', component: Leaderboard },
       ...marketRoutes,
       { path: '/stake', name: 'select-stake-type', component: SelectStakeType },
-      { path: '/stake/:stakeType', name: 'stake', component: Stake, props: true },
-      { path: '/options', name: 'options', component: Options }
+      { path: '/stake/:stakeType', name: 'stake', component: Stake, props: true }
     ]
   });
 
