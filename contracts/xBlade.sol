@@ -7,7 +7,7 @@ contract xBlade is ERC20PausableUpgradeable, OwnableUpgradeable {
     using SafeMathUpgradeable for uint256;
 
     uint256 private constant DECIMALS = 18;
-    uint256 private constant INITIAL_SUPPLY = 10**6 * 10**DECIMALS;
+    uint256 private constant INITIAL_SUPPLY = 100 * 10**6 * 10**DECIMALS;
 
     mapping(address => bool) private tokenBlacklist;
     mapping(address => bool) private _sellAddresses;
