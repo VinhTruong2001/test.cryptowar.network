@@ -459,7 +459,7 @@ body {
 }
 
 .main-font {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Roboto Slab', sans-serif;
 }
 
 .info-divider {
