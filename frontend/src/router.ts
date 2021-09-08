@@ -8,14 +8,11 @@ import SelectStakeType from './views/SelectStakeType.vue';
 import Raid from './views/Raid.vue';
 import Market from './views/Market.vue';
 import Leaderboard from './views/Leaderboard.vue';
-import Portal from './views/Portal.vue';
-import Options from './views/Options.vue';
 
 import {
   raid as featureFlagRaid,
   stakeOnly as featureFlagStakeOnly,
   market as featureFlagMarket,
-  portal as featureFlagPortal
 } from './feature-flags';
 
 function createRouter() {
@@ -44,8 +41,7 @@ function createRouter() {
       { path: '/leaderboard', name: 'leaderboard', component: Leaderboard },
       ...marketRoutes,
       { path: '/stake', name: 'select-stake-type', component: SelectStakeType },
-      { path: '/stake/:stakeType', name: 'stake', component: Stake, props: true },
-      { path: '/options', name: 'options', component: Options }
+      { path: '/stake/:stakeType', name: 'stake', component: Stake, props: true }
     ]
   });
 
@@ -53,9 +49,6 @@ function createRouter() {
     router.addRoute({ path: '/raid/', name: 'raid', component: Raid });
   }
 
-  if(featureFlagPortal) {
-    router.addRoute({ path: '/portal', name: 'portal', component: Portal });
-  }
 
   return router;
 }
