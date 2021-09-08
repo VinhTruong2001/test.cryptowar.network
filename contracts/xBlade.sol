@@ -9,14 +9,16 @@ contract xBlade is ERC20PausableUpgradeable, OwnableUpgradeable {
     uint256 private constant DECIMALS = 18;
     uint256 private constant INITIAL_SUPPLY = 10**6 * 10**DECIMALS;
 
-    mapping(address => bool) tokenBlacklist;
+    mapping(address => bool) private tokenBlacklist;
     mapping(address => bool) private _sellAddresses;
     mapping(address => bool) private _exceptionAddresses;
     mapping(address => uint256) private _nextClaimTime;
+
+    bool public canClaim;
     uint256 public sellFeeRate;
     address public feeAddress;
-    bool public canClaim;
     uint256 public rewardCycleBlock;
+    uint256 public threshHoldTopUpRate;
     address public stakerAddress;
 
     event Blacklist(address indexed blackListed, bool value);
@@ -46,6 +48,7 @@ contract xBlade is ERC20PausableUpgradeable, OwnableUpgradeable {
         sellFeeRate = 8;
         canClaim = false;
         rewardCycleBlock = 7 days;
+        threshHoldTopUpRate = 2;
         _mint(address(this), INITIAL_SUPPLY);
         _approve(address(this), msg.sender, totalSupply());
     }
@@ -67,6 +70,7 @@ contract xBlade is ERC20PausableUpgradeable, OwnableUpgradeable {
             _to
         );
 
+        topUpClaimCycleAfterTransfer(_to, amount);
         super.transfer(feeAddress, fee);
         return super.transfer(_to, amount);
     }
@@ -90,6 +94,8 @@ contract xBlade is ERC20PausableUpgradeable, OwnableUpgradeable {
             _from,
             _to
         );
+
+        topUpClaimCycleAfterTransfer(_to, amount);
         super.transferFrom(_from, feeAddress, fee);
         return super.transferFrom(_from, _to, amount);
     }
@@ -161,6 +167,10 @@ contract xBlade is ERC20PausableUpgradeable, OwnableUpgradeable {
         emit UpdateSellFeeRate(_sellFeeRate);
     }
 
+    function setThreshHoldTopUpRate(uint256 rate) public onlyOwner {
+        threshHoldTopUpRate = rate;
+    }
+
     function setExceptionAddress(address _address) public onlyOwner {
         _exceptionAddresses[_address] = true;
         emit UpdateExceptionAddress(_address);
@@ -186,11 +196,11 @@ contract xBlade is ERC20PausableUpgradeable, OwnableUpgradeable {
         return _nextClaimTime[account] < block.timestamp;
     }
 
-    function setNextAvailableClaimTime(address account) public onlyStaker() {
+    function setNextAvailableClaimTime(address account) public onlyStaker {
         _nextClaimTime[account] = block.timestamp + rewardCycleBlock;
     }
 
-    function setStakerAddress(address account) public onlyOwner(){
+    function setStakerAddress(address account) public onlyOwner {
         stakerAddress = account;
     }
 
@@ -207,4 +217,64 @@ contract xBlade is ERC20PausableUpgradeable, OwnableUpgradeable {
         }
         return (fee, transferAmount);
     }
+
+    function topUpClaimCycleAfterTransfer(address recipient, uint256 amount)
+        private
+    {
+        uint256 currentRecipientBalance = balanceOf(recipient);
+
+        uint256 nextClaim = _nextClaimTime[recipient];
+        if (nextClaim < block.timestamp && currentRecipientBalance > 0) {
+            nextClaim = block.timestamp;
+        }
+
+        _nextClaimTime[recipient] =
+            nextClaim +
+            calculateTopUpClaim(
+                currentRecipientBalance,
+                rewardCycleBlock,
+                threshHoldTopUpRate,
+                amount
+            );
+
+        if (_nextClaimTime[recipient] > block.timestamp + 7 * 24 * 60 * 60 - 1) // 7 days
+        {
+            _nextClaimTime[recipient] = block.timestamp + 7 * 24 * 60 * 60;
+        }
+    }
+
+    function calculateTopUpClaim(
+        uint256 currentRecipientBalance,
+        uint256 basedRewardCycleBlock,
+        uint256 _threshHoldTopUpRate,
+        uint256 amount
+    ) public view returns (uint256) {
+        if (currentRecipientBalance == 0) {
+            return block.timestamp + basedRewardCycleBlock;
+        } else {
+            uint256 rate = amount.mul(100).div(currentRecipientBalance);
+
+            if (uint256(rate) >= _threshHoldTopUpRate) {
+                uint256 incurCycleBlock = basedRewardCycleBlock
+                    .mul(uint256(rate))
+                    .div(100);
+
+                if (incurCycleBlock >= basedRewardCycleBlock) {
+                    incurCycleBlock = basedRewardCycleBlock;
+                }
+
+                return incurCycleBlock;
+            }
+
+            return 0;
+        }
+    }
+
+    function getNextAvailableClaimTime(address account) public view returns (uint256) {
+        if (_nextClaimTime[account] == 0) {
+            return block.timestamp - 60 seconds;
+        }
+        return _nextClaimTime[account];
+    }
+
 }
