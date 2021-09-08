@@ -7,7 +7,7 @@
     </div>
 
     <div class="balance-container">
-      <strong class="mr-2 balance-text">Total Balance</strong>
+      <strong class="mr-2 balance-text">Balance</strong>
       <span class="balance"
         v-tooltip="{ content: totalSkillTooltipHtml , trigger: (isMobile() ? 'click' : 'hover') }"
         @mouseover="hover = !isMobile() || true"
@@ -158,23 +158,30 @@ export default Vue.extend({
 
 .balance-container {
   margin-right: 5px;
-  color: #b3b0a7;
+  color: #FFF;
+  font-size: 0.7em;
 }
 
 .balance-text {
-  color : #BFA765;
+  color : #c755f8;
+  font-size: 12px
 }
 .add-button {
   width : 100%;
   height: 100%;
   border: none;
   border-radius: 50px;
-  box-shadow: inset 0px 0px 10px 7px #fea036;
-  background: #fea036;
+  box-shadow: inset 0px 0px 10px 7px #b523f3;
+  background: #9a13d2;
   transition: all 0.3s ease-in;
   font-weight: 600;
-  padding: 8px 16px;
+  padding: 4px 16px;
   color: #FFF;
+}
+@media only screen and (max-width: 769px) {
+  .add-button{
+    font-size: 11px;
+  }
 }
 .add-button:hover {
   cursor: pointer;

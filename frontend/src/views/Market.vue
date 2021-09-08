@@ -504,7 +504,7 @@
                     </div>
                     <div v-if="historyCounter === 0">
                       <p>It's seems like there's nothing here.</p>
-                      <p>For tips on how to list NFTs, you may click this <strong><a href="https://cryptoblades.gitbook.io/wiki/market/marketplace#list-nfts" target="_blank">link</a></strong></p>
+                      <p>For tips on how to list NFTs, you may click this <strong><a href="https://wiki.cryptowar.network/market/trading" target="_blank">link</a></strong></p>
                     </div>
                     <template #modal-footer>
                     <b-button class="mt-3" block @click="resetTransactionHistoryValues('weapons-sold-modal')">Ok</b-button>
@@ -535,7 +535,7 @@
                     </div>
                     <div v-if="historyCounter === 0">
                       <p>It's seems like there's nothing here.</p>
-                      <p>For tips on how to list NFTs, you may click this <strong><a href="https://cryptoblades.gitbook.io/wiki/market/marketplace#list-nfts" target="_blank">link</a></strong></p>
+                      <p>For tips on how to list NFTs, you may click this <strong><a href="https://wiki.cryptowar.network/market/trading" target="_blank">link</a></strong></p>
                     </div>
                     <template #modal-footer>
                     <b-button class="mt-3" block @click="resetTransactionHistoryValues('characters-sold-modal')">Ok</b-button>
@@ -564,7 +564,7 @@
                     </div>
                     <div v-if="historyCounter === 0">
                       <p>It's seems like there's nothing here.</p>
-                      <p>For tips on how to list NFTs, you may click this <strong><a href="https://cryptoblades.gitbook.io/wiki/market/marketplace#list-nfts" target="_blank">link</a></strong></p>
+                      <p>For tips on how to list NFTs, you may click this <strong><a href="https://wiki.cryptowar.network/market/trading" target="_blank">link</a></strong></p>
                     </div>
                     <template #modal-footer>
                     <b-button class="mt-3" block @click="resetTransactionHistoryValues('shields-sold-modal')">Ok</b-button>
