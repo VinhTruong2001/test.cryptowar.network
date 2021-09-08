@@ -18,7 +18,7 @@
 
         <b-dropdown-item @click.native="$router.push('portal')"><i class="fa fa-dungeon mr-2"></i>Portal</b-dropdown-item>
 
-        <b-dropdown-item href="https://cryptoblades.gitbook.io/wiki/" target="_blank"><i class="fa fa-book mr-2"></i>Wiki <b-icon scale="0.8" icon="question-circle"/></b-dropdown-item>
+        <b-dropdown-item href="https://wiki.cryptowar.network/" target="_blank"><i class="fa fa-book mr-2"></i>Wiki <b-icon scale="0.8" icon="question-circle"/></b-dropdown-item>
 
         </b-dropdown-group>
         <hr class="border-light">
