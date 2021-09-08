@@ -59,7 +59,7 @@
           <div class="small-stamina-char"
             :style="`--staminaReady: ${(getCharacterStamina(c.id)/maxStamina)*100}%;`"
             v-tooltip.bottom="toolTipHtml(timeUntilCharacterHasMaxStamina(c.id))">
-            <div class="stamina-text black-outline">STA {{ getCharacterStamina(c.id) }} / 200</div>
+            <div class="stamina-text">STA {{ getCharacterStamina(c.id) }} / 200</div>
           </div>
         </li>
       </ul>
@@ -315,7 +315,7 @@ li.character-highlight{
 
 .character-name {
   color: #dabf75; /* little lighter to emboss */
-  font-family: serif;
+  font-family: 'Roboto Slab', serif;
 }
 
 .subtext-stats {
@@ -338,11 +338,10 @@ li.character-highlight{
 
 .small-stamina-char {
   position: relative;
-  height :14px;
+  height: 14px;
   margin: 10px 5px 0px 5px;
-  border-radius: 2px;
-  border: 0.5px solid rgb(216, 215, 215);
-  background : linear-gradient(to right, rgb(236, 75, 75) var(--staminaReady), rgba(255, 255, 255, 0.1) 0);
+  border-radius: 4px;
+  background : linear-gradient(to right, rgb(215 75 236) var(--staminaReady), rgba(255, 255, 255, 0.1) 0);
 }
 
 .stamina-text {
