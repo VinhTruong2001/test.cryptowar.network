@@ -168,9 +168,6 @@ export default Vue.extend({
       }
     },
     async claimSkill(stage: ClaimStage) {
-      if (stage === ClaimStage.WaxBridge) {
-        (this.$refs['need-gas-modal'] as any).show();
-      }
       if (stage === ClaimStage.Stake) {
         (this.$refs['stake-suggestion-modal'] as any).show();
       }
