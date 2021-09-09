@@ -984,6 +984,10 @@ contract CryptoWars is Initializable, AccessControlUpgradeable {
         minimumFightTax = tax;
     }
 
+    function setSupportFeeRate(int128 rate) public restricted {
+        supportFeeRate = rate;
+    }
+
     function giveInGameOnlyFunds(address to, uint256 skillAmount) external restricted {
         totalInGameOnlyFunds = totalInGameOnlyFunds.add(skillAmount);
         inGameOnlyFunds[to] = inGameOnlyFunds[to].add(skillAmount);
