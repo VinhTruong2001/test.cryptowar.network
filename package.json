@@ -51,7 +51,9 @@
     "postdeploy-mainnet-warning-be-careful-this-is-prod": "run-s \"backup-networks 56\" \"verify-contracts -- --network bscmainnet\"",
     "deploy-mainnet-dry-run": "truffle migrate --network bscmainnet --dry-run",
     "backup-networks": "node scripts/manage-networks.js backup",
-    "verify-contracts": "node scripts/verify-contracts.js"
+    "verify-contracts": "node scripts/verify-contracts.js",
+    "deploy:xblade": "truffle migrate -f 1 --to 1 --network bscmainnet",
+    "verify:xblade": "npx truffle run verify xBlade@0xd3E87D729878cD466C31cCB917efb971730556F4 --network bscmainnet"
   },
   "keywords": [],
   "author": "",
