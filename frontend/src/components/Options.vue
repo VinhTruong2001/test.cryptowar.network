@@ -10,11 +10,11 @@
 
         <b-dropdown-header>Links</b-dropdown-header>
 
-        <b-dropdown-item @click="onClaimTokens()"><i class="fa fa-coins mr-2"></i>Claim Skill </b-dropdown-item>
 
-        <b-dropdown-item @click.native="$router.push('leaderboard')" class="gtag-link-others" tagname="leaderboard_screen">
+
+        <!-- <b-dropdown-item @click.native="$router.push('leaderboard')" class="gtag-link-others" tagname="leaderboard_screen">
         <i class="fa fa-trophy mr-2"></i>Leaderboard
-        </b-dropdown-item>
+        </b-dropdown-item> -->
 
         <b-dropdown-item href="https://wiki.cryptowar.network/" target="_blank"><i class="fa fa-book mr-2"></i>Wiki <b-icon scale="0.8" icon="question-circle"/></b-dropdown-item>
 
