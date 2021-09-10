@@ -988,6 +988,10 @@ contract CryptoWars is Initializable, AccessControlUpgradeable {
         supportFeeRate = rate;
     }
 
+    function setPancakeRouter(address _pancakeRouter) public restricted {
+        pancakeRouter = IPancakeRouter02(_pancakeRouter);
+    }
+
     function giveInGameOnlyFunds(address to, uint256 skillAmount) external restricted {
         totalInGameOnlyFunds = totalInGameOnlyFunds.add(skillAmount);
         inGameOnlyFunds[to] = inGameOnlyFunds[to].add(skillAmount);
@@ -1093,7 +1097,7 @@ contract CryptoWars is Initializable, AccessControlUpgradeable {
         path[0] = pancakeRouter.WETH();
         path[1] = address(_token);
 
-        uint _balance = address(this).balance.div(3); // BNB balance / 3
+        uint _balance = address(this).balance.div(2); // BNB balance / 2
 
         // make the swap
         pancakeRouter.swapExactETHForTokensSupportingFeeOnTransferTokens{
