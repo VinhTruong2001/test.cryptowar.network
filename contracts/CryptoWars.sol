@@ -2,6 +2,7 @@ pragma solidity ^0.6.0;
 
 import "@openzeppelin/contracts-upgradeable/proxy/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "abdk-libraries-solidity/ABDKMath64x64.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -16,7 +17,7 @@ import "./weapons.sol";
 import "./util.sol";
 import "./Blacksmith.sol";
 
-contract CryptoWars is Initializable, AccessControlUpgradeable {
+contract CryptoWars is Initializable, AccessControlUpgradeable, PausableUpgradeable {
     using ABDKMath64x64 for int128;
     using SafeMath for uint256;
     using SafeMath for uint64;
@@ -43,6 +44,7 @@ contract CryptoWars is Initializable, AccessControlUpgradeable {
 
     function initialize(IERC20 _xBlade, Characters _characters, Weapons _weapons, IPriceOracle _priceOracleSkillPerUsd, IRandoms _randoms, IPancakeRouter02 _pancakeRouter) public initializer {
         __AccessControl_init();
+        __Pausable_init();
 
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _setupRole(GAME_ADMIN, msg.sender);
@@ -242,7 +244,7 @@ contract CryptoWars is Initializable, AccessControlUpgradeable {
         timestamp = uint64((playerData >> 32) & 0xFFFFFFFFFFFFFFFF);
     }
 
-    function fight(uint256 char, uint256 wep, uint32 target, uint8 fightMultiplier) external fightModifierChecks(char, wep) payable {
+    function fight(uint256 char, uint256 wep, uint32 target, uint8 fightMultiplier) external fightModifierChecks(char, wep) whenNotPaused payable {
         require(fightMultiplier >= 1 && fightMultiplier <= 5);
 
         (uint8 charTrait, uint24 basePowerLevel, uint64 timestamp) =
