@@ -152,6 +152,7 @@ contract CryptoWars is Initializable, AccessControlUpgradeable, PausableUpgradea
     int128 public reforgeWeaponWithDustFee;
 
     Blacksmith public blacksmith;
+    address public BUSDAddress;
 
     struct MintPayment {
         bytes32 blockHash;
@@ -360,7 +361,7 @@ contract CryptoWars is Initializable, AccessControlUpgradeable, PausableUpgradea
         uint24 monsterRoll = getMonsterPowerRoll(targetPower, RandomUtil.combineSeeds(seed,1));
 
         uint16 xp = getXpGainForFight(playerFightPower, targetPower) * fightMultiplier;
-        uint256 tokens = usdToSkill(getTokenGainForFight(targetPower, fightMultiplier));
+        uint256 tokens = usdToxBlade(getTokenGainForFight(targetPower, fightMultiplier));
 
         if(playerRoll < monsterRoll) {
             tokens = 0;
@@ -637,7 +638,7 @@ contract CryptoWars is Initializable, AccessControlUpgradeable, PausableUpgradea
 
     function mintCharacter() public onlyNonContract oncePerBlock(msg.sender) {
 
-        uint256 skillAmount = usdToSkill(mintCharacterFee);
+        uint256 skillAmount = usdToxBlade(mintCharacterFee);
         (,, uint256 fromUserWallet) =
             getSkillToSubtract(
                 0,
@@ -646,11 +647,11 @@ contract CryptoWars is Initializable, AccessControlUpgradeable, PausableUpgradea
             );
         require(xBlade.balanceOf(msg.sender) >= fromUserWallet && promos.getBit(msg.sender, 4) == false);
 
-        uint256 convertedAmount = usdToSkill(mintCharacterFee);
+        uint256 convertedAmount = usdToxBlade(mintCharacterFee);
         _payContractTokenOnly(msg.sender, convertedAmount);
 
         if(!promos.getBit(msg.sender, promos.BIT_FIRST_CHARACTER()) && characters.balanceOf(msg.sender) == 0) {
-            _giveInGameOnlyFundsFromContractBalance(msg.sender, usdToSkill(promos.firstCharacterPromoInGameOnlyFundsGivenInUsd()));
+            _giveInGameOnlyFundsFromContractBalance(msg.sender, usdToxBlade(promos.firstCharacterPromoInGameOnlyFundsGivenInUsd()));
         }
 
         uint256 seed = randoms.getRandomSeed(msg.sender);
@@ -856,7 +857,7 @@ contract CryptoWars is Initializable, AccessControlUpgradeable, PausableUpgradea
     }
 
     function _requestPayFromPlayer(int128 usdAmount) internal view {
-        uint256 skillAmount = usdToSkill(usdAmount);
+        uint256 skillAmount = usdToxBlade(usdAmount);
 
         (,, uint256 fromUserWallet) =
             getSkillToSubtract(
@@ -895,7 +896,7 @@ contract CryptoWars is Initializable, AccessControlUpgradeable, PausableUpgradea
     function _payContract(address playerAddress, int128 usdAmount) internal
         returns (uint256 _fromInGameOnlyFunds, uint256 _fromTokenRewards, uint256 _fromUserWallet) {
 
-        return _payContractConverted(playerAddress, usdToSkill(usdAmount));
+        return _payContractConverted(playerAddress, usdToxBlade(usdAmount));
     }
 
     function _payContractConverted(address playerAddress, uint256 convertedAmount) internal
@@ -919,7 +920,7 @@ contract CryptoWars is Initializable, AccessControlUpgradeable, PausableUpgradea
     }
 
     function _payPlayer(address playerAddress, int128 baseAmount) internal {
-        _payPlayerConverted(playerAddress, usdToSkill(baseAmount));
+        _payPlayerConverted(playerAddress, usdToxBlade(baseAmount));
     }
 
     function _payPlayerConverted(address playerAddress, uint256 convertedAmount) internal {
@@ -994,6 +995,10 @@ contract CryptoWars is Initializable, AccessControlUpgradeable, PausableUpgradea
         pancakeRouter = IPancakeRouter02(_pancakeRouter);
     }
 
+    function setBUSDAddress(address _busdAddress) public restricted {
+        BUSDAddress = _busdAddress;
+    }
+
     function giveInGameOnlyFunds(address to, uint256 skillAmount) external restricted {
         totalInGameOnlyFunds = totalInGameOnlyFunds.add(skillAmount);
         inGameOnlyFunds[to] = inGameOnlyFunds[to].add(skillAmount);
@@ -1014,8 +1019,14 @@ contract CryptoWars is Initializable, AccessControlUpgradeable, PausableUpgradea
         _giveInGameOnlyFundsFromContractBalance(to, skillAmount);
     }
 
-    function usdToSkill(int128 usdAmount) public view returns (uint256) {
-        return usdAmount.mulu(priceOracleSkillPerUsd.currentPrice());
+    function usdToxBlade(int128 usdAmount) public view returns (uint256) {
+         // generate the pancake pair path of token -> weth
+        address[] memory path = new address[](2);
+        path[0] = BUSDAddress;
+        path[1] = address(xBlade);
+
+        uint size1 = pancakeRouter.getAmountsOut(ABDKMath64x64.toUInt(usdAmount), path)[1];
+        return usdAmount.mulu(size1);
     }
 
     function claimTokenRewards() public {
