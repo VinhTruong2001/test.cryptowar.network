@@ -46,8 +46,9 @@ module.exports = async function (deployer, network) {
 
   const weps = await deployProxy(Weapons, [], { deployer });
   const pancakeRouter = "";// Pancake router address
+  const busdAddress = ""; // BUSD Address for get price
 
-  const game = await deployProxy(CryptoWars, [xBladeToken.address, charas.address, weps.address, priceOracle.address, randoms.address, pancakeRouter], { deployer });
+  const game = await deployProxy(CryptoWars, [xBladeToken.address, charas.address, weps.address, priceOracle.address, randoms.address, pancakeRouter, busdAddress], { deployer });
 
   const charas_GAME_ADMIN = await charas.GAME_ADMIN();
   await charas.grantRole(charas_GAME_ADMIN, game.address);

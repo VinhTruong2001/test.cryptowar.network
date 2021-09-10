@@ -36,13 +36,12 @@ contract CryptoWars is Initializable, AccessControlUpgradeable, PausableUpgradea
     Characters public characters;
     Weapons public weapons;
     IERC20 public xBlade;
-    IPriceOracle public priceOracleSkillPerUsd;
     IRandoms public randoms;
     IPancakeRouter02 public pancakeRouter;
     uint256 public minimumFightTax;
     int128 public supportFeeRate;
 
-    function initialize(IERC20 _xBlade, Characters _characters, Weapons _weapons, IPriceOracle _priceOracleSkillPerUsd, IRandoms _randoms, IPancakeRouter02 _pancakeRouter) public initializer {
+    function initialize(IERC20 _xBlade, Characters _characters, Weapons _weapons, IRandoms _randoms, IPancakeRouter02 _pancakeRouter, address _busdAddress) public initializer {
         __AccessControl_init();
         __Pausable_init();
 
@@ -52,9 +51,9 @@ contract CryptoWars is Initializable, AccessControlUpgradeable, PausableUpgradea
         xBlade = _xBlade;
         characters = _characters;
         weapons = _weapons;
-        priceOracleSkillPerUsd = _priceOracleSkillPerUsd;
         randoms = _randoms;
         pancakeRouter = _pancakeRouter;
+        BUSDAddress = _busdAddress;
 
         staminaCostFight = 40;
         mintCharacterFee = ABDKMath64x64.divu(10, 1);//10 usd;
