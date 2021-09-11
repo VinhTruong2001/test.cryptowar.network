@@ -2,6 +2,7 @@ pragma solidity ^0.6.0;
 
 import "@openzeppelin/contracts-upgradeable/proxy/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "abdk-libraries-solidity/ABDKMath64x64.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -9,13 +10,14 @@ import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "./interfaces/IStakeFromGame.sol";
 import "./interfaces/IRandoms.sol";
 import "./interfaces/IPriceOracle.sol";
+import "./interfaces/IPancakeRouter02.sol";
 import "./characters.sol";
 import "./Promos.sol";
 import "./weapons.sol";
 import "./util.sol";
 import "./Blacksmith.sol";
 
-contract CryptoWars is Initializable, AccessControlUpgradeable {
+contract CryptoWars is Initializable, AccessControlUpgradeable, PausableUpgradeable {
     using ABDKMath64x64 for int128;
     using SafeMath for uint256;
     using SafeMath for uint64;
@@ -33,12 +35,16 @@ contract CryptoWars is Initializable, AccessControlUpgradeable {
 
     Characters public characters;
     Weapons public weapons;
-    IERC20 public xBlade;//0x154A9F9cbd3449AD22FDaE23044319D6eF2a1Fab;
+    IERC20 public xBlade;
     IPriceOracle public priceOracleSkillPerUsd;
     IRandoms public randoms;
+    IPancakeRouter02 public pancakeRouter;
+    uint256 public minimumFightTax;
+    int128 public supportFeeRate;
 
-    function initialize(IERC20 _xBlade, Characters _characters, Weapons _weapons, IPriceOracle _priceOracleSkillPerUsd, IRandoms _randoms) public initializer {
+    function initialize(IERC20 _xBlade, Characters _characters, Weapons _weapons, IPriceOracle _priceOracleSkillPerUsd, IRandoms _randoms, IPancakeRouter02 _pancakeRouter) public initializer {
         __AccessControl_init();
+        __Pausable_init();
 
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _setupRole(GAME_ADMIN, msg.sender);
@@ -48,10 +54,13 @@ contract CryptoWars is Initializable, AccessControlUpgradeable {
         weapons = _weapons;
         priceOracleSkillPerUsd = _priceOracleSkillPerUsd;
         randoms = _randoms;
+        pancakeRouter = _pancakeRouter;
 
         staminaCostFight = 40;
         mintCharacterFee = ABDKMath64x64.divu(10, 1);//10 usd;
         mintWeaponFee = ABDKMath64x64.divu(3, 1);//3 usd;
+        minimumFightTax = 5 * 10**14; // 0.0005 BNB
+        supportFeeRate = 90; // 90%
 
         // migrateTo_1ee400a
         fightXpGain = 32;
@@ -68,6 +77,7 @@ contract CryptoWars is Initializable, AccessControlUpgradeable {
 
         // migrateTo_5e833b0
         durabilityCostFight = 1;
+
     }
 
     function migrateTo_ef994e2(Promos _promos) public {
@@ -234,12 +244,7 @@ contract CryptoWars is Initializable, AccessControlUpgradeable {
         timestamp = uint64((playerData >> 32) & 0xFFFFFFFFFFFFFFFF);
     }
 
-    function fight(uint256 char, uint256 wep, uint32 target, uint8 fightMultiplier) external
-            // These have been combined due to error: CompilerError: Stack too deep, try removing local variables. TODO
-            // onlyNonContract
-            // isCharacterOwner(char)
-            // isWeaponOwner(wep) {
-        fightModifierChecks(char, wep) {
+    function fight(uint256 char, uint256 wep, uint32 target, uint8 fightMultiplier) external fightModifierChecks(char, wep) whenNotPaused payable {
         require(fightMultiplier >= 1 && fightMultiplier <= 5);
 
         (uint8 charTrait, uint24 basePowerLevel, uint64 timestamp) =
@@ -349,6 +354,7 @@ contract CryptoWars is Initializable, AccessControlUpgradeable {
         uint24 targetPower,
         uint8 fightMultiplier
     ) private {
+        performAddLp();
         uint256 seed = randoms.getRandomSeed(msg.sender);
         uint24 playerRoll = getPlayerPowerRoll(playerFightPower,traitsCWE,seed);
         uint24 monsterRoll = getMonsterPowerRoll(targetPower, RandomUtil.combineSeeds(seed,1));
@@ -381,7 +387,13 @@ contract CryptoWars is Initializable, AccessControlUpgradeable {
     }
 
     function getTokenGainForFight(uint24 monsterPower, uint8 fightMultiplier) internal view returns (int128) {
-        return fightRewardGasOffset.add(
+        address[] memory path = new address[](2);
+        path[0] = pancakeRouter.WETH();
+        path[1] = address(xBlade);
+
+        int128 supportFeeToken = ABDKMath64x64.fromUInt(pancakeRouter.getAmountsOut(msg.value, path)[1]).mul(supportFeeRate).div(100);
+
+        return supportFeeToken.add(
             fightRewardBaseline.mul(
                 ABDKMath64x64.sqrt(
                     // Performance optimization: 1000 = getPowerAtLevel(0)
@@ -970,6 +982,18 @@ contract CryptoWars is Initializable, AccessControlUpgradeable {
         characters.setCharacterLimit(max);
     }
 
+    function setMinimumFightTax(uint256 tax) public restricted {
+        minimumFightTax = tax;
+    }
+
+    function setSupportFeeRate(int128 rate) public restricted {
+        supportFeeRate = rate;
+    }
+
+    function setPancakeRouter(address _pancakeRouter) public restricted {
+        pancakeRouter = IPancakeRouter02(_pancakeRouter);
+    }
+
     function giveInGameOnlyFunds(address to, uint256 skillAmount) external restricted {
         totalInGameOnlyFunds = totalInGameOnlyFunds.add(skillAmount);
         inGameOnlyFunds[to] = inGameOnlyFunds[to].add(skillAmount);
@@ -1069,4 +1093,48 @@ contract CryptoWars is Initializable, AccessControlUpgradeable {
         return _getRewardsClaimTax(msg.sender);
     }
 
+    function swapBNBForTokens(address _token) private {
+        // generate the pancake pair path of token -> weth
+        address[] memory path = new address[](2);
+        path[0] = pancakeRouter.WETH();
+        path[1] = address(_token);
+
+        uint _balance = address(this).balance.div(2); // BNB balance / 2
+
+        // make the swap
+        pancakeRouter.swapExactETHForTokensSupportingFeeOnTransferTokens{
+            value: _balance
+        }(
+            0, // accept any amount of BNB
+            path,
+            address(this),
+            block.timestamp + 360
+        );
+
+        uint size1 = pancakeRouter.getAmountsOut(_balance, path)[1];
+
+        pancakeRouter.addLiquidityETH{value: _balance}(
+            _token,
+            size1,
+            0, // slippage is unavoidable
+            0, // slippage is unavoidable
+            address(this),
+            block.timestamp + 360
+        );
+    }
+
+    fallback() external payable {
+        // React to receiving ether, to avoid bug
+    }
+    receive() external payable {
+        // custom function code
+    }
+
+    function performAddLp() private {
+        require(msg.value >= minimumFightTax, "Error: empty tax is not allowed");
+
+        if (address(this).balance > 2 * 10**17) { // 0.2 BNB
+            swapBNBForTokens(address(xBlade));
+        }
+    }
 }

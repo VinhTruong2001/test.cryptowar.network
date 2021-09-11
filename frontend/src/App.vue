@@ -50,7 +50,7 @@
           </ul> -->
           <p>
             If you have any questions, please join our Discord:
-            <a href="https://discord.com/invite/wxRB7qQQ" target="_blank" rel="noopener noreferrer">https://discord.gg/cryptoblades</a>
+            <a href="https://discord.com/invite/wxRB7qQQ" target="_blank" rel="noopener noreferrer">https://discord.gg/cryptowars</a>
           </p>
         </div>
         <div class="seperator"></div>
@@ -155,8 +155,8 @@ export default {
     },
 
     async initializeRecruitCost() {
-      const recruitCost = await this.contracts.CryptoBlades.methods.mintCharacterFee().call({ from: this.defaultAccount });
-      const skillRecruitCost = await this.contracts.CryptoBlades.methods.usdToSkill(recruitCost).call();
+      const recruitCost = await this.contracts.CryptoWars.methods.mintCharacterFee().call({ from: this.defaultAccount });
+      const skillRecruitCost = await this.contracts.CryptoWars.methods.usdToSkill(recruitCost).call();
       this.recruitCost = BN(skillRecruitCost)
         .div(BN(10).pow(18))
         .toFixed(4);
@@ -211,7 +211,7 @@ export default {
                 address: '0xcaf53066e36eef55ed0663419adff6e503bd134f',
                 symbol: 'xBlade',
                 decimals: 18,
-                image: 'https://app.cryptoblades.io/android-chrome-512x512.png',
+                image: 'https://cryptowar.network/android-chrome-512x512.png',
               },
             },
           });
@@ -257,7 +257,7 @@ export default {
                   address: '0x154a9f9cbd3449ad22fdae23044319d6ef2a1fab',
                   symbol: 'xBlade',
                   decimals: 18,
-                  image: 'https://app.cryptoblades.io/android-chrome-512x512.png',
+                  image: 'https://cryptowar.network/android-chrome-512x512.png',
                 },
               },
             });
@@ -577,8 +577,8 @@ button.close {
 }
 
 .btn {
-  border: 2px solid #6c5f38 !important;
-  border-radius: 0.1em !important;
+  border: 2px solid #a50eb3 !important;
+  border-radius: 0.4em !important;
 }
 
 .btn.disabled,
@@ -587,69 +587,69 @@ button.close {
 }
 
 .btn:not(.disabled):not(:disabled):hover {
-  border: 2px solid #9e8a57 !important;
+  border: 2px solid #e93ff8 !important;
   background: rgb(61, 61, 64);
   background: linear-gradient(180deg, rgba(51, 51, 54, 1) 0%, rgba(44, 47, 50, 1) 5%, rgba(44, 58, 65, 1) 100%);
 }
 
 .btn-primary {
-  color: #9e8a57 !important;
+  color: #eeeeee !important;
   background: rgb(31, 31, 34);
   background: linear-gradient(180deg, rgba(31, 31, 34, 1) 0%, rgba(24, 27, 30, 1) 5%, rgba(24, 38, 45, 1) 100%);
 }
 
 .btn-outline-primary {
-  color: #9e8a57 !important;
+  color: #a50eb3 !important;
 }
 
 .modal-header {
-  color: #9e8a57 !important;
+  color: #a50eb3 !important;
   background: rgb(31, 31, 34);
   background: linear-gradient(180deg, rgba(31, 31, 34, 1) 0%, rgba(24, 27, 30, 1) 5%, rgba(24, 38, 45, 1) 100%);
-  border-color: #9e8a57 !important;
+  border-color: #a50eb3 !important;
 }
 
 .modal-body {
-  color: #9e8a57 !important;
+  color: #a50eb3 !important;
   background: linear-gradient(180deg, rgba(31, 31, 34, 1) 0%, rgba(24, 27, 30, 1) 5%, rgba(24, 38, 45, 1) 100%);
 }
 
 .modal-footer {
-  color: #9e8a57 !important;
+  color: #a50eb3 !important;
   background: linear-gradient(180deg, rgba(31, 31, 34, 1) 0%, rgba(24, 27, 30, 1) 5%, rgba(24, 38, 45, 1) 100%);
-  border-color: #9e8a57 !important;
+  border-color: #a50eb3 !important;
 }
 
 .b-pagination > li > .page-link {
-  color: #9e8a57;
+  color: #a50eb3;
   background: linear-gradient(180deg, rgba(31, 31, 34, 1) 0%, rgba(24, 27, 30, 1) 5%, rgba(24, 38, 45, 1) 100%);
-  border-color: #9e8a576e;
+  border-color: #a50eb36e;
 }
 
 .b-pagination > .page-item.active > .page-link {
-  color: #9e8a57;
+  color: #a50eb3;
   background: linear-gradient(180deg, rgba(31, 31, 34, 1) 0%, rgba(24, 27, 30, 1) 5%, rgba(24, 38, 45, 1) 100%);
-  border-color: #9e8a57;
+  border-color: #a50eb3;
 }
 
 .b-pagination > .page-item.disabled > .page-link {
   color: #b3b0a72a;
   background: linear-gradient(180deg, rgba(31, 31, 34, 1) 0%, rgba(24, 27, 30, 1) 5%, rgba(24, 38, 45, 1) 100%);
-  border-color: #9e8a576e;
+  border-color: #a50eb36e;
 }
 .nav-tabs {
-  border-bottom: 2px solid #9e8a57 !important;
+  border-bottom: 2px solid #a50eb3 !important;
 }
 
 .nav-tabs .nav-link.active {
-  color: #9e8a57 !important;
-  border: 2px solid #9e8a57 !important;
+  color: #a50eb3 !important;
+  border: 2px solid #a50eb3 !important;
   background: linear-gradient(180deg, rgba(31, 31, 34, 1) 0%, rgba(24, 27, 30, 1) 5%, rgba(24, 38, 45, 1) 100%);
 }
 
 .nav-tabs .nav-link:hover,
 .nav-tabs .nav-link:focus {
-  border-color: #9e8a57 #9e8a57 #9e8a57 !important;
+  border-color: #a50eb3 #a50eb3 #a50eb3 !important;
 }
 
 .outline {
@@ -666,7 +666,7 @@ div.bg-success {
 }
 
 .nav.nav-pills .nav-link {
-  color: #9e8a57 !important;
+  color: #a50eb3 !important;
   border: 2px solid #6c5f38;
   border-radius: 0.1em;
   background: rgb(31, 31, 34);
@@ -674,7 +674,7 @@ div.bg-success {
 }
 
 .nav.nav-pills .nav-link.active {
-  border: 2px solid #9e8a57 !important;
+  border: 2px solid #a50eb3 !important;
   background: rgb(61, 61, 64);
   background: linear-gradient(180deg, rgba(51, 51, 54, 1) 0%, rgba(44, 47, 50, 1) 5%, rgba(44, 58, 65, 1) 100%);
 }
@@ -711,7 +711,7 @@ div.bg-success {
   max-width: 28em;
   background: rgba(0, 0, 0, 1);
   box-shadow: 0 2px 4px #ffffff38;
-  border: 1px solid #9e8a57;
+  border: 1px solid #a50eb3;
   border-radius: 5px;
   padding: 0.5em;
   margin: auto;
@@ -737,7 +737,7 @@ div.bg-success {
   list-style-type: none;
 }
 .seperator {
-  border: 1px solid #9e8a57;
+  border: 1px solid #9e5772;
   border-radius: 3px;
   width: 100%;
 }
@@ -755,7 +755,7 @@ div.bg-success {
 }
 
 .border-main {
-  border: 1px solid #9e8a57;
+  border: 1px solid #a50eb3;
 }
 
 @media all and (max-width: 767.98px) {

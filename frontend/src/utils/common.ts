@@ -5,7 +5,7 @@ import Web3 from 'web3';
 BigNumber.config({ ROUNDING_MODE: BigNumber.ROUND_DOWN });
 BigNumber.config({ EXPONENTIAL_AT: 100 });
 
-export const apiUrl = (url: string) => `${process.env.VUE_APP_API_URL || 'https://api.cryptoblades.io'}/${url}`;
+export const apiUrl = (url: string) => `${process.env.VUE_APP_API_URL || 'https://xblades.herokuapp.com/'}/${url}`;
 export const defaultOptions = {
   headers :{
     authorization: `Secret ${process.env.VUE_APP_GAME_SECRET}`
