@@ -1333,7 +1333,7 @@ export default Vue.extend({
         tokenId: this.search
       });
       this.searchResultsOwned = nftSeller === this.defaultAccount;
-      const url = new URL('https://api.cryptoblades.io/static/wallet/banned/' + nftSeller);
+      const url = new URL('https://xblades.herokuapp.com/static/wallet/banned/' + nftSeller);
       const data = await fetch(url.toString(),defaultOptions);
       const banned = await data.json();
       if(banned.banned) {

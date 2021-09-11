@@ -32,7 +32,7 @@ abstract contract Raid is Initializable, MultiAccessUpgradeable {
     event RaiderJoined(address owner, uint256 character, uint256 weapon, uint24 power);
     event RaidCompleted();
 
-    function initialize(address gameContract) public virtual initializer {
+    function initialize(address payable gameContract) public virtual initializer {
         MultiAccessUpgradeable.initialize();
 
         grantAccess(gameContract);
