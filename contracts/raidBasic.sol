@@ -19,7 +19,7 @@ contract RaidBasic is Initializable, Raid {
     event XpReward(address addr, uint256 charID, uint256 amount);
     event WeaponWinner(address addr, uint256 wepID);
 
-    function initialize(address gameContract) public override initializer {
+    function initialize(address payable gameContract) public override initializer {
         Raid.initialize(gameContract);
 
         staminaDrain = 12 * 60 * 60;
