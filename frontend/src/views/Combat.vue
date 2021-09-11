@@ -330,7 +330,7 @@ export default {
       const weaponMultiplier = GetTotalMultiplierForTrait(selectedWeapon, playerElement);
       const totalPower = characterPower * weaponMultiplier + selectedWeapon.bonusPower;
 
-      //Formula taken from getXpGainForFight funtion of cryptoblades.sol
+      //Formula taken from getXpGainForFight funtion of CryptoWars.sol
       return Math.floor((targetToFight.power / totalPower) * this.fightXpGain) * this.fightMultiplier;
     },
 

@@ -118,12 +118,12 @@ export async function setUpContracts(web3: Web3): Promise<Contracts> {
 
   const cryptoBladesContractAddr = process.env.VUE_APP_CRYPTOWARS_CONTRACT_ADDRESS || (cryptoWarsNetworks as Networks)[networkId]!.address;
 
-  const CryptoBlades = new web3.eth.Contract(cryptoWarsAbi as Abi, cryptoBladesContractAddr);
+  const CryptoWars = new web3.eth.Contract(cryptoWarsAbi as Abi, cryptoBladesContractAddr);
   const [charactersAddr, weaponsAddr, randomsAddr, blacksmithAddr] = await Promise.all([
-    CryptoBlades.methods.characters().call(),
-    CryptoBlades.methods.weapons().call(),
-    CryptoBlades.methods.randoms().call(),
-    CryptoBlades.methods.blacksmith().call(),
+    CryptoWars.methods.characters().call(),
+    CryptoWars.methods.weapons().call(),
+    CryptoWars.methods.randoms().call(),
+    CryptoWars.methods.blacksmith().call(),
   ]);
   const Randoms = new web3.eth.Contract(randomsAbi as Abi, randomsAddr);
   const Characters = new web3.eth.Contract(charactersAbi as Abi, charactersAddr);
@@ -179,7 +179,7 @@ export async function setUpContracts(web3: Web3): Promise<Contracts> {
 
   return {
     ...stakingContracts,
-    CryptoWars: CryptoBlades, Randoms, Characters, Weapons, Blacksmith, Shields, WeaponRenameTagConsumables, CharacterRenameTagConsumables,
+    CryptoWars, Randoms, Characters, Weapons, Blacksmith, Shields, WeaponRenameTagConsumables, CharacterRenameTagConsumables,
     CharacterFireTraitChangeConsumables, CharacterEarthTraitChangeConsumables, CharacterWaterTraitChangeConsumables, CharacterLightningTraitChangeConsumables,
     ...raidContracts,
     ...marketContracts,
