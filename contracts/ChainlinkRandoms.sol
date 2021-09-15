@@ -65,6 +65,7 @@ contract ChainlinkRandoms is IRandoms, Pausable, AccessControl, VRFConsumerBase 
         // hence we set it to an arbitrary constant
         // requestRandomness(keyHash, fee, VRF_MAGIC_SEED);
         requestRandomness(keyHash, fee);
+
     }
 
     function pause() external onlyOwner {
