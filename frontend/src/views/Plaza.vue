@@ -184,6 +184,7 @@ export default Vue.extend({
 
   async created() {
     const recruitCost = await this.contracts.CryptoWars.methods.mintCharacterFee().call({ from: this.defaultAccount });
+
     const skillRecruitCost = await this.contracts.CryptoWars.methods.usdToxBlade(recruitCost).call();
     this.recruitCost = new BN(skillRecruitCost).div(new BN(10).pow(18)).toFixed(4);
     this.loadConsumablesCount();
