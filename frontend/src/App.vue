@@ -156,9 +156,8 @@ export default {
 
     async initializeRecruitCost() {
       const recruitCost = await this.contracts.CryptoWars.methods.mintCharacterFee().call({ from: this.defaultAccount });
-
-      const skillRecruitCost = await this.contracts.CryptoWars.methods.usdToxBlade(recruitCost).call();
-      this.recruitCost = BN(skillRecruitCost)
+      const xBladeRecruitCost = await this.contracts.CryptoWars.methods.usdToxBlade(recruitCost).call();
+      this.recruitCost = BN(xBladeRecruitCost)
         .div(BN(10).pow(18))
         .toFixed(4);
     },
@@ -639,13 +638,11 @@ button.close {
   border-color: #a50eb36e;
 }
 .nav-tabs {
-
   border-bottom: none !important;
 }
 
 .nav-tabs .nav-link.active {
   color: #a50eb3 !important;
-
   border-bottom: 5px solid #a50eb3 !important;
   border-top-color: transparent !important;
   border-left-color: transparent !important;
@@ -657,7 +654,6 @@ button.close {
 .nav-tabs .nav-link:hover {
   border-bottom: 5px solid #a50eb3 !important;
   border-color: transparent transparent  #a50eb3 transparent !important ;
-
 }
 
 .outline {
