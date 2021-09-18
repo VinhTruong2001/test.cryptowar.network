@@ -61,19 +61,20 @@ module.exports = {
       gas: parseInt(process.env.ETH_DEV_RPC_GAS, 10) || 67219750, // required for deploy, otherwise it throws weird require-errors on constructor
     },
     bsctestnet: {
+      networkCheckTimeout: 150000,
       provider: () =>
         new HDWalletProvider(
           hdWalletProviderOptions(
             process.env.BINANCE_WALLET_PRIVATE_KEY,
             process.env.BINANCE_WALLET_MNEMONIC,
             {
-              providerOrUrl: "wss://data-seed-prebsc-2-s2.binance.org:8545/",
+              providerOrUrl: "wss://data-seed-prebsc-2-s1.binance.org:8545/",
             }
           )
         ),
       network_id: 0x61,
+      timeoutBlocks: 100000,
       confirmations: 2,
-      timeoutBlocks: 400,
       gas: 8000000, //8000000,
       skipDryRun: true,
     },

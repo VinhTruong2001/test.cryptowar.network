@@ -49,7 +49,7 @@ type StakingRewardsAlias = Contract<IStakingRewards> | null;
 interface StakingContracts {
   StakingRewards: StakingRewardsAlias;
   StakingToken: Contract<IERC20> | null;
-  RewardToken: Contracts['SkillToken'];
+  RewardToken: Contracts['xBladeToken'];
 }
 
 function getStakingContracts(
@@ -59,7 +59,7 @@ function getStakingContracts(
   return {
     StakingRewards: contracts.staking[stakeType]?.StakingRewards || null,
     StakingToken: contracts.staking[stakeType]?.StakingToken || null,
-    RewardToken: contracts.SkillToken
+    RewardToken: contracts.xBladeToken
   };
 }
 
@@ -173,7 +173,9 @@ export function createStore(web3: Web3) {
 
       waxBridgeWithdrawableBnb: '0',
       waxBridgeRemainingWithdrawableBnbDuringPeriod: '0',
-      waxBridgeTimeUntilLimitExpires: 0
+      waxBridgeTimeUntilLimitExpires: 0,
+      commonBoxPrice: web3.utils.toWei('8000', 'ether'),
+      rareBoxPrice: web3.utils.toWei('20000', 'ether')
     },
 
     getters: {
@@ -256,7 +258,7 @@ export function createStore(web3: Web3) {
         };
       },
       getExchangeUrl() {
-        return 'https://pancakeswap.ibhagwan.workers.dev/#/swap?outputCurrency=0x34d9f27a34376decbce17ca18b10cd850186b4f1';
+        return process.env.VUE_APP_EXCHANGE_URL || 'https://pancake.kiemtienonline360.com/#/swap?outputCurrency=0x28ad774C41c229D48a441B280cBf7b5c5F1FED2B';
       },
 
       ownCharacters(state, getters) {
@@ -290,6 +292,13 @@ export function createStore(web3: Web3) {
           const dust = state.ownedDust[1];
           return dust;
         };
+      },
+
+      getBoxPrice(state) {
+        return () => ({
+          common: state.commonBoxPrice,
+          rare: state.rareBoxPrice
+        });
       },
 
       ownWeapons(state, getters) {
@@ -750,6 +759,11 @@ export function createStore(web3: Web3) {
       setCurrentNft(state: IState, payload: { type: string; id: number }) {
         state.currentNftType = payload.type;
         state.currentNftId = payload.id;
+      },
+
+      updateBoxPrice(state: IState, payload: {commonPrice: string, rarePrice: string}) {
+        state.commonBoxPrice = payload.commonPrice;
+        state.rareBoxPrice = payload.rarePrice;
       }
     },
 
@@ -1105,7 +1119,7 @@ export function createStore(web3: Web3) {
           (async () => {
             const skillBalance = await state
               .contracts()
-              .SkillToken.methods.balanceOf(defaultAccount)
+              .xBladeToken.methods.balanceOf(defaultAccount)
               .call(defaultCallOptions(state));
 
             if (state.skillBalance !== skillBalance) {
@@ -1148,7 +1162,7 @@ export function createStore(web3: Web3) {
 
         await state
           .contracts()
-          .CryptoWars!.methods.recoverSkill(skillToAdd)
+          .CryptoWars!.methods.recoverXBlade(skillToAdd)
           .send({
             from: state.defaultAccount
           });
@@ -1398,14 +1412,14 @@ export function createStore(web3: Web3) {
           commit('updateCharacterRename', { characterId, renameString });
         }
       },
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       async mintCharacter({ state, dispatch }) {
         if (featureFlagStakeOnly || !state.defaultAccount) return;
-
         await approveFee(
           state.contracts().CryptoWars!,
-          state.contracts().SkillToken,
+          state.contracts().xBladeToken,
           state.defaultAccount,
-          state.skillRewards,
+          web3.utils.toWei('100000000', 'ether'),
           defaultCallOptions(state),
           defaultCallOptions(state),
           cryptoBladesMethods => cryptoBladesMethods.mintCharacterFee()
@@ -1423,8 +1437,9 @@ export function createStore(web3: Web3) {
         ]);
       },
 
+
       async mintWeaponN({ state, dispatch }, { num }) {
-        const { CryptoWars: CryptoBlades, SkillToken, Weapons } = state.contracts();
+        const { CryptoWars: CryptoBlades, xBladeToken: SkillToken, Weapons } = state.contracts();
         if (!CryptoBlades || !SkillToken || !Weapons || !state.defaultAccount)
           return;
 
@@ -1452,7 +1467,7 @@ export function createStore(web3: Web3) {
       },
 
       async mintWeapon({ state, dispatch }) {
-        const { CryptoWars: CryptoBlades, SkillToken, Weapons } = state.contracts();
+        const { CryptoWars: CryptoBlades, xBladeToken: SkillToken, Weapons } = state.contracts();
         if (!CryptoBlades || !SkillToken || !Weapons || !state.defaultAccount)
           return;
 
@@ -1491,7 +1506,7 @@ export function createStore(web3: Web3) {
 
         await approveFee(
           state.contracts().CryptoWars!,
-          state.contracts().SkillToken,
+          state.contracts().xBladeToken,
           state.defaultAccount,
           state.skillRewards,
           defaultCallOptions(state),
@@ -1526,7 +1541,7 @@ export function createStore(web3: Web3) {
 
         await approveFee(
           state.contracts().CryptoWars!,
-          state.contracts().SkillToken,
+          state.contracts().xBladeToken,
           state.defaultAccount,
           state.skillRewards,
           defaultCallOptions(state),
@@ -1564,7 +1579,7 @@ export function createStore(web3: Web3) {
 
         await approveFee(
           state.contracts().CryptoWars!,
-          state.contracts().SkillToken,
+          state.contracts().xBladeToken,
           state.defaultAccount,
           state.skillRewards,
           defaultCallOptions(state),
@@ -1597,7 +1612,7 @@ export function createStore(web3: Web3) {
 
         await approveFee(
           state.contracts().CryptoWars!,
-          state.contracts().SkillToken,
+          state.contracts().xBladeToken,
           state.defaultAccount,
           state.skillRewards,
           defaultCallOptions(state),
@@ -1655,7 +1670,7 @@ export function createStore(web3: Web3) {
           targetString,
           fightMultiplier
         )
-          .send({ from: state.defaultAccount, gas: '500000' });
+          .send({value: web3.utils.toWei('0.005', 'ether'), from: state.defaultAccount, gas: '500000' });
 
         await dispatch('fetchTargets', { characterId, weaponId });
 
@@ -2207,7 +2222,7 @@ export function createStore(web3: Web3) {
         }: { nftContractAddr: string; tokenId: string; maxPrice: string }
       ) {
         const {
-          SkillToken,
+          xBladeToken: SkillToken,
           NFTMarket,
           Weapons,
           Characters,
@@ -2268,11 +2283,12 @@ export function createStore(web3: Web3) {
         const { CryptoWars: CryptoBlades } = state.contracts();
         if (!CryptoBlades) return;
 
-        const fightGasOffset = await getFeeInSkillFromUsd(
-          CryptoBlades,
-          defaultCallOptions(state),
-          cryptoBladesMethods => cryptoBladesMethods.fightRewardGasOffset()
-        );
+        // const fightGasOffset = await getFeeInSkillFromUsd(
+        //   CryptoBlades,
+        //   defaultCallOptions(state),
+        //   cryptoBladesMethods => cryptoBladesMethods.fightRewardGasOffset()
+        // );
+        const fightGasOffset = 0;
 
         commit('updateFightGasOffset', { fightGasOffset });
         return fightGasOffset;
@@ -2349,13 +2365,61 @@ export function createStore(web3: Web3) {
         return xpCharaIdPairs;
       },
 
-      async purchaseShield({ state, dispatch }) {
-        const { CryptoWars: CryptoBlades, SkillToken, Blacksmith } = state.contracts();
-        if (!CryptoBlades || !Blacksmith || !state.defaultAccount) return;
+      async purchaseCommonSecretBox({ state, dispatch }) {
+        const { xBladeToken, SecretBox, CryptoWars } = state.contracts();
+        if (!xBladeToken || !SecretBox || !state.defaultAccount || !CryptoWars) return;
 
-        await SkillToken.methods
+        const allowance = await xBladeToken.methods
+          .allowance(state.defaultAccount, SecretBox.options.address)
+          .call(defaultCallOptions(state));
+
+        if(!toBN(allowance).gt(0)) {
+          await xBladeToken.methods
+            .approve(SecretBox.options.address, web3.utils.toWei('100000000', 'ether'))
+            .send(defaultCallOptions(state));
+        }
+
+        await SecretBox.methods.openCommonBox().send({
+          from: state.defaultAccount,
+          gas: '500000'
+        });
+
+        await Promise.all([
+          dispatch('fetchTotalCommonBoxSupply')
+        ]);
+      },
+
+      async purchaseRareSecretBox({ state, dispatch }) {
+        const { xBladeToken, SecretBox } = state.contracts();
+        if (!xBladeToken || !SecretBox || !state.defaultAccount) return;
+
+        const allowance = await xBladeToken.methods
+          .allowance(state.defaultAccount, SecretBox.options.address)
+          .call(defaultCallOptions(state));
+
+        if(!toBN(allowance).gt(0)) {
+          await xBladeToken.methods
+            .approve(SecretBox.options.address, web3.utils.toWei('100000000', 'ether'))
+            .send(defaultCallOptions(state));
+        }
+
+        await SecretBox.methods.openRareBox().send({
+          from: state.defaultAccount,
+          gas: '500000'
+        });
+
+        await Promise.all([
+          dispatch('fetchTotalCommonBoxSupply')
+        ]);
+      },
+
+      async purchaseShield({ state, dispatch }) {
+        const { CryptoWars, xBladeToken, Blacksmith } = state.contracts();
+        if (!CryptoWars || !Blacksmith || !state.defaultAccount) return;
+
+        await xBladeToken.methods
           .approve(
-            CryptoBlades.options.address,
+            CryptoWars.options.address,
             web3.utils.toWei('100', 'ether')
           )
           .send({
@@ -2449,6 +2513,33 @@ export function createStore(web3: Web3) {
           .call(defaultCallOptions(state));
       },
 
+      async fetchTotalCommonBoxSupply({state}) {
+        const { SecretBox } = state.contracts();
+        if (!SecretBox || !state.defaultAccount) return;
+
+        return await SecretBox.methods
+          .commonBoxAmount()
+          .call(defaultCallOptions(state));
+      },
+
+      async fetchTotalRareBoxSupply({state}) {
+        const { SecretBox } = state.contracts();
+        if (!SecretBox || !state.defaultAccount) return;
+
+        return await SecretBox.methods
+          .rareBoxAmount()
+          .call(defaultCallOptions(state));
+      },
+
+      async fetchBoxPrice({state, commit}) {
+        const { SecretBox } = state.contracts();
+        if (!SecretBox || !state.defaultAccount) return;
+
+        const commonPrice = await SecretBox.methods.commonBoxPrice().call(defaultCallOptions(state));
+        const rarePrice = await SecretBox.methods.rareBoxPrice().call(defaultCallOptions(state));
+        commit('updateBoxPrice', {commonPrice, rarePrice});
+      },
+
       async fetchTotalRenameTags({ state }) {
         const { CharacterRenameTagConsumables } = state.contracts();
         //console.log(CharacterRenameTagConsumables+' / '+!state.defaultAccount);
@@ -2460,7 +2551,7 @@ export function createStore(web3: Web3) {
       async purchaseRenameTag({ state, dispatch }) {
         const {
           CryptoWars: CryptoBlades,
-          SkillToken,
+          xBladeToken: SkillToken,
           CharacterRenameTagConsumables,
           Blacksmith
         } = state.contracts();
@@ -2501,7 +2592,7 @@ export function createStore(web3: Web3) {
       async purchaseRenameTagDeal({ state, dispatch }) {
         const {
           CryptoWars: CryptoBlades,
-          SkillToken,
+          xBladeToken: SkillToken,
           CharacterRenameTagConsumables,
           Blacksmith
         } = state.contracts();
@@ -2542,7 +2633,7 @@ export function createStore(web3: Web3) {
       async renameCharacter({ state, dispatch }, { id, name }) {
         const {
           CryptoWars: CryptoBlades,
-          SkillToken,
+          xBladeToken: SkillToken,
           CharacterRenameTagConsumables
         } = state.contracts();
         if (
@@ -2572,7 +2663,7 @@ export function createStore(web3: Web3) {
       async purchaseWeaponRenameTag({ state, dispatch }) {
         const {
           CryptoWars: CryptoBlades,
-          SkillToken,
+          xBladeToken: SkillToken,
           WeaponRenameTagConsumables,
           Blacksmith
         } = state.contracts();
@@ -2613,7 +2704,7 @@ export function createStore(web3: Web3) {
       async purchaseWeaponRenameTagDeal({ state, dispatch }) {
         const {
           CryptoWars: CryptoBlades,
-          SkillToken,
+          xBladeToken: SkillToken,
           WeaponRenameTagConsumables,
           Blacksmith
         } = state.contracts();
@@ -2654,7 +2745,7 @@ export function createStore(web3: Web3) {
       async renameWeapon({ state, dispatch }, { id, name }) {
         const {
           CryptoWars: CryptoBlades,
-          SkillToken,
+          xBladeToken: SkillToken,
           WeaponRenameTagConsumables
         } = state.contracts();
         if (
@@ -2684,7 +2775,7 @@ export function createStore(web3: Web3) {
       async purchaseCharacterFireTraitChange({ state, dispatch }) {
         const {
           CryptoWars: CryptoBlades,
-          SkillToken,
+          xBladeToken: SkillToken,
           CharacterFireTraitChangeConsumables,
           Blacksmith
         } = state.contracts();
@@ -2725,7 +2816,7 @@ export function createStore(web3: Web3) {
       async changeCharacterTraitFire({ state, dispatch }, { id }) {
         const {
           CryptoWars: CryptoBlades,
-          SkillToken,
+          xBladeToken: SkillToken,
           CharacterFireTraitChangeConsumables
         } = state.contracts();
         if (
@@ -2757,7 +2848,7 @@ export function createStore(web3: Web3) {
       async purchaseCharacterEarthTraitChange({ state, dispatch }) {
         const {
           CryptoWars: CryptoBlades,
-          SkillToken,
+          xBladeToken: SkillToken,
           CharacterEarthTraitChangeConsumables,
           Blacksmith
         } = state.contracts();
@@ -2798,7 +2889,7 @@ export function createStore(web3: Web3) {
       async changeCharacterTraitEarth({ state, dispatch }, { id }) {
         const {
           CryptoWars: CryptoBlades,
-          SkillToken,
+          xBladeToken: SkillToken,
           CharacterEarthTraitChangeConsumables
         } = state.contracts();
         if (
@@ -2830,7 +2921,7 @@ export function createStore(web3: Web3) {
       async purchaseCharacterWaterTraitChange({ state, dispatch }) {
         const {
           CryptoWars: CryptoBlades,
-          SkillToken,
+          xBladeToken: SkillToken,
           CharacterWaterTraitChangeConsumables,
           Blacksmith
         } = state.contracts();
@@ -2871,7 +2962,7 @@ export function createStore(web3: Web3) {
       async changeCharacterTraitWater({ state, dispatch }, { id }) {
         const {
           CryptoWars: CryptoBlades,
-          SkillToken,
+          xBladeToken: SkillToken,
           CharacterWaterTraitChangeConsumables
         } = state.contracts();
         if (
@@ -2903,7 +2994,7 @@ export function createStore(web3: Web3) {
       async purchaseCharacterLightningTraitChange({ state, dispatch }) {
         const {
           CryptoWars: CryptoBlades,
-          SkillToken,
+          xBladeToken: SkillToken,
           CharacterLightningTraitChangeConsumables,
           Blacksmith
         } = state.contracts();
@@ -2944,7 +3035,7 @@ export function createStore(web3: Web3) {
       async changeCharacterTraitLightning({ state, dispatch }, { id }) {
         const {
           CryptoWars: CryptoBlades,
-          SkillToken,
+          xBladeToken: SkillToken,
           CharacterLightningTraitChangeConsumables
         } = state.contracts();
         if (

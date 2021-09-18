@@ -9,6 +9,7 @@ import xBladeStake from './views/xBladeStake.vue';
 import Raid from './views/Raid.vue';
 import Market from './views/Market.vue';
 import Leaderboard from './views/Leaderboard.vue';
+import Options from './views/Options.vue';
 
 import {
   raid as featureFlagRaid,
@@ -44,6 +45,7 @@ function createRouter() {
       ...marketRoutes,
       { path: '/sales', name: 'select-stake-type', component: xBladeStake },
       // { path: '/stake/:stakeType', name: 'stake', component: Stake, props: true }
+      { path: '/options', name: 'options', component: Options }
     ]
   });
 

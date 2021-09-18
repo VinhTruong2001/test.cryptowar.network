@@ -3,13 +3,7 @@
 
     <div v-if="ownCharacters.length === 0" class="blank-slate">
       <div class="current-promotion">
-        <div class="tob-bg-img promotion-decoration">
-          <img class="vertical-decoration bottom" src="../assets/border-element.png">
-        </div>
         <strong class="upper-text">Start earning today!</strong>
-        <div class="bot-bg-img promotion-decoration">
-            <img src="../assets/border-element.png">
-        </div>
       </div>
       <big-button
         class="button"
@@ -28,22 +22,22 @@
         <div v-if="ownCharacters.length > 0">
           <div class="d-flex justify-content-space-between">
             <h1>Characters ({{ ownCharacters.length }} / 4)</h1>
-            <b-button
+            <!-- <b-button
               v-if="canChangeTrait()"
               variant="primary"
               class="ml-auto gtag-link-others"
               @click="openChangeTrait"
               v-tooltip="'Change character\'s trait'" tagname="change_trait_character">
               Change Trait
-            </b-button>
-            <b-button
+            </b-button> -->
+            <!-- <b-button
               v-if="canRename()"
               variant="primary"
               class="ml-auto gtag-link-others"
               @click="openRenameCharacter"
               v-tooltip="'Rename character'" tagname="rename_character">
               Rename Character
-            </b-button>
+            </b-button> -->
             <b-button
               v-if="ownCharacters.length < 4"
               :disabled="!canRecruit()"
@@ -51,7 +45,16 @@
               class="ml-auto gtag-link-others"
               @click="onMintCharacter"
               v-tooltip="'Recruit new character'" tagname="recruit_character">
-              Recruit ({{ recruitCost }} NON-IGO xBlade) <i class="fas fa-plus"></i>
+              Recruit ({{ recruitCost }} xBlade) <i class="fas fa-plus"></i>
+            </b-button>
+            <b-button
+              v-if="ownCharacters.length < 4"
+              :disabled="!canRecruit()"
+              variant="primary"
+              class="ml-auto gtag-link-others"
+              @click="onMintCharaterWithBNB"
+              v-tooltip="'Recruit new character'" tagname="recruit_character">
+              Recruit ({{ recruitCost }} BNB) <i class="fas fa-plus"></i>
             </b-button>
           </div>
 
@@ -175,7 +178,7 @@ export default Vue.extend({
 
   async created() {
     const recruitCost = await this.contracts.CryptoWars.methods.mintCharacterFee().call({ from: this.defaultAccount });
-    const skillRecruitCost = await this.contracts.CryptoWars.methods.usdToSkill(recruitCost).call();
+    const skillRecruitCost = await this.contracts.CryptoWars.methods.usdToxBlade(recruitCost).call();
     this.recruitCost = new BN(skillRecruitCost).div(new BN(10).pow(18)).toFixed(4);
     this.loadConsumablesCount();
     getConsumablesCountInterval = setInterval(async () => {
@@ -214,11 +217,21 @@ export default Vue.extend({
         (this as any).$dialog.notify.error('Could not mint character: insufficient funds or transaction denied.');
       }
     },
+
+    async onMintCharaterWithBNB() {
+      try {
+        await this.onMintCharaterWithBNB();
+      } catch (e){
+        (this as any).$dialog.notify.error('Could not mint character: insufficient funds or transaction denied.');
+        console.log(e);
+      }
+    },
+
     formatSkill() {
       return fromWeiEther(this.skillBalance);
     },
     canRecruit() {
-      const cost = toBN(this.recruitCost);
+      const cost = toBN(this.recruitCost).div(10**9).toNumber() / 10 ** 9;
       const balance = toBN(this.skillBalance);
       return balance.isGreaterThanOrEqualTo(cost);
     },
@@ -291,6 +304,7 @@ export default Vue.extend({
 .current-promotion {
   width: 40%;
   text-align: center;
+  margin: 32px 0;
 }
 
 @media all and (max-width:  767.98px) {

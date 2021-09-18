@@ -14,6 +14,7 @@ contract Weapons is Initializable, ERC721Upgradeable, AccessControlUpgradeable {
     using ABDKMath64x64 for uint16;
 
     bytes32 public constant GAME_ADMIN = keccak256("GAME_ADMIN");
+    bytes32 public constant BOX_OPENER = keccak256("BOX_OPENER");
     bytes32 public constant RECEIVE_DOES_NOT_SET_TRANSFER_TIMESTAMP = keccak256("RECEIVE_DOES_NOT_SET_TRANSFER_TIMESTAMP");
 
     function initialize () public initializer {
@@ -21,25 +22,19 @@ contract Weapons is Initializable, ERC721Upgradeable, AccessControlUpgradeable {
         __AccessControl_init_unchained();
 
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
-    }
-
-    function migrateTo_e55d8c5() public {
-        require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "Not admin");
+        _setupRole(BOX_OPENER, msg.sender);
 
         burnPointMultiplier = 2;
         lowStarBurnPowerPerPoint = 15;
         fourStarBurnPowerPerPoint = 30;
         fiveStarBurnPowerPerPoint = 60;
-    }
-
-    function migrateTo_aa9da90() public {
-        require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "Not admin");
 
         oneFrac = ABDKMath64x64.fromUInt(1);
         powerMultPerPointBasic =  ABDKMath64x64.divu(1, 400);// 0.25%
         powerMultPerPointPWR = powerMultPerPointBasic.mul(ABDKMath64x64.divu(103, 100)); // 0.2575% (+3%)
         powerMultPerPointMatching = powerMultPerPointBasic.mul(ABDKMath64x64.divu(107, 100)); // 0.2675% (+7%)
     }
+
 
     function migrateTo_951a020() public {
         require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "Not admin");
@@ -104,8 +99,6 @@ contract Weapons is Initializable, ERC721Upgradeable, AccessControlUpgradeable {
     int128 public powerMultPerPointPWR; // 0.2575% (+3%)
     int128 public powerMultPerPointMatching; // 0.2675% (+7%)
 
-    // UNUSED; KEPT FOR UPGRADEABILITY PROXY COMPATIBILITY
-    mapping(uint256 => uint256) public lastTransferTimestamp;
 
     uint256 private lastMintedBlock;
     uint256 private firstMintedOfLastBlock;
@@ -131,6 +124,11 @@ contract Weapons is Initializable, ERC721Upgradeable, AccessControlUpgradeable {
 
     function _restricted() internal view {
         require(hasRole(GAME_ADMIN, msg.sender), "Not game admin");
+    }
+
+    modifier canMintWeapon() {
+        require(hasRole(GAME_ADMIN, msg.sender) || hasRole(BOX_OPENER, msg.sender), "Can not mint");
+        _;
     }
 
     modifier noFreshLookup(uint256 id) {
@@ -188,7 +186,7 @@ contract Weapons is Initializable, ERC721Upgradeable, AccessControlUpgradeable {
         _bonusPower = getBonusPower(id);
     }
 
-    function mint(address minter, uint256 seed) public restricted returns(uint256) {
+    function mint(address minter, uint256 seed) public canMintWeapon returns(uint256) {
         uint256 stars;
         uint256 roll = seed % 100;
         // will need revision, possibly manual configuration if we support more than 5 stars
@@ -211,7 +209,27 @@ contract Weapons is Initializable, ERC721Upgradeable, AccessControlUpgradeable {
         return mintWeaponWithStars(minter, stars, seed);
     }
 
-    function mintWeaponWithStars(address minter, uint256 stars, uint256 seed) public restricted returns(uint256) {
+    function mintWithRareBox(address minter, uint256 seed) public canMintWeapon returns(uint256) {
+        uint256 stars;
+        uint256 roll = seed % 100;
+        // will need revision, possibly manual configuration if we support more than 5 stars
+        if(roll < 3) {
+            stars = 4; // 5* at 3%
+        }
+        else if(roll < 12) { // 4* at 9%
+            stars = 3;
+        }
+        else if(roll < 49) { // 3* at 37%
+            stars = 2;
+        }
+        else { // 2* at 51%
+            stars = 1;
+        }
+
+        return mintWeaponWithStars(minter, stars, seed);
+    }
+
+    function mintWeaponWithStars(address minter, uint256 stars, uint256 seed) public canMintWeapon returns(uint256) {
         require(stars < 8, "Stars parameter too high! (max 7)");
         (uint16 stat1, uint16 stat2, uint16 stat3) = getStatRolls(stars, seed);
 
@@ -228,7 +246,7 @@ contract Weapons is Initializable, ERC721Upgradeable, AccessControlUpgradeable {
         uint16 properties,
         uint16 stat1, uint16 stat2, uint16 stat3,
         uint256 cosmeticSeed
-    ) public restricted returns(uint256) {
+    ) public canMintWeapon returns(uint256) {
 
         uint256 tokenID = tokens.length;
 
@@ -702,5 +720,9 @@ contract Weapons is Initializable, ERC721Upgradeable, AccessControlUpgradeable {
         if(promos.getBit(from, 4) && from != address(0) && to != address(0)) {
             require(hasRole(RECEIVE_DOES_NOT_SET_TRANSFER_TIMESTAMP, to), "Transfer cooldown");
         }
+    }
+
+    function setBoxOpener(address account) restricted public {
+        _setupRole(BOX_OPENER, account);
     }
 }

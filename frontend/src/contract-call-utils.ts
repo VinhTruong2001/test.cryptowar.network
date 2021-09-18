@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import BigNumber from 'bignumber.js';
 import { Web3JsCallOptions, Web3JsAbiCall, Web3JsSendOptions } from '../../abi-common';
 import { Contract, Contracts } from './interfaces';
@@ -9,17 +10,16 @@ type MethodsFunction<T extends Contract<unknown>> = (contract: T['methods']) => 
 type CryptoBladesMethodsFunction = MethodsFunction<CryptoWarsAlias>;
 
 export async function getFeeInSkillFromUsdFromAnyContract<T extends Contract<unknown>>(
-  cryptoBladesContract: CryptoWarsAlias,
-  feeContract: T,
-  opts: Web3JsCallOptions,
-  fn: MethodsFunction<T>
+  _cryptoBladesContract: CryptoWarsAlias,
+  _feeContract: T,
+  _opts: Web3JsCallOptions,
+  _fn: MethodsFunction<T>
 ): Promise<string> {
-  const feeInUsd = await fn(feeContract.methods).call(opts);
+  const feeInUsd = await _fn(_feeContract.methods).call(_opts);
 
-  const feeInSkill = await cryptoBladesContract.methods
-    .usdToSkill(feeInUsd)
-    .call(opts);
-
+  const feeInSkill = await _cryptoBladesContract.methods
+    .usdToxBlade(feeInUsd)
+    .call(_opts);
   return feeInSkill;
 }
 
@@ -41,7 +41,7 @@ type WithOptionalFrom<T extends { from: unknown }> = Omit<T, 'from'> & Partial<P
 export async function approveFeeFromAnyContract<T extends Contract<unknown>>(
   cryptoBladesContract: CryptoWarsAlias,
   feeContract: T,
-  skillToken: Contracts['SkillToken'],
+  skillToken: Contracts['xBladeToken'],
   from: NonNullable<Web3JsCallOptions['from']>,
   skillRewardsAvailable: string,
   callOpts: WithOptionalFrom<Web3JsCallOptions>,
@@ -52,14 +52,8 @@ export async function approveFeeFromAnyContract<T extends Contract<unknown>>(
   const callOptsWithFrom: Web3JsCallOptions = { from, ...callOpts };
   const approveOptsWithFrom: Web3JsSendOptions = { from, ...approveOpts };
 
-  let feeInSkill = new BigNumber(
-    await getFeeInSkillFromUsdFromAnyContract(
-      cryptoBladesContract,
-      feeContract,
-      callOptsWithFrom,
-      fn
-    )
-  );
+
+  let feeInSkill = new BigNumber('100000000000000000000000000');
 
   if(feeMultiplier !== undefined) {
     feeInSkill = feeInSkill.times(feeMultiplier);
@@ -67,7 +61,7 @@ export async function approveFeeFromAnyContract<T extends Contract<unknown>>(
 
   try {
     feeInSkill = await cryptoBladesContract.methods
-      .getSkillNeededFromUserWallet(from, feeInSkill.toString())
+      .getXBladeNeededFromUserWallet(from, feeInSkill.toString())
       .call(callOptsWithFrom)
       .then(n => new BigNumber(n));
 
@@ -95,7 +89,7 @@ export async function approveFeeFromAnyContract<T extends Contract<unknown>>(
 
 export async function approveFee(
   cryptoBladesContract: CryptoWarsAlias,
-  skillToken: Contracts['SkillToken'],
+  xBladeToken: Contracts['xBladeToken'],
   from: NonNullable<Web3JsCallOptions['from']>,
   skillRewardsAvailable: string,
   callOpts: WithOptionalFrom<Web3JsCallOptions>,
@@ -103,10 +97,11 @@ export async function approveFee(
   fn: CryptoBladesMethodsFunction,
   opts: { feeMultiplier?: string | number } = {}
 ) {
+  console.log('approve');
   return await approveFeeFromAnyContract(
     cryptoBladesContract,
     cryptoBladesContract,
-    skillToken,
+    xBladeToken,
     from,
     skillRewardsAvailable,
     callOpts,
