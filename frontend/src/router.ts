@@ -3,8 +3,9 @@ import VueRouter, { RouteConfig } from 'vue-router';
 import Plaza from './views/Plaza.vue';
 import Blacksmith from './views/Blacksmith.vue';
 import Combat from './views/Combat.vue';
-import Stake from './views/Stake.vue';
-import SelectStakeType from './views/SelectStakeType.vue';
+// import Stake from './views/Stake.vue';
+// import SelectStakeType from './views/SelectStakeType.vue';
+import xBladeStake from './views/xBladeStake.vue';
 import Raid from './views/Raid.vue';
 import Market from './views/Market.vue';
 import Leaderboard from './views/Leaderboard.vue';
@@ -19,9 +20,10 @@ function createRouter() {
   if (featureFlagStakeOnly) {
     return new VueRouter({
       routes: [
-        { path: '/', redirect: 'stake' },
-        { path: '/stake', name: 'select-stake-type', component: SelectStakeType },
-        { path: '/stake/:stakeType', name: 'stake', component: Stake, props: true },
+        { path: '/', redirect: 'sales' },
+        { path: '/sales', name: 'select-stake-type', component: xBladeStake },
+        // { path: '/stake', name: 'select-stake-type', component: SelectStakeType },
+        // { path: '/stake/:stakeType', name: 'stake', component: Stake, props: true },
       ]
     });
   }
@@ -40,8 +42,8 @@ function createRouter() {
       { path: '/combat', name: 'combat', component: Combat },
       { path: '/leaderboard', name: 'leaderboard', component: Leaderboard },
       ...marketRoutes,
-      { path: '/stake', name: 'select-stake-type', component: SelectStakeType },
-      { path: '/stake/:stakeType', name: 'stake', component: Stake, props: true }
+      { path: '/sales', name: 'select-stake-type', component: xBladeStake },
+      // { path: '/stake/:stakeType', name: 'stake', component: Stake, props: true }
     ]
   });
 
