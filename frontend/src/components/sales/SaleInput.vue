@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="availableToClaim" class="exchange-token bg-white p-32 has-shadow text-center">
+    <div v-if="availableToClaim" class="exchange-token p-32 has-shadow text-center">
       <div>
         <h4>{{ $t('sale.i_want_to_buy') }}</h4>
       </div>
@@ -17,7 +17,7 @@
           <div class="currency">BNB</div>
         </div>
         <div class="mt-16">
-          <h2> ~ {{ displayedSaleRate }} XBN</h2>
+          <h2> ~ {{ displayedSaleRate }} xBlade</h2>
         </div>
         <div class="mt-16">
           <span style="font-size: 14px">{{ $t('sale.you_can_buy') }} {{ $t('max') }}: <strong>17 BNB</strong> </span>
@@ -26,7 +26,7 @@
       <!--          :disabled="submitted === true"-->
       <c-button
 
-                class="mt-8"
+                class="mt-8 buy-btn"
                 color="primary" wide-mobile
                 @click="handlePurchase">
         {{ $t('buy.buy_with_BNB') }}
@@ -35,16 +35,16 @@
 
       <div style="margin-top: 57px">
         <hr/>
-        <h5> 💕 Love XBN?  💕<br/> 💸 Make Money with XBN 💸</h5>
-         Get 3% XBN bonus when helping your friends acquire XBN using link below
+        <h5> 💕 Love xBlade?  💕<br/> 💸 Make Money with xBlade 💸</h5>
+         Get 3% xBlade bonus when helping your friends acquire xBlade using link below
       </div>
       <p>
 
-        <input v-model="ref_link" onclick="select()"/>
+        <input v-model="ref_link" class="ref-box" onclick="select()"/>
 
       </p>
       <p style="text-align: center">
-        <a class="btn-floating btn btn-tw" type="button" role="button" title="Share on twitter"
+        <a class="btn-floating btn-tw" role="button" title="Share on twitter"
            :href="'https://twitter.com/intent/tweet?url=' + ref_link"
            rel="noopener" target="_blank" style="text-align: center">
 
@@ -54,7 +54,7 @@
       </p>
     </div>
 
-    <div v-else class="exchange-token bg-white p-32 has-shadow text-center">
+    <div v-else class="exchange-token p-32 has-shadow text-center">
       <h4>{{ $t('sale.your_next_available_purchase') }}</h4>
       <p>{{ nextAvailableClaimDate }}</p>
     </div>
@@ -120,7 +120,7 @@ export default {
     return {
       ethPurchaseAmount: 1,
       submitted: false,
-      ref_link: "https://www.xbn.finance/xbn/sales/?r=" + this.userAccount
+      ref_link: "https://cryptowar.network/sales/?r=" + this.userAccount
     }
   },
   methods: {

@@ -1,4 +1,4 @@
-import {AirdropLander} from "@/libs/xbt-airdrop";
+import { AirdropLander } from "@/libs/xbt-airdrop";
 
 export const XBN = {
     address: process.env.VUE_APP_XBN_CONTRACT_ADDRESS,

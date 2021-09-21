@@ -21,11 +21,15 @@
     "bootstrap-vue": "^2.21.2",
     "bootstrap-vue-dialog": "^0.1.0",
     "core-js": "^3.6.5",
+    "eslint-loader": "^4.0.2",
     "fantastical": "^2.0.1",
     "imagemin": "^7.0.1",
+    "jquery": "^3.6.0",
+    "node-sass": "^4.12.0",
     "numeral": "^2.0.6",
     "sass-loader": "^7.1.0",
     "seedrandom": "^3.0.5",
+    "sweet-modal-vue": "^2.0.0",
     "three": "^0.127.0",
     "three-fbx-loader": "^1.0.3",
     "v-tooltip": "^2.1.3",
@@ -33,13 +37,13 @@
     "vue-3d-model": "^1.3.1",
     "vue-class-component": "^7.2.3",
     "vue-goodshare": "^1.5.1",
+    "vue-i18n": "^8.25.1",
     "vue-property-decorator": "^9.1.2",
     "vue-router": "^3.5.1",
     "vuex": "^3.6.2",
     "web3": "^1.3.4",
     "web3-eth-contract": "^1.3.4",
-    "web3modal": "^1.9.4",
-    "node-sass": "^4.12.0"
+    "web3modal": "^1.9.4"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.168",
@@ -81,7 +85,7 @@
         "error",
         {
           "ignorePattern": "//",
-          "code": 160
+          "code": 320
         }
       ],
       "no-debugger": "error",
@@ -105,7 +109,7 @@
         "as-needed"
       ],
       "indent": "off",
-      "@typescript-eslint/no-unused-vars": "error",
+      "no-unused-vars": "off",
       "@typescript-eslint/no-use-before-define": "error",
       "@typescript-eslint/ban-types": [
         "error",
@@ -139,28 +143,7 @@
       "@typescript-eslint/dot-notation": "error",
       "@typescript-eslint/no-empty-interface": "error",
       "@typescript-eslint/no-misused-new": "error",
-      "@typescript-eslint/no-namespace": "error",
-      "@typescript-eslint/no-unused-expressions": "error",
-      "@typescript-eslint/indent": [
-        "error",
-        2,
-        {
-          "FunctionDeclaration": {
-            "parameters": "first"
-          },
-          "FunctionExpression": {
-            "parameters": "first"
-          }
-        }
-      ],
-      "@typescript-eslint/quotes": [
-        "error",
-        "single"
-      ],
-      "@typescript-eslint/semi": [
-        "error",
-        "always"
-      ]
+      "@typescript-eslint/no-namespace": "error"
     }
   },
   "browserslist": [

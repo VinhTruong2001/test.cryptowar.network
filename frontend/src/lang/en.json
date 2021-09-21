@@ -1,0 +1,415 @@
+{
+  "sale": {
+    "i_want_to_buy": "I want to buy",
+    "public_discounted_sale": "xBlade Sales",
+    "connected_as": "Connected as",
+    "you_can_buy": "You can buy",
+    "current_rate": "Current Rate",
+    "sale_supply": "Sale Supply",
+    "your_xbt_balance": "Current Balance",
+    "order_book": "Order Book",
+    "show_only_my_address": "Show only my address",
+    "timestamp": "Timestamp",
+    "address": "Address",
+    "purchase_amount": "Purchase Amount",
+    "eth_value": "BNB Value",
+    "price": "Price",
+    "bonus_won": "Bonus Won",
+    "no_available_data": "No available data",
+    "summaries": "Summaries",
+    "request_sent": "Transaction submitted",
+    "page_title": "Join $XBN public discounted sale here.",
+    "thank_you": "Thank you",
+    "your_next_available_purchase": "Next sale session will be available at",
+    "sale_over": "Our sale is over, thanks for your participation"
+  },
+  "please_visit": "Please visit",
+  "channel": "channel",
+  "for_further_information": "for further information",
+  "min": "min",
+  "max": "max",
+  "and": "and",
+  "dont_have_wallet": "If you do not have BNB wallet, please download",
+  "or": "or",
+  "hint": "Hint",
+  "here": "here",
+  "any_questions": "If you have any questions, please ask us",
+  "refresh": "Refresh",
+  "connect_wallet": "Connect Wallet",
+  "airdrop": {
+    "airdrop": "Airdrop",
+    "share_page_title": "Hey I just claimed $XBN. Check it out.",
+    "xbt_coming": "Your $XBN is sent successfully",
+    "thank_you": "Thank you for being a part of $XBN Community <3",
+    "claim_title": "XBN Airdrop",
+    "claim_description": "Fair $XBN for everyone on a first-come-first-serve basis",
+    "claim_xbt": "Get $XBN now!",
+    "not_participated": "You haven't participated this airdrop program",
+    "participated": "You already participated this airdrop program",
+    "allowed_once": "One address only participate once",
+    "balance": "Your $XBN balance",
+    "contract_fund_balance": "Total available tokens to claim",
+    "next_claim": "Next claim will be available at"
+  },
+  "header": {
+    "learn": "Learn",
+    "governance": "Governance",
+    "roadmap": "Roadmap",
+    "staking": "Staking",
+    "cryptounicorns": "Cryptounicorns",
+    "investment_fund": "Investment Fund",
+    "buy": " Buy",
+    "lottery": "FOMOLOTTO",
+    "gratitude": "#Gratitude"
+  },
+  "home": {
+    "hero_split": {
+      "title_1": "XBN · Elastic BNB · Smart Liquidity Pool",
+      "desc_1": "XBN's mission is powering the next big things on Binance Smart Chain",
+      "desc_2": "XBN utilizes the power of BSC's Smart Contract to achieve its goal: 1 XBN = 1 BNB",
+      "desc_3": "",
+      "buy_xbt": "Buy $XBN now"
+    },
+    "features_tiles": {
+      "section_header_title": "What is Elastic BNB ($XBN)?",
+      "section_data_upper": {
+        "item_1": {
+          "title": "A special DeFi token",
+          "desc": "$XBN is using Artificial Intelligent technology to balancing its trading pool and increasing its price"
+        },
+        "item_2": {
+          "title": "Following the Defi Market",
+          "desc": "XBN pool automatically adjust everyday to optimize its earning by investing in other Defi tokens"
+        },
+        "item_3": {
+          "title": "Price target of 1 $BNB",
+          "desc": "$XBN's goal is to reach price target of 1 $BNB with just 6.5 million supply"
+        },
+        "item_4": {
+          "title": "$XBN powers different Dapps",
+          "desc": "$XBN Holders can benefit not just from one but many different Dapps to be release every quarter"
+        },
+        "item_5": {
+          "title": "What is Defi Dapps?",
+          "desc": "It refers to digital assets, financial smart contracts, protocols, and dapps predominantly built on Binance Smart Chain"
+        },
+        "item_6": {
+          "title": "What is Smart Liquidity Pool?",
+
+          "desc": "also known as information markets or virtual markets are exchange-traded markets created for the purpose of trading the outcome of events. "
+        }
+      }
+    },
+    "testimonial": {
+      "section_header": {
+        "title": "$XBN Foundation Team",
+        "paragraph": "The $XBN Foundation (XF) is a non-profit organization dedicated to supporting $XBN and related technologies, their role is not to control but contribue to $XBN's growth"
+      },
+      "team_data": {
+        "item_1": {
+          "desc": "20 years experience in software engineering. Smart contract builder, crypto-asset trading bot developer. Serial entrepreneur who enjoys the rolling coaster of building new things!"
+        },
+        "item_2": {
+          "desc": "I lead and provide everything data. Tailored. Scalable. Automated."
+        },
+        "item_3": {
+          "desc": "I have a great passion for product development"
+        },
+        "item_4": {
+          "desc": "The expectation of customers on the product design is increasing rapidly in terms of quality and timely manner. My goal is to meet customer demands with user-friendly an modern design by expertising strong UX UI design, user centered design and software testing."
+        },
+        "item_5": {
+          "desc": "Joined software engineering for 5 years. Doing full-stack stuffs: mobile, backend, frontend, and DevOps development. My lifetime goal is to become a human-expert in my own life journey. Have been fallen in love with bootstrapped startups and cryptocurrency. Currently, I'm running a business with my friends @ activators.dev and doing dApp specialist @ xbn.finance"
+        }
+      }
+    },
+    "features_split": {
+      "section_header": {
+        "title": "Learn about $XBN",
+        "paragraph": "$XBN is a cryptocurrency like BNB which runs on Binance Smart Chain, its price target of BNB"
+      },
+      "title_1": "Artificial Intelligence",
+      "title_2": "Risk diversification",
+      "title_3": "A trading instrument",
+      "desc_1": "At its core, XBN is running by complex multi-million USD AI bot system to balancing its trading pools to optimize return for holders",
+      "desc_2": "When investing into XBN, you are investing into the whole sophisticated ecosystem, which reduces risk of your altcoin portfolio",
+      "desc_3": "As a trading instrument, XBN has many advantages, own XBN you can catch the hype of BNB's price growth, but also reduce the risk when BNB takes quick dive because of smart pooling technology built by XBN"
+    },
+    "faq_data": {
+      "item_2": {
+        "title": "When is the whitepaper published",
+        "answer": "It is finalizeding and currently in peer review with our advisory team. It will be published in Q1/2021"
+      },
+      "item_3": {
+        "title": "What is the total supply",
+        "answer": "You can see the current supply here: <a href='https://bscscan.com/token/0x547cbe0f0c25085e7015aa6939b28402eb0ccdac'>here</a>"
+      },
+      "item_4": {
+        "title": "Has the smart contract been released",
+        "answer": "Yes, you can find it <a href='https://github.com/ElasticBTC-XBT/xbn.finance'>here</a>"
+      },
+     
+      "item_6": {
+        "title": "Where to ask questions about XBN?",
+        "answer": "You can check more QNA here on <a href='https://twitter.com/elasticbitcoin/status/1366224650536017922'>Twitter</a> "
+      },
+     
+      "item_9": {
+        "title": "How can user balances change without a transaction",
+        "answer": "All wallets are updated with a single transaction using Scalar Contract Variables. Your wallet balance is your private supply multiplied by the global split ratio. The more or less it is split, the more or less your balance will be dynamically updated."
+      },
+      "item_10": {
+        "title": "Can a rebase happen multiple times in one day",
+        "answer": "No"
+      },
+      "item_11": {
+        "title": "How is the rebase calculated",
+        "answer": "(current price – base target price) * wallet balance / (base target price * lag factor)  <br/>Example: At a current price of $BNB 1.30, lag factor 10.00, the updated wallet balance would be adjusted by: (1.30 – 1) * 100 / (1 * 10) = 3 . The new wallet balance would be 103 $XBN."
+      },
+      "item_12": {
+        "title": "What is the lag factor",
+        "answer": "A randomized, curved lag factor is used to calculate supply increases and decreases when a rebase happens. This makes rebase events more unpredictable. The curve allows supply to increase at a faster rate when the total market cap is low. The lag factor depends on the total supply. The higher the supply is, the higher is the possible lag factor. Minimum is 6 and maximum is 100."
+      },
+      "item_13": {
+        "title": "What is the XBN LP Staking",
+        "answer": "The XBN LP Staking offers a solution to incentive liquidity provision on PancakeSwap. Once you have provided liquidity for XBN on PancakeSwap, you will receive liquidity tokens, which you can stake on the XBN Staking dashboard. Depending on the amount of staked tokens and the duration of your stake, you will receive a share of the XBN ecosystem pool.The pool is unlocked over time and distributed to each staker according to his weight in the network."
+      }
+    }
+  },
+  "cta": {
+    "title": "Hold XBN earn XBN & BUSD",
+    "buy_xbt": "Buy XBN"
+  },
+  "learn": {
+    "section_header": {
+      "title": "Learn about XBN"
+    },
+    "basic": "Basics",
+    "technology": "Technology",
+    "economics": "Economics"
+  },
+  "basic_split": {
+    "section_header": {
+      "title": "Learn about XBN",
+      "paragraph": "XBN is a cryptocurrency like BNB, its price target of 1 BNB "
+    },
+    "section_contents": {
+      "item_1": {
+        "title": "We can have BNB on Binance Smart Chain Network without collateral.",
+        "description": "That's true yet very impressive, now you have BNB on Binance Smart Chain without centralized collateral like WBTC. The XBN protocol automatically adjusts supply in response to demand. When price is high, wallet balances increase. When price is low, wallet balances decrease."
+      },
+      "item_2": {
+        "title": "With XBN, we can have unlimited, not 21 millions, BNB",
+        "description": "There are only 170,532,785 BNB but XBN is unlimited, there will be enough XBN for everyone in the earth to own 1 $XBN and 1 $XBN still equal to 1 $BNB. Spend a second to think how wonderful it is."
+      },
+      "item_3": {
+        "title": "XBN helps stablizing BNB while contributes to its growth",
+        "description": "As XBN grows, not only its price is stablized to BNB price, but also it helps BNB stable because of its elastic & scalable supply. So, when there is a lot of demand for XBN, XBN can increase its supply to meet demand and vice versa."
+      }
+    },
+    "learn_basic": "Learn Basics",
+    "learn_technology": "Learn Technology",
+    "learn_economics": "Learn Economics"
+  },
+  "technology": {
+    "title_1": "How it works",
+    "title_2": "Information Flow",
+    "title_3": "Core Features & Capabilities",
+    "desc_1": "As a fork from AMPL, XBN works very similar to it, information from this page are copied, then modified from AMPL",
+    "desc_1_5": "XBN's smart contract design allows the increase and decrease of supply to be automatically executed without any need for a transfer between peers, and without the need for a bank.",
+    "desc_2": "The monetary protocol automatically adjusts the supply of XBN across all user wallets based on price. This means the number of XBN you own changes based on market conditions. When price is high wallet balances automatically increase. When price is low wallet balances automatically decrease. This supply adjustment operation happens once per day and is called a rebase.",
+    "desc_3": "This daily rebase operation is applied universally and proportionally across every wallet’s balance. This means XBN is non-dilutive. Like BNB, if you own 1% of the overall network you will always own 1% unless you actively make a transfer.",
+    "desc_4": "At a high level, the policy contract reflects price changes in the market as supply changes in wallet balances. This in-turn incentivizes market actors to adjust price. Price informs supply algorithmically and supply informs price behaviorally, in a cycle.",
+    "section_header": {
+      "title": "Technology",
+      "paragraph": "XBN combines the best of BNB and Smart Contract on Binance Smart Chain."
+    },
+    "faq_data": {
+      "item_1": {
+        "title": "Algorithmic",
+        "description": "The protocol rules are encoded in smart contracts on Binance Smart Chain. Rules-based policies allow for predictable actions and measurable responses, and are effective checks against discretionary monetary policies."
+      },
+      "item_2": {
+        "title": "Non Dilutive",
+        "description": "If you own 1% of the network, you’ll always own 1%. No party extracts value and there are no added transaction fees."
+      },
+      "item_3": {
+        "title": "Bankless",
+        "description": "XBN is a base money, there is no notion of debt or credit in the system. It does not rely on open debt markets or lenders of last resort"
+      },
+      "item_4": {
+        "title": "Simple Incentives",
+        "description": "A simple system is transparent and easy to understand. The XBN protocol has only two rules for expansion and contraction, and depends solely on profit-seeking actors in the marketplace to reach equilibrium."
+      },
+      "item_5": {
+        "title": "Non Custodial",
+        "description": "Ownership is accounted for natively on the blockchain. No custody is taken of outside assets or collateral."
+      },
+      "item_6": {
+        "title": "Minimal Governance",
+        "description": "XBN was designed to minimize the need for governance. No governance exists within the loop of supply adjustments because there are no interest rates to adjust or markets to balance."
+      },
+      "item_7": {
+        "title": "Distinct Movement Pattern",
+        "description": "XBN’s novel protocol rules lead to unique incentives and a distinct volatility fingerprint. XBN offers a way to diversify risk in a dangerously correlated ecosystem."
+      },
+      "item_8": {
+        "title": "ERC-20",
+        "description": "XBN implements the ERC-20 interface and can be used with any native blockchain wallet. A standard interface allows XBN to integrate with many DeFi application platforms."
+      }
+    }
+  },
+  "economic": {
+    "title_1": "How it works",
+    "desc_1": "As a fork from AMPL, XBN works very similar to it, information from this page are copied, then modified from AMPL.",
+    "desc_2": "Varying economic circumstances like recessions, booms, and technological advances, affect how much a currency people want to hold. In the case of fixed supply currencies like gold, silver, and BNB, these changes in demand are expressed entirely by changes in the value of the currency.",
+    "desc_3": "This means the volatility of demand translates into the price of anything denominated in that currency—including contracts and notably debt. For this reason, sudden shocks in demand can destabilize ecosystems supported by fixed supply assets. The greater the complexity of an ecosystem built on fixed supply assets, the greater the risk of cascading failure.",
+    "desc_4": "To address this shortcoming, we gave XBN the ability to fairly and automatically adjust its supply in response to demand, without any need for a bank. XBN was designed to be the simplest direct solution to the supply inelasticity problem that limits assets like gold and bitcoin.",
+    "desc_5": "Today XBN’s unique volatility pattern makes it a valuable new building block for decentralized finance. Tomorrow XBN can be a better BNB.",
+    "desc_6": "You can read more about how an elastic supply coin works from ",
+    "section_header": {
+      "title": "Economics",
+      "paragraph": "XBN’s unique volatility pattern makes it a valuable new building block for decentralized finance and XBN can be even a better BNB."
+    },
+    "faq_data": {
+      "item_1": {
+        "title": "Rules over Discretion",
+        "description": "Rules-based policies allow for predictable and measurable actions and responses. This is good for checking against discretionary economic policies."
+      },
+      "item_2": {
+        "title": "Monies over Banks",
+        "description": "Monies are simple, banks are complex. This is good for decentralizing governance."
+      },
+      "item_3": {
+        "title": "Elasticity over Inelasticity",
+        "description": "Supply elasticity allows for currencies to adapt to economic shocks. This is good for everyone."
+      }
+    }
+  },
+  "governance": {
+    "title_1": "About XBN Governance",
+    "title_2": "Discussion",
+    "title_3": "Proposals (XIPs / XCCPs)",
+    "title_4": "Targeted Discussion",
+    "title_5": "On-chain Signaling",
+    "title_6": "Technical Development",
+    "title_7": "Binding Vote / Deployment (work in progress)",
+    "desc_1": "XBN learns Governance model from AMPL and will upgrade when needed.",
+    "desc_2": "The XBN protocol is governed through a series of sequential steps, each representing increasing levels of consensus from the community. Proposals and ideas are surfaced on the Telegram or Twitter, and are finalised when they are deployed on-chain. The progression of increasingly binding consensus can be seen below.",
+    "desc_3": "The highest level discussions may surface ideas in many places including (but not limited to) the Telegram and Twitter/Reddit. When it appears that there is enough general support, a champion may formalize the idea by submitting an XBN Improvement Proposal (XIP) or Configuration Change Proposal (XCCP).",
+    "desc_4": "XIPs and XCCPs are formal documents that describe the proposed change to the protocol or protocol configuration.",
+    "desc_5": "Each proposal has a dedicated github issue where outcome-driven discussion takes place. The goal at this step is to finalize any unresolved issues and formalize off-chain consensus. Everything will be documented at XBN Github https://github.com/ElasticBTC-XBT/",
+    "desc_6": "If the previous step did not arrive at obvious consensus, sentiment may be gathered in a non-binding way via on-chain signaling from token holders. This provides more insight into the likelihood of the outcome of the final binding vote.",
+    "desc_7": "Requirements are implemented in code, launched on testnet, and audited for security.",
+    "desc_8": "System changes are currently controlled by a multi-sig contract. This will eventually be replaced by generalized voting from token holders.",
+    "section_header_title": "XBN Governance"
+  },
+  "road_map": {
+    "item_1": {
+      "title": "Academic Research",
+      "desc": "The team conducted researches on how elastic supply model would affect crypto space and what are best approaches to improve its ecosystem",
+      "category": "Research"
+    },
+    "item_2": {
+      "title": "Testnet launch",
+      "desc": "XBN has been launched internally for testnet",
+      "category": "development"
+    },
+    "item_3": {
+      "title": "Public launch",
+      "desc": "XBN Pairs launched on PancakeSwap",
+      "category": "launch"
+    },
+    "item_4": {
+      "title": "Public launch",
+      "desc": "Officially launched",
+      "category": "announcement"
+    },
+    "item_5": {
+      "title": "Releasing First Dapps",
+      "desc": "On-chain fomo lottery",
+      "category": "development"
+    },
+    "item_6": {
+      "title": "Releasing 2nd Dapps",
+      "desc": "On-chain price Smart Liquidity Pool",
+      "category": "research"
+    },
+    "item_7": {
+      "title": "Releasing 3rd Dapps",
+      "desc": "To be announced",
+      "category": "launch"
+    },
+    "item_8": {
+      "title": "Public launch",
+      "desc": "Launch games which are built on top of XBN",
+      "category": "launch"
+    },
+    "item_9": {
+      "title": "Launch on top exchanges",
+      "desc": "The team aims to launch XBN on top exchanges, which helps increase mass adoption for XBN",
+      "category": "Growth"
+    },
+    "item_10": {
+      "title": "Launching Smart Liquidity Pool",
+      "desc": "XBN will become The Best on-chain Smart Liquidity Pool",
+      "category": "Growth"
+    },
+    "section_header_title": "Roadmap"
+  },
+  "staking": {
+    "section_header": {
+      "title": "Staking coming soon"
+    },
+    "years": "Years",
+    "weeks": "Weeks",
+    "days": "Days",
+    "hours": "Hours",
+    "minutes": "Minutes",
+    "seconds": "Seconds"
+  },
+  "crypto_unicorns": {
+    "section_header": {
+      "title": "CryptoUnicorns coming soon"
+    }
+  },
+  "investment": {
+    "section_header": {
+      "title": "XBN Fund coming soon"
+    }
+  },
+  "buy": {
+    "section_header": {
+      "title": "Get XBN on PancakeSwap"
+    },
+    "buy_with_BNB": "Buy with BNB",
+    "buy_with_WBTC": "Buy with WBTC",
+    "buy_with_USDT": "Buy with USDT"
+  },
+  "footer": {
+    "copy_right": "2020 Elastic BNB (XBN)"
+  },
+  "format_time": {
+    "years_past": "{year} years ago",
+    "year_past": "{year} year ago",
+    "months_past": "{month} months ago",
+    "month_past": "{month} month ago",
+    "weeks_past": "{week} weeks ago",
+    "week_past": "{week} week ago",
+    "days_past": "{day} days ago",
+    "day_past": "{day} day ago",
+    "hours_past": "{hour} hours ago",
+    "hour_past": "{hour} hour ago",
+    "just_now": "just now",
+    "years_future": "in {year} years",
+    "year_future": "in {year} year",
+    "months_future": "in {month} months",
+    "month_future": "in {month} month",
+    "weeks_future": "in {week} weeks",
+    "week_future": "in {week} week",
+    "days_future": "in {day} days",
+    "day_future": "in {day} day",
+    "hours_future": "in {hour} hours",
+    "hour_future": "in {hour} hour"
+  }
+}

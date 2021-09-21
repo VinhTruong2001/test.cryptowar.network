@@ -15,7 +15,7 @@
                 />
                 <div class="sales-statis">
                   <div class="title">{{$t('sale.current_rate')}}</div>
-                  <div class="value">1 BNB ~ {{ displayedSaleRate }} XBN</div>
+                  <div class="value">1 BNB ~ {{ displayedSaleRate }} xBlade</div>
                 </div>
                 <img
                     class="sales-icon-bg"
@@ -42,7 +42,7 @@
                 />
                 <div class="sales-statis">
                   <div class="title">{{$t('sale.your_xbt_balance')}}</div>
-                  <div class="value">{{ displayedXBNBalance }} XBN</div>
+                  <div class="value">{{ displayedXBNBalance }} xBlade</div>
                 </div>
                 <img
                     class="sales-icon-bg"

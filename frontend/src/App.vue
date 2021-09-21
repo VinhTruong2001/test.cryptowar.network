@@ -1,37 +1,88 @@
 <template>
   <div class="app">
     <nav-bar />
-    <character-bar v-if="!featureFlagStakeOnly && currentCharacterId !== null" />
+    <character-bar
+      v-if="!featureFlagStakeOnly && currentCharacterId !== null"
+    />
     <div class="content dark-bg-text">
       <router-view v-if="canShowApp" />
     </div>
-    <div class="fullscreen-warning" v-if="!hideWalletWarning && (showMetamaskWarning || showNetworkError)">
+    <div
+      class="fullscreen-warning"
+      v-if="!hideWalletWarning && (showMetamaskWarning || showNetworkError)"
+    >
       <div class="starter-panel">
-        <span class="starter-panel-heading">Metamask Not Detected Or Incorrect Network</span>
+        <span class="starter-panel-heading"
+          >Metamask Not Detected Or Incorrect Network</span
+        >
         <div class="center">
-          <big-button class="button" :mainText="`Add MetaMask`" @click="startOnboarding" v-if="showMetamaskWarning" />
-          <big-button class="button" :mainText="`Switch to BSC Network`" @click="configureMetaMask" v-if="showNetworkError" />
-          <small-button class="button" @click="toggleHideWalletWarning" :text="'Hide Warning'" />
+          <big-button
+            class="button"
+            :mainText="`Add MetaMask`"
+            @click="startOnboarding"
+            v-if="showMetamaskWarning"
+          />
+          <big-button
+            class="button"
+            :mainText="`Switch to BSC Network`"
+            @click="configureMetaMask"
+            v-if="showNetworkError"
+          />
+          <small-button
+            class="button"
+            @click="toggleHideWalletWarning"
+            :text="'Hide Warning'"
+          />
         </div>
       </div>
     </div>
     <div
       class="fullscreen-warning"
-      v-if="!hideWalletWarning && !showMetamaskWarning && (errorMessage || (ownCharacters.length === 0 && skillBalance === '0' && !hasStakedBalance))"
+      v-if="
+        !hideWalletWarning &&
+        !showMetamaskWarning &&
+        (errorMessage ||
+          (ownCharacters.length === 0 &&
+            skillBalance === '0' &&
+            !hasStakedBalance))
+      "
     >
       <div class="starter-panel">
-        <img class="mini-icon-starter" src="./assets/sword/sword-air-04.png" alt="" srcset="" />
-        <span class="starter-panel-heading">{{ errorMessage || 'Get Started With CryptoWars' }}</span>
-        <img class="mini-icon-starter" src="./assets/sword/sword-air-04.png" alt="" srcset="" />
+        <img
+          class="mini-icon-starter"
+          src="./assets/sword/sword-air-04.png"
+          alt=""
+          srcset=""
+        />
+        <span class="starter-panel-heading">{{
+          errorMessage || "Get Started With CryptoWars"
+        }}</span>
+        <img
+          class="mini-icon-starter"
+          src="./assets/sword/sword-air-04.png"
+          alt=""
+          srcset=""
+        />
         <div>
-          <big-button class="button mm-button" :mainText="`Configure MetaMask`" @click="configureMetaMask" />
-          <big-button v-bind:class="[isConnecting ? 'disabled' : '']" class="button mm-button" :mainText="`Connect to MetaMask`" @click="connectMetamask" />
+          <big-button
+            class="button mm-button"
+            :mainText="`Configure MetaMask`"
+            @click="configureMetaMask"
+          />
+          <big-button
+            v-bind:class="[isConnecting ? 'disabled' : '']"
+            class="button mm-button"
+            :mainText="`Connect to MetaMask`"
+            @click="connectMetamask"
+          />
         </div>
         <div class="seperator"></div>
         <div class="instructions-list">
           <p>
-            To recruit your first character you need {{ recruitCost }} xBlade and .001 BNB for gas. You will also need .0015
-            BNB to do your first few battles, but don't worry, you earn the battle fees back in xBlade rewards immediately!
+            To recruit your first character you need {{ recruitCost }} xBlade
+            and .001 BNB for gas. You will also need .0015 BNB to do your first
+            few battles, but don't worry, you earn the battle fees back in
+            xBlade rewards immediately!
           </p>
           <!-- <ul class="unstyled-list">
             <li>1. Buying BNB with fiat: <a href="https://youtu.be/6-sUDUE2RPA" target="_blank" rel="noopener noreferrer">Watch Video</a></li>
@@ -50,36 +101,51 @@
           </ul> -->
           <p>
             If you have any questions, please join our Discord:
-            <a href="https://discord.com/invite/wxRB7qQQ" target="_blank" rel="noopener noreferrer">https://discord.gg/cryptowars</a>
+            <a
+              href="https://discord.com/invite/wxRB7qQQ"
+              target="_blank"
+              rel="noopener noreferrer"
+              >https://discord.gg/cryptowars</a
+            >
           </p>
         </div>
         <div class="seperator"></div>
-        <small-button class="button" @click="toggleHideWalletWarning" :text="'Hide Warning'" />
+        <small-button
+          class="button"
+          @click="toggleHideWalletWarning"
+          :text="'Hide Warning'"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import BN from 'bignumber.js';
+import BN from "bignumber.js";
 
-import { mapState, mapActions, mapGetters } from 'vuex';
-import _ from 'lodash';
-import Vue from 'vue';
-import Events from './events';
-import MetaMaskOnboarding from '@metamask/onboarding';
-import BigButton from './components/BigButton.vue';
-import SmallButton from './components/SmallButton.vue';
-import NavBar from './components/NavBar.vue';
-import CharacterBar from './components/CharacterBar.vue';
-import { apiUrl, defaultOptions } from './utils/common';
+import { mapState, mapActions, mapGetters } from "vuex";
+import _ from "lodash";
+import $ from "jquery";
+import Vue from "vue";
+import Events from "./events";
+import MetaMaskOnboarding from "@metamask/onboarding";
+import BigButton from "./components/BigButton.vue";
+import SmallButton from "./components/SmallButton.vue";
+import NavBar from "./components/NavBar.vue";
+import CharacterBar from "./components/CharacterBar.vue";
+import { apiUrl, defaultOptions } from "./utils/common";
 
-Vue.directive('visible', (el, bind) => {
-  el.style.visibility = bind.value ? 'visible' : 'hidden';
+Vue.directive("visible", (el, bind) => {
+  el.style.visibility = bind.value ? "visible" : "hidden";
 });
 
 export default {
-  inject: ['web3', 'featureFlagStakeOnly', 'expectedNetworkId', 'expectedNetworkName'],
+  inject: [
+    "web3",
+    "featureFlagStakeOnly",
+    "expectedNetworkId",
+    "expectedNetworkName",
+  ],
   components: {
     NavBar,
     CharacterBar,
@@ -88,18 +154,34 @@ export default {
   },
 
   data: () => ({
-    errorMessage: '',
+    errorMessage: "",
     hideWalletWarning: false,
     isConnecting: false,
-    recruitCost: '',
+    recruitCost: "",
   }),
 
   computed: {
-    ...mapState(['skillBalance', 'defaultAccount', 'currentNetworkId', 'currentCharacterId', 'staking']),
-    ...mapGetters(['contracts', 'ownCharacters', 'getExchangeUrl', 'availableStakeTypes', 'hasStakedBalance']),
+    ...mapState([
+      "skillBalance",
+      "defaultAccount",
+      "currentNetworkId",
+      "currentCharacterId",
+      "staking",
+    ]),
+    ...mapGetters([
+      "contracts",
+      "ownCharacters",
+      "getExchangeUrl",
+      "availableStakeTypes",
+      "hasStakedBalance",
+    ]),
 
     canShowApp() {
-      return this.contracts !== null && !_.isEmpty(this.contracts) && !this.showNetworkError;
+      return (
+        this.contracts !== null &&
+        !_.isEmpty(this.contracts) &&
+        !this.showNetworkError
+      );
     },
 
     showMetamaskWarning() {
@@ -107,7 +189,11 @@ export default {
     },
 
     showNetworkError() {
-      return this.expectedNetworkId && this.currentNetworkId !== null && this.currentNetworkId !== this.expectedNetworkId;
+      return (
+        this.expectedNetworkId &&
+        this.currentNetworkId !== null &&
+        this.currentNetworkId !== this.expectedNetworkId
+      );
     },
   },
 
@@ -121,25 +207,25 @@ export default {
     },
     $route(to) {
       // react to route changes
-      window.gtag('event', 'page_view', {
+      window.gtag("event", "page_view", {
         page_title: to.name,
         page_location: to.fullPath,
         page_path: to.path,
-        send_to: 'G-C5RLX74PEW',
+        send_to: "G-C5RLX74PEW",
       });
     },
   },
 
   methods: {
-    ...mapActions({ initializeStore: 'initialize' }),
+    ...mapActions({ initializeStore: "initialize" }),
     ...mapActions([
-      'fetchCharacterStamina',
-      'pollAccountsAndNetwork',
-      'fetchCharacterTransferCooldownForOwnCharacters',
-      'setupWeaponDurabilities',
-      'fetchStakeDetails',
-      'fetchWaxBridgeDetails',
-      'fetchRewardsClaimTax',
+      "fetchCharacterStamina",
+      "pollAccountsAndNetwork",
+      "fetchCharacterTransferCooldownForOwnCharacters",
+      "setupWeaponDurabilities",
+      "fetchStakeDetails",
+      "fetchWaxBridgeDetails",
+      "fetchRewardsClaimTax",
     ]),
 
     async updateCharacterStamina(id) {
@@ -151,15 +237,18 @@ export default {
     },
 
     checkStorage() {
-      this.hideWalletWarning = localStorage.getItem('hideWalletWarning') === 'true';
+      this.hideWalletWarning =
+        localStorage.getItem("hideWalletWarning") === "true";
     },
 
     async initializeRecruitCost() {
-      const recruitCost = await this.contracts.CryptoWars.methods.mintCharacterFee().call({ from: this.defaultAccount });
-      const xBladeRecruitCost = await this.contracts.CryptoWars.methods.usdToxBlade(recruitCost).call();
-      this.recruitCost = BN(xBladeRecruitCost)
-        .div(BN(10).pow(18))
-        .toFixed(4);
+      const recruitCost = await this.contracts.CryptoWars.methods
+        .mintCharacterFee()
+        .call({ from: this.defaultAccount });
+      const xBladeRecruitCost = await this.contracts.CryptoWars.methods
+        .usdToxBlade(recruitCost)
+        .call();
+      this.recruitCost = BN(xBladeRecruitCost).div(BN(10).pow(18)).toFixed(4);
     },
     data() {
       return {
@@ -176,24 +265,24 @@ export default {
       if (this.currentNetworkId === 97) {
         try {
           await web3.request({
-            method: 'wallet_switchEthereumChain',
-            params: [{ chainId: '0x61' }],
+            method: "wallet_switchEthereumChain",
+            params: [{ chainId: "0x61" }],
           });
         } catch (switchError) {
           try {
             await web3.request({
-              method: 'wallet_addEthereumChain',
+              method: "wallet_addEthereumChain",
               params: [
                 {
-                  chainId: '0x61',
-                  chainName: 'Binance Smart Chain Testnet',
+                  chainId: "0x61",
+                  chainName: "Binance Smart Chain Testnet",
                   nativeCurrency: {
-                    name: 'Binance Coin',
-                    symbol: 'BNB',
+                    name: "Binance Coin",
+                    symbol: "BNB",
                     decimals: 18,
                   },
-                  rpcUrls: ['https://data-seed-prebsc-1-s1.binance.org:8545/'],
-                  blockExplorerUrls: ['https://testnet.bscscan.com'],
+                  rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
+                  blockExplorerUrls: ["https://testnet.bscscan.com"],
                 },
               ],
             });
@@ -204,14 +293,14 @@ export default {
 
         try {
           await web3.request({
-            method: 'wallet_watchAsset',
+            method: "wallet_watchAsset",
             params: {
-              type: 'ERC20',
+              type: "ERC20",
               options: {
-                address: '0xcaf53066e36eef55ed0663419adff6e503bd134f',
-                symbol: 'xBlade',
+                address: "0xcaf53066e36eef55ed0663419adff6e503bd134f",
+                symbol: "xBlade",
                 decimals: 18,
-                image: 'https://cryptowar.network/android-chrome-512x512.png',
+                image: "https://cryptowar.network/android-chrome-512x512.png",
               },
             },
           });
@@ -222,24 +311,24 @@ export default {
         {
           try {
             await web3.request({
-              method: 'wallet_switchEthereumChain',
-              params: [{ chainId: '0x38' }],
+              method: "wallet_switchEthereumChain",
+              params: [{ chainId: "0x38" }],
             });
           } catch (switchError) {
             try {
               await web3.request({
-                method: 'wallet_addEthereumChain',
+                method: "wallet_addEthereumChain",
                 params: [
                   {
-                    chainId: '0x38',
-                    chainName: 'Binance Smart Chain Mainnet',
+                    chainId: "0x38",
+                    chainName: "Binance Smart Chain Mainnet",
                     nativeCurrency: {
-                      name: 'Binance Coin',
-                      symbol: 'BNB',
+                      name: "Binance Coin",
+                      symbol: "BNB",
                       decimals: 18,
                     },
-                    rpcUrls: ['https://bsc-dataseed.binance.org/'],
-                    blockExplorerUrls: ['https://bscscan.com/'],
+                    rpcUrls: ["https://bsc-dataseed.binance.org/"],
+                    blockExplorerUrls: ["https://bscscan.com/"],
                   },
                 ],
               });
@@ -250,14 +339,14 @@ export default {
 
           try {
             await web3.request({
-              method: 'wallet_watchAsset',
+              method: "wallet_watchAsset",
               params: {
-                type: 'ERC20',
+                type: "ERC20",
                 options: {
-                  address: '0x154a9f9cbd3449ad22fdae23044319d6ef2a1fab',
-                  symbol: 'xBlade',
+                  address: "0x154a9f9cbd3449ad22fdae23044319d6ef2a1fab",
+                  symbol: "xBlade",
                   decimals: 18,
-                  image: 'https://cryptowar.network/android-chrome-512x512.png',
+                  image: "https://cryptowar.network/android-chrome-512x512.png",
                 },
               },
             });
@@ -271,28 +360,31 @@ export default {
     async connectMetamask() {
       const web3 = this.web3.currentProvider;
       this.isConnecting = true;
-      this.errorMessage = 'Connecting to MetaMask...';
+      this.errorMessage = "Connecting to MetaMask...";
       web3
-        .request({ method: 'eth_requestAccounts' })
+        .request({ method: "eth_requestAccounts" })
         .then(() => {
-          this.errorMessage = 'Success: MetaMask connected.';
+          this.errorMessage = "Success: MetaMask connected.";
           this.isConnecting = false;
 
           this.initializeStore();
           this.toggleHideWalletWarning();
         })
         .catch(() => {
-          this.errorMessage = 'Error: MetaMask could not get permissions.';
+          this.errorMessage = "Error: MetaMask could not get permissions.";
           this.isConnecting = false;
         });
     },
 
     toggleHideWalletWarning() {
       this.hideWalletWarning = !this.hideWalletWarning;
-      if (this.hideWalletWarning) localStorage.setItem('hideWalletWarning', 'true');
-      else localStorage.setItem('hideWalletWarning', 'false');
+      if (this.hideWalletWarning)
+        localStorage.setItem("hideWalletWarning", "true");
+      else localStorage.setItem("hideWalletWarning", "false");
 
-      Events.$emit('setting:hideWalletWarning', { value: this.hideWalletWarning });
+      Events.$emit("setting:hideWalletWarning", {
+        value: this.hideWalletWarning,
+      });
     },
 
     async showWarningDialog() {
@@ -301,23 +393,30 @@ export default {
       if (
         this.hideWalletWarning &&
         !this.showMetamaskWarning &&
-        (this.errorMessage || this.showNetworkError || (this.ownCharacters.length === 0 && this.skillBalance === '0' && !this.hasStakedBalance))
+        (this.errorMessage ||
+          this.showNetworkError ||
+          (this.ownCharacters.length === 0 &&
+            this.skillBalance === "0" &&
+            !this.hasStakedBalance))
       ) {
         this.$dialog.notify.warning(
           `You have hidden the wallet warning and it would now be displayed. If you are trying to play,
         please disable the option and follow the instructions, otherwise close and ignore.`,
           {
             timeout: 0,
-          },
+          }
         );
       }
     },
 
     async checkNotifications() {
-      const response = await fetch(apiUrl('static/notifications'),defaultOptions);
+      const response = await fetch(
+        apiUrl("static/notifications"),
+        defaultOptions
+      );
       const notifications = await response.json();
 
-      const lastHash = localStorage.getItem('lastnotification');
+      const lastHash = localStorage.getItem("lastnotification");
       let shouldContinue = true;
 
       notifications.forEach((notif) => {
@@ -335,50 +434,55 @@ export default {
           `,
           {
             timeout: 300000,
-          },
+          }
         );
       });
 
-      localStorage.setItem('lastnotification', notifications[0].hash);
+      localStorage.setItem("lastnotification", notifications[0].hash);
     },
   },
 
   mounted() {
     this.checkStorage();
 
-    Events.$on('setting:hideRewards', () => this.checkStorage());
-    Events.$on('setting:useGraphics', () => this.checkStorage());
-    Events.$on('setting:hideWalletWarning', () => this.checkStorage());
+    Events.$on("setting:hideRewards", () => this.checkStorage());
+    Events.$on("setting:useGraphics", () => this.checkStorage());
+    Events.$on("setting:hideWalletWarning", () => this.checkStorage());
 
-    document.body.addEventListener('click', (e) => {
-      const tagname = e.target.getAttribute('tagname');
+    document.body.addEventListener("click", (e) => {
+      const tagname = e.target.getAttribute("tagname");
       if (!tagname) return;
 
-      if (e.target.nodeName === 'BUTTON') {
-        window.gtag('event', 'button_clicked', {
+      if (e.target.nodeName === "BUTTON") {
+        window.gtag("event", "button_clicked", {
           value: tagname,
         });
       }
 
-      if (e.target.className.includes('gtag-link-others')) {
-        window.gtag('event', 'nav', {
-          event_category: 'navigation',
-          event_label: 'navbar',
+      if (e.target.className.includes("gtag-link-others")) {
+        window.gtag("event", "nav", {
+          event_category: "navigation",
+          event_label: "navbar",
           value: tagname,
         });
       }
     });
 
     this.showWarningDialog();
+
+    this.$root.$once("updateWalletClient", async (callbackHandler) => {
+      await callbackHandler();
+    });
   },
 
   async created() {
     try {
       await this.initializeStore();
     } catch (e) {
-      this.errorMessage = 'Welcome to CryptoWars. Here is how you can get started.';
+      this.errorMessage =
+        "Welcome to CryptoWars. Here is how you can get started.";
       if (e.code === 4001) {
-        this.errorMessage = 'Error: MetaMask could not get permissions.';
+        this.errorMessage = "Error: MetaMask could not get permissions.";
       }
 
       console.error(e);
@@ -419,10 +523,14 @@ export default {
 
     pollAccounts();
 
-    if (!localStorage.getItem('useGraphics')) localStorage.setItem('useGraphics', 'false');
-    if (!localStorage.getItem('hideRewards')) localStorage.setItem('hideRewards', 'false');
-    if (!localStorage.getItem('hideWalletWarning')) localStorage.setItem('hideWalletWarning', 'false');
-    if (!localStorage.getItem('fightMultiplier')) localStorage.setItem('fightMultiplier', '1');
+    if (!localStorage.getItem("useGraphics"))
+      localStorage.setItem("useGraphics", "false");
+    if (!localStorage.getItem("hideRewards"))
+      localStorage.setItem("hideRewards", "false");
+    if (!localStorage.getItem("hideWalletWarning"))
+      localStorage.setItem("hideWalletWarning", "false");
+    if (!localStorage.getItem("fightMultiplier"))
+      localStorage.setItem("fightMultiplier", "1");
 
     this.checkNotifications();
     this.initializeRecruitCost();
@@ -437,7 +545,8 @@ export default {
 </script>
 
 <style>
-button.btn.button.main-font.dark-bg-text.encounter-button.btn-styled.btn-primary > h1 {
+button.btn.button.main-font.dark-bg-text.encounter-button.btn-styled.btn-primary
+  > h1 {
   font-weight: 600;
   text-align: center;
 }
@@ -447,7 +556,11 @@ hr.hr-divider {
 }
 body {
   margin: 0;
-  background: linear-gradient(45deg, rgba(20, 20, 20, 1) 100%, rgba(36, 39, 32, 1) 100%);
+  background: linear-gradient(
+    45deg,
+    rgba(20, 20, 20, 1) 100%,
+    rgba(36, 39, 32, 1) 100%
+  );
 }
 
 .no-margin {
@@ -459,7 +572,7 @@ body {
 }
 
 .main-font {
-  font-family: 'Roboto Slab', sans-serif;
+  font-family: "Roboto Slab", sans-serif;
 }
 
 .info-divider {
@@ -525,7 +638,7 @@ button,
 .fire-icon,
 .str-icon {
   color: red;
-  content: url('assets/elements/fire.png');
+  content: url("assets/elements/fire.png");
   width: 1em;
   height: 1em;
 }
@@ -533,7 +646,7 @@ button,
 .earth-icon,
 .dex-icon {
   color: green;
-  content: url('assets/elements/earth.png');
+  content: url("assets/elements/earth.png");
   width: 1em;
   height: 1em;
 }
@@ -541,7 +654,7 @@ button,
 .water-icon,
 .int-icon {
   color: cyan;
-  content: url('assets/elements/water.png');
+  content: url("assets/elements/water.png");
   width: 1em;
   height: 1em;
 }
@@ -549,7 +662,7 @@ button,
 .lightning-icon,
 .cha-icon {
   color: yellow;
-  content: url('assets/elements/lightning.png');
+  content: url("assets/elements/lightning.png");
   width: 1em;
   height: 1em;
 }
@@ -589,13 +702,23 @@ button.close {
 .btn:not(.disabled):not(:disabled):hover {
   border: 2px solid #e93ff8 !important;
   background: rgb(61, 61, 64);
-  background: linear-gradient(180deg, rgba(51, 51, 54, 1) 0%, rgba(44, 47, 50, 1) 5%, rgba(44, 58, 65, 1) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(51, 51, 54, 1) 0%,
+    rgba(44, 47, 50, 1) 5%,
+    rgba(44, 58, 65, 1) 100%
+  );
 }
 
 .btn-primary {
   color: #eeeeee !important;
   background: rgb(31, 31, 34);
-  background: linear-gradient(180deg, rgba(31, 31, 34, 1) 0%, rgba(24, 27, 30, 1) 5%, rgba(24, 38, 45, 1) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(31, 31, 34, 1) 0%,
+    rgba(24, 27, 30, 1) 5%,
+    rgba(24, 38, 45, 1) 100%
+  );
 }
 
 .btn-outline-primary {
@@ -605,36 +728,66 @@ button.close {
 .modal-header {
   color: #a50eb3 !important;
   background: rgb(31, 31, 34);
-  background: linear-gradient(180deg, rgba(31, 31, 34, 1) 0%, rgba(24, 27, 30, 1) 5%, rgba(24, 38, 45, 1) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(31, 31, 34, 1) 0%,
+    rgba(24, 27, 30, 1) 5%,
+    rgba(24, 38, 45, 1) 100%
+  );
   border-color: #a50eb3 !important;
 }
 
 .modal-body {
   color: #a50eb3 !important;
-  background: linear-gradient(180deg, rgba(31, 31, 34, 1) 0%, rgba(24, 27, 30, 1) 5%, rgba(24, 38, 45, 1) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(31, 31, 34, 1) 0%,
+    rgba(24, 27, 30, 1) 5%,
+    rgba(24, 38, 45, 1) 100%
+  );
 }
 
 .modal-footer {
   color: #a50eb3 !important;
-  background: linear-gradient(180deg, rgba(31, 31, 34, 1) 0%, rgba(24, 27, 30, 1) 5%, rgba(24, 38, 45, 1) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(31, 31, 34, 1) 0%,
+    rgba(24, 27, 30, 1) 5%,
+    rgba(24, 38, 45, 1) 100%
+  );
   border-color: #a50eb3 !important;
 }
 
 .b-pagination > li > .page-link {
   color: #a50eb3;
-  background: linear-gradient(180deg, rgba(31, 31, 34, 1) 0%, rgba(24, 27, 30, 1) 5%, rgba(24, 38, 45, 1) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(31, 31, 34, 1) 0%,
+    rgba(24, 27, 30, 1) 5%,
+    rgba(24, 38, 45, 1) 100%
+  );
   border-color: #a50eb36e;
 }
 
 .b-pagination > .page-item.active > .page-link {
   color: #a50eb3;
-  background: linear-gradient(180deg, rgba(31, 31, 34, 1) 0%, rgba(24, 27, 30, 1) 5%, rgba(24, 38, 45, 1) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(31, 31, 34, 1) 0%,
+    rgba(24, 27, 30, 1) 5%,
+    rgba(24, 38, 45, 1) 100%
+  );
   border-color: #a50eb3;
 }
 
 .b-pagination > .page-item.disabled > .page-link {
   color: #b3b0a72a;
-  background: linear-gradient(180deg, rgba(31, 31, 34, 1) 0%, rgba(24, 27, 30, 1) 5%, rgba(24, 38, 45, 1) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(31, 31, 34, 1) 0%,
+    rgba(24, 27, 30, 1) 5%,
+    rgba(24, 38, 45, 1) 100%
+  );
   border-color: #a50eb36e;
 }
 .nav-tabs {
@@ -648,12 +801,17 @@ button.close {
   border-left-color: transparent !important;
   border-right-color: transparent !important;
   background-color: transparent !important;
-  background: linear-gradient(180deg, rgba(31, 31, 34, 1) 0%, rgba(24, 27, 30, 1) 5%, rgba(24, 38, 45, 1) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(31, 31, 34, 1) 0%,
+    rgba(24, 27, 30, 1) 5%,
+    rgba(24, 38, 45, 1) 100%
+  );
 }
 
 .nav-tabs .nav-link:hover {
   border-bottom: 5px solid #a50eb3 !important;
-  border-color: transparent transparent  #a50eb3 transparent !important ;
+  border-color: transparent transparent #a50eb3 transparent !important ;
 }
 
 .outline {
@@ -674,13 +832,23 @@ div.bg-success {
   border: 2px solid #6c5f38;
   border-radius: 0.1em;
   background: rgb(31, 31, 34);
-  background: linear-gradient(180deg, rgba(31, 31, 34, 1) 0%, rgba(24, 27, 30, 1) 5%, rgba(24, 38, 45, 1) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(31, 31, 34, 1) 0%,
+    rgba(24, 27, 30, 1) 5%,
+    rgba(24, 38, 45, 1) 100%
+  );
 }
 
 .nav.nav-pills .nav-link.active {
   border: 2px solid #a50eb3 !important;
   background: rgb(61, 61, 64);
-  background: linear-gradient(180deg, rgba(51, 51, 54, 1) 0%, rgba(44, 47, 50, 1) 5%, rgba(44, 58, 65, 1) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(51, 51, 54, 1) 0%,
+    rgba(44, 47, 50, 1) 5%,
+    rgba(44, 58, 65, 1) 100%
+  );
 }
 </style>
 <style scoped>
@@ -691,7 +859,11 @@ div.bg-success {
 .content {
   padding: 0 1em;
   height: calc(100vh - 56px);
-  background: linear-gradient(45deg, rgba(20, 20, 20, 1) 100%, rgba(36, 39, 32, 1) 100%);
+  background: linear-gradient(
+    45deg,
+    rgba(20, 20, 20, 1) 100%,
+    rgba(36, 39, 32, 1) 100%
+  );
   margin: auto;
 }
 
