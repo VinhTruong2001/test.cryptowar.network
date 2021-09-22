@@ -1,14 +1,7 @@
 <template>
     <component
         :is="tag"
-        class="button"
-        :class="[
-            color && `button-${color}`,
-            size && `button-${size}`,
-            loading && 'is-loading',
-            wide && 'button-block',
-            wideMobile && 'button-wide-mobile'
-        ]"
+        class="btn-primary"
         :disabled="disabled"
         @click="handleClick">
         <slot />

@@ -34,14 +34,6 @@
                   :user-account="userAccount"
                 />
               </div>
-
-              <div>
-                <sale-info
-                  :xbt-balance="totalPurchasedXBN"
-                  :sale-supply="saleSupply"
-                  :sale-rate="saleRate"
-                />
-              </div>
             </div>
 
             <div v-else>
@@ -99,7 +91,6 @@ import VueGoodshareTwitter from "vue-goodshare/src/providers/Twitter.vue";
 // import sections
 import CSectionHeader from "@/components/sections/SectionHeader.vue";
 import { SectionProps } from "@/utils/SectionProps.js";
-import SaleInfo from "@/components/sales/SaleInfo";
 import SaleInput from "@/components/sales/SaleInput";
 
 import WalletNotConnect from "@/components/sections/WalletNotConnect";
@@ -117,7 +108,6 @@ export default {
   name: "Login",
   components: {
     WalletNotConnect,
-    SaleInfo,
     SaleInput,
     // SaleOrderBook,
     VueGoodshareFacebook,
@@ -138,7 +128,7 @@ export default {
       sectionHeader: {
         title: this.$t("sale.public_discounted_sale"),
         paragraph:
-          '<img src="https://i.imgur.com/jmPNlwr.png" style="width: 30px; display: inline;"> Limited offer to buy xBlade at discounted price. <br/>BNB from sales go straight to liquidity pool!💰 <br/> You win and xBlade holders win ✌️ ',
+          'Buy xBlade at discounted price up to 5% 💰',
       },
       // sale info
       saleSupply: 0,
@@ -165,7 +155,7 @@ export default {
       return minAvailableSale < this.minBidAmount;
     },
     pageTitle() {
-      return this.$t("sales.page_title");
+      return this.$t("sale.page_title");
     },
     pageUrl() {
       return "https://cryptowar.network/sales";
