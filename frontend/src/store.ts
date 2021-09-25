@@ -149,14 +149,12 @@ export function createStore(web3: Web3) {
       nfts: {},
 
       staking: {
-        skill: { ...defaultStakeState },
-        skill2: { ...defaultStakeState },
+        // skill: { ...defaultStakeState },
+        // skill2: { ...defaultStakeState },
         lp: { ...defaultStakeState },
         lp2: { ...defaultStakeState }
       },
       stakeOverviews: {
-        skill: { ...defaultStakeOverviewState },
-        skill2: { ...defaultStakeOverviewState },
         lp: { ...defaultStakeOverviewState },
         lp2: { ...defaultStakeOverviewState }
       },
