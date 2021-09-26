@@ -20,8 +20,8 @@
     <div class="row mt-3" v-if="ownCharacters.length > 0">
       <div class="col">
         <div v-if="ownCharacters.length > 0">
-          <div class="d-flex justify-content-space-between">
-            <h1>Characters ({{ ownCharacters.length }} / 4)</h1>
+          <div class="chara-head-box">
+            <h1 class="chara-title">Characters ({{ ownCharacters.length }}/4)</h1>
             <!-- <b-button
               v-if="canChangeTrait()"
               variant="primary"
@@ -42,10 +42,10 @@
               v-if="ownCharacters.length < 4"
               :disabled="!canRecruit()"
               variant="primary"
-              class="ml-auto gtag-link-others"
+              class="ml-auto gtag-link-others recruit"
               @click="onMintCharacter"
               v-tooltip="'Recruit new character'" tagname="recruit_character">
-              Recruit ({{ recruitCost }} xBlade) <i class="fas fa-plus"></i>
+              Recruit ({{ recruitCost }} xBlade)&nbsp;<i class="fas fa-plus"></i>
             </b-button>
             <!-- <b-button
               v-if="ownCharacters.length < 4"
@@ -300,7 +300,22 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-
+.chara-head-box{
+  position: relative;
+}
+.chara-title{
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+}
+.recruit{
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.recruit i{
+  padding-left: 0.5rem;
+}
 .current-promotion {
   width: 40%;
   text-align: center;

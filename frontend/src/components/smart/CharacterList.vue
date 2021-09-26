@@ -41,9 +41,9 @@
         </b-button>
     </div>
 
-    <ul class="character-list">
+    <ul class="character-list d-flex">
       <li
-        class="character"
+        class="character-item"
         :class="{ selected: value === c.id }"
         v-for="c in filteredCharacters"
         :key="c.id"
@@ -215,45 +215,20 @@ export default {
    margin-bottom: 20px;
 }
 
-.character-list {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  padding: 0.5em;
-  grid-template-columns: repeat(auto-fit, 14em);
-  gap: 1.5em;
-}
-
-.character {
-  position: relative;
-  width: 14em;
-  height: 25em;
-  background-position: center;
+.character-item{
+  width: 333px;
+  max-width: 100%;
+  background-image: url('../../assets/images/bg-item-top.png');
+  background-position: 0 0;
   background-repeat: no-repeat;
-  background-size: 115%;
-  background-color: #2e2e30cc;
-  background-image: url('../../assets/cardCharacterFrame.png');
-  /* border-radius: 10px; */
-  text-align: center;
-  /* padding: 40px 20px; */
-  box-shadow: inset 0px 0px 12px 7px #9a13d2;
-  transition: all 0.3s ease-in;
-  /* border: 1px solid #9a13d2; */
-  border-radius: 15px;
-  padding: 0.5rem;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
+  margin-top: 50px;
+  background-size: contain;
 }
 
-.character .art {
+.character-item .art {
   width: 100%;
   min-height: 0;
-  height: 18rem;
+  height: 100%;
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
@@ -263,11 +238,11 @@ export default {
   vertical-align: middle;
 }
 
-.character img {
+.character-item img {
   object-fit: contain;
 }
 
-.character.selected {
+.character-item.selected {
 
     box-shadow: inset 0px 0px 12px 7px #fea036;
 }
@@ -287,6 +262,12 @@ export default {
   flex-direction: row;
   align-self: flex-end;
   margin:0 15px;
+}
+
+.character-list{
+  list-style: none;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 @media (max-width: 576px) {

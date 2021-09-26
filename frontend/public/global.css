@@ -93,10 +93,6 @@
   transition: opacity .15s;
 }
 
-* {
-  font-family: 'Roboto Slab', serif;
-}
-
 .add-button {
   width: 21px;
   height: 20px;

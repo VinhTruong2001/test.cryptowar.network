@@ -1,0 +1,89 @@
+@import "settings/settings";
+/*--------------------------------------------------------------
+# Fonts
+--------------------------------------------------------------*/
+@import "core/fonts";
+
+@import "core/base";
+
+.btn-buy {
+  background: linear-gradient(to top, $btn-gradient-top, $btn-gradient-bottom);
+  padding: .2rem 0.6rem;
+  border-radius: 5px;
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: $white;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.xblade {
+  color: $txt-light;
+}
+
+.navbar-nav .nav-link.dropdown-toggle{
+  color: $white;
+  font-size: 2rem;
+}
+
+.dropdown-item{
+  color: $white;
+}
+
+.app {
+  margin: 0;
+  width: calc(100vw);
+  height: calc(100vh);
+  overflow-y: auto;
+  background: url('../images/bg.png') no-repeat 0 0;
+}
+
+.main-font .nav-item a{
+  color: #B3B0A8;
+}
+.main-font .nav-item{
+  margin: 0 0.1rem;
+  font-size: 0.8rem;
+}
+
+.main-font .navbar{
+  padding-top: 0;
+}
+
+.gtag-link-others{
+  margin-right: 1rem;
+}
+
+a:hover,
+.navbar-light .navbar-nav a.router-link-active, .navbar-light .navbar-nav a.router-link-active span, .navbar-light .navbar-nav a:hover span {
+  color: #F58B5B;
+  text-decoration: none !important;
+}
+
+.navbar-expand{
+  list-style: none;
+}
+
+.navbar-brand, .main-nav{
+  padding-bottom: 0;
+}
+
+.character-display-container{
+  border: 1px solid #707070;
+  padding: 1rem 1rem 0;
+}
+
+li:not(:last-child){
+  margin-bottom: 0;
+}
+
+.button-div .btn-primary{
+  margin-right: 40px;
+  margin-left: 40px;
+  min-width: 70px;
+
+}
+
+.navbar-light .navbar-nav .show > .nav-link{
+  color: $white;
+}

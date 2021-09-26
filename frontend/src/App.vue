@@ -1,39 +1,65 @@
 <template>
   <div class="app">
-    <nav-bar />
-    <character-bar v-if="!featureFlagStakeOnly && currentCharacterId !== null" />
-    <div class="content dark-bg-text">
-      <router-view v-if="canShowApp" />
-    </div>
-    <div class="fullscreen-warning" v-if="!hideWalletWarning && (showMetamaskWarning || showNetworkError)">
-      <div class="starter-panel">
-        <span class="starter-panel-heading">Metamask Not Detected Or Incorrect Network</span>
-        <div class="center">
-          <big-button class="button" :mainText="`Add MetaMask`" @click="startOnboarding" v-if="showMetamaskWarning" />
-          <big-button class="button" :mainText="`Switch to BSC Network`" @click="configureMetaMask" v-if="showNetworkError" />
-          <small-button class="button" @click="toggleHideWalletWarning" :text="'Hide Warning'" />
+    <div class="container-box">
+      <nav-bar />
+      <character-bar
+        v-if="!featureFlagStakeOnly && currentCharacterId !== null"
+      />
+      <div class="content dark-bg-text">
+        <router-view v-if="canShowApp" />
+      </div>
+      <div
+        class="fullscreen-warning"
+        v-if="!hideWalletWarning && (showMetamaskWarning || showNetworkError)"
+      >
+        <div class="starter-panel">
+          <span class="starter-panel-heading"
+            >Metamask Not Detected Or Incorrect Network</span
+          >
+          <div class="center">
+            <big-button
+              class="button"
+              :mainText="`Add MetaMask`"
+              @click="startOnboarding"
+              v-if="showMetamaskWarning"
+            />
+            <big-button
+              class="button"
+              :mainText="`Switch to BSC Network`"
+              @click="configureMetaMask"
+              v-if="showNetworkError"
+            />
+            <small-button
+              class="button"
+              @click="toggleHideWalletWarning"
+              :text="'Hide Warning'"
+            />
+          </div>
         </div>
       </div>
-    </div>
-    <div
-      class="fullscreen-warning"
-      v-if="!hideWalletWarning && !showMetamaskWarning && (errorMessage || (ownCharacters.length === 0 && skillBalance === '0' && !hasStakedBalance))"
-    >
-      <div class="starter-panel">
-        <img class="mini-icon-starter" src="./assets/sword/sword-air-04.png" alt="" srcset="" />
-        <span class="starter-panel-heading">{{ errorMessage || 'Get Started With CryptoWars' }}</span>
-        <img class="mini-icon-starter" src="./assets/sword/sword-air-04.png" alt="" srcset="" />
-        <div>
-          <big-button class="button mm-button" :mainText="`Configure MetaMask`" @click="configureMetaMask" />
-          <big-button v-bind:class="[isConnecting ? 'disabled' : '']" class="button mm-button" :mainText="`Connect to MetaMask`" @click="connectMetamask" />
-        </div>
-        <div class="seperator"></div>
-        <div class="instructions-list">
-          <p>
-            To recruit your first character you need {{ recruitCost }} xBlade and .001 BNB for gas. You will also need .0015
-            BNB to do your first few battles, but don't worry, you earn the battle fees back in xBlade rewards immediately!
-          </p>
-          <!-- <ul class="unstyled-list">
+      <div
+        class="fullscreen-warning"
+        v-if="
+          !hideWalletWarning &&
+          !showMetamaskWarning &&
+          (errorMessage ||
+            (ownCharacters.length === 0 &&
+              skillBalance === '0' &&
+              !hasStakedBalance))
+        "
+      >
+        <div class="starter-panel">
+          <span class="starter-panel-heading">{{
+            errorMessage || "Get Started With CryptoWars"
+          }}</span>
+          <div class="instructions-list">
+            <p>
+              To recruit your first character you need {{ recruitCost }} xBlade
+              and .001 BNB for gas. You will also need .0015 BNB to do your
+              first few battles, but don't worry, you earn the battle fees back
+              in xBlade rewards immediately!
+            </p>
+            <!-- <ul class="unstyled-list">
             <li>1. Buying BNB with fiat: <a href="https://youtu.be/6-sUDUE2RPA" target="_blank" rel="noopener noreferrer">Watch Video</a></li>
             <li>
               2. Once you have BNB, go to ApeSwap to obtain xBlade tokens:<br />
@@ -48,38 +74,64 @@
               >)
             </li>
           </ul> -->
-          <p>
-            If you have any questions, please join our Discord:
-            <a href="https://discord.com/invite/wxRB7qQQ" target="_blank" rel="noopener noreferrer">https://discord.gg/cryptowars</a>
-          </p>
+            <p>
+              If you have any questions, please join our Discord:
+              <a
+                href="https://discord.com/invite/wxRB7qQQ"
+                target="_blank"
+                rel="noopener noreferrer"
+                >https://discord.gg/cryptowars</a
+              >
+            </p>
+          </div>
+          <button
+            class="hide-modal"
+            @click="toggleHideWalletWarning"
+          ><img src='./assets/images/btn-close.svg'/></button>
+          <div class="button-div">
+            <big-button
+              class="button mm-button"
+              :mainText="`Configure MetaMask`"
+              @click="configureMetaMask"
+            />
+            <big-button
+              v-bind:class="[isConnecting ? 'disabled' : '']"
+              class="button mm-button"
+              :mainText="`Connect to MetaMask`"
+              @click="connectMetamask"
+            />
+          </div>
         </div>
-        <div class="seperator"></div>
-        <small-button class="button" @click="toggleHideWalletWarning" :text="'Hide Warning'" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import BN from 'bignumber.js';
+import BN from "bignumber.js";
 
-import { mapState, mapActions, mapGetters } from 'vuex';
-import _ from 'lodash';
-import Vue from 'vue';
-import Events from './events';
-import MetaMaskOnboarding from '@metamask/onboarding';
-import BigButton from './components/BigButton.vue';
-import SmallButton from './components/SmallButton.vue';
-import NavBar from './components/NavBar.vue';
-import CharacterBar from './components/CharacterBar.vue';
-import { apiUrl, defaultOptions } from './utils/common';
+import { mapState, mapActions, mapGetters } from "vuex";
+import _ from "lodash";
+import Vue from "vue";
+import Events from "./events";
+import MetaMaskOnboarding from "@metamask/onboarding";
+import BigButton from "./components/BigButton.vue";
+import SmallButton from "./components/SmallButton.vue";
+import NavBar from "./components/NavBar.vue";
+import CharacterBar from "./components/CharacterBar.vue";
+import { apiUrl, defaultOptions } from "./utils/common";
 
-Vue.directive('visible', (el, bind) => {
-  el.style.visibility = bind.value ? 'visible' : 'hidden';
+Vue.directive("visible", (el, bind) => {
+  el.style.visibility = bind.value ? "visible" : "hidden";
 });
 
 export default {
-  inject: ['web3', 'featureFlagStakeOnly', 'expectedNetworkId', 'expectedNetworkName'],
+  inject: [
+    "web3",
+    "featureFlagStakeOnly",
+    "expectedNetworkId",
+    "expectedNetworkName",
+  ],
   components: {
     NavBar,
     CharacterBar,
@@ -88,18 +140,34 @@ export default {
   },
 
   data: () => ({
-    errorMessage: '',
+    errorMessage: "",
     hideWalletWarning: false,
     isConnecting: false,
-    recruitCost: '',
+    recruitCost: "",
   }),
 
   computed: {
-    ...mapState(['skillBalance', 'defaultAccount', 'currentNetworkId', 'currentCharacterId', 'staking']),
-    ...mapGetters(['contracts', 'ownCharacters', 'getExchangeUrl', 'availableStakeTypes', 'hasStakedBalance']),
+    ...mapState([
+      "skillBalance",
+      "defaultAccount",
+      "currentNetworkId",
+      "currentCharacterId",
+      "staking",
+    ]),
+    ...mapGetters([
+      "contracts",
+      "ownCharacters",
+      "getExchangeUrl",
+      "availableStakeTypes",
+      "hasStakedBalance",
+    ]),
 
     canShowApp() {
-      return this.contracts !== null && !_.isEmpty(this.contracts) && !this.showNetworkError;
+      return (
+        this.contracts !== null &&
+        !_.isEmpty(this.contracts) &&
+        !this.showNetworkError
+      );
     },
 
     showMetamaskWarning() {
@@ -107,7 +175,11 @@ export default {
     },
 
     showNetworkError() {
-      return this.expectedNetworkId && this.currentNetworkId !== null && this.currentNetworkId !== this.expectedNetworkId;
+      return (
+        this.expectedNetworkId &&
+        this.currentNetworkId !== null &&
+        this.currentNetworkId !== this.expectedNetworkId
+      );
     },
   },
 
@@ -121,25 +193,25 @@ export default {
     },
     $route(to) {
       // react to route changes
-      window.gtag('event', 'page_view', {
+      window.gtag("event", "page_view", {
         page_title: to.name,
         page_location: to.fullPath,
         page_path: to.path,
-        send_to: 'G-C5RLX74PEW',
+        send_to: "G-C5RLX74PEW",
       });
     },
   },
 
   methods: {
-    ...mapActions({ initializeStore: 'initialize' }),
+    ...mapActions({ initializeStore: "initialize" }),
     ...mapActions([
-      'fetchCharacterStamina',
-      'pollAccountsAndNetwork',
-      'fetchCharacterTransferCooldownForOwnCharacters',
-      'setupWeaponDurabilities',
-      'fetchStakeDetails',
-      'fetchWaxBridgeDetails',
-      'fetchRewardsClaimTax',
+      "fetchCharacterStamina",
+      "pollAccountsAndNetwork",
+      "fetchCharacterTransferCooldownForOwnCharacters",
+      "setupWeaponDurabilities",
+      "fetchStakeDetails",
+      "fetchWaxBridgeDetails",
+      "fetchRewardsClaimTax",
     ]),
 
     async updateCharacterStamina(id) {
@@ -151,15 +223,18 @@ export default {
     },
 
     checkStorage() {
-      this.hideWalletWarning = localStorage.getItem('hideWalletWarning') === 'true';
+      this.hideWalletWarning =
+        localStorage.getItem("hideWalletWarning") === "true";
     },
 
     async initializeRecruitCost() {
-      const recruitCost = await this.contracts.CryptoWars.methods.mintCharacterFee().call({ from: this.defaultAccount });
-      const xBladeRecruitCost = await this.contracts.CryptoWars.methods.usdToxBlade(recruitCost).call();
-      this.recruitCost = BN(xBladeRecruitCost)
-        .div(BN(10).pow(18))
-        .toFixed(4);
+      const recruitCost = await this.contracts.CryptoWars.methods
+        .mintCharacterFee()
+        .call({ from: this.defaultAccount });
+      const xBladeRecruitCost = await this.contracts.CryptoWars.methods
+        .usdToxBlade(recruitCost)
+        .call();
+      this.recruitCost = BN(xBladeRecruitCost).div(BN(10).pow(18)).toFixed(4);
     },
     data() {
       return {
@@ -176,24 +251,24 @@ export default {
       if (this.currentNetworkId === 97) {
         try {
           await web3.request({
-            method: 'wallet_switchEthereumChain',
-            params: [{ chainId: '0x61' }],
+            method: "wallet_switchEthereumChain",
+            params: [{ chainId: "0x61" }],
           });
         } catch (switchError) {
           try {
             await web3.request({
-              method: 'wallet_addEthereumChain',
+              method: "wallet_addEthereumChain",
               params: [
                 {
-                  chainId: '0x61',
-                  chainName: 'Binance Smart Chain Testnet',
+                  chainId: "0x61",
+                  chainName: "Binance Smart Chain Testnet",
                   nativeCurrency: {
-                    name: 'Binance Coin',
-                    symbol: 'BNB',
+                    name: "Binance Coin",
+                    symbol: "BNB",
                     decimals: 18,
                   },
-                  rpcUrls: ['https://data-seed-prebsc-1-s1.binance.org:8545/'],
-                  blockExplorerUrls: ['https://testnet.bscscan.com'],
+                  rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
+                  blockExplorerUrls: ["https://testnet.bscscan.com"],
                 },
               ],
             });
@@ -204,14 +279,14 @@ export default {
 
         try {
           await web3.request({
-            method: 'wallet_watchAsset',
+            method: "wallet_watchAsset",
             params: {
-              type: 'ERC20',
+              type: "ERC20",
               options: {
-                address: '0xcaf53066e36eef55ed0663419adff6e503bd134f',
-                symbol: 'xBlade',
+                address: "0xcaf53066e36eef55ed0663419adff6e503bd134f",
+                symbol: "xBlade",
                 decimals: 18,
-                image: 'https://cryptowar.network/android-chrome-512x512.png',
+                image: "https://cryptowar.network/android-chrome-512x512.png",
               },
             },
           });
@@ -222,24 +297,24 @@ export default {
         {
           try {
             await web3.request({
-              method: 'wallet_switchEthereumChain',
-              params: [{ chainId: '0x38' }],
+              method: "wallet_switchEthereumChain",
+              params: [{ chainId: "0x38" }],
             });
           } catch (switchError) {
             try {
               await web3.request({
-                method: 'wallet_addEthereumChain',
+                method: "wallet_addEthereumChain",
                 params: [
                   {
-                    chainId: '0x38',
-                    chainName: 'Binance Smart Chain Mainnet',
+                    chainId: "0x38",
+                    chainName: "Binance Smart Chain Mainnet",
                     nativeCurrency: {
-                      name: 'Binance Coin',
-                      symbol: 'BNB',
+                      name: "Binance Coin",
+                      symbol: "BNB",
                       decimals: 18,
                     },
-                    rpcUrls: ['https://bsc-dataseed.binance.org/'],
-                    blockExplorerUrls: ['https://bscscan.com/'],
+                    rpcUrls: ["https://bsc-dataseed.binance.org/"],
+                    blockExplorerUrls: ["https://bscscan.com/"],
                   },
                 ],
               });
@@ -250,14 +325,14 @@ export default {
 
           try {
             await web3.request({
-              method: 'wallet_watchAsset',
+              method: "wallet_watchAsset",
               params: {
-                type: 'ERC20',
+                type: "ERC20",
                 options: {
-                  address: '0x154a9f9cbd3449ad22fdae23044319d6ef2a1fab',
-                  symbol: 'xBlade',
+                  address: "0x154a9f9cbd3449ad22fdae23044319d6ef2a1fab",
+                  symbol: "xBlade",
                   decimals: 18,
-                  image: 'https://cryptowar.network/android-chrome-512x512.png',
+                  image: "https://cryptowar.network/android-chrome-512x512.png",
                 },
               },
             });
@@ -271,28 +346,31 @@ export default {
     async connectMetamask() {
       const web3 = this.web3.currentProvider;
       this.isConnecting = true;
-      this.errorMessage = 'Connecting to MetaMask...';
+      this.errorMessage = "Connecting to MetaMask...";
       web3
-        .request({ method: 'eth_requestAccounts' })
+        .request({ method: "eth_requestAccounts" })
         .then(() => {
-          this.errorMessage = 'Success: MetaMask connected.';
+          this.errorMessage = "Success: MetaMask connected.";
           this.isConnecting = false;
 
           this.initializeStore();
           this.toggleHideWalletWarning();
         })
         .catch(() => {
-          this.errorMessage = 'Error: MetaMask could not get permissions.';
+          this.errorMessage = "Error: MetaMask could not get permissions.";
           this.isConnecting = false;
         });
     },
 
     toggleHideWalletWarning() {
       this.hideWalletWarning = !this.hideWalletWarning;
-      if (this.hideWalletWarning) localStorage.setItem('hideWalletWarning', 'true');
-      else localStorage.setItem('hideWalletWarning', 'false');
+      if (this.hideWalletWarning)
+        localStorage.setItem("hideWalletWarning", "true");
+      else localStorage.setItem("hideWalletWarning", "false");
 
-      Events.$emit('setting:hideWalletWarning', { value: this.hideWalletWarning });
+      Events.$emit("setting:hideWalletWarning", {
+        value: this.hideWalletWarning,
+      });
     },
 
     async showWarningDialog() {
@@ -301,23 +379,30 @@ export default {
       if (
         this.hideWalletWarning &&
         !this.showMetamaskWarning &&
-        (this.errorMessage || this.showNetworkError || (this.ownCharacters.length === 0 && this.skillBalance === '0' && !this.hasStakedBalance))
+        (this.errorMessage ||
+          this.showNetworkError ||
+          (this.ownCharacters.length === 0 &&
+            this.skillBalance === "0" &&
+            !this.hasStakedBalance))
       ) {
         this.$dialog.notify.warning(
           `You have hidden the wallet warning and it would now be displayed. If you are trying to play,
         please disable the option and follow the instructions, otherwise close and ignore.`,
           {
             timeout: 0,
-          },
+          }
         );
       }
     },
 
     async checkNotifications() {
-      const response = await fetch(apiUrl('static/notifications'),defaultOptions);
+      const response = await fetch(
+        apiUrl("static/notifications"),
+        defaultOptions
+      );
       const notifications = await response.json();
 
-      const lastHash = localStorage.getItem('lastnotification');
+      const lastHash = localStorage.getItem("lastnotification");
       let shouldContinue = true;
 
       notifications.forEach((notif) => {
@@ -335,35 +420,35 @@ export default {
           `,
           {
             timeout: 300000,
-          },
+          }
         );
       });
 
-      localStorage.setItem('lastnotification', notifications[0].hash);
+      localStorage.setItem("lastnotification", notifications[0].hash);
     },
   },
 
   mounted() {
     this.checkStorage();
 
-    Events.$on('setting:hideRewards', () => this.checkStorage());
-    Events.$on('setting:useGraphics', () => this.checkStorage());
-    Events.$on('setting:hideWalletWarning', () => this.checkStorage());
+    Events.$on("setting:hideRewards", () => this.checkStorage());
+    Events.$on("setting:useGraphics", () => this.checkStorage());
+    Events.$on("setting:hideWalletWarning", () => this.checkStorage());
 
-    document.body.addEventListener('click', (e) => {
-      const tagname = e.target.getAttribute('tagname');
+    document.body.addEventListener("click", (e) => {
+      const tagname = e.target.getAttribute("tagname");
       if (!tagname) return;
 
-      if (e.target.nodeName === 'BUTTON') {
-        window.gtag('event', 'button_clicked', {
+      if (e.target.nodeName === "BUTTON") {
+        window.gtag("event", "button_clicked", {
           value: tagname,
         });
       }
 
-      if (e.target.className.includes('gtag-link-others')) {
-        window.gtag('event', 'nav', {
-          event_category: 'navigation',
-          event_label: 'navbar',
+      if (e.target.className.includes("gtag-link-others")) {
+        window.gtag("event", "nav", {
+          event_category: "navigation",
+          event_label: "navbar",
           value: tagname,
         });
       }
@@ -376,9 +461,10 @@ export default {
     try {
       await this.initializeStore();
     } catch (e) {
-      this.errorMessage = 'Welcome to CryptoWars. Here is how you can get started.';
+      this.errorMessage =
+        "Welcome to CryptoWars. Here is how you can get started.";
       if (e.code === 4001) {
-        this.errorMessage = 'Error: MetaMask could not get permissions.';
+        this.errorMessage = "Error: MetaMask could not get permissions.";
       }
 
       console.error(e);
@@ -419,10 +505,14 @@ export default {
 
     pollAccounts();
 
-    if (!localStorage.getItem('useGraphics')) localStorage.setItem('useGraphics', 'false');
-    if (!localStorage.getItem('hideRewards')) localStorage.setItem('hideRewards', 'false');
-    if (!localStorage.getItem('hideWalletWarning')) localStorage.setItem('hideWalletWarning', 'false');
-    if (!localStorage.getItem('fightMultiplier')) localStorage.setItem('fightMultiplier', '1');
+    if (!localStorage.getItem("useGraphics"))
+      localStorage.setItem("useGraphics", "false");
+    if (!localStorage.getItem("hideRewards"))
+      localStorage.setItem("hideRewards", "false");
+    if (!localStorage.getItem("hideWalletWarning"))
+      localStorage.setItem("hideWalletWarning", "false");
+    if (!localStorage.getItem("fightMultiplier"))
+      localStorage.setItem("fightMultiplier", "1");
 
     this.checkNotifications();
     this.initializeRecruitCost();
@@ -436,8 +526,9 @@ export default {
 };
 </script>
 
-<style>
-button.btn.button.main-font.dark-bg-text.encounter-button.btn-styled.btn-primary > h1 {
+<style lang="scss">
+button.btn.button.main-font.dark-bg-text.encounter-button.btn-styled.btn-primary
+  > h1 {
   font-weight: 600;
   text-align: center;
 }
@@ -447,7 +538,11 @@ hr.hr-divider {
 }
 body {
   margin: 0;
-  background: linear-gradient(45deg, rgba(20, 20, 20, 1) 100%, rgba(36, 39, 32, 1) 100%);
+  background: linear-gradient(
+    45deg,
+    rgba(20, 20, 20, 1) 100%,
+    rgba(36, 39, 32, 1) 100%
+  );
 }
 
 .no-margin {
@@ -459,7 +554,6 @@ body {
 }
 
 .main-font {
-  font-family: 'Roboto Slab', sans-serif;
 }
 
 .info-divider {
@@ -474,10 +568,6 @@ body {
 
 .dark-bg-text {
   color: #fff;
-}
-
-.body {
-  max-height: calc(100vh - 56px - 160px);
 }
 
 button,
@@ -525,7 +615,7 @@ button,
 .fire-icon,
 .str-icon {
   color: red;
-  content: url('assets/elements/fire.png');
+  content: url("assets/elements/fire.png");
   width: 1em;
   height: 1em;
 }
@@ -533,7 +623,7 @@ button,
 .earth-icon,
 .dex-icon {
   color: green;
-  content: url('assets/elements/earth.png');
+  content: url("assets/elements/earth.png");
   width: 1em;
   height: 1em;
 }
@@ -541,7 +631,7 @@ button,
 .water-icon,
 .int-icon {
   color: cyan;
-  content: url('assets/elements/water.png');
+  content: url("assets/elements/water.png");
   width: 1em;
   height: 1em;
 }
@@ -549,7 +639,7 @@ button,
 .lightning-icon,
 .cha-icon {
   color: yellow;
-  content: url('assets/elements/lightning.png');
+  content: url("assets/elements/lightning.png");
   width: 1em;
   height: 1em;
 }
@@ -576,70 +666,68 @@ button.close {
   margin-right: 5px;
 }
 
-.btn {
-  border: 2px solid #a50eb3 !important;
-  border-radius: 0.4em !important;
-}
-
 .btn.disabled,
 .btn:disabled {
   cursor: auto;
 }
 
-.btn:not(.disabled):not(:disabled):hover {
-  box-shadow: rgba(45, 35, 66, .4) 0 4px 8px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #a43ce0 0 -3px 0 inset;
-  transform: translateY(-2px);
-}
-
-.btn-primary {
-  background: #9a13d2;
+.btn-primary, .btn-secondary.focus, .btn-secondary:focus, .btn-primary:focus {
+  background-color: transparent;
+  background-image: url("assets/images/bt-bg-center.png");
+  background-repeat: repeat-x;
+  background-position: 0 0;
   transition: all 0.3s ease-in;
-  font-weight: 600;
-  padding: 6px 16px;
-  color: #FFF;
-
+  will-change: box-shadow, transform;
+  font-size: 20px;
+  height: 60px;
+  border: 0px solid transparent !important;
+  box-shadow: -6px 0 15px 0px #ffc1077d;
+  margin-left: 37px;
+  margin-right: 37px;
+  color: #000;
+  padding-right: 0;
+  padding-left: 0;
+  display: flex;
   align-items: center;
-  appearance: none;
-  background-image: linear-gradient(to right top, #e477f9, #db68f6, #d158f3, #c746f1, #bc33ee);
-  border: 0;
-  border-radius: 6px;
-  box-shadow: rgba(45, 35, 66, .4) 0 2px 4px,rgba(45, 35, 66, .3) 0 7px 13px -3px,rgba(105, 58, 111, 0.5) 0 -3px 0 inset;
-  box-sizing: border-box;
-  color: #fff;
-  cursor: pointer;
-  display: inline-flex;
-  font-family: "JetBrains Mono",monospace;
-  height: 48px;
-  justify-content: center;
-  line-height: 1;
-  list-style: none;
-  overflow: hidden;
-  padding-left: 16px;
-  padding-right: 16px;
-  position: relative;
-  text-align: left;
-  text-decoration: none;
-  transition: box-shadow .15s,transform .15s;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  white-space: nowrap;
-  will-change: box-shadow,transform;
-  font-size: 28px;
 }
 
-.btn-primary:focus {
-  box-shadow: #a43ce0 0 0 0 1.5px inset, rgba(45, 35, 66, .4) 0 2px 4px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
+.btn-primary::after,
+.btn-primary::before {
+  content: " ";
+  width: 44px;
+  height: 100%;
+  background: url("assets/images/bt-bg-right.png") 100% 0 no-repeat;
+  position: absolute;
+  top: 0;
+  right: -22px;
+  z-index: -1;
+  box-shadow: 6px 0 8px 0px #ffc1074d;
+  background-color: #ffc10729;
+  transition: all 0.3s ease-in;
+}
+.btn-primary::before {
+  background: url("assets/images/bt-bg-left.png") 0 0 no-repeat;
+  left: -22px;
+  right: inherit;
+  width: 70px;
+  box-shadow: -6px 0 8px 0px #ffc1074d;
+  background-color: #ffc10729;
 }
 
-.btn-primary:hover {
-  box-shadow: rgba(45, 35, 66, .4) 0 4px 8px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #a43ce0 0 -3px 0 inset;
-  transform: translateY(-2px);
+
+.btn-primary:hover, .btn-primary:not(:disabled):not(.disabled):active {
+  background-image: url("assets/images/bt-bg-center-hover.png");
+  color: #000;
+}
+
+.btn-primary:hover::before {
+  background-image: url("assets/images/bt-bg-left-hover.png");
+}
+.btn-primary:hover::after {
+  background-image: url("assets/images/bt-bg-right-hover.png");
 }
 
 .btn-primary:active {
-  box-shadow: #a43ce0 0 3px 7px inset;
-  transform: translateY(2px);
 }
 
 .btn-outline-primary {
@@ -649,36 +737,66 @@ button.close {
 .modal-header {
   color: #a50eb3 !important;
   background: rgb(31, 31, 34);
-  background: linear-gradient(180deg, rgba(31, 31, 34, 1) 0%, rgba(24, 27, 30, 1) 5%, rgba(24, 38, 45, 1) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(31, 31, 34, 1) 0%,
+    rgba(24, 27, 30, 1) 5%,
+    rgba(24, 38, 45, 1) 100%
+  );
   border-color: #a50eb3 !important;
 }
 
 .modal-body {
   color: #a50eb3 !important;
-  background: linear-gradient(180deg, rgba(31, 31, 34, 1) 0%, rgba(24, 27, 30, 1) 5%, rgba(24, 38, 45, 1) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(31, 31, 34, 1) 0%,
+    rgba(24, 27, 30, 1) 5%,
+    rgba(24, 38, 45, 1) 100%
+  );
 }
 
 .modal-footer {
   color: #a50eb3 !important;
-  background: linear-gradient(180deg, rgba(31, 31, 34, 1) 0%, rgba(24, 27, 30, 1) 5%, rgba(24, 38, 45, 1) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(31, 31, 34, 1) 0%,
+    rgba(24, 27, 30, 1) 5%,
+    rgba(24, 38, 45, 1) 100%
+  );
   border-color: #a50eb3 !important;
 }
 
 .b-pagination > li > .page-link {
   color: #a50eb3;
-  background: linear-gradient(180deg, rgba(31, 31, 34, 1) 0%, rgba(24, 27, 30, 1) 5%, rgba(24, 38, 45, 1) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(31, 31, 34, 1) 0%,
+    rgba(24, 27, 30, 1) 5%,
+    rgba(24, 38, 45, 1) 100%
+  );
   border-color: #a50eb36e;
 }
 
 .b-pagination > .page-item.active > .page-link {
   color: #a50eb3;
-  background: linear-gradient(180deg, rgba(31, 31, 34, 1) 0%, rgba(24, 27, 30, 1) 5%, rgba(24, 38, 45, 1) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(31, 31, 34, 1) 0%,
+    rgba(24, 27, 30, 1) 5%,
+    rgba(24, 38, 45, 1) 100%
+  );
   border-color: #a50eb3;
 }
 
 .b-pagination > .page-item.disabled > .page-link {
   color: #b3b0a72a;
-  background: linear-gradient(180deg, rgba(31, 31, 34, 1) 0%, rgba(24, 27, 30, 1) 5%, rgba(24, 38, 45, 1) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(31, 31, 34, 1) 0%,
+    rgba(24, 27, 30, 1) 5%,
+    rgba(24, 38, 45, 1) 100%
+  );
   border-color: #a50eb36e;
 }
 .nav-tabs {
@@ -692,12 +810,17 @@ button.close {
   border-left-color: transparent !important;
   border-right-color: transparent !important;
   background-color: transparent !important;
-  background: linear-gradient(180deg, rgba(31, 31, 34, 1) 0%, rgba(24, 27, 30, 1) 5%, rgba(24, 38, 45, 1) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(31, 31, 34, 1) 0%,
+    rgba(24, 27, 30, 1) 5%,
+    rgba(24, 38, 45, 1) 100%
+  );
 }
 
 .nav-tabs .nav-link:hover {
   border-bottom: 5px solid #a50eb3 !important;
-  border-color: transparent transparent  #a50eb3 transparent !important ;
+  border-color: transparent transparent #a50eb3 transparent !important ;
 }
 
 .outline {
@@ -718,24 +841,29 @@ div.bg-success {
   border: 2px solid #6c5f38;
   border-radius: 0.1em;
   background: rgb(31, 31, 34);
-  background: linear-gradient(180deg, rgba(31, 31, 34, 1) 0%, rgba(24, 27, 30, 1) 5%, rgba(24, 38, 45, 1) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(31, 31, 34, 1) 0%,
+    rgba(24, 27, 30, 1) 5%,
+    rgba(24, 38, 45, 1) 100%
+  );
 }
 
 .nav.nav-pills .nav-link.active {
   border: 2px solid #a50eb3 !important;
   background: rgb(61, 61, 64);
-  background: linear-gradient(180deg, rgba(51, 51, 54, 1) 0%, rgba(44, 47, 50, 1) 5%, rgba(44, 58, 65, 1) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(51, 51, 54, 1) 0%,
+    rgba(44, 47, 50, 1) 5%,
+    rgba(44, 58, 65, 1) 100%
+  );
 }
 </style>
 <style scoped>
-.app {
-  margin: 0;
-}
-
 .content {
   padding: 0 1em;
   height: calc(100vh - 56px);
-  background: linear-gradient(45deg, rgba(20, 20, 20, 1) 100%, rgba(36, 39, 32, 1) 100%);
   margin: auto;
 }
 
@@ -755,30 +883,60 @@ div.bg-success {
 }
 
 .starter-panel {
-  width: 100%;
-  max-width: 28em;
-  background: rgba(0, 0, 0, 1);
-  box-shadow: 0 2px 4px #ffffff38;
-  border: 1px solid #a50eb3;
+  width: 50rem;
+  height: calc(50rem * 0.69);
+  max-width:  100%;
+  background-image: url('assets/images/bg-modal.svg');
+  background-position: 50% 0;
+  background-size: contain;
+  background-repeat: no-repeat;
   border-radius: 5px;
   padding: 0.5em;
   margin: auto;
   text-align: center;
   overflow: auto auto;
+  position: relative;
 }
 
 .starter-panel-heading {
   margin-left: 15px;
-  font-size: 45px;
+  margin-top: 3rem;
+  font-size: 2.8rem;
+  font-weight: bold;
+  color: #F58B5B;
+  display: block;
+}
+
+.starter-panel .button-div h1{
+  font-size: 1.3rem;
+}
+
+.starter-panel .button-div{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.starter-panel p{
+  margin-bottom: 2rem;
+}
+
+.hide-modal{
+  position: absolute;
+  right: 1.5rem;
+  top: 1rem;
+  background: none;
+  border: none
 }
 
 .starter-msg {
   font-size: 0.85em;
 }
 .instructions-list {
-  text-align: start;
-  padding: 15px;
-  font-size: 0.5em;
+  text-align: center;
+  padding: 30px 20px 15px 10px;
+  font-size: 1.3rem;
 }
 
 .unstyled-list {
@@ -788,6 +946,10 @@ div.bg-success {
   border: 1px solid #9e5772;
   border-radius: 3px;
   width: 100%;
+}
+
+.starter-panel a{
+  color: #F58B5B;
 }
 
 .mini-icon-starter {
