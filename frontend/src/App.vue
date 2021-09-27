@@ -75,13 +75,20 @@
             </li>
           </ul> -->
             <p>
-              If you have any questions, please join our Discord:
+              Join us on 
               <a
-                href="https://discord.com/invite/wxRB7qQQ"
+                href="https://discord.gg/kwXdupvext"
                 target="_blank"
                 rel="noopener noreferrer"
-                >https://discord.gg/cryptowars</a
-              >
+                >Discord</a> / <a
+                href="https://t.me/elasticbitcoinxbt"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Telegram</a> / <a
+                href="https://twitter.com/xbladecryptowar"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Twitter</a>
             </p>
           </div>
           <button
