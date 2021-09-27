@@ -678,7 +678,7 @@ button.close {
   cursor: auto;
 }
 
-.btn-primary, .btn-secondary.focus, .btn-secondary:focus, .btn-primary:focus {
+.btn-primary, .btn-primary.focus, .btn-primary:focus{
   background-color: transparent;
   background-image: url("assets/images/bt-bg-center.png");
   background-repeat: repeat-x;
@@ -806,28 +806,37 @@ button.close {
   );
   border-color: #a50eb36e;
 }
+
+.tabs > div:first-child{
+  display: flex;
+  justify-content: center;
+}
 .nav-tabs {
   border-bottom: none !important;
 }
 
+.nav-justified > .nav-link, .nav-justified .nav-item{
+  flex-basis: initial;
+  flex-grow: initial;
+}
+
+.main-font .nav-tabs a.nav-link{
+  font-size: 1.1rem;
+  color: #fff;
+}
+
 .nav-tabs .nav-link.active {
-  color: #a50eb3 !important;
-  border-bottom: 5px solid #a50eb3 !important;
+  color: #F58B5B !important;
+  border-bottom: 5px solid #F58B5B !important;
   border-top-color: transparent !important;
   border-left-color: transparent !important;
   border-right-color: transparent !important;
   background-color: transparent !important;
-  background: linear-gradient(
-    180deg,
-    rgba(31, 31, 34, 1) 0%,
-    rgba(24, 27, 30, 1) 5%,
-    rgba(24, 38, 45, 1) 100%
-  );
 }
 
 .nav-tabs .nav-link:hover {
-  border-bottom: 5px solid #a50eb3 !important;
-  border-color: transparent transparent #a50eb3 transparent !important ;
+  border-bottom: 5px solid #F58B5B !important;
+  border-color: transparent transparent #F58B5B transparent !important ;
 }
 
 .outline {

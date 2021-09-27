@@ -211,7 +211,7 @@ export default Vue.extend({
 <style scoped>
 
 .nav-item {
-  margin-top: -24px;
+  /* margin-top: -24px; */
 }
 
 .nav-item a {

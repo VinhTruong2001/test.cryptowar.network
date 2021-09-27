@@ -24,8 +24,8 @@
       </div>
     </b-navbar>
     <claim-rewards-bar v-if="canShowRewardsBar" />
-    <!-- <div class="container_row">
-      <img src="../assets/divider4.png" class="expander-divider" />
+    <div class="container_row">
+      <!-- <img src="../assets/divider4.png" class="expander-divider" /> -->
       <b-button
         class="expander-button"
         @click="toggleCharacterView"
@@ -41,7 +41,7 @@
           aria-hidden="true"
         />
       </b-button>
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -159,29 +159,29 @@ a {
 
 .expand-collapse-icon {
   position: relative;
-  top: -4px;
-  left: -10px;
   color: #9e8a57;
 }
 
 .expander-button {
-  position: relative;
+  position: absolute;
   height: 27px;
   width: 27px;
-  top: -12px;
-  background: linear-gradient(
-    45deg,
-    rgba(20, 20, 20, 1) 0%,
-    rgba(36, 39, 32, 1) 100%
-  );
-  border: 2px solid #312e21 !important;
+  background: #200334;
+  border: 1px solid #312e21 !important;
   border-radius: 0.1em;
-  justify-items: center;
+  padding: 0;
+  margin-top: -5px;
+  margin-right: 0;
+}
+
+.expander-button.focus, .expander-button:focus, .expander-button:active{
+  box-shadow: none;
 }
 
 .container_row {
   display: grid;
   justify-items: center;
+  position: relative;
 }
 
 .expander-divider {

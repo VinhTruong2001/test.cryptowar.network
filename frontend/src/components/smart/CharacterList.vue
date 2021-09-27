@@ -34,7 +34,7 @@
         </div>
       </template>
 
-      <b-button variant="primary" class="clear-filters-button mb-3" @click="clearFilters" >
+      <b-button class="clear-filters-button mb-3" @click="clearFilters" >
           <span>
             Clear Filters
           </span>

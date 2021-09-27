@@ -12,7 +12,6 @@
                       @mouseover="hover = !isMobile() || true"
                       @mouseleave="hover = !isMobile()" />
           <b-button
-            variant="primary"
             class="shop-button"
             @click="buyItem(nft)">
             <span class="gtag-link-others">
@@ -59,7 +58,6 @@
         </div>
 
         <b-button
-          variant="primary"
           class="ml-3 clear-filters-button"
           @click="clearFilters"
         >
