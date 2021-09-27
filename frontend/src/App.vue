@@ -75,7 +75,7 @@
             </li>
           </ul> -->
             <p>
-              Join us on 
+              Join us on
               <a
                 href="https://discord.gg/kwXdupvext"
                 target="_blank"
