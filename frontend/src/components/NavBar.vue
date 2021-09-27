@@ -1,46 +1,61 @@
 <template>
   <div class="main-nav-div">
-    <b-navbar class="main-nav" toggleable="sm" type="dark" variant="dark">
+    <b-navbar class="main-nav" toggleable="sm">
       <b-navbar-brand href="#" class="nav-logo">
-        <img src="../assets/xBlade-logo-02.png" class="logo d-inline-block align-top" alt="Logo">
+        <img
+          src="../assets/xBlade-logo-02.png"
+          class="logo d-inline-block align-top"
+          alt="Logo"
+        />
       </b-navbar-brand>
 
       <view-links class="view-links"></view-links>
 
       <skill-balance-display class="ml-auto d-none d-sm-flex" />
 
-      <claim-rewards  v-if="!canShowRewardsBar" />
+      <claim-rewards v-if="!canShowRewardsBar" />
 
-      <options class="d-none d-sm-flex"/>
+      <options class="d-none d-sm-flex" />
 
       <!-- Render only on mobile view -->
       <div class="d-flex d-sm-none">
         <skill-balance-display class="skill-display-mobile" />
-        <options class="options-display-mobile"/>
+        <options class="options-display-mobile" />
       </div>
     </b-navbar>
     <claim-rewards-bar v-if="canShowRewardsBar" />
-    <div class="container_row">
-      <img src="../assets/divider4.png" class="expander-divider">
-      <b-button class="expander-button" @click="toggleCharacterView" v-if="ownCharacters.length > 0">
-        <b-icon-arrows-expand class="expand-collapse-icon" v-if="!getIsCharacterViewExpanded" />
-        <b-icon-arrows-collapse class="expand-collapse-icon" v-if="getIsCharacterViewExpanded" aria-hidden="true" />
+    <!-- <div class="container_row">
+      <img src="../assets/divider4.png" class="expander-divider" />
+      <b-button
+        class="expander-button"
+        @click="toggleCharacterView"
+        v-if="ownCharacters.length > 0"
+      >
+        <b-icon-arrows-expand
+          class="expand-collapse-icon"
+          v-if="!getIsCharacterViewExpanded"
+        />
+        <b-icon-arrows-collapse
+          class="expand-collapse-icon"
+          v-if="getIsCharacterViewExpanded"
+          aria-hidden="true"
+        />
       </b-button>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue from "vue";
 
-import ViewLinks from './ViewLinks.vue';
-import Options from './Options.vue';
-import SkillBalanceDisplay from './smart/SkillBalanceDisplay.vue';
-import ClaimRewards from './smart/ClaimRewards.vue';
-import ClaimRewardsBar from './smart/ClaimRewardsBar.vue';
+import ViewLinks from "./ViewLinks.vue";
+import Options from "./Options.vue";
+import SkillBalanceDisplay from "./smart/SkillBalanceDisplay.vue";
+import ClaimRewards from "./smart/ClaimRewards.vue";
+import ClaimRewardsBar from "./smart/ClaimRewardsBar.vue";
 
-import Events from '../events';
-import { mapGetters, mapMutations } from 'vuex';
+import Events from "../events";
+import { mapGetters, mapMutations } from "vuex";
 
 export default Vue.extend({
   components: {
@@ -48,57 +63,54 @@ export default Vue.extend({
     SkillBalanceDisplay,
     ClaimRewards,
     ClaimRewardsBar,
-    Options
+    Options,
   },
-
 
   data() {
     return {
-      canShowRewardsBar: true
+      canShowRewardsBar: true,
     };
   },
 
   computed: {
-    ...mapGetters(['getIsCharacterViewExpanded','ownCharacters'])
+    ...mapGetters(["getIsCharacterViewExpanded", "ownCharacters"]),
   },
 
   methods: {
-    ...mapMutations(['setIsCharacterViewExpanded']),
+    ...mapMutations(["setIsCharacterViewExpanded"]),
     checkStorage(): void {
-      this.canShowRewardsBar = localStorage.getItem('hideRewards') === 'false';
+      this.canShowRewardsBar = localStorage.getItem("hideRewards") === "false";
     },
     toggleCharacterView(): void {
       this.setIsCharacterViewExpanded(!this.getIsCharacterViewExpanded);
-      localStorage.setItem('isCharacterViewExpanded', this.getIsCharacterViewExpanded ? 'true' : 'false');
-    }
+      localStorage.setItem(
+        "isCharacterViewExpanded",
+        this.getIsCharacterViewExpanded ? "true" : "false"
+      );
+    },
   },
 
   mounted() {
     this.checkStorage();
-    Events.$on('setting:hideRewards', () => this.checkStorage());
+    Events.$on("setting:hideRewards", () => this.checkStorage());
   },
 });
 </script>
 
 <style>
-
 /** Suggest to move this to atomic folder structure like assets/css **/
 a {
   text-decoration: none;
   user-select: none;
-  color: #b3b0a7 !important;
-}
-
-a:hover,
-a.router-link-active {
-  color: #ffb4ef;
-  text-shadow: 0 0 5px rgb(74, 2, 88), 0 0 10px rgb(78, 3, 94), 0 0 15px #9d17af, 0 0 10px #9a23a5;
-  text-decoration: none !important;
 }
 
 .dropdown-menu {
-  background: rgb(20,20,20);
-  background: linear-gradient(45deg, rgba(20,20,20,1) 0%, rgba(36,39,32,1) 100%);
+  background: rgb(20, 20, 20);
+  background: linear-gradient(
+    45deg,
+    rgba(20, 20, 20, 1) 0%,
+    rgba(36, 39, 32, 1) 100%
+  );
   border: none !important;
 }
 
@@ -118,7 +130,7 @@ a.router-link-active {
     flex-direction: row;
     justify-content: space-evenly;
   }
-  .skill-display-mobile  {
+  .skill-display-mobile {
     flex: 5;
   }
   .skill-display-mobile > .balance-container {
@@ -137,15 +149,12 @@ a.router-link-active {
   padding-top: 7px;
 }
 
-.navbar {
-  background: rgb(20,20,20);
-  background: linear-gradient(45deg, rgba(20,20,20,1) 0%, rgba(36,39,32,1) 100%);
-}
+
 .main-nav > .view-links {
-  flex : 2.3;
+  flex: 2.3;
 }
 .nav-logo {
-  flex : 0.3;
+  flex: 0.3;
 }
 
 .expand-collapse-icon {
@@ -155,18 +164,22 @@ a.router-link-active {
   color: #9e8a57;
 }
 
-.expander-button{
+.expander-button {
   position: relative;
   height: 27px;
   width: 27px;
   top: -12px;
-  background: linear-gradient(45deg, rgba(20, 20, 20, 1) 0%, rgba(36, 39, 32, 1) 100%);
-  border: 2px solid #312E21 !important;
+  background: linear-gradient(
+    45deg,
+    rgba(20, 20, 20, 1) 0%,
+    rgba(36, 39, 32, 1) 100%
+  );
+  border: 2px solid #312e21 !important;
   border-radius: 0.1em;
   justify-items: center;
 }
 
-.container_row{
+.container_row {
   display: grid;
   justify-items: center;
 }
@@ -176,7 +189,8 @@ a.router-link-active {
   position: relative;
 }
 
-.expander-divider, .expander-button{
+.expander-divider,
+.expander-button {
   grid-column: 1;
   grid-row: 1;
 }

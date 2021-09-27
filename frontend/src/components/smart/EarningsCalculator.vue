@@ -1,18 +1,26 @@
 <template>
   <div>
     <div class="character-earning-potential dark-bg-text" v-if="!isLoadingCharacter">
-      <div class="milestone-header">
-        <img src="../../assets/earning-potential-sword.png" class="sword-left">
-        <span class="milestone-text">Next Milestone</span>
-        <img src="../../assets/earning-potential-sword.png" class="sword-right">
+      <div class="milestone-header-box">
+        <div class="milestone-header">
+          <div class="milestone-item">
+          <img src="../../assets/earning-potential-sword.png" class="sword-left">
+          <span class="milestone-text">Next Milestone</span>
+          <img src="../../assets/earning-potential-sword.png" class="sword-right">
+        </div>
+        <div class="milestone-item">
+          Earn <span class="bonus-text">{{getNextMilestoneBonus(currentCharacter.level)}}%</span> more per battle at<br>
+        </div>
+        <div class="milestone-item">
+          <span class="milestone-lvl-text">LVL {{getNextMilestoneLevel(currentCharacter.level)}}</span><br>
+        </div>
+      </div>
       </div>
       <div class="milestone-details">
-        Earn <span class="bonus-text">{{getNextMilestoneBonus(currentCharacter.level)}}%</span> more per battle at<br>
         <div class="calculator-icon-div">
-          <span class="milestone-lvl-text">LVL {{getNextMilestoneLevel(currentCharacter.level)}}</span><br>
-          <b-button class="btn btn-primary btn-small" @click="onShowEarningsCalculator">
-            <b-icon-calculator-fill class="milestone-hint" scale="1"
-              v-tooltip.bottom="`Earnings Calculator`"/>
+          <b-button class="btn-primary" @click="onShowEarningsCalculator">
+            <!-- <b-icon-calculator-fill class="milestone-hint" scale="1"
+              v-tooltip.bottom="`Earnings Calculator`"/> -->
               Earnings Calculator
           </b-button>
 
@@ -370,8 +378,7 @@ export default Vue.extend({
 .character-earning-potential {
   position: relative;
   display: flex;
-  align-items: center;
-  flex-direction: column;
+  padding-left: 2rem;
 }
 
 .milestone-text {
@@ -379,7 +386,6 @@ export default Vue.extend({
 }
 
 .milestone-details {
-  text-align: center;
   line-height: 1;
 }
 
@@ -422,6 +428,16 @@ export default Vue.extend({
   justify-self: flex-start;
   width: 20%;
   padding-right: 5px;
+}
+
+.milestone-header .milestone-item{
+  display: flex;
+  text-align: center;
+  justify-content: center;
+}
+
+.milestone-header-box{
+  display: flex;;
 }
 
 .calculator-weapon {

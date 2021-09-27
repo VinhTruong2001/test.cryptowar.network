@@ -1,27 +1,25 @@
 <template>
   <div class="body main-font">
     <b-navbar>
-      <b-icon-exclamation-circle-fill class="rewards-claimable-icon" scale="1.2"
-      variant="success" :hidden="!canClaimTokens && !canClaimXp" v-tooltip.bottom="'Rewards ready to claim!'"/>
+      <!-- <b-icon-exclamation-circle-fill class="rewards-claimable-icon" scale="1.2"
+      variant="success" :hidden="!canClaimTokens && !canClaimXp" v-tooltip.bottom="'Rewards ready to claim!'"/> -->
 
-      <b-nav-item disabled><strong>Rewards</strong></b-nav-item>
+      <b-nav-item disabled>Rewards</b-nav-item>
 
       <b-nav-item
-        class="ml-3"
         :disabled="!canClaimTokens"
         @click="onClaimTokens()"><!-- moved gtag-link below b-nav-item -->
         <span class="gtag-link-others" tagname="claim_skill" v-tooltip.bottom="'Tax is being reduced by 1% per day.' + getTaxTimerNextTick">
-          <strong>xBlade</strong> {{ formattedSkillReward }}
-          <strong>Early Withdraw Tax</strong> {{ formattedRewardsClaimTax }}
-          <b-icon-question-circle class="centered-icon" scale="0.8"/>
+          xBlade {{ formattedSkillReward }}
+          Early Withdraw Tax {{ formattedRewardsClaimTax }}
+          <!-- <b-icon-question-circle class="centered-icon" scale="0.8"/> -->
         </span>
       </b-nav-item>
 
       <b-nav-item
-        class="ml-3"
         :disabled="!canClaimXp"
         @click="onClaimXp">
-          <div class="gtag-link-others" v-html="`<strong>XP</strong> ${formattedXpRewards}`"></div>
+          <div class="gtag-link-others" v-html="`XP ${formattedXpRewards}`"></div>
       </b-nav-item>
     </b-navbar>
 
@@ -153,11 +151,10 @@ export default Vue.extend({
       return this.xpRewardsForOwnedCharacters.map((xp, i) => {
         const currentCharacter = this.currentCharacter || { id: null };
         if(!this.ownCharacters[i]) return `${xp}`;
-        return  `${this.ownCharacters[i].id === currentCharacter.id ? '<b>' : ''}` +
-                `${(this.ownCharacters[i].xp + this.xpRewards[this.ownCharacters[i].id]) as any > RequiredXp(this.ownCharacters[i].level) ? '<u>' : ''}` +
+        return  `${(this.ownCharacters[i].xp + this.xpRewards[this.ownCharacters[i].id]) as any > RequiredXp(this.ownCharacters[i].level) ? '' : ''}` +
                 `${(this.getCleanCharacterName(this.ownCharacters[i].id))} ${xp}` +
-                `${(this.ownCharacters[i].xp + this.xpRewards[this.ownCharacters[i].id]) as any > RequiredXp(this.ownCharacters[i].level) ? '</u>' : ''}` +
-                `${this.ownCharacters[i].id === currentCharacter.id ? '</b>' : ''}`;
+                `${(this.ownCharacters[i].xp + this.xpRewards[this.ownCharacters[i].id]) as any > RequiredXp(this.ownCharacters[i].level) ? '' : ''}` +
+                `${this.ownCharacters[i].id === currentCharacter.id ? '' : ''}`;
       }).join(', ');
     },
 
@@ -212,11 +209,6 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-
-.navbar {
-  background: rgb(20,20,20);
-  background: linear-gradient(45deg, rgba(20,20,20,1) 0%, rgba(36,39,32,1) 100%);
-}
 
 .nav-item {
   margin-top: -24px;
