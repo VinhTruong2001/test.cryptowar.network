@@ -1,7 +1,7 @@
 <template>
   <div class="character-bar">
     <character-display />
-    <div class="character-bar-divider"/>
+    <!-- <div class="character-bar-divider"/> -->
     <!-- <img src="../assets/infoDivider.png" class="info-divider"> -->
   </div>
 </template>

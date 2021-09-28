@@ -12,25 +12,23 @@
           <div class="col">
 
             <div class="row button-row">
-              <div class="col">
+              <div class="">
                 <b-button
-                  variant="primary"
-                  @click="searchAllCharacterListings(currentPage - 1)"  class="gtag-link-others" tagname="browse_characters">Browse Characters</b-button>
+                  @click="searchAllCharacterListings(currentPage - 1)"  class="gtag-link-others search-btn"
+                  tagname="browse_characters">Browse Characters</b-button>
               </div>
 
-              <div class="col">
+              <div class="">
                 <b-button
-                  variant="primary"
-                  @click="searchAllWeaponListings(currentPage - 1)"  class="gtag-link-others" tagname="browse_weapons">Browse Weapons</b-button>
+                  @click="searchAllWeaponListings(currentPage - 1)"  class="gtag-link-others search-btn" tagname="browse_weapons">Browse Weapons</b-button>
               </div>
 
-              <div class="col">
+              <div class="">
                 <b-button
-                  variant="primary"
-                  @click="searchAllShieldListings(currentPage - 1)"  class="gtag-link-others" tagname="browse_shields">Browse Shields</b-button>
+                  @click="searchAllShieldListings(currentPage - 1)"  class="gtag-link-others search-btn" tagname="browse_shields">Browse Shields</b-button>
               </div>
 
-              <div class="col"></div>
+              <div class=""></div>
             </div>
 
             <div class="search-results">
@@ -210,48 +208,41 @@
             <div class="row buttons-row mt-3">
               <div class="col-4 col-md-3 col-lg-2 mb-2">
                 <b-button
-                  variant="primary"
                   :disabled="!search"
-                  @click="searchListingsByNftId('character')"  class="gtag-link-others" tagname="search_character_id">Search Character ID</b-button>
+                  @click="searchListingsByNftId('character')"  class="gtag-link-others search-btn" tagname="search_character_id">Search Character ID</b-button>
               </div>
 
               <div class="col-4 col-md-3 col-lg-2 mb-2">
                 <b-button
-                  variant="primary"
                   :disabled="!search"
-                  @click="searchListingsByNftId('weapon')"  class="gtag-link-others" tagname="search_weapon_id">Search Weapon ID</b-button>
+                  @click="searchListingsByNftId('weapon')"  class="gtag-link-others search-btn" tagname="search_weapon_id">Search Weapon ID</b-button>
               </div>
 
               <div class="col-4 col-md-3 col-lg-2">
                 <b-button
-                  variant="primary"
                   :disabled="!search"
-                  @click="searchListingsByNftId('shield')"  class="gtag-link-others" tagname="search_shield_id">Search Shield ID</b-button>
+                  @click="searchListingsByNftId('shield')"  class="gtag-link-others search-btn" tagname="search_shield_id">Search Shield ID</b-button>
               </div>
 
               <div class="col-4 col-md-3 col-lg-2">
                 <b-button
-                  variant="primary"
-                  @click="searchOwnListings('weapon')"  class="gtag-link-others" tagname="search_own_weapons">Search My Weapons</b-button>
+                  @click="searchOwnListings('weapon')"  class="gtag-link-others search-btn" tagname="search_own_weapons">Search My Weapons</b-button>
               </div>
 
               <div class="col-4 col-md-3 col-lg-2">
                 <b-button
-                  variant="primary"
-                  @click="searchOwnListings('character')"  class="gtag-link-others" tagname="search_own_characters">Search My Characters</b-button>
+                  @click="searchOwnListings('character')"  class="gtag-link-others search-btn" tagname="search_own_characters">Search My Characters</b-button>
               </div>
 
               <div class="col-4 col-md-3 col-lg-2">
                 <b-button
-                  variant="primary"
-                  @click="searchOwnListings('shield')"  class="gtag-link-others" tagname="search_own_shields">Search My Shields</b-button>
+                  @click="searchOwnListings('shield')"  class="gtag-link-others search-btn" tagname="search_own_shields">Search My Shields</b-button>
               </div>
 
               <div class="col-4 col-md-3 col-lg-2">
                 <b-button
-                  variant="primary"
                   v-if="ownListedNftSelected"
-                  @click="showListingSetupModal(true)" class="gtag-link-others" tagname="change_price">Change Price</b-button>
+                  @click="showListingSetupModal(true)" class="gtag-link-others search-btn" tagname="change_price">Change Price</b-button>
               </div>
 
               <div class="col-4 col-md-3">
@@ -408,43 +399,37 @@
             <div class="row button-row">
               <div class="col-4 col-md-3 col-lg-2 mb-2">
                 <b-button
-                  variant="primary"
-                  @click="activeType = 'weapon'"  class="gtag-link-others" tagname="show_weapons_market">Show Weapons</b-button>
+                  @click="activeType = 'weapon'"  class="gtag-link-others  search-btn" tagname="show_weapons_market">Show Weapons</b-button>
               </div>
 
               <div class="col-4 col-md-3 col-lg-2 mb-2">
                 <b-button
-                  variant="primary"
-                  @click="activeType = 'character'"  class="gtag-link-others" tagname="show_characters_market">Show Characters</b-button>
+                  @click="activeType = 'character'"  class="gtag-link-others  search-btn" tagname="show_characters_market">Show Characters</b-button>
               </div>
 
               <div class="col-4 col-md-3 col-lg-2 mb-2">
                 <b-button
-                  variant="primary"
-                  @click="activeType = 'shield'"  class="gtag-link-others" tagname="show_shields_market">Show Shields</b-button>
+                  @click="activeType = 'shield'"  class="gtag-link-others search-btn" tagname="show_shields_market">Show Shields</b-button>
               </div>
 
               <div class="col-4 col-md-3 col-lg-2 mb-2">
                 <b-button
-                  variant="primary"
                   v-if="activeType === 'weapon'"
-                   class="gtag-link-others" tagname="add_listing_weapon"
+                   class="gtag-link-others  search-btn" tagname="add_listing_weapon"
                   :disabled="selectedNftId === null || selectedNftOnCooldown"
                   @click="showListingSetupModal()">List Weapon <b-icon-question-circle :hidden=!weaponMarketTax
                   v-tooltip.bottom="weaponMarketTax + '% tax (paid by the buyer) will be added to the final price.'"/></b-button>
 
                 <b-button
-                  variant="primary"
                   v-if="activeType === 'character'"
                   :disabled="selectedNftId === null || selectedNftOnCooldown"
-                   class="gtag-link-others" tagname="add_listing_character"
+                   class="gtag-link-others search-btn" tagname="add_listing_character"
                   @click="showListingSetupModal()">List Character <b-icon-question-circle :hidden=!characterMarketTax
                   v-tooltip.bottom="characterMarketTax + '% tax (paid by the buyer) will be added to the final price.'"/></b-button>
 
                 <b-button
-                  variant="primary"
                   v-if="activeType === 'shield'"
-                   class="gtag-link-others" tagname="add_listing_shield"
+                   class="gtag-link-others search-btn" tagname="add_listing_shield"
                   :disabled="selectedNftId === null || selectedNftOnCooldown"
                   @click="showListingSetupModal()">List Shield <b-icon-question-circle :hidden=!shieldMarketTax
                   v-tooltip.bottom="shieldMarketTax + '% tax (paid by the buyer) will be added to the final price.'"/></b-button>
@@ -465,8 +450,7 @@
 
               <div class="col-4 col-md-3 col-lg-2">
                 <b-button
-                  variant="primary"
-                   class="gtag-link-others" tagname="show_weapons_sold"
+                   class="gtag-link-others search-btn" tagname="show_weapons_sold"
                   @click="showWeaponsSoldModal()"> Weapons Sold
                   <b-icon-question-circle v-tooltip.bottom="'View weapons you have sold.'"/>
                 </b-button>
@@ -496,8 +480,7 @@
 
               <div class="col-4 col-md-3 col-lg-2">
                 <b-button
-                  variant="primary"
-                   class="gtag-link-others" tagname="show_characters_sold"
+                   class="gtag-link-others  search-btn" tagname="show_characters_sold"
                   @click="showCharactersSoldModal()"> Characters Sold
                   <b-icon-question-circle v-tooltip.bottom="'View characters you have sold.'"/>
                 </b-button>
@@ -525,8 +508,7 @@
 
               <div class="col-4 col-md-3 col-lg-2">
                 <b-button
-                  variant="primary"
-                   class="gtag-link-others" tagname="show_shields_sold"
+                   class="gtag-link-others  search-btn" tagname="show_shields_sold"
                   @click="showShieldsSoldModal()"> Shields Sold
                   <b-icon-question-circle v-tooltip.bottom="'View shields you have sold.'"/>
                 </b-button>
@@ -1821,5 +1803,11 @@ export default Vue.extend({
 .special-offer-bg {
   margin-top: -5px;
 }
-
+.button-row{
+  align-items: center;
+  justify-content: center;
+}
+.buttons-row{
+  text-align: center;
+}
 </style>

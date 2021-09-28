@@ -1,7 +1,7 @@
 <template>
   <div class="character-display-container">
     <transition name="slide-fade">
-      <div class="row ">
+      <div class="row chara-head-box" :class="[getIsCharacterViewExpanded?'':'chara-head-close']">
         <div class="col-sm-6 root main-font">
           <div class="character-portrait">
             <!--img
@@ -65,7 +65,7 @@
       </div>
     </transition>
 
-    <div class="character-full-list" v-if="!isMobile()">
+    <div class="character-full-list" :class="[getIsCharacterViewExpanded? '': 'move-center']" v-if="!isMobile()">
       <ul
         class="character-list"
         v-bind:class="[
@@ -215,6 +215,16 @@ export default Vue.extend({
   width: 100%;
 }
 
+.chara-head-box{
+  transition: all 0.3s ease-in;
+  max-height: 200px;
+  overflow: hidden;
+}
+.chara-head-close{
+  max-height: 0px;
+  /* overflow: hidden; */
+}
+
 .character-display-container .root{
   border-right: 1px solid #707070;
 }
@@ -293,7 +303,7 @@ li.character-highlight {
 
 .name-list {
   margin: auto;
-  font-size: 1.2em;
+  font-size: 1.1em;
   text-align: center;
   color: #F58B5B;
 }
@@ -315,7 +325,10 @@ li.character-highlight {
   justify-content: space-around;
   align-items: stretch;
   margin-bottom: 15px;
+  flex: 1;
+  transition: flex 0.3s ease;
 }
+
 
 .centered-list {
   justify-content: center;
@@ -325,6 +338,11 @@ li.character-highlight {
   display: flex;
   padding-left: 0px;
   list-style: none;
+  flex: 1;
+  transition: flex 0.3s ease;
+}
+.move-center{
+  padding-top: 0;
 }
 .character-list {
   list-style: none;

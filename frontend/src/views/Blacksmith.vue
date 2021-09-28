@@ -20,7 +20,7 @@
               <h1>Weapons ({{ ownWeapons.length }})</h1>
               <div class="d-flex justify-content-flex-end ml-auto">
                 <b-button
-                  variant="primary"
+                  class="btn-buy"
                   v-if="canRename()"
                   @click="openRenameWeapon"
                   tagname="rename_weapon"
@@ -28,8 +28,7 @@
                   Rename Weapon
                 </b-button>
                 <b-button
-                        variant="primary"
-                        class="ml-3"
+                        class="ml-3 btn-buy"
                         v-if="reforgeWeaponId !== null && ownWeapons.length > 0"
                         @click="displayDustReforge()"
                         tagname="reforge_weapon"
@@ -37,8 +36,7 @@
                   Reforge with Dust
                 </b-button>
                 <b-button
-                        variant="primary"
-                        class="ml-3"
+                        class="ml-3 btn-buy"
                         @click="displayDustCreation()"
                         tagname="reforge_weapon"
                         v-tooltip="'Burn weapons to buff selected weapon'">
@@ -98,9 +96,8 @@
               <h1>Create Dust</h1>
               <div class="d-flex justify-content-flex-end ml-auto">
                 <b-button
-                        variant="primary"
                         tagname="confirm_forge_weapon"
-                        class="confirmReforge ml-3"
+                        class="confirmReforge ml-3 btn-buy"
                         @click="showMassDustConfirmation"
                         v-tooltip="'Reforge selected weapon with dust'">
                   Mass Burn
@@ -108,9 +105,8 @@
                   ({{burnCost * burnWeaponIds.length }} xBlade)
                 </b-button>
                 <b-button
-                        variant="primary"
                         tagname="confirm_forge_weapon"
-                        class="confirmReforge ml-3"
+                        class="confirmReforge ml-3 btn-buy"
                         @click="cancelReforge()"
                         v-tooltip="'Cancel Reforge'">
                         Cancel
@@ -202,9 +198,8 @@
                           <div class="text-center" :hidden="burnWeaponId === 0"></div>
                         </div>
                         <b-button
-                                variant="primary"
                                 tagname="confirm_forge_weapon"
-                                class="confirmReforge"
+                                class="confirmReforge btn-buy"
                                 @click="showDustReforgeConfirmation"
                                 v-tooltip="'Reforge selected weapon with dust'">
                           Confirm Reforge
@@ -218,9 +213,8 @@
                           ({{ dustReforgeCost }} xBlade)
                         </b-button>
                         <b-button
-                                variant="primary"
                                 tagname="confirm_forge_weapon"
-                                class="confirmReforge"
+                                class="confirmReforge btn-buy"
                                 @click="displayBlacksmith()"
                                 v-tooltip="'Cancel Reforge'">
                           Cancel Reforge
@@ -248,9 +242,8 @@
                     <div v-if="showReforge && showDustForge === true">
                       <h1 class="text-center">
                         <b-button
-                                variant="primary"
                                 tagname="confirm_forge_weapon"
-                                class="multiForging"
+                                class="multiForging btn-buy"
                                 @click="clearAllMassBurn()"
                                 v-tooltip="'Clear all'"
                                 :disabled="burnWeaponIds === []">
