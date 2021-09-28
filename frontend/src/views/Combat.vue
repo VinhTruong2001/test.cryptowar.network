@@ -66,8 +66,8 @@
                   <weapon-icon class="weapon-icon" :weapon="selectedWeapon" />
                 </div>
 
-                <b-button v-if="selectedWeaponId" variant="primary" class="ml-3" @click="selectedWeaponId = null" id="gtag-link-others" tagname="choose_weapon">
-                  Choose New Weapon
+                <b-button v-if="selectedWeaponId" class="ml-3 choose_weapon" @click="selectedWeaponId = null" id="gtag-link-others" tagname="choose_weapon">
+                  + Choose New Weapon
                 </b-button>
               </div>
 
@@ -575,19 +575,32 @@ h1 {
   padding-top: 0px;
 }
 
-.encounter-button {
-  display: block;
+button.encounter-button {
+  display: flex;
   margin: 0 auto;
-  height: 5em;
-  width: 13em;
   position: relative;
   top: 3vw;
-  margin-top: 2em;
+  text-align: center;
+  line-height: 1;
+  justify-content: center;
+  align-items: center;
+  width: calc(100% - 44px) !important
 }
 
+.encounter-button:active{
+  margin-left: 0px;
+}
+
+button.btn.button.main-font.dark-bg-text.encounter-button.btn-styled.encounter-button > h1{
+  margin: 0;
+}
 .enemy-img {
   position: relative;
   top: -24px;
+}
+
+.choose_weapon{
+  max-width: 12rem;
 }
 
 @media (max-width: 1334px) {
@@ -642,11 +655,7 @@ h1 {
   margin-top: 30px;
 }
 #gtag-link-others {
-  margin: 0 auto;
-  display: block;
-  position: relative;
-  margin-top: 20px;
-  width: 100%;
+  margin-top: 30px;
 }
 .ml-3 {
   margin-left: 0px !important;

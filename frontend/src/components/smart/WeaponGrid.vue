@@ -45,7 +45,7 @@
 
       <b-button
         v-if="!newWeapon"
-        class="clear-filters-button" :class="{'mb-3': !showFavoriteToggle}"
+        class="clear-filters-button mb-3"
         @click="clearFilters"
       >
         <span>
@@ -455,10 +455,13 @@ export default Vue.extend({
 
   .show-reforged {
     width: 100%;
-    justify-content: center;
+    justify-content: start;
     margin-bottom: 15px;
+    padding-left: 1rem;
   }
-
+  .show-favorite{
+    margin-left: 0;
+  }
   .clear-filters-button {
     width: 100%;
     text-align: center;
@@ -467,6 +470,13 @@ export default Vue.extend({
 
   .ml-3 {
     margin-left: 0 !important;
+  }
+  h1{
+    font-size: 2rem;
+  }
+  .main-font .nav-tabs a.nav-link{
+    padding-left: 0.2rem;
+    padding-right: 0.2rem;
   }
 }
 

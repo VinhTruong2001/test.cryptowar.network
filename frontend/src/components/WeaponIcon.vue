@@ -251,7 +251,8 @@ export default {
 
 .favorite-star {
   position: absolute;
-  margin-left: 5px;
+  margin-left: 3px;
+  margin-top: 2px;
 }
 
 .id {

@@ -111,6 +111,12 @@ li:not(:last-child){
   border-color: #ffffff55;
 }
 
+select.form-control option, .custom-select option{
+  background-color: #5c456a;
+  color: #fff;
+  border-color: #ffffff55;
+}
+
 .form-control{
   background-color: #ffffff44;
   color: #fff;
