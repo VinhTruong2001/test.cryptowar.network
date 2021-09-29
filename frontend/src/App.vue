@@ -538,6 +538,7 @@ button.btn.button.main-font.dark-bg-text.encounter-button.btn-styled.btn-primary
   > h1 {
   font-weight: 600;
   text-align: center;
+  padding: 0;
 }
 hr.hr-divider {
   border-top: 1px solid #9e8a57;

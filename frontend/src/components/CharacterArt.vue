@@ -349,8 +349,9 @@ export default {
 .name-lvl-container,
 .score-id-container {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   position: relative;
+  padding: 0 2rem;
 }
 
 .market-bot .name-lvl-container {
