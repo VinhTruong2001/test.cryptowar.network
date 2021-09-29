@@ -375,12 +375,6 @@ export default Vue.extend({
   pointer-events: none;
 }
 
-.character-earning-potential {
-  position: relative;
-  display: flex;
-  padding-left: 2rem;
-}
-
 .milestone-text {
   color: #dabf75; /* little lighter to emboss */
 }

@@ -277,7 +277,7 @@ export default {
   max-width: 180px;
   max-height: 180px;
   margin-left: 16px;
-  margin-top: 32px;
+  margin-top: 0px;
 
   transform: scale(0.8);
 }

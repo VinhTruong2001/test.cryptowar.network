@@ -469,7 +469,7 @@
                       <p>For tips on how to list NFTs, you may click this <strong><a href="https://wiki.cryptowar.network/market/trading" target="_blank">link</a></strong></p>
                     </div>
                     <template #modal-footer>
-                    <b-button class="mt-3" block @click="resetTransactionHistoryValues('weapons-sold-modal')">Ok</b-button>
+                    <b-button class="mt-3 btn-buy" block @click="resetTransactionHistoryValues('weapons-sold-modal')">Ok</b-button>
                     </template>
 
 
@@ -499,7 +499,7 @@
                       <p>For tips on how to list NFTs, you may click this <strong><a href="https://wiki.cryptowar.network/market/trading" target="_blank">link</a></strong></p>
                     </div>
                     <template #modal-footer>
-                    <b-button class="mt-3" block @click="resetTransactionHistoryValues('characters-sold-modal')">Ok</b-button>
+                    <b-button class="mt-3 btn-buy" block @click="resetTransactionHistoryValues('characters-sold-modal')">Ok</b-button>
                     </template>
 
                 </b-modal>
@@ -527,7 +527,7 @@
                       <p>For tips on how to list NFTs, you may click this <strong><a href="https://wiki.cryptowar.network/market/trading" target="_blank">link</a></strong></p>
                     </div>
                     <template #modal-footer>
-                    <b-button class="mt-3" block @click="resetTransactionHistoryValues('shields-sold-modal')">Ok</b-button>
+                    <b-button class="mt-3 btn-buy" block @click="resetTransactionHistoryValues('shields-sold-modal')">Ok</b-button>
                     </template>
 
 

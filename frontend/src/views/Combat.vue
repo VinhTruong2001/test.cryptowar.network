@@ -676,6 +676,14 @@ button.btn.button.main-font.dark-bg-text.encounter-button.btn-styled.encounter-b
 .weapon-icon-wrapper {
   margin: 0 auto;
 }
+@media (max-width: 767.98px){
+  .button.encounter-button{
+    top: 10vw;
+  }
+  .small-durability-bar{
+    top: 35px
+  }
+}
 
 @media (max-width: 575.98px) {
   .show-reforged {

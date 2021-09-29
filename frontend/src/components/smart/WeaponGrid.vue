@@ -491,10 +491,10 @@ export default Vue.extend({
     justify-content: center;
   }
   .stars-elem {
-  margin-bottom: 20px;
-  max-width: 500px;
-  width: 100%;
-}
+    margin-bottom: 20px;
+    max-width: 500px;
+    width: 100%;
+  }
   li.weapon {
     display: inline-block;
     margin: auto;
@@ -527,4 +527,6 @@ export default Vue.extend({
 .fix-h24 {
   height: 24px;
 }
+
+
 </style>
