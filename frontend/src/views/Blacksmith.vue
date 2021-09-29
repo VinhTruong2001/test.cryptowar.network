@@ -660,7 +660,7 @@ export default Vue.extend({
 }
 
 .weapon-container {
-  border-right: 1px solid #9e8a57;
+  /* border-right: 1px solid #9e8a57; */
 }
 
 .confirmReforge{

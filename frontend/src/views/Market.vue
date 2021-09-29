@@ -416,7 +416,7 @@
                   v-if="activeType === 'weapon'"
                    class="gtag-link-others  search-btn" tagname="add_listing_weapon"
                   :disabled="selectedNftId === null || selectedNftOnCooldown"
-                  @click="showListingSetupModal()">List Weapon <b-icon-question-circle :hidden=!weaponMarketTax
+                  @click="showListingSetupModal()">Sell Weapon/Character <b-icon-question-circle :hidden=!weaponMarketTax
                   v-tooltip.bottom="weaponMarketTax + '% tax (paid by the buyer) will be added to the final price.'"/></b-button>
 
                 <b-button
@@ -447,7 +447,7 @@
                 </b-modal>
               </div>
 
-              <div class="">
+              <div class="mb-2">
                 <b-button
                    class="gtag-link-others search-btn" tagname="show_weapons_sold"
                   @click="showWeaponsSoldModal()"> Weapons Sold
@@ -477,7 +477,7 @@
 
               </div>
 
-              <div class="">
+              <div class="mb-2">
                 <b-button
                    class="gtag-link-others  search-btn" tagname="show_characters_sold"
                   @click="showCharactersSoldModal()"> Characters Sold
@@ -505,7 +505,7 @@
                 </b-modal>
               </div>
 
-              <div class="">
+              <div class="mb-2">
                 <b-button
                    class="gtag-link-others  search-btn" tagname="show_shields_sold"
                   @click="showShieldsSoldModal()"> Shields Sold

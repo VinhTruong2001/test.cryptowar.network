@@ -35,17 +35,17 @@
         <div class="black-outline" v-if="!portrait">
           ID <span class="white">{{ character.id }}</span>
         </div>
-        <!--<div class="black-outline score" v-if="!portrait">
-          Score <span class="">{{ heroScore.toLocaleString() }}</span>
-           <b-icon-question-circle
+        <div class="black-outline score" v-if="!portrait">
+          <span class="">{{ heroScore.toLocaleString() }}</span>
+           <!--<b-icon-question-circle
           class="centered-icon"
           scale="0.8"
           v-tooltip.bottom="
             `Hero score is a measure of your hero's combat prowess so far.
         It goes up when you win and down when you lose. It is also temporarily disabled!`
           "
-        />
-        </div>-->
+        />-->
+        </div>
       </div>
 
       <!-- <div
