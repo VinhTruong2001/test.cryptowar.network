@@ -216,13 +216,14 @@ export default {
 }
 
 .character-item{
-  width: 333px;
+  width: 350px;
   max-width: 100%;
   background-image: url('../../assets/images/bg-item-top.png');
-  background-position: 0 0;
+  background-position: 50% 50%;
   background-repeat: no-repeat;
   margin-top: 50px;
-  background-size: contain;
+  background-size: cover;
+  position: relative;
 }
 
 .character-item .art {
@@ -244,7 +245,7 @@ export default {
 
 .character-item.selected {
 
-    box-shadow: inset 0px 0px 12px 7px #fea036;
+    background-image: url('../../assets/images/bg-item-top-select.png');
 }
 
 .above-wrapper {

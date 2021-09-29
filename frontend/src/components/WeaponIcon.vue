@@ -251,8 +251,9 @@ export default {
 
 .favorite-star {
   position: absolute;
-  margin-left: 3px;
-  margin-top: 2px;
+  margin-left: 4px;
+  margin-top: 4px;
+  font-size: 0.8rem;
 }
 
 .id {
@@ -291,9 +292,10 @@ export default {
 
 .glow-0 {
   animation: none;
-   display: flex;
+   /* display: flex; */
   justify-content: center;
   align-items: center;
+  box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.411);;
 }
 
 .glow-1 {

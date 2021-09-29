@@ -256,7 +256,7 @@ export default {
 
 .glow-0 {
   animation: none;
-  display: flex;
+  /* display: flex; */
   justify-content: center;
   align-items: center;
 }

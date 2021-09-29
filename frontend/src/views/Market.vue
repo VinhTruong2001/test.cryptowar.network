@@ -1765,7 +1765,7 @@ export default Vue.extend({
 }
 
 .m-top-negative-50{
-  margin-top: -50px;
+  margin-top: -25px;
 }
 
 .centered-text {
