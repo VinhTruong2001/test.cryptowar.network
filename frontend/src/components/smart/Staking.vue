@@ -831,7 +831,7 @@ export default {
 }
 
 .gold-text {
-  color: #9e8a57;
+  font-size: 1rem;
 }
 
 </style>

@@ -7,7 +7,7 @@
 
       <b-modal id="fightResultsModal" hide-footer title="Fight Results">
         <CombatResults v-if="resultsAvailable" :results="fightResults" />
-        <b-button class="mt-3" variant="primary" block @click="$bvModal.hide('fightResultsModal')">Close</b-button>
+        <b-button class="mt-3 btn-buy" block @click="$bvModal.hide('fightResultsModal')">Close</b-button>
       </b-modal>
 
       <div class="row">

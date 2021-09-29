@@ -267,7 +267,7 @@ export default {
 .character-list{
   list-style: none;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 @media (max-width: 576px) {

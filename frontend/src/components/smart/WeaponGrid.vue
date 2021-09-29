@@ -401,7 +401,7 @@ export default Vue.extend({
 
 .weapon {
   width: 14em;
-  background: rgba(255, 255, 255, 0.05);
+  /* background: rgba(255, 255, 255, 0.05); */
   border-radius: 6px;
   cursor: pointer;
   position: relative;
@@ -409,7 +409,7 @@ export default Vue.extend({
 }
 
 .weapon.selected {
-  box-shadow: inset 0 0 20px rgb(255, 255, 255);
+  /* box-shadow: inset 0 0 20px rgb(255, 255, 255); */
 }
 
 .weapon-icon-wrapper {
@@ -418,7 +418,11 @@ export default Vue.extend({
 }
 
 .above-wrapper {
-  padding: 0.1rem;
+  padding: 0.1rem 0.1rem 1rem;
+}
+
+.above-wrapper .fix-h24 {
+  margin: 0.5rem 0;
 }
 
 .toggle-button {

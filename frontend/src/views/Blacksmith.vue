@@ -693,7 +693,7 @@ export default Vue.extend({
 .headings {
   min-height: 13em;
   min-width: 13em;
-  max-height: 13em;
+  /* max-height: 13em; */
   max-width: 13em;
   border-radius:0.15em;
   box-sizing: border-box;
