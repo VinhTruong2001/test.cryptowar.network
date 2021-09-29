@@ -679,7 +679,7 @@ button.close {
   cursor: auto;
 }
 
-.btn-primary, .btn-primary.focus, .btn-primary:focus{
+.btn-primary, .btn-primary.focus, .btn-primary:focus, .btn-primary.disabled:not(:hover) .btn-primary:disabled:hover{
   background-color: transparent;
   background-image: url("assets/images/bt-bg-center.png");
   background-repeat: repeat-x;
@@ -723,15 +723,15 @@ button.close {
 }
 
 
-.btn-primary:hover, .btn-primary:not(:disabled):not(.disabled):active {
+.btn-primary:not(:disabled):hover, .btn-primary:not(:disabled):not(.disabled):active {
   background-image: url("assets/images/bt-bg-center-hover.png");
   color: #000;
 }
 
-.btn-primary:hover::before {
+.btn-primary:not(:disabled):hover::before {
   background-image: url("assets/images/bt-bg-left-hover.png");
 }
-.btn-primary:hover::after {
+.btn-primary:not(:disabled):hover::after {
   background-image: url("assets/images/bt-bg-right-hover.png");
 }
 

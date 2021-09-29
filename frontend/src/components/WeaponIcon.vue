@@ -291,6 +291,9 @@ export default {
 
 .glow-0 {
   animation: none;
+   display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .glow-1 {

@@ -93,7 +93,7 @@ export default {
 
 .stake-select-item {
   width: 17rem;
-  height: 22rem;
+  /* height: 22rem; */
   margin: 2rem;
   border-radius: 1rem;
   overflow: hidden;
