@@ -30,7 +30,7 @@
         </div>
       </div>
 
-      <img src="../assets/divider7.png" class="info-divider enemy-divider" />
+      <!-- <img src="../assets/divider7.png" class="info-divider enemy-divider" /> -->
 
       <div class="row" v-if="currentCharacterStamina >= staminaPerFight">
         <div class="col">
@@ -538,8 +538,17 @@ div.encounter.text-center {
   margin-bottom: 50px;
 }
 
+.combat-enemy-container .weapon-icon-wrapper{
+  height: 13rem;
+}
+
+.combat-enemy-container .small-durability-bar{
+  top: 36px;
+}
+
 .enemy-container {
   flex: 3;
+  border-left: 1px solid #9e8a57;
 }
 
 .enemy-divider {
@@ -554,7 +563,7 @@ div.encounter.text-center {
 }
 
 .weapon-selection {
-  border-right: 1px solid #9e8a57;
+  /* border-right: 1px solid #9e8a57; */
 }
 
 .weapon-header {
@@ -666,6 +675,14 @@ button.btn.button.main-font.dark-bg-text.encounter-button.btn-styled.encounter-b
 }
 .weapon-icon-wrapper {
   margin: 0 auto;
+}
+@media (max-width: 767.98px){
+  .button.encounter-button{
+    top: 10vw;
+  }
+  .small-durability-bar{
+    top: 35px
+  }
 }
 
 @media (max-width: 575.98px) {

@@ -24,7 +24,7 @@
     </div>
     <div :class="{ 'market-bot': !portrait }">
       <div class="name-lvl-container">
-        <div class="name black-outline" v-if="!portrait">
+        <div class="name black-outline" :title="getCleanCharacterName(character.id)" v-if="!portrait">
           {{ getCleanCharacterName(character.id) }}
         </div>
         <div class="lv" v-if="!portrait">
@@ -36,19 +36,19 @@
           ID <span class="white">{{ character.id }}</span>
         </div>
         <div class="black-outline score" v-if="!portrait">
-          Score <span class="">{{ heroScore.toLocaleString() }}</span>
-          <!-- <b-icon-question-circle
+          <span class="">{{ heroScore.toLocaleString() }}</span>
+           <!--<b-icon-question-circle
           class="centered-icon"
           scale="0.8"
           v-tooltip.bottom="
             `Hero score is a measure of your hero's combat prowess so far.
         It goes up when you win and down when you lose. It is also temporarily disabled!`
           "
-        /> -->
+        />-->
         </div>
       </div>
 
-      <div
+      <!-- <div
         v-if="!portrait && isMarket"
         class="small-stamina-char"
         :style="`--staminaReady: ${
@@ -61,7 +61,7 @@
         <div class="stamina-text black-outline">
           STA {{ timestampToStamina(character.staminaTimestamp) }} / 200
         </div>
-      </div>
+      </div> -->
 
       <div class="xp" v-if="!portrait">
         <b-progress
@@ -230,7 +230,7 @@ export default {
 }
 
 .trait {
-  top: -25px;
+  top: -8px;
   justify-self: center;
   margin: 0 auto;
   position: relative;
@@ -258,7 +258,7 @@ export default {
 }
 
 .xp {
-  left: 30px;
+  left: 40px;
   width: 238px;
   right: 0;
 
@@ -317,6 +317,7 @@ export default {
 
 .market-bot .name {
   font-size: 1.3rem;
+  text-overflow: ellipsis;
 }
 
 .market-bot .lv {
@@ -351,7 +352,7 @@ export default {
   display: flex;
   justify-content: space-between;
   position: relative;
-  padding: 0 2rem;
+  padding: 0 3rem;
 }
 
 .market-bot .name-lvl-container {

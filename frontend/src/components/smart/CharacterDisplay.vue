@@ -215,11 +215,6 @@ export default Vue.extend({
   width: 100%;
 }
 
-.chara-head-box{
-  transition: all 0.3s ease-in;
-  max-height: 200px;
-  overflow: hidden;
-}
 .chara-head-close{
   max-height: 0px;
   /* overflow: hidden; */
@@ -227,24 +222,6 @@ export default Vue.extend({
 
 .character-display-container .root{
   border-right: 1px solid #707070;
-}
-
-.character-portrait {
-  width: 17.625rem;
-  height: calc(17.625rem * 0.56);
-  background: gray;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: url("../../assets/images/chara-bg.png") center bottom -4px no-repeat;
-  background-size: contain;
-  background-clip: border-box;
-  margin-right: 1.9rem;
-}
-
-.character-portrait img {
-  max-height: 100%;
-  max-width: 100%;
 }
 
 .character-data-column {

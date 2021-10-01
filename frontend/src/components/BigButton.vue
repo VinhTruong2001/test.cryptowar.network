@@ -58,7 +58,10 @@ h2 {
 /* Needed to asjust image size, not just image column-size and other classes to accommodate that */
 @media all and (max-width:  767.98px) {
   .dark-bg-text{
-    width: 75%;
+    /* width: 75%; */
+  }
+  .blank-slate .button h1{
+    font-size: 1.5rem;
   }
 }
 </style>

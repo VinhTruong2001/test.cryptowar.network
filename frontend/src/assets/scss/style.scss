@@ -6,7 +6,7 @@
 
 @import "core/base";
 
-.btn-buy, .btn-secondary {
+.btn-buy, .btn-secondary, .modal-footer .btn-primary {
   background: linear-gradient(to top, $btn-gradient-top, $btn-gradient-bottom);
   padding: .2rem 0.6rem;
   border-radius: 5px;
@@ -17,11 +17,19 @@
   cursor: pointer;
 }
 
-.btn-secondary{
+.btn-secondary, .modal-footer .btn-primary{
   font-size: 0.9rem;
   padding: 0.8rem 1rem;
   border: 0px solid;
   margin-right: 0.5rem;
+}
+.modal-footer .btn-primary{
+  box-shadow:none;
+  padding: 0.8rem 1rem;
+  height: auto;
+}
+.modal-footer .btn-primary::before, .modal-footer .btn-primary::after{
+  content: none;
 }
 
 .btn-secondary.search-btn{
@@ -141,4 +149,74 @@ select.form-control option, .custom-select option{
 
 .search-results{
   margin-top: 1rem;
+}
+
+.character-portrait {
+  width: 17.625rem;
+  height: calc(17.625rem * 0.56);
+  background: gray;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: url("../../assets/images/chara-bg.png") center bottom -4px no-repeat;
+  background-size: contain;
+  background-clip: border-box;
+  margin-right: 1.9rem;
+}
+
+.character-portrait img {
+  max-height: 100%;
+  max-width: 100%;
+}
+
+.character-earning-potential {
+  position: relative;
+  display: flex;
+  padding-left: 2rem;
+}
+
+.chara-head-box{
+  transition: all 0.3s ease-in;
+  max-height: 200px;
+  overflow: hidden;
+}
+
+@media all and (max-width: 767.98px) {
+  h1{
+    font-size: 1.6rem;
+  }
+  .main-font .nav-tabs a.nav-link{
+    padding-left: 0.3rem;
+    padding-right: 0.3rem;
+  }
+  .dust-box-modal .placeholder{
+    margin-top: 0;
+  }
+  .character-portrait{
+    background-size: cover;
+    margin-right: 0rem;
+  }
+  .character-data-column .name{
+    // font-size: 1.1rem;
+  }
+  .subtext-stats p{
+    // font-size: 0.8rem;
+  }
+  .chara-head-box{
+    max-height: 400px;
+  }
+  .character-earning-potential{
+    flex-wrap: wrap;
+    margin-top: 1rem;
+    margin-right: 0px;
+    padding-left: 0;
+    justify-content: center;
+  }
+  .character-display-container .root{
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .character-display-container .chara-head-box{
+    max-height: 500px;
+  }
 }

@@ -416,7 +416,7 @@
                   v-if="activeType === 'weapon'"
                    class="gtag-link-others  search-btn" tagname="add_listing_weapon"
                   :disabled="selectedNftId === null || selectedNftOnCooldown"
-                  @click="showListingSetupModal()">List Weapon <b-icon-question-circle :hidden=!weaponMarketTax
+                  @click="showListingSetupModal()">Sell Weapon/Character <b-icon-question-circle :hidden=!weaponMarketTax
                   v-tooltip.bottom="weaponMarketTax + '% tax (paid by the buyer) will be added to the final price.'"/></b-button>
 
                 <b-button
@@ -447,7 +447,7 @@
                 </b-modal>
               </div>
 
-              <div class="">
+              <div class="mb-2">
                 <b-button
                    class="gtag-link-others search-btn" tagname="show_weapons_sold"
                   @click="showWeaponsSoldModal()"> Weapons Sold
@@ -469,7 +469,7 @@
                       <p>For tips on how to list NFTs, you may click this <strong><a href="https://wiki.cryptowar.network/market/trading" target="_blank">link</a></strong></p>
                     </div>
                     <template #modal-footer>
-                    <b-button class="mt-3" block @click="resetTransactionHistoryValues('weapons-sold-modal')">Ok</b-button>
+                    <b-button class="mt-3 btn-buy" block @click="resetTransactionHistoryValues('weapons-sold-modal')">Ok</b-button>
                     </template>
 
 
@@ -477,7 +477,7 @@
 
               </div>
 
-              <div class="">
+              <div class="mb-2">
                 <b-button
                    class="gtag-link-others  search-btn" tagname="show_characters_sold"
                   @click="showCharactersSoldModal()"> Characters Sold
@@ -499,13 +499,13 @@
                       <p>For tips on how to list NFTs, you may click this <strong><a href="https://wiki.cryptowar.network/market/trading" target="_blank">link</a></strong></p>
                     </div>
                     <template #modal-footer>
-                    <b-button class="mt-3" block @click="resetTransactionHistoryValues('characters-sold-modal')">Ok</b-button>
+                    <b-button class="mt-3 btn-buy" block @click="resetTransactionHistoryValues('characters-sold-modal')">Ok</b-button>
                     </template>
 
                 </b-modal>
               </div>
 
-              <div class="">
+              <div class="mb-2">
                 <b-button
                    class="gtag-link-others  search-btn" tagname="show_shields_sold"
                   @click="showShieldsSoldModal()"> Shields Sold
@@ -527,7 +527,7 @@
                       <p>For tips on how to list NFTs, you may click this <strong><a href="https://wiki.cryptowar.network/market/trading" target="_blank">link</a></strong></p>
                     </div>
                     <template #modal-footer>
-                    <b-button class="mt-3" block @click="resetTransactionHistoryValues('shields-sold-modal')">Ok</b-button>
+                    <b-button class="mt-3 btn-buy" block @click="resetTransactionHistoryValues('shields-sold-modal')">Ok</b-button>
                     </template>
 
 
@@ -1733,7 +1733,7 @@ export default Vue.extend({
 }
 
 .m-top-negative-50{
-  margin-top: -50px;
+  margin-top: -25px;
 }
 
 .centered-text {

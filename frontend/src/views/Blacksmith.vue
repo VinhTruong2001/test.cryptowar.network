@@ -90,7 +90,7 @@
           </div>
         </div>
 
-        <div class="row mt-3" v-if="showReforge && !showReforgeDust">
+        <div class="row mt-3 dust-box" v-if="showReforge && !showReforgeDust">
           <div class="col">
             <div class="d-flex justify-content-space-between">
               <h1>Create Dust</h1>
@@ -309,7 +309,7 @@
       </span>
     </b-modal>
 
-    <b-modal class="centered-modal text-center" ref="dustreforge-confirmation-modal"
+    <b-modal class="centered-modal text-center dust-box-modal" ref="dustreforge-confirmation-modal"
              title="Dust Reforge Confirmation" @ok="onReforgeWeaponWithDust">
       <div class="row">
         <div class="headings">
@@ -660,7 +660,7 @@ export default Vue.extend({
 }
 
 .weapon-container {
-  border-right: 1px solid #9e8a57;
+  /* border-right: 1px solid #9e8a57; */
 }
 
 .confirmReforge{
@@ -727,5 +727,15 @@ export default Vue.extend({
     flex-flow: column-reverse;
   }
 }
+@media all and (max-width: 767.98px) {
+  .dust-box .d-flex{
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 
+  .dust-box .d-flex .btn-secondary{
+    margin: inherit;
+    margin-bottom: 1rem;
+  }
+}
 </style>

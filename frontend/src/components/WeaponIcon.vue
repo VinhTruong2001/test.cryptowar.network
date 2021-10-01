@@ -17,7 +17,6 @@
 
       <div class="trait">
         <span :class="weapon.element.toLowerCase() + '-icon'"></span>
-        <b-icon v-if="favorite" class="favorite-star" icon="star-fill" variant="warning" />
         {{Array(this.weapon.stars + 1).fill('★').join('')}}
       </div>
 
@@ -40,7 +39,10 @@
 
     </div>
 
-    <div class="id">ID {{ weapon.id }}</div>
+    <div class="id">
+      ID {{ weapon.id }}<br>
+      <b-icon v-if="favorite" class="favorite-star" icon="star-fill" variant="warning" />
+    </div>
 
     <div class="stats">
       <div v-if="weapon.stat1Value">
@@ -251,8 +253,8 @@ export default {
 
 .favorite-star {
   position: absolute;
-  margin-left: 3px;
-  margin-top: 2px;
+  right: 4px;
+  font-size: 0.8rem;
 }
 
 .id {
@@ -275,9 +277,14 @@ export default {
   max-width: 180px;
   max-height: 180px;
   margin-left: 16px;
-  margin-top: 32px;
+  margin-top: 0px;
 
   transform: scale(0.8);
+}
+
+
+.confirmReforge .placeholder{
+  margin-top: 0px;
 }
 
 .name {
@@ -291,9 +298,10 @@ export default {
 
 .glow-0 {
   animation: none;
-   display: flex;
+   /* display: flex; */
   justify-content: center;
   align-items: center;
+  box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.411);;
 }
 
 .glow-1 {

@@ -16,7 +16,7 @@
           <span class="starter-panel-heading"
             >Metamask Not Detected Or Incorrect Network</span
           >
-          <div class="center">
+          <div class="center row">
             <big-button
               class="button"
               :mainText="`Add MetaMask`"
@@ -30,7 +30,7 @@
               v-if="showNetworkError"
             />
             <small-button
-              class="button"
+              class="button btn-primary"
               @click="toggleHideWalletWarning"
               :text="'Hide Warning'"
             />
@@ -992,5 +992,18 @@ div.bg-success {
   .dark-bg-text {
     width: 100%;
   }
+
+  .fullscreen-warning .button{
+    margin-bottom: 1rem;
+    justify-content: center;
+  }
+  .starter-panel{
+    background-size: auto 100%;
+    background-position: -150px -36px;
+  }
+  .blank-slate .button h1{
+    font-size: 1.5rem;
+  }
+
 }
 </style>
