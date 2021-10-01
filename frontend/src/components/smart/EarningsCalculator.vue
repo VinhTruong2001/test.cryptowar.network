@@ -80,10 +80,10 @@
                   </div>
                 </div>
                 <div class="button-div">
-                  <b-button class="btn btn-primary" @click="onReset">
+                  <b-button class="btn btn-secondary" @click="onReset">
                       Reset
                   </b-button>
-                  <b-button class="btn btn-primary" @click="calculateEarnings"
+                  <b-button class="btn btn-secondary" @click="calculateEarnings"
                     v-bind:class="[!canCalculate() ? 'disabled disabled-button' : '']">
                       Calculate
                   </b-button>
@@ -571,13 +571,17 @@ export default Vue.extend({
   margin-top: 5px;
 }
 
-@media (max-width: 576px) {
+@media (max-width: 767.98px) {
   .calculator {
     flex-direction: column;
   }
   .calculator-character, .calculator-weapon {
     justify-self: center;
     width: 100%;
+  }
+
+  .calculator-weapon{
+    margin-top: 2rem;
   }
 }
 </style>

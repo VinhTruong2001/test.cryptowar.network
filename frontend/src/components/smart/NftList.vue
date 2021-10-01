@@ -572,6 +572,10 @@ export default Vue.extend({
     display: inline-block;
     margin: auto;
   }
+
+  .nft-grid{
+    justify-content: center;
+  }
 }
 
 .sold {

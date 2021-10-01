@@ -328,6 +328,13 @@ export default Vue.extend({
     margin-top: 90px;
     padding-left: 15px;
   }
+
+  .recruit{
+    margin-left: inherit !important;
+    justify-content: center;
+    margin-right: inherit;
+    position: inherit;
+  }
 }
 
 .promotion-decoration {
