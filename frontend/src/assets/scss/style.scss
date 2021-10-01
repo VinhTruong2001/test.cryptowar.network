@@ -204,6 +204,10 @@ select.form-control option, .custom-select option{
   }
   .chara-head-box{
     max-height: 400px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
   }
   .character-earning-potential{
     flex-wrap: wrap;
@@ -218,5 +222,11 @@ select.form-control option, .custom-select option{
   }
   .character-display-container .chara-head-box{
     max-height: 500px;
+  }
+  .btn-secondary.search-btn{
+    margin-bottom: 1rem;
+  }
+  .navbar-nav .dropdown-menu{
+    position: absolute;
   }
 }

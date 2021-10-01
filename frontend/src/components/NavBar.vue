@@ -118,7 +118,7 @@ a {
   background: transparent !important;
 }
 
-@media (max-width: 576px) {
+@media (max-width: 767.98px) {
   .main-nav {
     align-items: normal !important; /** force only for mobile to manually set alignments **/
     flex-direction: column;
@@ -129,6 +129,7 @@ a {
   .main-nav > .navbar-nav {
     flex-direction: row;
     justify-content: space-evenly;
+    flex-wrap: wrap;
   }
   .skill-display-mobile {
     flex: 5;
