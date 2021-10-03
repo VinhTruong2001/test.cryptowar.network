@@ -216,7 +216,7 @@ export default {
 }
 
 .character-item{
-  width: 350px;
+  width: 340px;
   max-width: 100%;
   background-image: url('../../assets/images/bg-item-top.png');
   background-position: 50% 50%;
@@ -269,6 +269,7 @@ export default {
   list-style: none;
   flex-wrap: wrap;
   justify-content: center;
+  padding-left: 0px;
 }
 
 @media (max-width: 576px) {

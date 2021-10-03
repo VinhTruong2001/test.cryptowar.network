@@ -169,7 +169,7 @@ export default {
   height: 100%;
   width: 100%;
   position: relative;
-  background: rgba(255, 255, 255, 0.1);
+  /* background: rgba(255, 255, 255, 0.1); */
 }
 .nft-icon-wrapper {
   width: 12em;
@@ -264,7 +264,7 @@ export default {
 
 .glow-0 {
   animation: none;
-  /* display: flex; */
+  display: flex;
   justify-content: center;
   align-items: center;
 }
