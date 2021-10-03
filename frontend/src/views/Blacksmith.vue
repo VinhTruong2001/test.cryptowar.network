@@ -663,6 +663,10 @@ export default Vue.extend({
   /* border-right: 1px solid #9e8a57; */
 }
 
+.weapon-container h1{
+  font-size: 2rem;
+}
+
 .confirmReforge{
   margin: 1em auto 2em;
   border-radius:0.15em;
@@ -684,6 +688,7 @@ export default Vue.extend({
   border-radius: 5px;
   cursor: pointer;
   margin-bottom: 2em;
+  display: flex;
 }
 
 .multiForging {
@@ -719,6 +724,15 @@ export default Vue.extend({
 .centered-icon {
   align-self: center;
   margin-left: 5px;
+}
+
+.confirmReforge .weapon-icon-wrapper, .modal-body .weapon-icon-wrapper{
+  display: flex;
+  width: 100%;
+}
+
+.confirmReforge .weapon, .modal-body .weapon{
+  height: 13rem;
 }
 
 @media (max-width: 1000px) {

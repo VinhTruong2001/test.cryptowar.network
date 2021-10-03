@@ -12,9 +12,9 @@
     </div>
 
     <div class="glow-container" ref="el" :class="['glow-' + (weapon.stars || 0)]">
-
+      <div class="glow-img-box">
       <img v-if="showPlaceholder" class="placeholder" :src="getWeaponArt(weapon)" />
-
+      </div>
       <div class="trait">
         <span :class="weapon.element.toLowerCase() + '-icon'"></span>
         {{Array(this.weapon.stars + 1).fill('★').join('')}}
@@ -207,7 +207,7 @@ export default {
 <style scoped>
 .small-durability-bar {
   position: relative;
-  top: 20px;
+  top: 10px;
   height: 12px;
   width: 80%;
   margin: 0 auto;
@@ -282,11 +282,6 @@ export default {
   transform: scale(0.8);
 }
 
-
-.confirmReforge .placeholder{
-  margin-top: 0px;
-}
-
 .name {
   position: absolute;
   bottom: 15px;
@@ -294,6 +289,35 @@ export default {
   right: 12%;
   font-size: 0.9em;
   text-align: center;
+}
+
+.sell-grid .glow-img-box, .weapon-grid .glow-img-box{
+  padding-top: 1rem;
+}
+
+.glow-img-box{
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.glow-img-box img{
+  margin: 0;
+}
+
+.confirmReforge .glow-img-box img, .modal-body .glow-img-box img {
+    max-width: 7rem;
+    margin-top: 1.5rem;
+    padding-bottom: 0.5rem;
+}
+
+
+.confirmReforge .small-durability-bar, .modal-body .small-durability-bar{
+  top: -10px
+}
+
+.confirmReforge .name, .modal-body .name{
+  bottom: 5px;
 }
 
 .glow-0 {
