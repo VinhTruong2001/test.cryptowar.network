@@ -278,9 +278,9 @@
         </div>
       </b-tab>
       <b-tab>
-        <template #title>
+        <!-- <template #title>
           Shields <b-icon-question-circle class="centered-icon" scale="0.8" v-tooltip.bottom="`You can buy shield in Skill shop tab in the market!`"/>
-        </template>
+        </template> -->
         <div class="row mt-3">
           <div class="col">
             <div class="d-flex justify-content-space-between">
