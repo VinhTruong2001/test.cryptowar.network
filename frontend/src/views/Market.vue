@@ -1736,4 +1736,7 @@ export default Vue.extend({
   text-align: center;
   justify-content: center;
 }
+.weapon {
+  flex-direction: column;
+}
 </style>
