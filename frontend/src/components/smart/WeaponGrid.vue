@@ -407,6 +407,7 @@ export default Vue.extend({
   position: relative;
   overflow: hidden;
   display: flex;
+  flex-direction: column;
 }
 
 .weapon.selected {
