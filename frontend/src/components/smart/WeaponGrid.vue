@@ -45,7 +45,7 @@
 
       <b-button
         v-if="!newWeapon"
-        class="clear-filters-button mb-3"
+        class="clear-filters-button mb-3 mt-3"
         @click="clearFilters"
       >
         <span>
@@ -57,7 +57,7 @@
     <ul class="weapon-grid">
       <li
         class="weapon"
-        :class="{ selected: highlight !== null && weapon.id === highlight }"
+        :class="[{ selected: highlight !== null && weapon.id === highlight },isMarket?'weapon-market':'']"
         v-for="weapon in nonIgnoredWeapons"
         :key="weapon.id"
         @click=
@@ -65,7 +65,7 @@
         @contextmenu="canFavorite && toggleFavorite($event, weapon.id)"
       >
         <div class="weapon-icon-wrapper">
-          <weapon-icon class="weapon-icon" :weapon="weapon" :favorite="isFavorite(weapon.id)" />
+          <weapon-icon class="weapon-icon" :weapon="weapon" :favorite="isFavorite(weapon.id)" :isMarket="isMarket" :sellClick="sellClick"/>
         </div>
         <div class="above-wrapper" v-if="$slots.above || $scopedSlots.above">
           <slot name="above" :weapon="weapon"></slot>
@@ -183,6 +183,10 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
+    sellClick:{
+      type: ()=>{},
+      default: null
+    }
   },
 
   data() {
@@ -419,6 +423,10 @@ export default Vue.extend({
   height: 18em;
 }
 
+.weapon-market .weapon-icon-wrapper{
+  height: 20em;
+}
+
 .above-wrapper {
   padding: 0.1rem 0.1rem 1rem;
 }
@@ -451,6 +459,14 @@ export default Vue.extend({
   flex-direction: row;
   align-self: flex-end;
   margin:0 15px;
+}
+
+.weapon-container .clear-filters-button{
+  margin-bottom: 0rem !important;
+}
+
+.weapon.selected{
+  box-shadow: 0 0 10px;
 }
 
 @media (max-width: 576px) {

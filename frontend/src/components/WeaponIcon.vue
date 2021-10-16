@@ -37,6 +37,11 @@
           Repairs 1 point every 50 minutes, durability will be full at: ${timeUntilWeaponHasMaxDurability(weapon.id)}`"></div>
       </div>
 
+      <div class="weapon-bt-box" v-if="isMarket">
+        <b-button @click="sellClick()">
+          Sell
+        </b-button>
+      </div>
     </div>
 
     <div class="id">
@@ -58,7 +63,6 @@
         <span :class="weapon.stat3.toLowerCase()">{{ weapon.stat3 }} +{{ weapon.stat3Value }}</span>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -75,7 +79,7 @@ import { getCleanName } from '../rename-censor';
 
 
 export default {
-  props: ['weapon', 'favorite'],
+  props: ['weapon', 'favorite', 'isMarket', 'sellClick'],
 
   computed: {
     ...mapState(['maxDurability']),
@@ -207,7 +211,7 @@ export default {
 <style scoped>
 .small-durability-bar {
   position: relative;
-  top: 10px;
+  top: 0px;
   height: 12px;
   width: 80%;
   margin: 0 auto;
@@ -278,17 +282,28 @@ export default {
   max-height: 180px;
   margin-left: 16px;
   margin-top: 0px;
-
   transform: scale(0.8);
 }
 
 .name {
   position: absolute;
-  bottom: 15px;
+  bottom: 2rem;
   left: 12%;
   right: 12%;
   font-size: 0.9em;
   text-align: center;
+}
+
+.weapon-market .name{
+  bottom: 4rem;
+}
+
+.weapon-bt-box{
+  position: absolute;
+  bottom: 15px;
+  display: flex;
+  width: 100%;
+  justify-content: center;
 }
 
 .sell-grid .glow-img-box, .weapon-grid .glow-img-box{
@@ -350,8 +365,8 @@ export default {
 
 .bonus-power {
   position: absolute;
-  bottom: 40px;
-  right: 10%;
+  top: 45px;
+  right: 5%;
   font-size: 0.6em;
   text-align: right;
 }
