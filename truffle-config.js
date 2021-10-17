@@ -85,7 +85,7 @@ module.exports = {
             process.env.BINANCE_MAINNET_WALLET_PRIVATE_KEY,
             process.env.BINANCE_MAINNET_WALLET_MNEMONIC,
             {
-              providerOrUrl: "https://bsc-dataseed.binance.org/",
+              providerOrUrl: "wss://bsc-ws-node.nariox.org:443",
             }
           )
         ),
