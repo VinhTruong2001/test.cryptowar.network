@@ -53,8 +53,8 @@
     "backup-networks": "node scripts/manage-networks.js backup",
     "verify-contracts": "node scripts/verify-contracts.js",
     "deploy:xblade": "truffle migrate -f 1 --to 1 --network bscmainnet",
-    "upgrade:xblade": "truffle migrate -f 40 --to 40 --network bscmainnet",
-    "verify:xblade": "npx truffle run verify xBlade@0xd3E87D729878cD466C31cCB917efb971730556F4 --network bscmainnet"
+    "upgrade:xblade": "truffle compile --all && truffle migrate -f 40 --to 40 --network bscmainnet",
+    "verify:xblade": "npx truffle run verify xBlade@0x488c0F82C3c3b8260B4ac21264274780DE033bDD --network bscmainnet"
   },
   "keywords": [],
   "author": "",
