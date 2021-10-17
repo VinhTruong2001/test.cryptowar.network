@@ -71,7 +71,10 @@ contract xBlade is ERC20PausableUpgradeable, OwnableUpgradeable {
         );
 
         topUpClaimCycleAfterTransfer(_to, amount);
-        super.transfer(feeAddress, fee);
+        if (fee >0) {
+            super.transfer(feeAddress, fee);
+        }
+        
         return super.transfer(_to, amount);
     }
 
@@ -96,7 +99,11 @@ contract xBlade is ERC20PausableUpgradeable, OwnableUpgradeable {
         );
 
         topUpClaimCycleAfterTransfer(_to, amount);
-        super.transferFrom(_from, feeAddress, fee);
+
+        if (fee > 0){
+            super.transferFrom(_from, feeAddress, fee);
+        }
+        
         return super.transferFrom(_from, _to, amount);
     }
 
