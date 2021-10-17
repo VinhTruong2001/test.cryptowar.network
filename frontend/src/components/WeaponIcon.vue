@@ -37,7 +37,7 @@
           Repairs 1 point every 50 minutes, durability will be full at: ${timeUntilWeaponHasMaxDurability(weapon.id)}`"></div>
       </div>
 
-      <div class="weapon-bt-box" v-if="isMarket">
+      <div class="weapon-bt-box" v-if="isSell">
         <b-button @click="sellClick()">
           Sell
         </b-button>
@@ -79,7 +79,7 @@ import { getCleanName } from '../rename-censor';
 
 
 export default {
-  props: ['weapon', 'favorite', 'isMarket', 'sellClick'],
+  props: ['weapon', 'favorite', 'isSell', 'sellClick'],
 
   computed: {
     ...mapState(['maxDurability']),

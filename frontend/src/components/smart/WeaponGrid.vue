@@ -57,7 +57,7 @@
     <ul class="weapon-grid">
       <li
         class="weapon"
-        :class="[{ selected: highlight !== null && weapon.id === highlight },isMarket?'weapon-market':'']"
+        :class="[{ selected: highlight !== null && weapon.id === highlight },isSell?'weapon-market':'']"
         v-for="weapon in nonIgnoredWeapons"
         :key="weapon.id"
         @click=
@@ -65,7 +65,7 @@
         @contextmenu="canFavorite && toggleFavorite($event, weapon.id)"
       >
         <div class="weapon-icon-wrapper">
-          <weapon-icon class="weapon-icon" :weapon="weapon" :favorite="isFavorite(weapon.id)" :isMarket="isMarket" :sellClick="sellClick"/>
+          <weapon-icon class="weapon-icon" :weapon="weapon" :favorite="isFavorite(weapon.id)" :isSell="isSell" :sellClick="sellClick"/>
         </div>
         <div class="above-wrapper" v-if="$slots.above || $scopedSlots.above">
           <slot name="above" :weapon="weapon"></slot>
@@ -182,6 +182,10 @@ export default Vue.extend({
     newWeapon: {
       type: Boolean,
       default: false,
+    },
+    isSell:{
+      type:Boolean,
+      default: false
     },
     sellClick:{
       type: ()=>{},
@@ -405,7 +409,7 @@ export default Vue.extend({
 
 .weapon {
   width: 14em;
-  background: rgba(255, 255, 255, 0.05);
+  /* background: rgba(255, 255, 255, 0.05); */
   border-radius: 6px;
   cursor: pointer;
   position: relative;

@@ -503,7 +503,7 @@
                 :showReforgedWeaponsDefVal="false"
                 :showFavoriteWeaponsDefVal="false"
                 :canFavorite="false"
-                :isMarket="isSell"
+                :isSell="isSell"
                 :sellClick="showListingSetupModal"
               />
             </div>
@@ -513,7 +513,7 @@
                 :showFilters="true"
                 v-model="selectedNftId"
                 :sellClick="showListingSetupModal"
-                :isMarket="isSell"
+                :isSell="isSell"
               />
             </div>
 
