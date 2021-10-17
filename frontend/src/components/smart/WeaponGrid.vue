@@ -414,10 +414,6 @@ export default Vue.extend({
   flex-direction: column;
 }
 
-.weapon.selected {
-  /* box-shadow: inset 0 0 20px rgb(255, 255, 255); */
-}
-
 .weapon-icon-wrapper {
   width: 14em;
   height: 18em;
@@ -463,10 +459,6 @@ export default Vue.extend({
 
 .weapon-container .clear-filters-button{
   margin-bottom: 0rem !important;
-}
-
-.weapon.selected{
-  box-shadow: 0 0 10px;
 }
 
 @media (max-width: 576px) {

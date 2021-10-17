@@ -229,11 +229,13 @@ export default {
 .glow-container {
   height: 100%;
   width: 100%;
-}
-
-.glow-container {
   border-radius: 5px;
   z-index: 540;
+}
+
+.weapon.selected .glow-container{
+  /* border: 1px solid rgb(255 255 255 / 41%); */
+  background-color: rgb(255 255 255 / 7%);
 }
 
 .loading-container {

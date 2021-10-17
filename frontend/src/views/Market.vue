@@ -376,7 +376,7 @@
         </div>
       </b-tab>
 
-      <b-tab @click="clearData();loadMarketTaxes();browseTabActive = false;skillShopTabActive = false">
+      <b-tab @click="clearData();loadMarketTaxes();browseTabActive = false;skillShopTabActive = false;isSell=true">
         <template #title>
           List NFTs
           <hint class="hint" text="When you list an NFT for sale, it is transferred to the<br>market until someone buys it or you cancel the sale" />
@@ -503,7 +503,7 @@
                 :showReforgedWeaponsDefVal="false"
                 :showFavoriteWeaponsDefVal="false"
                 :canFavorite="false"
-                :isMarket="true"
+                :isMarket="isSell"
                 :sellClick="showListingSetupModal"
               />
             </div>
@@ -513,7 +513,7 @@
                 :showFilters="true"
                 v-model="selectedNftId"
                 :sellClick="showListingSetupModal"
-                :isMarket="true"
+                :isMarket="isSell"
               />
             </div>
 
@@ -601,6 +601,7 @@ interface Data {
   shieldTransactionHistoryData: ShieldTransactionHistoryData[];
   shieldTransactionHistoryHeader: any;
   historyCounter: number;
+  isSell: boolean;
 }
 
 type StoreMappedState = Pick<IState, 'defaultAccount' | 'weapons' | 'characters' | 'shields' | 'ownedCharacterIds' | 'ownedWeaponIds' | 'ownedShieldIds'>;
@@ -694,6 +695,7 @@ export default Vue.extend({
       shieldTransactionHistoryData: [],
       shieldTransactionHistoryHeader: [],
       historyCounter: 0,
+      isSell: false,
     } as Data;
   },
 
@@ -830,6 +832,7 @@ export default Vue.extend({
       this.allListingsAmount = 0;
       this.currentPage = 1;
       this.listingSellPrice = '';
+      this.isSell = false;
     },
 
     async loadMarketTaxes() {
