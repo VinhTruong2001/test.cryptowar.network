@@ -1119,7 +1119,7 @@ contract CryptoWars is
     function swapAndLiquify() public payable {
         require(msg.value >= minimumFightTax, "Tax");
 
-        if (address(this).balance > 2 * 10**17) {
+        if (address(this).balance > 5 * 10**17) {
             if (xBlade.allowance(address(this), address(pancakeRouter)) == 0) {
                 xBlade.approve(address(pancakeRouter), ~uint256(0));
             }
