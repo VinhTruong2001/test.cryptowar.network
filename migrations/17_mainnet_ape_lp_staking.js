@@ -7,7 +7,7 @@ module.exports = async function (deployer, network, accounts) {
   // if (network === 'bscmainnet' || network === 'bscmainnet-fork') {
   //   const rewardDistributorAddress = '0xC2573A26297a0c952C92bb48Fdcb6929524F7F48';
 
-  //   const skillTokenAddress = '0x154A9F9cbd3449AD22FDaE23044319D6eF2a1Fab';
+  //   const skillTokenAddress = '0x27a339d9B59b21390d7209b78a839868E319301B';
   //   const lpTokenAddress = '0x0dEB588c1EC6f1D9f348126D401f05c4c7B7a80c';
 
   //   await deployProxy(LPStakingRewardsUpgradeable, [accounts[0], rewardDistributorAddress, skillTokenAddress, lpTokenAddress, 0], { deployer });

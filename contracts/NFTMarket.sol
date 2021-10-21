@@ -67,7 +67,7 @@ contract NFTMarket is
     // ############
     // State
     // ############
-    IERC20 public skillToken; //0x154A9F9cbd3449AD22FDaE23044319D6eF2a1Fab;
+    IERC20 public skillToken; //0x27a339d9B59b21390d7209b78a839868E319301B;
     address public taxRecipient; //game contract
     //IPriceOracle public priceOracleSkillPerUsd; // we may want this for dynamic pricing
 

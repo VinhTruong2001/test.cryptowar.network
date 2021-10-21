@@ -256,7 +256,7 @@ export function createStore(web3: Web3) {
         };
       },
       getExchangeUrl() {
-        return process.env.VUE_APP_EXCHANGE_URL || 'https://pancake.kiemtienonline360.com/#/swap?outputCurrency=0x28ad774C41c229D48a441B280cBf7b5c5F1FED2B';
+        return process.env.VUE_APP_EXCHANGE_URL || 'https://pancake.kiemtienonline360.com/#/swap?outputCurrency=0x27a339d9B59b21390d7209b78a839868E319301B';
       },
 
       ownCharacters(state, getters) {

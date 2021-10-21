@@ -9,7 +9,7 @@ const LP2StakingRewardsUpgradeable = artifacts.require("LP2StakingRewardsUpgrade
 
 module.exports = async function (deployer, network, accounts) {
   // if (network === 'development' || network === 'development-fork' || network === 'bsctestnet' || network === 'bsctestnet-fork') {
-  //   const token = await xBlade.at("0x28ad774C41c229D48a441B280cBf7b5c5F1FED2B");
+  //   const token = await xBlade.at("0x27a339d9B59b21390d7209b78a839868E319301B");
   //   const expToken = await ExperimentToken.deployed();
   //   // const expToken2 = await ExperimentToken2.deployed();
 
@@ -20,7 +20,7 @@ module.exports = async function (deployer, network, accounts) {
     const ownerAddress = accounts[0];
     const rewardDistributorAddress = '0x2CC6D07871A1c0655d6A7c9b0Ad24bED8f940517';
 
-    const xBladeTokenAddress = '0x28ad774C41c229D48a441B280cBf7b5c5F1FED2B';
+    const xBladeTokenAddress = '0x27a339d9B59b21390d7209b78a839868E319301B';
     const lpTokenAddress = '0x90a1d4073772488ac3a19079cafa3bb9ed5045fe';
 
     await deployProxy(LPStakingRewardsUpgradeable, [ownerAddress, rewardDistributorAddress, xBladeTokenAddress, lpTokenAddress, 8000], { deployer });

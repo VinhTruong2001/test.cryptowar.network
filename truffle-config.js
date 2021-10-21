@@ -90,9 +90,9 @@ module.exports = {
           )
         ),
       network_id: 0x38,
-      confirmations: 10,
+      confirmations: 3,
       timeoutBlocks: 200,
-      gas: 5600000,
+      gas: 10600000,
       skipDryRun: true,
     },
     // Another network with more advanced options...
