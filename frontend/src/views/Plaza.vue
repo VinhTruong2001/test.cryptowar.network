@@ -2,6 +2,9 @@
   <div class="body main-font">
 
     <div v-if="ownCharacters.length === 0" class="blank-slate">
+       <div class="current-promotion promotion-hero-left">
+        <strong class="upper-text">Only <strong class="upper-text promotion-number">{{ heroAmount}}</strong> heroes left!</strong>
+      </div>
       <div class="current-promotion">
         <strong class="upper-text">Start earning today!</strong>
       </div>
@@ -115,6 +118,7 @@ interface Data {
   haveChangeTraitWater: number;
   haveChangeTraitLightning: number;
   targetTrait: string;
+  heroAmount: number
 }
 
 export default Vue.extend({
@@ -184,6 +188,9 @@ export default Vue.extend({
     getConsumablesCountInterval = setInterval(async () => {
       this.loadConsumablesCount();
     }, 3000);
+
+    const heroAmount = await this.contracts.Characters.methods.availableAmount().call({ from: this.defaultAccount });
+    this.heroAmount = heroAmount;
   },
 
   destroyed() {
@@ -200,6 +207,7 @@ export default Vue.extend({
       haveChangeTraitWater: 0,
       haveChangeTraitLightning: 0,
       targetTrait: '',
+      heroAmount: 0
     } as Data;
   },
 
@@ -347,5 +355,14 @@ export default Vue.extend({
 
 .upper-text {
   text-transform: uppercase;
+}
+
+.promotion-hero-left {
+  font-size: 5rem;
+  width: 60%;
+}
+
+.promotion-number {
+  color: #f58b5b;
 }
 </style>
