@@ -1,11 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { abi as erc20Abi } from '../../build/contracts/IERC20.json';
 
-import { networks as xBladeStakingRewardsNetworks } from '../../build/contracts/XBladeStakingRewardsUpgradeable.json';
 import { networks as lpStakingRewardsNetworks } from '../../build/contracts/LPStakingRewardsUpgradeable.json';
-import { networks as lp2StakingRewardsNetworks } from '../../build/contracts/LP2StakingRewardsUpgradeable.json';
 import { networks as lpTokenNetworks } from '../../build/contracts/ExperimentToken.json';
-import { networks as lp2TokenNetworks } from '../../build/contracts/ExperimentToken2.json';
 import { abi as stakingRewardsAbi } from '../../build/contracts/IStakingRewards.json';
 
 import { abi as cryptoWarsAbi, networks as cryptoWarsNetworks } from '../../build/contracts/CryptoWars.json';
@@ -22,7 +19,6 @@ import { abi as characterWaterTraitChangeConsumablesAbi } from '../../build/cont
 import { abi as characterLightningTraitChangeConsumablesAbi } from '../../build/contracts/CharacterLightningTraitChangeConsumables.json';
 import { abi as randomsAbi } from '../../build/contracts/IRandoms.json';
 import { abi as marketAbi, networks as marketNetworks } from '../../build/contracts/NFTMarket.json';
-import { abi as waxBridgeAbi, networks as waxBridgeNetworks } from '../../build/contracts/WaxBridge.json';
 import { abi as xBladeTokenAbi, networks as xBladeTokenNetworks } from '../../build/contracts/xBlade.json';
 import { abi as secretBoxAbi } from '../../build/contracts/SecretBox.json';
 import Web3 from 'web3';
@@ -179,8 +175,6 @@ export async function setUpContracts(web3: Web3): Promise<Contracts> {
     marketContracts.NFTMarket = new web3.eth.Contract(marketAbi as Abi, marketContractAddr);
   }
 
-  const waxBridgeContractAddr = process.env.VUE_APP_WAX_BRIDGE_CONTRACT_ADDRESS || (waxBridgeNetworks as Networks)[networkId]!.address;
-  const WaxBridge = new web3.eth.Contract(waxBridgeAbi as Abi, waxBridgeContractAddr);
 
   return {
     ...stakingContracts,
@@ -188,7 +182,6 @@ export async function setUpContracts(web3: Web3): Promise<Contracts> {
     CharacterFireTraitChangeConsumables, CharacterEarthTraitChangeConsumables, CharacterWaterTraitChangeConsumables, CharacterLightningTraitChangeConsumables,
     ...raidContracts,
     ...marketContracts,
-    WaxBridge,
     xBladeToken,
     SecretBox,
   };
