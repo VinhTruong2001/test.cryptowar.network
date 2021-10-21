@@ -3,7 +3,7 @@
 
     <div v-if="ownCharacters.length === 0" class="blank-slate">
        <div class="current-promotion promotion-hero-left">
-        <strong class="upper-text">Only <strong class="upper-text promotion-number">{{ heroAmount}}</strong> heroes left!</strong>
+        <strong class="upper-text">Only <strong class="upper-text promotion-number">{{ heroAmount }}</strong> heroes left!</strong>
       </div>
       <div class="current-promotion">
         <strong class="upper-text">Start earning today!</strong>
@@ -11,7 +11,7 @@
       <big-button
         class="button"
         :mainText="`Recruit character for ${recruitCost} xBlade`"
-        :disabled="!canRecruit()"
+        :disabled="!canRecruit() || heroAmount < 1"
         @click="onMintCharacter"
         tagname="recruit_character"
       />
@@ -41,15 +41,19 @@
               v-tooltip="'Rename character'" tagname="rename_character">
               Rename Character
             </b-button> -->
+            <div>
             <b-button
               v-if="ownCharacters.length < 4"
-              :disabled="!canRecruit()"
+              :disabled="!canRecruit() || heroAmount < 1"
               variant="primary"
               class="ml-auto gtag-link-others recruit"
               @click="onMintCharacter"
               v-tooltip="'Recruit new character'" tagname="recruit_character">
-              Recruit ({{ recruitCost }} xBlade)&nbsp;<i class="fas fa-plus"></i>
+            Recruit ({{ recruitCost }} xBlade)&nbsp;<i class="fas fa-plus"></i>
             </b-button>
+            <div class="small-hero-left">Only <strong class="upper-text promotion-number" style="margin: 0 4px;">{{ heroAmount }}</strong> heroes left!</div>
+            </div>
+
             <!-- <b-button
               v-if="ownCharacters.length < 4"
               :disabled="!canRecruit()"
@@ -364,5 +368,12 @@ export default Vue.extend({
 
 .promotion-number {
   color: #f58b5b;
+}
+
+.small-hero-left {
+  display: flex;
+  align-self: flex-end;
+  margin: 16px 4px;
+  margin-right: 18px;
 }
 </style>
