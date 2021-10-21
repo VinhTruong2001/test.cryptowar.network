@@ -72,8 +72,7 @@ contract CryptoWars is
         BUSDAddress = _busdAddress;
 
         staminaCostFight = 40;
-        mintCharacterFee = ABDKMath64x64.divu(10, 1); //10 usd;
-        mintWeaponFee = ABDKMath64x64.divu(3, 1); //3 usd;
+        mintCharacterFee = 4200 ether; // 4200 xBlade;
         minimumFightTax = 5 * 10**14; // 0.0005 BNB
         supportFeeRate = 90; // 90%
 
@@ -109,8 +108,7 @@ contract CryptoWars is
     // config vars
     uint8 staminaCostFight;
 
-    // prices & payouts are in USD, with 4 decimals of accuracy in 64.64 fixed point format
-    int128 public mintCharacterFee;
+    uint256 public mintCharacterFee;
     //int128 public rerollTraitFee;
     //int128 public rerollCosmeticsFee;
     // int128 public refillStaminaFee;
@@ -119,7 +117,6 @@ contract CryptoWars is
     int128 public fightRewardBaseline;
     // int128 public fightRewardGasOffset;
 
-    int128 public mintWeaponFee;
     int128 public reforgeWeaponFee;
 
     mapping(address => uint256) lastBlockNumberCalled;
@@ -606,29 +603,15 @@ contract CryptoWars is
     }
 
     function mintCharacter() public onlyNonContract oncePerBlock(msg.sender) {
-        (, , uint256 fromUserWallet) = getXBladeToSubtract(
-            0,
-            tokenRewards[msg.sender],
-            PancakeUtil.usdToxBlade(
-                address(pancakeRouter),
-                BUSDAddress,
-                address(xBlade),
-                mintCharacterFee
-            ) //xblade amount
-        );
+        uint256 fee = characters.getCurrentMintFee(mintCharacterFee);
         require(
-            xBlade.balanceOf(msg.sender) >= fromUserWallet &&
+            xBlade.balanceOf(msg.sender) >= fee &&
                 promos.getBit(msg.sender, 4) == false
         );
 
         _payContractTokenOnly(
             msg.sender,
-            PancakeUtil.usdToxBlade(
-                address(pancakeRouter),
-                BUSDAddress,
-                address(xBlade),
-                mintCharacterFee
-            )
+            fee
         );
 
         if (
@@ -940,16 +923,12 @@ contract CryptoWars is
         weapons.approve(playerAddress, weaponID);
     }
 
-    function setCharacterMintValue(uint256 cents) public restricted {
-        mintCharacterFee = ABDKMath64x64.divu(cents, 100);
+    function setCharacterMintValue(uint256 baseFee) public restricted {
+        mintCharacterFee = baseFee;
     }
 
     function setFightRewardBaselineValue(uint256 tenthcents) public restricted {
         fightRewardBaseline = ABDKMath64x64.divu(tenthcents, 1000); // !!! THIS TAKES TENTH OF CENTS !!!
-    }
-
-    function setWeaponMintValue(uint256 cents) public restricted {
-        mintWeaponFee = ABDKMath64x64.divu(cents, 100);
     }
 
     function setBurnWeaponValue(uint256 cents) public restricted {

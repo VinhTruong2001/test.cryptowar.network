@@ -25,6 +25,7 @@ contract Characters is Initializable, ERC721Upgradeable, AccessControlUpgradeabl
 
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
 
+        priceRate = 35; // 0.35%
         characterLimit = 4;
         experienceTable = [
             16, 17, 18, 19, 20, 22, 24, 26, 28, 30, 33, 36, 39, 42, 46, 50, 55, 60, 66
@@ -98,6 +99,8 @@ contract Characters is Initializable, ERC721Upgradeable, AccessControlUpgradeabl
     uint256 private firstMintedOfLastBlock;
 
     uint256 public characterLimit;
+    uint256 public priceRate;
+    uint256 public availableAmount;
 
     event NewCharacter(uint256 indexed character, address indexed minter);
     event LevelUp(address indexed owner, uint256 indexed character, uint16 level);
@@ -151,6 +154,8 @@ contract Characters is Initializable, ERC721Upgradeable, AccessControlUpgradeabl
     }
 
     function mint(address minter, uint256 seed) public restricted {
+        require(availableAmount > 0, "Cannot mint character now");
+        availableAmount = availableAmount - 1;
         uint256 tokenID = tokens.length;
 
         if(block.number != lastMintedBlock)
@@ -295,4 +300,21 @@ contract Characters is Initializable, ERC721Upgradeable, AccessControlUpgradeabl
     function setCharacterLimit(uint256 max) public restricted {
         characterLimit = max;
     }
+
+    function setPriceRate(uint256 rate) public restricted {
+        priceRate = rate;
+    }
+
+    function setAvailableAmount(uint256 amount) public restricted {
+        availableAmount = amount;
+    }
+
+    function getNumberOfCharacters() public view returns (uint256){
+        return tokens.length;
+    }
+
+    function getCurrentMintFee(uint256 mintFee) public view returns (uint256){
+        return mintFee + mintFee.mul(tokens.length).mul(priceRate).div(10000);
+    }
+
 }
