@@ -172,8 +172,8 @@ export function createStore(web3: Web3) {
       waxBridgeWithdrawableBnb: '0',
       waxBridgeRemainingWithdrawableBnbDuringPeriod: '0',
       waxBridgeTimeUntilLimitExpires: 0,
-      commonBoxPrice: web3.utils.toWei('8000', 'ether'),
-      rareBoxPrice: web3.utils.toWei('20000', 'ether')
+      commonBoxPrice: web3.utils.toWei('0', 'ether'),
+      rareBoxPrice: web3.utils.toWei('0', 'ether')
     },
 
     getters: {
@@ -2535,7 +2535,10 @@ export function createStore(web3: Web3) {
 
         const commonPrice = await SecretBox.methods.commonBoxPrice().call(defaultCallOptions(state));
         const rarePrice = await SecretBox.methods.rareBoxPrice().call(defaultCallOptions(state));
-        commit('updateBoxPrice', {commonPrice, rarePrice});
+        commit('updateBoxPrice', {
+          commonPrice,
+          rarePrice
+        });
       },
 
       async fetchTotalRenameTags({ state }) {

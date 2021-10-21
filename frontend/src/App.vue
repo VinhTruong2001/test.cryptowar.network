@@ -492,7 +492,7 @@ export default {
       await Promise.all([
         this.fetchCharacterTransferCooldownForOwnCharacters(),
         this.setupWeaponDurabilities(),
-        this.fetchWaxBridgeDetails(),
+        // this.fetchWaxBridgeDetails(),
         this.fetchRewardsClaimTax(),
       ]);
     }, 10 * 1000);
