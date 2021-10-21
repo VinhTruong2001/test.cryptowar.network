@@ -56,6 +56,7 @@
     "deploy:randomness": "truffle migrate -f 6 --to 6 --network bscmainnet",
     "deploy:cryptowar": "truffle compile --all && truffle migrate -f 11 --to 11 --network bscmainnet",
     "upgrade:xblade": "truffle compile --all && truffle migrate -f 40 --to 40 --network bscmainnet",
+    "upgrade:cryptowars": "truffle compile --all && truffle migrate -f 41 --to 41 --network bscmainnet",
     "verify:xblade": "npx truffle run verify xBlade@0x488c0F82C3c3b8260B4ac21264274780DE033bDD --network bscmainnet",
     "verify:randomness": "npx truffle run verify ChainlinkRandoms@0xBDCBD31a02718FA8f0c356265aaBB1D2f4000A26 --network bscmainnet",
     "verify:Weapons": "npx truffle run verify Weapons@0x9e6b44e080a67d3309a92d3c80730de6560dffe5 --network bscmainnet",
