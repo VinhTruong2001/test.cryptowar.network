@@ -8,7 +8,7 @@
           <br>
           <big-button
             class="button"
-            :mainText="`Buy chest in CryptoWars shop`"
+            :mainText="`Buy Secret Box`"
             @click="$router.push({name: 'shop'})"
           />
         </div>
