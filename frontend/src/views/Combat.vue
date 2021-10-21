@@ -127,7 +127,7 @@
     </div>
 
     <div class="blank-slate" v-if="ownWeapons.length === 0 || ownCharacters.length === 0">
-      <div v-if="ownWeapons.length === 0">You do not currently have any weapons. You can forge one at the Blacksmith.</div>
+      <div v-if="ownWeapons.length === 0">You do not currently have any weapons. You can buy one at the CryptoWars shop.</div>
 
       <div v-if="ownCharacters.length === 0">You do not currently have any characters. You can recruit one at the Plaza.</div>
     </div>
