@@ -993,12 +993,8 @@ export default Vue.extend({
       this.waitingMarketOutcome = true;
       this.currentPage = page + 1;
 
-      if(useBlockchain){
-        await this.searchAllCharacterListingsThroughChain(page);
-      }
-      else{
-        await this.searchAllCharacterListingsThroughAPI(page);
-      }
+      await this.searchAllCharacterListingsThroughChain(page);
+
 
       // searchResultsOwned does not mesh with this function
       // will need per-result checking of it, OR filtering out own NFTs
