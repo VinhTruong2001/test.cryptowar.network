@@ -61,7 +61,7 @@
                       @mouseover="hover = !isMobile() || true"
                       @mouseleave="hover = !isMobile()"
                       >
-                        <strong>Price</strong>: {{ convertWeiToSkill(nftPricesById[id]) | dynamicDecimals(2, 4) }} xBlade
+                        <strong>Price</strong>: {{ convertWeiToSkill(nftPricesById[id])  | dynamicDecimals(2, 4) }} xBlade
                       </span>
                     </span>
                     <span class="d-block text-center" v-else>Loading price...</span>
@@ -298,7 +298,7 @@
                       @mouseover="hover = !isMobile() || true"
                       @mouseleave="hover = !isMobile()"
                       >
-                        {{ convertWeiToSkill(nftPricesById[id]) | dynamicDecimals(2, 4) }} xBlade
+                        {{ convertWeiToSkill(nftPricesById[id])  | dynamicDecimals(2, 4) }} xBlade
                       </span>
                     </span>
                     <span class="d-block text-center" v-else>Loading price...</span>
@@ -558,7 +558,7 @@ import { CharacterTransactionHistoryData, ICharacterHistory,
   IWeaponHistory, WeaponTransactionHistoryData,
   IShieldHistory, ShieldTransactionHistoryData } from '@/interfaces/History';
 import { getShieldNameFromSeed } from '@/shield-name';
-import { fromWeiEther, apiUrl, defaultOptions, toBN } from '../utils/common';
+import { fromWeiEther, apiUrl, defaultOptions } from '../utils/common';
 import NftList, { NftIdType } from '@/components/smart/NftList.vue';
 import { getCleanName } from '../rename-censor';
 
@@ -662,7 +662,7 @@ export default Vue.extend({
 
   data() {
     return {
-      activeType: 'weapon',
+      activeType: 'character',
       search: '',
       searchResults: [],
       allSearchResults: [],
@@ -762,31 +762,6 @@ export default Vue.extend({
 
       return nftList;
     },
-
-    shopOffersNftList(): SkillShopListing[] {
-      const { common, rare } = this.getBoxPrice();
-
-      const nftList = [
-        {
-          id: 0,
-          type: 'SecretBox',
-          nftPrice: toBN(fromWeiEther(common)).toNumber(),
-          name: 'Common Box',
-          description: 'Get common weapon, 1% chance to get 5-stars weapon',
-          image: 'scroll_06_te.png'
-        },
-        {
-          id: 1,
-          type: 'SecretBox',
-          nftPrice: toBN(fromWeiEther(rare)).toNumber(),
-          name: 'Rare Box',
-          description: 'Get rare weapon, 4% chance to get 5-stars weapon',
-          image: 'gold_chest.png'
-        }
-      ] as SkillShopListing[];
-
-      return nftList;
-    }
   },
 
   methods: {
@@ -1621,6 +1596,7 @@ export default Vue.extend({
 
   async mounted() {
     assert.ok(this.contracts.Weapons && this.contracts.Characters && this.contracts.Shields, 'Expected required contracts to be available');
+    this.searchAllCharacterListings(0);
     await this.fetchBoxPrice();
   },
 });
