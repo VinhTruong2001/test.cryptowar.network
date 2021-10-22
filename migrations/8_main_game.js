@@ -36,12 +36,15 @@ module.exports = async function (deployer, network) {
     );
     randoms = await ChainlinkRandoms.deployed();
 
-    xBladeToken = await IERC20.at("0x28ad774C41c229D48a441B280cBf7b5c5F1FED2B");
+    xBladeToken = await IERC20.at("0x27a339d9B59b21390d7209b78a839868E319301B");
   } else if (network === "bscmainnet" || network === "bscmainnet-fork") {
     randoms = await ChainlinkRandoms.deployed();
 
-    xBladeToken = await IERC20.at("0x154a9f9cbd3449ad22fdae23044319d6ef2a1fab");
+    xBladeToken = await IERC20.at("0x27a339d9B59b21390d7209b78a839868E319301B");
   }
+
+
+  console.info(`xBladeToken ${xBladeToken}`);
 
   assert(xBladeToken != null, "Expected xBlade to be set to a contract");
   assert(randoms != null, "Expected random to be set to a contract");
@@ -53,8 +56,8 @@ module.exports = async function (deployer, network) {
   const blacksmith = await deployProxy(Blacksmith, [weapons.address, randoms.address], { deployer });
 
   // Testnet
-  const pancakeRouter = "0x9ac64cc6e4415144c455bd8e4837fea55603e5c3"; // Pancake router address
-  const busdAddress = "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7"; // BUSD Address for get price
+  const pancakeRouter = "0x10ED43C718714eb63d5aA57B78B54704E256024E"; // Pancake router address
+  const busdAddress = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56"; // BUSD Address for get price
 
 
   await deployer.deploy(PancakeUtil);

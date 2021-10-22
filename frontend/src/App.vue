@@ -336,7 +336,7 @@ export default {
               params: {
                 type: "ERC20",
                 options: {
-                  address: "0x154a9f9cbd3449ad22fdae23044319d6ef2a1fab",
+                  address: "0x27a339d9B59b21390d7209b78a839868E319301B",
                   symbol: "xBlade",
                   decimals: 18,
                   image: "https://cryptowar.network/android-chrome-512x512.png",
@@ -492,7 +492,7 @@ export default {
       await Promise.all([
         this.fetchCharacterTransferCooldownForOwnCharacters(),
         this.setupWeaponDurabilities(),
-        this.fetchWaxBridgeDetails(),
+        // this.fetchWaxBridgeDetails(),
         this.fetchRewardsClaimTax(),
       ]);
     }, 10 * 1000);

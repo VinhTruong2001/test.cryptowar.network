@@ -8,7 +8,7 @@ const CryptoWars = artifacts.require("CryptoWars");
 
 module.exports = async function (deployer, network, accounts) {
   if (network === "bscmainnet" || network === "bscmainnet-fork") {
-    const xBladeAddress = "0x154A9F9cbd3449AD22FDaE23044319D6eF2a1Fab";
+    const xBladeAddress = "0x27a339d9B59b21390d7209b78a839868E319301B";
     const ownerAddress = accounts[0];
     const rewardDistributorAddress = accounts[0];
 

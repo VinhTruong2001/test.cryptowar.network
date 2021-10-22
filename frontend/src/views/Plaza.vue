@@ -2,13 +2,16 @@
   <div class="body main-font">
 
     <div v-if="ownCharacters.length === 0" class="blank-slate">
+       <div class="current-promotion promotion-hero-left">
+        <strong class="upper-text">Only <strong class="upper-text promotion-number">{{ heroAmount }}</strong> heroes left!</strong>
+      </div>
       <div class="current-promotion">
         <strong class="upper-text">Start earning today!</strong>
       </div>
       <big-button
         class="button"
         :mainText="`Recruit character for ${recruitCost} xBlade`"
-        :disabled="!canRecruit()"
+        :disabled="!canRecruit() || heroAmount < 1"
         @click="onMintCharacter"
         tagname="recruit_character"
       />
@@ -38,15 +41,19 @@
               v-tooltip="'Rename character'" tagname="rename_character">
               Rename Character
             </b-button> -->
+            <div>
             <b-button
               v-if="ownCharacters.length < 4"
-              :disabled="!canRecruit()"
+              :disabled="!canRecruit() || heroAmount < 1"
               variant="primary"
               class="ml-auto gtag-link-others recruit"
               @click="onMintCharacter"
               v-tooltip="'Recruit new character'" tagname="recruit_character">
-              Recruit ({{ recruitCost }} xBlade)&nbsp;<i class="fas fa-plus"></i>
+            Recruit ({{ recruitCost }} xBlade)&nbsp;<i class="fas fa-plus"></i>
             </b-button>
+            <div class="small-hero-left">Only <strong class="upper-text promotion-number" style="margin: 0 4px;">{{ heroAmount }}</strong> heroes left!</div>
+            </div>
+
             <!-- <b-button
               v-if="ownCharacters.length < 4"
               :disabled="!canRecruit()"
@@ -115,6 +122,7 @@ interface Data {
   haveChangeTraitWater: number;
   haveChangeTraitLightning: number;
   targetTrait: string;
+  heroAmount: number
 }
 
 export default Vue.extend({
@@ -178,12 +186,15 @@ export default Vue.extend({
 
   async created() {
     const recruitCost = await this.contracts.CryptoWars.methods.mintCharacterFee().call({ from: this.defaultAccount });
-    const skillRecruitCost = await this.contracts.CryptoWars.methods.usdToxBlade(recruitCost).call();
-    this.recruitCost = new BN(skillRecruitCost).div(new BN(10).pow(18)).toFixed(4);
+    const mintCost = await this.contracts.Characters.methods.getCurrentMintFee(recruitCost).call({ from: this.defaultAccount });
+    this.recruitCost = new BN(mintCost).div(new BN(10).pow(18)).toFixed(2);
     this.loadConsumablesCount();
     getConsumablesCountInterval = setInterval(async () => {
       this.loadConsumablesCount();
     }, 3000);
+
+    const heroAmount = await this.contracts.Characters.methods.availableAmount().call({ from: this.defaultAccount });
+    this.heroAmount = heroAmount;
   },
 
   destroyed() {
@@ -200,6 +211,7 @@ export default Vue.extend({
       haveChangeTraitWater: 0,
       haveChangeTraitLightning: 0,
       targetTrait: '',
+      heroAmount: 0
     } as Data;
   },
 
@@ -347,5 +359,21 @@ export default Vue.extend({
 
 .upper-text {
   text-transform: uppercase;
+}
+
+.promotion-hero-left {
+  font-size: 5rem;
+  width: 60%;
+}
+
+.promotion-number {
+  color: #f58b5b;
+}
+
+.small-hero-left {
+  display: flex;
+  align-self: flex-end;
+  margin: 16px 4px;
+  margin-right: 18px;
 }
 </style>

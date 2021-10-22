@@ -5,13 +5,11 @@
         <div class="blank-slate" v-if="ownWeapons.length === 0">
           You do not currently have any weapons.
           <br>
-          You can forge one by clicking the button below.
-          <br>
           <br>
           <big-button
             class="button"
-            :mainText="`Forge sword for ${forgeCost} xBlade`"
-            @click="$router.push({name: 'market'})"
+            :mainText="`Buy Secret Box`"
+            @click="$router.push({name: 'shop'})"
           />
         </div>
         <div class="row mt-3" v-if="ownWeapons.length > 0 && !showReforge">

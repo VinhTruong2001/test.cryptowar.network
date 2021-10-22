@@ -172,8 +172,8 @@ export function createStore(web3: Web3) {
       waxBridgeWithdrawableBnb: '0',
       waxBridgeRemainingWithdrawableBnbDuringPeriod: '0',
       waxBridgeTimeUntilLimitExpires: 0,
-      commonBoxPrice: web3.utils.toWei('8000', 'ether'),
-      rareBoxPrice: web3.utils.toWei('20000', 'ether')
+      commonBoxPrice: web3.utils.toWei('0', 'ether'),
+      rareBoxPrice: web3.utils.toWei('0', 'ether')
     },
 
     getters: {
@@ -256,7 +256,7 @@ export function createStore(web3: Web3) {
         };
       },
       getExchangeUrl() {
-        return process.env.VUE_APP_EXCHANGE_URL || 'https://pancake.kiemtienonline360.com/#/swap?outputCurrency=0x28ad774C41c229D48a441B280cBf7b5c5F1FED2B';
+        return process.env.VUE_APP_EXCHANGE_URL || 'https://pancake.kiemtienonline360.com/#/swap?outputCurrency=0x27a339d9B59b21390d7209b78a839868E319301B';
       },
 
       ownCharacters(state, getters) {
@@ -1659,6 +1659,7 @@ export function createStore(web3: Web3) {
         { characterId, weaponId, targetString, fightMultiplier }
       ) {
         if (featureFlagStakeOnly) return;
+        const fightTax = await state.contracts().CryptoWars!.methods.minimumFightTax().call(defaultCallOptions(state));
 
         const res = await state
           .contracts()
@@ -1668,7 +1669,7 @@ export function createStore(web3: Web3) {
           targetString,
           fightMultiplier
         )
-          .send({value: web3.utils.toWei('0.005', 'ether'), from: state.defaultAccount, gas: '600000' });
+          .send({value: fightTax, from: state.defaultAccount, gas: '800000' });
 
         await dispatch('fetchTargets', { characterId, weaponId });
 
@@ -2535,7 +2536,10 @@ export function createStore(web3: Web3) {
 
         const commonPrice = await SecretBox.methods.commonBoxPrice().call(defaultCallOptions(state));
         const rarePrice = await SecretBox.methods.rareBoxPrice().call(defaultCallOptions(state));
-        commit('updateBoxPrice', {commonPrice, rarePrice});
+        commit('updateBoxPrice', {
+          commonPrice,
+          rarePrice
+        });
       },
 
       async fetchTotalRenameTags({ state }) {
