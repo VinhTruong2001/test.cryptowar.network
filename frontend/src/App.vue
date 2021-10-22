@@ -77,7 +77,7 @@
             <p>
               Join us on
               <a
-                href="https://discord.gg/kwXdupvext"
+                href="https://discord.gg/MQBWnE8t2G"
                 target="_blank"
                 rel="noopener noreferrer"
                 >Discord</a> / <a
