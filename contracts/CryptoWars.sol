@@ -604,8 +604,13 @@ contract CryptoWars is
 
     function mintCharacter() public onlyNonContract oncePerBlock(msg.sender) {
         uint256 fee = characters.getCurrentMintFee(mintCharacterFee);
+        (, , uint256 fromUserWallet) = getXBladeToSubtract(
+            0,
+            tokenRewards[msg.sender],
+            fee //xblade amount
+        );
         require(
-            xBlade.balanceOf(msg.sender) >= fee &&
+            xBlade.balanceOf(msg.sender) >= fromUserWallet &&
                 promos.getBit(msg.sender, 4) == false
         );
 
