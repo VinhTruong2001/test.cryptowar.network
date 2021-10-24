@@ -146,6 +146,8 @@ contract CryptoWars is
     Blacksmith public blacksmith;
     address public BUSDAddress;
 
+    uint256 private topupTimerBase;
+
     event FightOutcome(
         address indexed owner,
         uint256 indexed character,
@@ -604,12 +606,16 @@ contract CryptoWars is
         return (((attacker + 1) % 4) == defender); // Thanks to Tourist
     }
 
+    function setTopupTimerBase(uint256 timerBase) public restricted {
+        topupTimerBase = timerBase;
+    }
+
     function topupClaimTaxTimerStart(address account, uint8 level, uint256 tokensAmount) private {
         if (tokenRewards[account] == 0 && tokensAmount > 0) {
             _rewardsClaimTaxTimerStart[account] = block.timestamp;
             return;
         }
-        uint256 topupTime = uint256(level).add(1).mul(300);
+        uint256 topupTime = uint256(level).add(1).mul(topupTimerBase);
         _rewardsClaimTaxTimerStart[account] = _rewardsClaimTaxTimerStart[account].add(topupTime);
     }
 
