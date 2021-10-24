@@ -398,11 +398,12 @@ contract CryptoWars is
     ) private {
         swapAndLiquify();
         uint256 seed = randoms.getRandomSeed(msg.sender);
+        uint8 realLevel = characters.getExpectedLevel(characters.getLevel(char), uint256(characters.getXp(char)).add(xpRewards[char]));
         uint24 playerRoll = getPlayerPowerRoll(
             playerFightPower,
             traitsCWE,
             seed,
-            characters.getExpectedLevel(characters.getLevel(char), uint256(characters.getXp(char)).add(xpRewards[char]))
+            realLevel
         );
         uint24 monsterRoll = getMonsterPowerRoll(
             targetPower,
