@@ -1098,12 +1098,20 @@ contract CryptoWars is
             xBlade.balanceOf(wallet);
     }
 
+    function getRewardsClaimTaxTimerStart(address playerAddress)
+        public
+        view
+        returns (uint256)
+    {
+        return _rewardsClaimTaxTimerStart[playerAddress];
+    }
+
     function _getRewardsClaimTax(address playerAddress)
         internal
         view
         returns (int128)
     {
-        assert(_rewardsClaimTaxTimerStart[playerAddress] <= block.timestamp);
+        require(_rewardsClaimTaxTimerStart[playerAddress] <= block.timestamp,"_rewardsClaimTaxTimerStart[playerAddress] > block.timestamp");
 
         uint256 rewardsClaimTaxTimerEnd = _rewardsClaimTaxTimerStart[
             playerAddress
