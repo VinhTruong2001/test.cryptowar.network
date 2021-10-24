@@ -398,10 +398,12 @@ contract CryptoWars is
     ) private {
         swapAndLiquify();
         uint256 seed = randoms.getRandomSeed(msg.sender);
+        uint8 realLevel = characters.getExpectedLevel(characters.getLevel(char), uint256(characters.getXp(char)).add(xpRewards[char]));
         uint24 playerRoll = getPlayerPowerRoll(
             playerFightPower,
             traitsCWE,
-            seed
+            seed,
+            realLevel
         );
         uint24 monsterRoll = getMonsterPowerRoll(
             targetPower,
@@ -417,16 +419,6 @@ contract CryptoWars is
             getTokenGainForFight(targetPower, fightMultiplier)
         );
 
-        if(playerRoll > monsterRoll && characters.getLevel(char) >= 8) {
-            //if player win, increase luck factor for level 8 and above
-            uint r = RandomUtil.combineSeeds(seed, 1);
-            if (r%100 < 50) {
-                uint24 tempRoll = playerRoll;
-                playerRoll = monsterRoll;
-                monsterRoll = tempRoll;                
-            }
-
-        }
 
         if (playerRoll < monsterRoll) {
             tokens = 0;
@@ -501,12 +493,13 @@ contract CryptoWars is
     function getPlayerPowerRoll(
         uint24 playerFightPower,
         uint24 traitsCWE,
-        uint256 seed
+        uint256 seed,
+        uint8 level
     ) internal view returns (uint24) {
         return
             uint24(
                 getPlayerTraitBonusAgainst(traitsCWE).mulu(
-                    RandomUtil.plusMinus10PercentSeeded(playerFightPower, seed)
+                    RandomUtil.plusMinus10PercentSeededWithLv(playerFightPower, seed, level)
                 )
             );
     }
