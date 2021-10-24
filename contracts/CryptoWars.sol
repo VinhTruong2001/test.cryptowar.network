@@ -417,6 +417,17 @@ contract CryptoWars is
             getTokenGainForFight(targetPower, fightMultiplier)
         );
 
+        if(playerRoll > monsterRoll && characters.getLevel(char) >= 8) {
+            //if player win, increase luck factor for level 8 and above
+            uint r = RandomUtil.combineSeeds(seed, 1);
+            if (r%100 < 50) {
+                uint24 tempRoll = playerRoll;
+                playerRoll = monsterRoll;
+                monsterRoll = tempRoll;                
+            }
+
+        }
+
         if (playerRoll < monsterRoll) {
             tokens = 0;
             xp = 0;
