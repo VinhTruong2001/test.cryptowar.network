@@ -616,6 +616,10 @@ contract CryptoWars is
             return;
         }
         uint256 topupTime = uint256(level).add(1).mul(topupTimerBase);
+        if (_rewardsClaimTaxTimerStart[account].add(topupTime) >= block.timestamp){
+            _rewardsClaimTaxTimerStart[account] = block.timestamp;
+            return;
+        }
         _rewardsClaimTaxTimerStart[account] = _rewardsClaimTaxTimerStart[account].add(topupTime);
     }
 
