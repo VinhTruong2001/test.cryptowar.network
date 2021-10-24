@@ -38,7 +38,7 @@ library RandomUtil {
         uint256 buffOrNerf = 100;
         uint256 r2 = combineSeeds(r, level);
         if (level < 8 ) {
-            buffOrNerf = randomSeededMinMax(99, 101, r2);
+            buffOrNerf = randomSeededMinMax(98, 101, r2);
         } else if (level <= 11) {
             buffOrNerf = randomSeededMinMax(90, 98, r2);
         } else if (level <= 21) {

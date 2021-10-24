@@ -212,6 +212,19 @@ contract Characters is Initializable, ERC721Upgradeable, AccessControlUpgradeabl
         return tokens[id].xp;
     }
 
+    function getExpectedLevel(uint8 level, uint256 xp) public view returns (uint8) {
+        uint requiredToLevel = experienceTable[level]; // technically next level
+        while(xp >= requiredToLevel) {
+            xp = xp - requiredToLevel;
+            level += 1;
+            if(level < 255)
+                requiredToLevel = experienceTable[level];
+            else
+                xp = 0;
+        }
+        return level;
+    }
+
     function gainXp(uint256 id, uint16 xp) public restricted {
         Character storage char = tokens[id];
         if(char.level < 255) {
