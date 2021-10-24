@@ -402,7 +402,7 @@ contract CryptoWars is
             playerFightPower,
             traitsCWE,
             seed,
-            characters.getExpectedLevel(characters.getLevel(char), xpRewards[char])
+            characters.getExpectedLevel(characters.getLevel(char), uint256(characters.getXp(char)).add(xpRewards[char]))
         );
         uint24 monsterRoll = getMonsterPowerRoll(
             targetPower,
