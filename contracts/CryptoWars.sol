@@ -425,9 +425,7 @@ contract CryptoWars is
             xp = 0;
         }
 
-        if (tokenRewards[msg.sender] == 0 && tokens > 0) {
-            _rewardsClaimTaxTimerStart[msg.sender] = block.timestamp;
-        }
+        topupClaimTaxTimerStart(msg.sender, realLevel, tokens);
 
         // this may seem dumb but we want to avoid guessing the outcome based on gas estimates!
         tokenRewards[msg.sender] += tokens;
@@ -604,6 +602,15 @@ contract CryptoWars is
         returns (bool)
     {
         return (((attacker + 1) % 4) == defender); // Thanks to Tourist
+    }
+
+    function topupClaimTaxTimerStart(address account, uint8 level, uint256 tokensAmount) private {
+        if (tokenRewards[account] == 0 && tokensAmount > 0) {
+            _rewardsClaimTaxTimerStart[account] = block.timestamp;
+            return;
+        }
+        uint256 topupTime = uint256(level).add(1).mul(300);
+        _rewardsClaimTaxTimerStart[account] = _rewardsClaimTaxTimerStart[account].add(topupTime);
     }
 
     function mintCharacter() public onlyNonContract oncePerBlock(msg.sender) {
