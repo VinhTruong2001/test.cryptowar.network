@@ -1115,7 +1115,7 @@ contract CryptoWars is
         view
         returns (int128)
     {
-        // require(_rewardsClaimTaxTimerStart[playerAddress] <= block.timestamp,"_rewardsClaimTaxTimerStart[playerAddress] > block.timestamp");       
+        require(_rewardsClaimTaxTimerStart[playerAddress] <= block.timestamp,"_rewardsClaimTaxTimerStart[playerAddress] > block.timestamp");       
 
         uint256 rewardsClaimTaxTimerEnd = _rewardsClaimTaxTimerStart[
             playerAddress
