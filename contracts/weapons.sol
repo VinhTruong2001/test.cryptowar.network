@@ -190,7 +190,7 @@ contract Weapons is Initializable, ERC721Upgradeable, AccessControlUpgradeable {
         uint256 stars;
         uint256 roll = seed % 1000;
         // will need revision, possibly manual configuration if we support more than 5 stars
-        if(roll < 5) {
+        if(roll < 4) {
             stars = 4;
         }
         else if(roll < 15) {
@@ -213,7 +213,7 @@ contract Weapons is Initializable, ERC721Upgradeable, AccessControlUpgradeable {
         uint256 stars;
         uint256 roll = seed % 1000;
         // will need revision, possibly manual configuration if we support more than 5 stars
-        if(roll < 10) {
+        if(roll < 8) {
             stars = 4;
         }
         else if(roll < 50) {
