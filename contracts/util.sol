@@ -38,15 +38,15 @@ library RandomUtil {
         uint256 buffOrNerf = 100;
         uint256 r2 = combineSeeds(r, level);
         if (level < 8 ) {
-            buffOrNerf = randomSeededMinMax(98, 101, r2);
+            buffOrNerf = randomSeededMinMax(95, 100, r2);
         } else if (level <= 11) {
-            buffOrNerf = randomSeededMinMax(90, 98, r2);
+            buffOrNerf = randomSeededMinMax(90, 100, r2);
         } else if (level <= 21) {
-            buffOrNerf = randomSeededMinMax(81, 90, r2);
+            buffOrNerf = randomSeededMinMax(81, 100, r2);
         } else if (level <= 31) {
-            buffOrNerf = randomSeededMinMax(73, 81, r2);
+            buffOrNerf = randomSeededMinMax(73, 100, r2);
         } else {
-            buffOrNerf = randomSeededMinMax(68, 73, r2);
+            buffOrNerf = randomSeededMinMax(68, 100, r2);
         }
         uint256 luckFactor = randomSeededMinMax(0, tenPercent.mul(2), seed).mul(buffOrNerf).div(100);
         return num.sub(tenPercent).add(luckFactor);
