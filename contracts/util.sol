@@ -48,7 +48,8 @@ library RandomUtil {
         } else {
             buffOrNerf = randomSeededMinMax(68, 73, r2);
         }
-        return num.sub(tenPercent).add(randomSeededMinMax(0, tenPercent.mul(2), seed)).mul(buffOrNerf).div(100);
+        uint256 luckFactor = randomSeededMinMax(0, tenPercent.mul(2), seed).mul(buffOrNerf).div(100);
+        return num.sub(tenPercent).add(luckFactor);
     }
 
     function uint2str(uint _i) internal pure returns (string memory _uintAsString) {
