@@ -55,6 +55,7 @@
     "deploy:xblade": "truffle migrate -f 1 --to 1 --network bscmainnet",
     "deploy:randomness": "truffle migrate -f 6 --to 6 --network bscmainnet",
     "deploy:cryptowar": "truffle compile --all && truffle migrate -f 11 --to 11 --network bscmainnet",
+    "deploy:staking": "truffle compile --all && truffle migrate -f 44 --to 44 --network bscmainnet",
     "upgrade:xblade": "truffle compile --all && truffle migrate -f 40 --to 40 --network bscmainnet",
     "upgrade:cryptowars": "truffle compile --all && truffle migrate -f 41 --to 41 --network bscmainnet",
     "upgrade:weapon": "truffle compile --all && truffle migrate -f 42 --to 42 --network bscmainnet",
@@ -70,7 +71,9 @@
     "verify:secretBox": "npx truffle run verify SecretBox@0xe474F205d4FBDd21C0b1E0E709776E46a6722b84 --network bscmainnet",
     "verify:shields": "npx truffle run verify Shields@0xBe67D7Dbf14967109dFDB6bFCDE8C57bb76F78BB --network bscmainnet",
     "verify:XBladeStakingRewardsUpgradeable": "npx truffle run verify XBladeStakingRewardsUpgradeable@0x80ceb112dEfDeE0626969c6c71CE9Fd3D1beBBdA --network bscmainnet",
-    "verify:characters": "npx truffle run verify Characters@0xcC7860619381788267CeFD44ec3190796D16eee6 --network bscmainnet"
+    "verify:characters": "npx truffle run verify Characters@0xcC7860619381788267CeFD44ec3190796D16eee6 --network bscmainnet",
+    "verify:stakexBLADEBNB": "npx truffle run verify BNBLPStakingRewardsUpgradeable@0x1fA56671ccFA16fFBe3f46E22c87b94e4a08143E --network bscmainnet",
+    "verify:stakexBLADE": "npx truffle run verify BNBLPStakingRewardsUpgradeable@0x633f5bbff95CE461a135d1a7482ebC52Cf5b1B5b --network bscmainnet"
   },
   "keywords": [],
   "author": "",
