@@ -7,14 +7,12 @@ import "@openzeppelin/contracts/math/Math.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 
-import "../CryptoWars.sol";
-
 // Inheritance
 import "./interfaces/IStakingRewards.sol";
 import "./RewardsDistributionRecipientUpgradeable.sol";
 import "./FailsafeUpgradeable.sol";
+import "../CryptoWars.sol";
 
-// https://docs.synthetix.io/contracts/source/contracts/stakingrewards
 contract StakingRewardsUpgradeable is
     IStakingRewards,
     Initializable,
@@ -36,6 +34,10 @@ contract StakingRewardsUpgradeable is
     uint256 public override minimumStakeTime;
     uint256 public lastUpdateTime;
     uint256 public rewardPerTokenStored;
+    uint256 public feePercent;
+
+     // used only by the SKILL-for-SKILL staking contract
+    CryptoWars internal __game;
 
     mapping(address => uint256) public userRewardPerTokenPaid;
     mapping(address => uint256) public rewards;
@@ -44,8 +46,6 @@ contract StakingRewardsUpgradeable is
     mapping(address => uint256) private _balances;
     mapping(address => uint256) private _stakeTimestamp;
 
-    // used only by the SKILL-for-SKILL staking contract
-    CryptoWars internal __game;
 
     uint256 public override minimumStakeAmount;
 
@@ -76,10 +76,8 @@ contract StakingRewardsUpgradeable is
         periodFinish = 0;
         rewardRate = 0;
         rewardsDuration = 180 days;
-    }
-
-    function migrateTo_8cb6e70(uint256 _minimumStakeAmount) external onlyOwner {
-        minimumStakeAmount = _minimumStakeAmount;
+        minimumStakeAmount = 500 ether; // 500 xBlade
+        feePercent = 20; // 20%
     }
 
     /* ========== VIEWS ========== */
@@ -129,19 +127,18 @@ contract StakingRewardsUpgradeable is
 
     function getStakeRewardDistributionTimeLeft()
         external
-        override
         view
+        override
         returns (uint256)
     {
         (bool success, uint256 diff) = periodFinish.trySub(block.timestamp);
         return success ? diff : 0;
     }
 
-    function getStakeUnlockTimeLeft() external override view returns (uint256) {
-        (bool success, uint256 diff) =
-            _stakeTimestamp[msg.sender].add(minimumStakeTime).trySub(
-                block.timestamp
-            );
+    function getStakeUnlockTimeLeft() external view override returns (uint256) {
+        (bool success, uint256 diff) = _stakeTimestamp[msg.sender]
+            .add(minimumStakeTime)
+            .trySub(block.timestamp);
         return success ? diff : 0;
     }
 
@@ -191,16 +188,18 @@ contract StakingRewardsUpgradeable is
         nonReentrant
         updateReward(msg.sender)
     {
-        require(
-            minimumStakeTime == 0 ||
-                block.timestamp.sub(_stakeTimestamp[msg.sender]) >=
-                minimumStakeTime,
-            "Cannot get reward until minimum staking time has passed"
-        );
+        uint256 fee = 0;
         uint256 reward = rewards[msg.sender];
+
+        if (
+            minimumStakeTime > 0 &&
+            block.timestamp.sub(_stakeTimestamp[msg.sender]) < minimumStakeTime
+        ) {
+            fee = reward.mul(feePercent).div(100);
+        }
         if (reward > 0) {
             rewards[msg.sender] = 0;
-            rewardsToken.safeTransfer(msg.sender, reward);
+            rewardsToken.safeTransfer(msg.sender, reward.sub(fee));
             emit RewardPaid(msg.sender, reward);
         }
     }
@@ -322,8 +321,9 @@ contract StakingRewardsUpgradeable is
     function recoverExtraStakingTokensToOwner() external onlyOwner {
         // stake() and withdraw() should guarantee that
         // _totalSupply <= stakingToken.balanceOf(this)
-        uint256 stakingTokenAmountBelongingToOwner =
-            stakingToken.balanceOf(address(this)).sub(_totalSupply);
+        uint256 stakingTokenAmountBelongingToOwner = stakingToken
+            .balanceOf(address(this))
+            .sub(_totalSupply);
 
         if (stakingTokenAmountBelongingToOwner > 0) {
             stakingToken.safeTransfer(
@@ -343,8 +343,7 @@ contract StakingRewardsUpgradeable is
 
     /* ========== INTERNAL FUNCTIONS ========== */
 
-    function _stake(address staker, uint256 amount) internal
-    {
+    function _stake(address staker, uint256 amount) internal {
         require(amount >= minimumStakeAmount, "Minimum stake amount required");
         _totalSupply = _totalSupply.add(amount);
         _balances[staker] = _balances[staker].add(amount);

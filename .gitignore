@@ -10,3 +10,4 @@ report*.json
 .vs
 public/abi
 .DS_Store
+.idea/
