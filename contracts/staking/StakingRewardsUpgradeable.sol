@@ -11,6 +11,7 @@ import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "./interfaces/IStakingRewards.sol";
 import "./RewardsDistributionRecipientUpgradeable.sol";
 import "./FailsafeUpgradeable.sol";
+import "../CryptoWars.sol";
 
 contract StakingRewardsUpgradeable is
     IStakingRewards,
@@ -34,6 +35,9 @@ contract StakingRewardsUpgradeable is
     uint256 public lastUpdateTime;
     uint256 public rewardPerTokenStored;
     uint256 public feePercent;
+
+     // used only by the SKILL-for-SKILL staking contract
+    CryptoWars internal __game;
 
     mapping(address => uint256) public userRewardPerTokenPaid;
     mapping(address => uint256) public rewards;
