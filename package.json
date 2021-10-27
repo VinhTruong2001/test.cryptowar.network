@@ -57,7 +57,7 @@
     "deploy:cryptowar": "truffle compile --all && truffle migrate -f 11 --to 11 --network bscmainnet",
     "deploy:staking": "truffle compile --all && truffle migrate -f 44 --to 44 --network bscmainnet",
     "upgrade:xblade": "truffle compile --all && truffle migrate -f 40 --to 40 --network bscmainnet",
-    "upgrade:cryptowars": "truffle compile --all && truffle migrate -f 41 --to 41 --network bscmainnet",
+    "upgrade:cryptowars": "truffle migrate -f 41 --to 41 --network bscmainnet",
     "upgrade:weapon": "truffle compile --all && truffle migrate -f 42 --to 42 --network bscmainnet",
     "upgrade:charators": "truffle compile --all && truffle migrate -f 43 --to 43 --network bscmainnet",
     "verify:xblade": "npx truffle run verify xBlade@0x488c0F82C3c3b8260B4ac21264274780DE033bDD --network bscmainnet",
