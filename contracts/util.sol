@@ -42,11 +42,11 @@ library RandomUtil {
         } else if (level <= 11) {
             buffOrNerf = randomSeededMinMax(90, 98, r2);
         } else if (level <= 21) {
-            buffOrNerf = randomSeededMinMax(81, 90, r2);
+            buffOrNerf = randomSeededMinMax(87, 96, r2);
         } else if (level <= 31) {
-            buffOrNerf = randomSeededMinMax(73, 81, r2);
+            buffOrNerf = randomSeededMinMax(80, 94, r2);
         } else {
-            buffOrNerf = randomSeededMinMax(68, 73, r2);
+            buffOrNerf = randomSeededMinMax(68, 80, r2);
         }
         return num.sub(tenPercent).add(randomSeededMinMax(0, tenPercent.mul(2), seed)).mul(buffOrNerf).div(100);
     }
