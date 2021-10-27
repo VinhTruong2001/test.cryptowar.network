@@ -2,7 +2,7 @@ pragma solidity ^0.6.2;
 
 import "./staking/StakingRewards.sol";
 
-contract LPStakingRewards is StakingRewards {
+contract XBNLPStakingRewards is StakingRewards {
     constructor(
         address _owner,
         address _rewardsDistribution,
