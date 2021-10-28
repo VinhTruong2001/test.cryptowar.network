@@ -42,6 +42,7 @@
     "contract:prepare": "npm run build",
     "contract:deploy": "npm run deploy",
     "build": "truffle compile -all",
+    "checksize": "truffle compile —all && truffle run contract-size --checkMaxSize --contracts CryptoWars",
     "postbuild": "node scripts/generate-ts-from-abis.js",
     "test": "truffle test",
     "deploy": "truffle migrate --reset",

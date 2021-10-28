@@ -994,17 +994,17 @@ contract CryptoWars is
         minimumFightTax = tax;
     }
 
-    function setSupportFeeRate(uint8 rate) public restricted {
-        supportFeeRate = rate;
-    }
+    // function setSupportFeeRate(uint8 rate) public restricted {
+    //     supportFeeRate = rate;
+    // }
 
-    function setPancakeRouter(address _pancakeRouter) public restricted {
-        pancakeRouter = IPancakeRouter02(_pancakeRouter);
-    }
+    // function setPancakeRouter(address _pancakeRouter) public restricted {
+    //     pancakeRouter = IPancakeRouter02(_pancakeRouter);
+    // }
 
-    function setBUSDAddress(address _busdAddress) public restricted {
-        BUSDAddress = _busdAddress;
-    }
+    // function setBUSDAddress(address _busdAddress) public restricted {
+    //     BUSDAddress = _busdAddress;
+    // }
 
     // function setFightRewardGasOffsetValue(uint256 cents) public restricted {
     //     fightRewardGasOffset = ABDKMath64x64.divu(cents, 100);
