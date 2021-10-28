@@ -1,6 +1,6 @@
 const { upgradeProxy } = require("@openzeppelin/truffle-upgrades");
 
-const Cryptowars = artifacts.require("Cryptowars");
+const CryptoWars = artifacts.require("CryptoWars");
 let PancakeUtil = artifacts.require("PancakeUtil");
 
 
@@ -18,6 +18,5 @@ module.exports = async function (deployer, network, accounts) {
     unsafeAllow: ["external-library-linking"],
   });
 
-  cw.setPancakeUtil(pancake.address)
 
 };
