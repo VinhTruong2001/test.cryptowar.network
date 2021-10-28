@@ -9,7 +9,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "./interfaces/IStakeFromGame.sol";
 import "./interfaces/IRandoms.sol";
-import "./interfaces/IPancakeRouter02.sol";
+// import "./interfaces/IPancakeRouter02.sol";
 import "./characters.sol";
 import "./Promos.sol";
 import "./weapons.sol";
@@ -724,10 +724,10 @@ contract CryptoWars is
         weapons.reforgeWithDust(reforgeID, amountLB, amount4B, amount5B);
     }
 
-    function migrateRandoms(IRandoms _newRandoms) external {
-        require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "Not adm");
-        randoms = _newRandoms;
-    }
+    // function migrateRandoms(IRandoms _newRandoms) external {
+    //     require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "Not adm");
+    //     randoms = _newRandoms;
+    // }
 
     function usdToxBlade(int128 usdAmount) public view returns (uint256) {
         return
@@ -994,17 +994,17 @@ contract CryptoWars is
         minimumFightTax = tax;
     }
 
-    function setSupportFeeRate(uint8 rate) public restricted {
-        supportFeeRate = rate;
-    }
+    // function setSupportFeeRate(uint8 rate) public restricted {
+    //     supportFeeRate = rate;
+    // }
 
-    function setPancakeRouter(address _pancakeRouter) public restricted {
-        pancakeRouter = IPancakeRouter02(_pancakeRouter);
-    }
+    // function setPancakeRouter(address _pancakeRouter) public restricted {
+    //     pancakeRouter = IPancakeRouter02(_pancakeRouter);
+    // }
 
-    function setBUSDAddress(address _busdAddress) public restricted {
-        BUSDAddress = _busdAddress;
-    }
+    // function setBUSDAddress(address _busdAddress) public restricted {
+    //     BUSDAddress = _busdAddress;
+    // }
 
     // function setFightRewardGasOffsetValue(uint256 cents) public restricted {
     //     fightRewardGasOffset = ABDKMath64x64.divu(cents, 100);
