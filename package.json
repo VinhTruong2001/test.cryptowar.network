@@ -73,6 +73,7 @@
     "verify:XBladeStakingRewardsUpgradeable": "npx truffle run verify XBladeStakingRewardsUpgradeable@0x80ceb112dEfDeE0626969c6c71CE9Fd3D1beBBdA --network bscmainnet",
     "verify:characters": "npx truffle run verify Characters@0xcC7860619381788267CeFD44ec3190796D16eee6 --network bscmainnet",
     "verify:stakexBLADEBNB": "npx truffle run verify BNBLPStakingRewardsUpgradeable@0x1fA56671ccFA16fFBe3f46E22c87b94e4a08143E --network bscmainnet",
+    "verify:PancakeUtil": "npx truffle run verify PancakeUtil@0x2E4Bb0A60734aFD6A7a03dacE82247c1531f9ae5 --network bscmainnet",
     "verify:stakexBLADE": "npx truffle run verify BNBLPStakingRewardsUpgradeable@0x633f5bbff95CE461a135d1a7482ebC52Cf5b1B5b --network bscmainnet"
   },
   "keywords": [],
