@@ -9,7 +9,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "./interfaces/IStakeFromGame.sol";
 import "./interfaces/IRandoms.sol";
-import "./interfaces/IPancakeRouter02.sol";
+// import "./interfaces/IPancakeRouter02.sol";
 import "./characters.sol";
 import "./Promos.sol";
 import "./weapons.sol";
@@ -724,20 +724,20 @@ contract CryptoWars is
         weapons.reforgeWithDust(reforgeID, amountLB, amount4B, amount5B);
     }
 
-    function migrateRandoms(IRandoms _newRandoms) external {
-        require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "Not adm");
-        randoms = _newRandoms;
-    }
+    // function migrateRandoms(IRandoms _newRandoms) external {
+    //     require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "Not adm");
+    //     randoms = _newRandoms;
+    // }
 
-    function usdToxBlade(int128 usdAmount) public view returns (uint256) {
-        return
-            PancakeUtil.usdToxBlade(
-                address(pancakeRouter),
-                BUSDAddress,
-                address(xBlade),
-                usdAmount
-            );
-    }
+    // function usdToxBlade(int128 usdAmount) public view returns (uint256) {
+    //     return
+    //         PancakeUtil.usdToxBlade(
+    //             address(pancakeRouter),
+    //             BUSDAddress,
+    //             address(xBlade),
+    //             usdAmount
+    //         );
+    // }
 
     modifier fightModifierChecks(uint256 character, uint256 weapon) {
         _onlyNonContract();
