@@ -729,15 +729,15 @@ contract CryptoWars is
     //     randoms = _newRandoms;
     // }
 
-    // function usdToxBlade(int128 usdAmount) public view returns (uint256) {
-    //     return
-    //         PancakeUtil.usdToxBlade(
-    //             address(pancakeRouter),
-    //             BUSDAddress,
-    //             address(xBlade),
-    //             usdAmount
-    //         );
-    // }
+    function usdToxBlade(int128 usdAmount) public view returns (uint256) {
+        return
+            PancakeUtil.usdToxBlade(
+                address(pancakeRouter),
+                BUSDAddress,
+                address(xBlade),
+                usdAmount
+            );
+    }
 
     modifier fightModifierChecks(uint256 character, uint256 weapon) {
         _onlyNonContract();
