@@ -40,9 +40,9 @@ library RandomUtil {
         if (level < 8 ) {
             buffOrNerf = randomSeededMinMax(98, 101, r2);
         } else if (level <= 11) {
-            buffOrNerf = randomSeededMinMax(90, 98, r2);
+            buffOrNerf = randomSeededMinMax(88, 96, r2);
         } else if (level <= 21) {
-            buffOrNerf = randomSeededMinMax(87, 96, r2);
+            buffOrNerf = randomSeededMinMax(86, 94, r2);
         } else if (level <= 31) {
             buffOrNerf = randomSeededMinMax(80, 94, r2);
         } else {

@@ -64,7 +64,7 @@
     "verify:xblade": "npx truffle run verify xBlade@0x488c0F82C3c3b8260B4ac21264274780DE033bDD --network bscmainnet",
     "verify:randomness": "npx truffle run verify ChainlinkRandoms@0xBDCBD31a02718FA8f0c356265aaBB1D2f4000A26 --network bscmainnet",
     "verify:weapons": "npx truffle run verify Weapons@0x183C042B4D4103657f81719BaB76349D1255F9f2 --network bscmainnet",
-    "verify:cryptoWars": "npx truffle run verify CryptoWars@0x34940520134aaF9A46c62262CF6F3D3C47D4BA8a --network bscmainnet",
+    "verify:cryptoWars": "npx truffle run verify CryptoWars@0xf7a1d6040dca0436eb46214282586699cfbb0910 --network bscmainnet",
     "verify:blacksmith": "npx truffle run verify Blacksmith@0xdD3493dEcAC2bD82391fd6fd2f3a6c983372a015 --network bscmainnet",
     "verify:promos": "npx truffle run verify Promos@0x3289d71fc107bb2a686879e35895bae6634a1df9 --network bscmainnet",
     "verify:raidBasic": "npx truffle run verify RaidBasic@0x8087ee61FC0c42d4A39f3ec78Bf69b245A684880 --network bscmainnet",
