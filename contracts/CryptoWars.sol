@@ -16,6 +16,7 @@ import "./weapons.sol";
 import "./util.sol";
 import "./pancakeUtils.sol";
 import "./Blacksmith.sol";
+import "./CWController.sol";
 
 contract CryptoWars is
     Initializable,
@@ -147,6 +148,7 @@ contract CryptoWars is
     address public BUSDAddress;
 
     uint256 private topupTimerBase;
+    CWController private cwController;
 
     event FightOutcome(
         address indexed owner,
@@ -500,7 +502,7 @@ contract CryptoWars is
         return
             uint24(
                 getPlayerTraitBonusAgainst(traitsCWE).mulu(
-                    RandomUtil.plusMinus10PercentSeededWithLv(playerFightPower, seed, level)
+                    cwController.plusMinus10PercentSeededWithLv(playerFightPower, seed, level)
                 )
             );
     }
@@ -948,6 +950,10 @@ contract CryptoWars is
         internal
     {
         weapons.approve(playerAddress, weaponID);
+    }
+
+    function setCWController(CWController _controller) public restricted {
+        cwController = _controller;
     }
 
     function setCharacterMintValue(uint256 baseFee) public restricted {
