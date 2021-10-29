@@ -66,19 +66,20 @@ contract CWController is Initializable, OwnableUpgradeable {
         return uint256(keccak256(abi.encodePacked(seeds)));
     }
 
-    function getMaxRollPerLevel(uint8 level) private view returns (uint256) {
+    function getMaxRollPerLevel(uint8 level) public view returns (uint256) {
         uint256 base = 10000; // 100%
         if (level < 8) {
             return base;
         }
-        uint256 reduce = base - level * reducePerMilestone;
-        if (reduce < maxReduce) {
+        (bool success, uint256 reduce) = base.trySub(uint256(level).mul(reducePerMilestone));
+
+        if (reduce < maxReduce || !success) {
             reduce = maxReduce;
         }
         return reduce;
     }
 
-    function getMinRollPerLevel(uint8 level) private view returns (uint256) {
+    function getMinRollPerLevel(uint8 level) public view returns (uint256) {
         return
             getMaxRollPerLevel(level).sub(
                 getMaxRollPerLevel(level).mul(range).div(10000)
