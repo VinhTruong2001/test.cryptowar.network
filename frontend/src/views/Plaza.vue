@@ -2,13 +2,24 @@
   <div class="body main-font">
 
     <div v-if="ownCharacters.length === 0" class="blank-slate">
-       <div class="current-promotion promotion-hero-left">
+      <div class="current-promotion promotion-hero-left" v-if="heroAmount > 0">
         <strong class="upper-text">Only <strong class="upper-text promotion-number">{{ heroAmount }}</strong> heroes left!</strong>
+      </div>
+      <div class="current-promotion promotion-hero-left" v-if="heroAmount === 0">
+        <strong class="upper-text">No more heroes left! Please buy in Market</strong>
       </div>
       <div class="current-promotion">
         <strong class="upper-text">Start earning today!</strong>
       </div>
       <big-button
+        v-if="heroAmount === 0"
+        class="button"
+        :mainText="'Go to Market'"
+        @click="$router.push({name: 'market'})"
+        tagname="recruit_character"
+      />
+      <big-button
+        v-if="heroAmount > 0"
         class="button"
         :mainText="`Recruit character for ${recruitCost} xBlade`"
         :disabled="!canRecruit() || heroAmount < 1"
@@ -24,7 +35,7 @@
       <div class="col">
         <div v-if="ownCharacters.length > 0">
           <div class="chara-head-box">
-            <h1 class="chara-title">Characters ({{ ownCharacters.length }}/4)</h1>
+            <h1 class="chara-title">Characters ({{ ownCharacters.length }}/8)</h1>
             <!-- <b-button
               v-if="canChangeTrait()"
               variant="primary"
@@ -43,7 +54,7 @@
             </b-button> -->
             <div>
             <b-button
-              v-if="ownCharacters.length < 4"
+              v-if="ownCharacters.length < 8"
               :disabled="!canRecruit() || heroAmount < 1"
               variant="primary"
               class="ml-auto gtag-link-others recruit"
@@ -194,7 +205,8 @@ export default Vue.extend({
     }, 3000);
 
     const heroAmount = await this.contracts.Characters.methods.availableAmount().call({ from: this.defaultAccount });
-    this.heroAmount = heroAmount;
+
+    this.heroAmount =Number(heroAmount);
   },
 
   destroyed() {

@@ -173,7 +173,8 @@ export function createStore(web3: Web3) {
       waxBridgeRemainingWithdrawableBnbDuringPeriod: '0',
       waxBridgeTimeUntilLimitExpires: 0,
       commonBoxPrice: web3.utils.toWei('0', 'ether'),
-      rareBoxPrice: web3.utils.toWei('0', 'ether')
+      rareBoxPrice: web3.utils.toWei('0', 'ether'),
+      secondsPerStamina: 1
     },
 
     getters: {
@@ -502,6 +503,9 @@ export function createStore(web3: Web3) {
       getIsCharacterViewExpanded(state: IState): boolean {
         return state.isCharacterViewExpanded;
       },
+      minutesPerStamina(state: IState): string {
+        return (state.secondsPerStamina / 60).toFixed(2);
+      },
 
       waxBridgeAmountOfBnbThatCanBeWithdrawnDuringPeriod(state): string {
         return bnMinimum(
@@ -762,6 +766,10 @@ export function createStore(web3: Web3) {
       updateBoxPrice(state: IState, payload: {commonPrice: string, rarePrice: string}) {
         state.commonBoxPrice = payload.commonPrice;
         state.rareBoxPrice = payload.rarePrice;
+      },
+
+      updateSecondsPerStamina(state: IState, payload: {secondsPerStamina: number}){
+        state.secondsPerStamina = payload.secondsPerStamina;
       }
     },
 
@@ -776,6 +784,7 @@ export function createStore(web3: Web3) {
         await dispatch('setupCharacterRenames');
         await dispatch('setupWeaponDurabilities');
         await dispatch('setupWeaponRenames');
+        await dispatch('getStaminaPerMinute');
       },
 
       async pollAccountsAndNetwork({ state, dispatch, commit }) {
@@ -1659,7 +1668,13 @@ export function createStore(web3: Web3) {
         { characterId, weaponId, targetString, fightMultiplier }
       ) {
         if (featureFlagStakeOnly) return;
-        const fightTax = await state.contracts().CryptoWars!.methods.minimumFightTax().call(defaultCallOptions(state));
+        let fightTax = '0';
+        try {
+          fightTax = await state.contracts().CryptoWars!.methods.getTaxByHeroLevel(characterId).call(defaultCallOptions(state));
+        } catch (e){
+          fightTax = web3.utils.toWei('0.0003', 'ether');
+        }
+
 
         const res = await state
           .contracts()
@@ -3056,6 +3071,12 @@ export function createStore(web3: Web3) {
           });
 
         await Promise.all([dispatch('fetchCharacter', id)]);
+      },
+      async getStaminaPerMinute({state, commit}){
+        const { Characters } = state.contracts();
+        const secondsPerStamina =  await  Characters?.methods.getSecondsPerStamina().call(defaultCallOptions(state));
+        console.log(secondsPerStamina);
+        commit('updateSecondsPerStamina', {secondsPerStamina: Number(secondsPerStamina)});
       }
     }
   });

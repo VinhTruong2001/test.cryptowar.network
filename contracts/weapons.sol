@@ -188,22 +188,22 @@ contract Weapons is Initializable, ERC721Upgradeable, AccessControlUpgradeable {
 
     function mint(address minter, uint256 seed) public canMintWeapon returns(uint256) {
         uint256 stars;
-        uint256 roll = seed % 100;
+        uint256 roll = seed % 1000;
         // will need revision, possibly manual configuration if we support more than 5 stars
-        if(roll < 1) {
-            stars = 4; // 5* at 1%
+        if(roll < 4) {
+            stars = 4;
         }
-        else if(roll < 6) { // 4* at 5%
+        else if(roll < 15) {
             stars = 3;
         }
-        else if(roll < 16) { // 3* at 10%
+        else if(roll < 95) {
             stars = 2;
         }
-        else if(roll < 46) { // 2* at 35%
+        else if(roll < 365) {
             stars = 1;
         }
         else {
-            stars = 0; // 1* at 54%
+            stars = 0;
         }
 
         return mintWeaponWithStars(minter, stars, seed);
@@ -211,18 +211,18 @@ contract Weapons is Initializable, ERC721Upgradeable, AccessControlUpgradeable {
 
     function mintWithRareBox(address minter, uint256 seed) public canMintWeapon returns(uint256) {
         uint256 stars;
-        uint256 roll = seed % 100;
+        uint256 roll = seed % 1000;
         // will need revision, possibly manual configuration if we support more than 5 stars
-        if(roll < 2) {
-            stars = 4; // 5* at 2%
+        if(roll < 8) {
+            stars = 4;
         }
-        else if(roll < 8) { // 4* at 6%
+        else if(roll < 50) {
             stars = 3;
         }
-        else if(roll < 24) { // 3* at 16%
+        else if(roll < 190) {
             stars = 2;
         }
-        else { // 2* at 51%
+        else {
             stars = 1;
         }
 
@@ -588,6 +588,22 @@ contract Weapons is Initializable, ERC721Upgradeable, AccessControlUpgradeable {
 
     // UNUSED FOR NOW!
     function levelUp(uint256 id, uint256 seed) private {
+        Weapon storage wep = tokens[id];
+
+        wep.level = uint8(SafeMath.add(wep.level, 1));
+        wep.stat1 = uint16(SafeMath.add(wep.stat1, 1));
+
+        uint8 stars = getStarsFromProperties(wep.properties);
+
+        if(stars >= 4 && RandomUtil.randomSeededMinMax(0,1, seed) == 0) {
+            wep.stat2 = uint16(SafeMath.add(wep.stat2, 1));
+        }
+        if(stars >= 5 && RandomUtil.randomSeededMinMax(0,1, RandomUtil.combineSeeds(seed,1)) == 0) {
+            wep.stat3 = uint16(SafeMath.add(wep.stat3, 1));
+        }
+    }
+
+    function reforgeStats(uint256 id, uint256 seed) private {
         Weapon storage wep = tokens[id];
 
         wep.level = uint8(SafeMath.add(wep.level, 1));

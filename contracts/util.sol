@@ -29,6 +29,28 @@ library RandomUtil {
         return num.sub(tenPercent).add(randomSeededMinMax(0, tenPercent.mul(2), seed));
     }
 
+    function plusMinus10PercentSeededWithLv(uint256 num, uint256 seed, uint8 level) internal pure returns (uint256) {
+        uint256 tenPercent = num.div(10);
+        uint256 r = combineSeeds(seed, level);
+        if (r.mod(100) < 10){
+            return num.sub(tenPercent).add(randomSeededMinMax(0, tenPercent.mul(2), seed));
+        }
+        uint256 buffOrNerf = 100;
+        uint256 r2 = combineSeeds(r, level);
+        if (level < 8 ) {
+            buffOrNerf = randomSeededMinMax(98, 101, r2);
+        } else if (level <= 11) {
+            buffOrNerf = randomSeededMinMax(88, 96, r2);
+        } else if (level <= 21) {
+            buffOrNerf = randomSeededMinMax(86, 94, r2);
+        } else if (level <= 31) {
+            buffOrNerf = randomSeededMinMax(80, 94, r2);
+        } else {
+            buffOrNerf = randomSeededMinMax(68, 80, r2);
+        }
+        return num.sub(tenPercent).add(randomSeededMinMax(0, tenPercent.mul(2), seed)).mul(buffOrNerf).div(100);
+    }
+
     function uint2str(uint _i) internal pure returns (string memory _uintAsString) {
         if (_i == 0) {
             return "0";
