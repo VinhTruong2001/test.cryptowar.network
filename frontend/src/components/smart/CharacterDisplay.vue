@@ -308,10 +308,8 @@ li.character-highlight {
 }
 
 .character-full-list > ul {
-  display: flex;
   padding-left: 0px;
   list-style: none;
-  flex: 1;
   transition: flex 0.3s ease;
 }
 .move-center{
@@ -324,7 +322,8 @@ li.character-highlight {
   display: grid;
   padding: 0.5em;
   grid-template-columns: repeat(auto-fit, 14em);
-  gap: 1.5em;
+  column-gap: 2em;
+  row-gap: 1.5em;
 }
 
 .character-full-list .character,

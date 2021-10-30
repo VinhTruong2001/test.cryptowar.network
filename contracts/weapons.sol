@@ -603,6 +603,22 @@ contract Weapons is Initializable, ERC721Upgradeable, AccessControlUpgradeable {
         }
     }
 
+    function reforgeStats(uint256 id, uint256 seed) private {
+        Weapon storage wep = tokens[id];
+
+        wep.level = uint8(SafeMath.add(wep.level, 1));
+        wep.stat1 = uint16(SafeMath.add(wep.stat1, 1));
+
+        uint8 stars = getStarsFromProperties(wep.properties);
+
+        if(stars >= 4 && RandomUtil.randomSeededMinMax(0,1, seed) == 0) {
+            wep.stat2 = uint16(SafeMath.add(wep.stat2, 1));
+        }
+        if(stars >= 5 && RandomUtil.randomSeededMinMax(0,1, RandomUtil.combineSeeds(seed,1)) == 0) {
+            wep.stat3 = uint16(SafeMath.add(wep.stat3, 1));
+        }
+    }
+
     function getBonusPower(uint256 id) public view noFreshLookup(id) returns (uint24) {
         Weapon storage wep = tokens[id];
         return getBonusPowerForFight(id, wep.level);
