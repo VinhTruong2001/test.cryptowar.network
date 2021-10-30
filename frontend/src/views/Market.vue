@@ -111,7 +111,7 @@
                       v-bind:class="[!canPurchase ? 'disabled-button' : '']"
                       class="gtag-link-others" tagname="confirm_purchase">
                       {{ convertWeiToSkill(nftPricesById[id]) !== '0' ? 'Purchase' : 'Sold' }} <b-icon-question-circle v-if="!canPurchase"
-                      v-tooltip.bottom="'You already have max amount of characters (4).'"/>
+                      v-tooltip.bottom="'You already have max amount of characters (8).'"/>
                     </b-button>
                   </div>
                 </template>
@@ -310,7 +310,7 @@
                       v-bind:class="[!canPurchase ? 'disabled-button' : '']"
                       class="gtag-link-others" tagname="confirm_purchase">
                       {{ convertWeiToSkill(nftPricesById[id]) !== '0' ? 'Purchase' : 'Sold' }} <b-icon-question-circle v-if="!canPurchase"
-                      v-tooltip.bottom="'You already have max amount of characters (4).'"/>
+                      v-tooltip.bottom="'You already have max amount of characters (8).'"/>
                     </b-button>
                   </div>
                 </template>
@@ -745,7 +745,7 @@ export default Vue.extend({
     },
 
     canPurchase(): boolean {
-      return this.activeType === 'weapon' || this.activeType === 'shield' || this.ownCharacters.length < 4 ;
+      return this.activeType === 'weapon' || this.activeType === 'shield' || this.ownCharacters.length < 8 ;
     },
 
     specialOffersNftList(): SkillShopListing[] {
