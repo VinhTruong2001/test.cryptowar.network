@@ -9,7 +9,7 @@
         @click="claimSkill(ClaimStage.Claim)"
         ><!-- moved gtag-link below b-nav-item -->
         <span
-          class="gtag-link-others"
+          class="gtag-link-others claim-reward-text"
           tagname="claim_skill"
           v-tooltip.bottom="
             'Tax is being reduced by 1% per day.' + getTaxTimerNextTick
@@ -22,7 +22,11 @@
       </b-nav-item>
 
       <b-nav-item :disabled="!canClaimXp" @click="onClaimXp">
-        <div class="gtag-link-others" v-html="`XP ${formattedXpRewards}`"></div>
+        <b-button
+          class="gtag-link-others"
+          v-html="`Claim Heroes XP`"
+          v-tooltip.bottom="formattedXpRewards"
+        ></b-button>
       </b-nav-item>
     </b-navbar>
 
@@ -63,8 +67,7 @@
             this.formattedTaxAmount
           : ""
       }}
-      . Are you sure you wish
-      to continue? <b>This action cannot be undone.</b>
+      . Are you sure you wish to continue? <b>This action cannot be undone.</b>
       <div>
         <hr class="hr-divider" />
         Hold Reminder:<br />
@@ -73,11 +76,11 @@
         <div class="row col-12">
           <div>
             Your early withdraw tax
-            <span class="text-danger font-weight-bold">{{
-              formattedRewardsClaimTax
-            }} </span>
+            <span class="text-danger font-weight-bold"
+              >{{ formattedRewardsClaimTax }}
+            </span>
           </div>
-          <div class="text-left" style="margin-left: 4px;">
+          <div class="text-left" style="margin-left: 4px">
             . Reduces 1% per day. Reset to 15% after withdraw
           </div>
         </div>
@@ -317,5 +320,8 @@ export default Vue.extend({
 .claim-reward-modal {
   max-width: 800px;
   background: khaki;
+}
+.claim-reward-text:hover {
+  color: #F58B5B;
 }
 </style>
