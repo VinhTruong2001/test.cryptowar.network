@@ -1188,7 +1188,10 @@ contract CryptoWars is
         if (level < 8) {
             return minimumFightTax;
         }
-        return minimumFightTax.mul(uint256(level).mul(5).div(100).add(1));
+        return
+            minimumFightTax.add(
+                minimumFightTax.mul(uint256(level)).mul(5).div(100)
+            );
     }
 
     function getHeroExpectedLevel(uint256 char) public view returns (uint256) {
