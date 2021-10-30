@@ -500,8 +500,8 @@
             <div class="sell-grid" v-if="activeType === 'weapon'">
               <weapon-grid
                 v-model="selectedNftId"
-                :showReforgedWeaponsDefVal="false"
-                :showFavoriteWeaponsDefVal="false"
+                :showReforgedWeaponsDefVal="true"
+                :showFavoriteWeaponsDefVal="true"
                 :canFavorite="false"
               />
             </div>
