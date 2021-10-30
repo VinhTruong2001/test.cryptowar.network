@@ -3,7 +3,7 @@ const { upgradeProxy } = require("@openzeppelin/truffle-upgrades");
 const CWController = artifacts.require("CWController");
 
 module.exports = async function (deployer, network, accounts) {
-  const proxyAddress = "0x2F809DF5522E3e81cfac0766F7f24f64A3A9359D"
+  const proxyAddress = "0x29317C450496958fE15bC0076591a04fb5Bbb766"
   await upgradeProxy(
     proxyAddress,
     CWController,
