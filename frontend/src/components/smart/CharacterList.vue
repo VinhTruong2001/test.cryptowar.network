@@ -80,7 +80,10 @@ const sorts = [
 export default {
   props: {
     value: {},
-    sellClick:null,
+    sellClick:{
+      type: Function,
+      default: null
+    },
     isSell: {
       type: Boolean,
       default: false

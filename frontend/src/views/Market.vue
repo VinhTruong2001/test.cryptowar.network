@@ -1018,6 +1018,7 @@ export default Vue.extend({
         maxLevel: this.characterMaxLevelFilter()
       });
 
+
       this.allSearchResults = await this.fetchAllMarketCharacterNftIdsPage({
         nftContractAddr: this.contractAddress,
         limit: this.characterShowLimit || defaultLimit,
@@ -1026,6 +1027,68 @@ export default Vue.extend({
         minLevel: this.characterMinLevelFilter(),
         maxLevel: this.characterMaxLevelFilter()
       });
+
+      // filter price character
+      this.minPriceFilter(parseFloat(this.characterMinPriceFilter()));
+
+      this.maxPriceFilter(parseFloat(this.characterMaxPriceFilter()));
+      this.sortPrice(this.characterPriceOrder());
+      // filter price weapon
+      this.minPriceFilter(parseFloat(this.weaponMinPriceFilter()));
+      this.maxPriceFilter(parseFloat(this.weaponMaxPriceFilter()));
+      this.sortPrice(this.weaponPriceOrder());
+
+    },
+
+    minPriceFilter(minPrice: number){
+      if(minPrice && minPrice > 0){
+        const arrStr: string[] = [];
+        this.allSearchResults.forEach((val: any)=>{
+          if(parseFloat(this.convertWeiToSkill(this.nftPricesById[val])) >= minPrice){
+            arrStr.push(val);
+          }
+        });
+        this.allSearchResults = arrStr;
+      }
+    },
+
+    maxPriceFilter(maxPrice: number){
+      if(maxPrice && maxPrice > 0){
+        const arrStr: string[] = [];
+        this.allSearchResults.forEach((val: any)=>{
+          if(parseFloat(this.convertWeiToSkill(this.nftPricesById[val])) <= maxPrice){
+            arrStr.push(val);
+          }
+        });
+        this.allSearchResults = arrStr;
+      }
+    },
+
+    sortPrice(typeSort: string){
+      if(!typeSort){
+        return;
+      }
+      const sortable = [];
+      for (const item in this.allSearchResults) {
+        sortable.push([item, this.nftPricesById[item]]);
+      }
+
+      if(typeSort === '-1'){
+        sortable.sort(function(a, b) {
+          return parseFloat(a[1]) - parseFloat(b[1]);
+        });
+      } else if(typeSort === '1'){
+        sortable.sort(function(a, b) {
+          return parseFloat(b[1]) - parseFloat(a[1]);
+        });
+      }
+
+      const result: string[] = [];
+      sortable.forEach((item)=>{
+        result.push(item[0]);
+      });
+
+      this.allSearchResults = result;
     },
 
     async searchAllWeaponListings(page: number) {
@@ -1214,12 +1277,10 @@ export default Vue.extend({
     async searchOwnListings(type: SellType) {
       this.marketOutcome = null;
       this.activeType = type;
-      console.log('1');
       if(!this.defaultAccount) {
         this.searchResults = [];
         return;
       }
-      console.log('2');
       this.waitingMarketOutcome = true;
 
       await this.searchOwnListingsThroughChain();
@@ -1229,7 +1290,6 @@ export default Vue.extend({
     },
 
     async searchOwnListingsThroughChain() {
-      console.log('Contract address: ', this.contractAddress);
       this.searchResults = await this.fetchMarketNftIdsBySeller({
         nftContractAddr: this.contractAddress,
         sellerAddr: this.defaultAccount as string
