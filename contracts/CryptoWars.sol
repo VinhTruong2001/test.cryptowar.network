@@ -77,6 +77,8 @@ contract CryptoWars is
         minimumFightTax = 5 * 10**14; // 0.0005 BNB
         supportFeeRate = 90; // 90%
 
+        topupTimerBase = 120; // 2 minutes
+
         // migrateTo_1ee400a
         fightXpGain = 32;
 

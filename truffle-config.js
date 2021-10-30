@@ -96,6 +96,24 @@ module.exports = {
       gas: 10600000,
       skipDryRun: true,
     },
+    avax: {
+      provider: () =>
+        new HDWalletProvider(
+          hdWalletProviderOptions(
+            process.env.BINANCE_MAINNET_WALLET_PRIVATE_KEY,
+            process.env.BINANCE_MAINNET_WALLET_MNEMONIC,
+            {
+              providerOrUrl: "https://speedy-nodes-nyc.moralis.io/eba7d2e0234f08d2741c13aa/avalanche/mainnet",
+            }
+          )
+        ),
+      network_id: "*",
+      confirmations: 10,
+      timeoutBlocks: 200,
+      gas: 3000000,
+      gasPrice: 225000000000,
+      skipDryRun: true,
+    },
     // Another network with more advanced options...
     // advanced: {
     // port: 8777,             // Custom port
@@ -140,6 +158,15 @@ module.exports = {
           runs: 200,
         },
         //evmVersion: "byzantium"
+      },
+      metadata: {
+        // Use only literal content and not URLs (false by default)
+        useLiteralContent: true,
+        // Use the given hash method for the metadata hash that is appended to the bytecode.
+        // The metadata hash can be removed from the bytecode via option "none".
+        // The other options are "ipfs" and "bzzr1".
+        // If the option is omitted, "ipfs" is used by default.
+        bytecodeHash: "ipfs"
       },
     },
   },

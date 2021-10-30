@@ -11,3 +11,4 @@ report*.json
 public/abi
 .DS_Store
 .idea/
+temp
