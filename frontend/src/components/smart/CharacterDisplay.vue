@@ -279,6 +279,9 @@ li.character-highlight {
   font-size: 1.1em;
   text-align: center;
   color: #F58B5B;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
 }
 
 .character-list-mobile {

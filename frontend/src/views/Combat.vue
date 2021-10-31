@@ -547,6 +547,9 @@ div.encounter.text-center {
   top: 36px;
 }
 
+.combat-enemy-container h4{
+  font-size: 1.3rem;
+}
 .enemy-container {
   flex: 3;
   border-left: 1px solid #F58B5B;

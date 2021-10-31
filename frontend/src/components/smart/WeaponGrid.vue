@@ -45,7 +45,7 @@
 
       <b-button
         v-if="!newWeapon"
-        class="clear-filters-button mb-3"
+        class="clear-filters-button mb-3 mt-3"
         @click="clearFilters"
       >
         <span>
@@ -57,7 +57,7 @@
     <ul class="weapon-grid">
       <li
         class="weapon"
-        :class="{ selected: highlight !== null && weapon.id === highlight }"
+        :class="[{ selected: highlight !== null && weapon.id === highlight },isSell?'weapon-market':'']"
         v-for="weapon in nonIgnoredWeapons"
         :key="weapon.id"
         @click=
@@ -65,7 +65,7 @@
         @contextmenu="canFavorite && toggleFavorite($event, weapon.id)"
       >
         <div class="weapon-icon-wrapper">
-          <weapon-icon class="weapon-icon" :weapon="weapon" :favorite="isFavorite(weapon.id)" />
+          <weapon-icon class="weapon-icon" :weapon="weapon" :favorite="isFavorite(weapon.id)" :isSell="isSell" :sellClick="sellClick"/>
         </div>
         <div class="above-wrapper" v-if="$slots.above || $scopedSlots.above">
           <slot name="above" :weapon="weapon"></slot>
@@ -183,6 +183,14 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
+    isSell:{
+      type:Boolean,
+      default: false
+    },
+    sellClick:{
+      type: ()=>{},
+      default: null
+    }
   },
 
   data() {
@@ -401,7 +409,7 @@ export default Vue.extend({
 
 .weapon {
   width: 14em;
-  background: rgba(255, 255, 255, 0.05);
+  /* background: rgba(255, 255, 255, 0.05); */
   border-radius: 6px;
   cursor: pointer;
   position: relative;
@@ -410,13 +418,13 @@ export default Vue.extend({
   flex-direction: column;
 }
 
-.weapon.selected {
-  /* box-shadow: inset 0 0 20px rgb(255, 255, 255); */
-}
-
 .weapon-icon-wrapper {
   width: 14em;
   height: 18em;
+}
+
+.weapon-market .weapon-icon-wrapper{
+  height: 20em;
 }
 
 .above-wrapper {
@@ -451,6 +459,10 @@ export default Vue.extend({
   flex-direction: row;
   align-self: flex-end;
   margin:0 15px;
+}
+
+.weapon-container .clear-filters-button{
+  margin-bottom: 0rem !important;
 }
 
 @media (max-width: 576px) {

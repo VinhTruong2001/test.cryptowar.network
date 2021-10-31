@@ -44,7 +44,7 @@
     <ul class="character-list d-flex">
       <li
         class="character-item"
-        :class="{ selected: value === c.id }"
+        :class="[{ selected: value === c.id }, {isMarket: isSell}]"
         v-for="c in filteredCharacters"
         :key="c.id"
         @click="$emit('input', c.id)"
@@ -55,6 +55,11 @@
         <slot name="sold" :character="c"></slot>
         <div class="art">
           <CharacterArt :character="c" :isMarket="isMarket"/>
+        </div>
+        <div class="sell-box" v-if="isSell">
+          <b-button @click="sellClick()">
+            Sell
+          </b-button>
         </div>
       </li>
     </ul>
@@ -75,6 +80,14 @@ const sorts = [
 export default {
   props: {
     value: {},
+    sellClick:{
+      type: Function,
+      default: null
+    },
+    isSell: {
+      type: Boolean,
+      default: false
+    },
     showGivenCharacterIds: {
       type: Boolean,
       default: false
@@ -311,5 +324,16 @@ export default {
 
 .fix-h24 {
   height: 24px;
+}
+
+.sell-box{
+  position: absolute;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.isMarket{
+  margin-bottom: 3rem;
 }
 </style>
