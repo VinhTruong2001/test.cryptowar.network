@@ -114,6 +114,24 @@ module.exports = {
       gasPrice: 225000000000,
       skipDryRun: true,
     },
+    polygon: {
+      provider: () =>
+        new HDWalletProvider(
+          hdWalletProviderOptions(
+            process.env.BINANCE_MAINNET_WALLET_PRIVATE_KEY,
+            process.env.BINANCE_MAINNET_WALLET_MNEMONIC,
+            {
+              providerOrUrl: "https://speedy-nodes-nyc.moralis.io/eba7d2e0234f08d2741c13aa/polygon/mainnet",
+            }
+          )
+        ),
+      network_id: "137",
+      confirmations: 10,
+      timeoutBlocks: 200,
+      gas: 15000000,
+      gasPrice: 50000000000,
+      skipDryRun: true,
+    },
     // Another network with more advanced options...
     // advanced: {
     // port: 8777,             // Custom port
@@ -173,6 +191,7 @@ module.exports = {
   plugins: ["truffle-plugin-verify", "truffle-contract-size"],
   api_keys: {
     bscscan: process.env.BSCSCAN_API_KEY,
+    polygonscan: process.env.POLYGONSCAN_API_KEY,
   },
   // subscribers: {
   //   abisToTs: require('./truffle-subscriber-abis-to-ts.js')
