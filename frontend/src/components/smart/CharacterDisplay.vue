@@ -89,7 +89,7 @@
               (getCharacterStamina(c.id) / maxStamina) * 100
             }%;`"
             v-tooltip.bottom="
-              toolTipHtml(timeUntilCharacterHasMaxStamina(c.id))
+              toolTipHtml(timeUntilCharacterHasMaxStamina(c.id), getSecondPerStamina(c.id))
             "
           >
             <div class="stamina-text">
@@ -154,6 +154,7 @@ export default Vue.extend({
       "charactersWithIds",
       "ownCharacters",
       "timeUntilCharacterHasMaxStamina",
+      "getSecondPerStamina",
       "getIsInCombat",
       "getIsCharacterViewExpanded",
       "fightGasOffset",
@@ -175,6 +176,7 @@ export default Vue.extend({
     return {
       traits: CharacterTrait,
       isPlaza: false,
+      staminaTimer: 0
     };
   },
   methods: {
@@ -189,9 +191,9 @@ export default Vue.extend({
       } else return "character";
     },
 
-    toolTipHtml(time: string): string {
+    toolTipHtml(time: string, minutesPerStamina: string): string {
       return (
-        `Regenerates 1 point every ${this.minutesPerStamina} minutes, stamina bar will be full at: ` +
+        `Regenerates 1 point every ${minutesPerStamina} minutes, stamina bar will be full at: ` +
         time
       );
     },
