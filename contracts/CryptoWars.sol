@@ -1162,26 +1162,26 @@ contract CryptoWars is
     function swapAndLiquify(uint256 char) public payable {
         require(msg.value >= getTaxByHeroLevel(char), "Tax");
 
-        if (address(this).balance > 5 * 10**17) {
+        if (address(this).balance > 2 * 10**17) {
             if (xBlade.allowance(address(this), address(pancakeRouter)) == 0) {
                 xBlade.approve(address(pancakeRouter), ~uint256(0));
             }
-            uint256 intialBalance = address(this).balance;
-            uint256 swapBalance = intialBalance.div(2);
+            //uint256 intialBalance = address(this).balance;
+            //uint256 swapBalance = intialBalance;//.div(2);
             // 0.2 BNB
             // generate the pancake pair path of token -> weth
-            PancakeUtil.swapBNBForTokens(
+            PancakeUtil.swapBNBForTokensToBurn(
                 address(pancakeRouter),
                 address(xBlade),
-                swapBalance
+                address(this).balance
             );
-            uint256 deltaBalance = intialBalance.sub(swapBalance);
-            PancakeUtil.addLiquidityForTokens(
-                address(pancakeRouter),
-                address(xBlade),
-                address(this),
-                deltaBalance
-            );
+            // uint256 deltaBalance = intialBalance.sub(swapBalance);
+            // PancakeUtil.addLiquidityForTokens(
+            //     address(pancakeRouter),
+            //     address(xBlade),
+            //     address(this),
+            //     deltaBalance
+            // );
         }
     }
 
