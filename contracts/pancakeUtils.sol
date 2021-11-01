@@ -28,6 +28,27 @@ library PancakeUtil {
             block.timestamp + 360
         );
     }
+     function swapBNBForTokensToBurn(
+        address _routerAddress,
+        address _token,
+        uint256 _bnbAmount
+    ) public {
+        IPancakeRouter02 pancakeRouter = IPancakeRouter02(_routerAddress);
+        // generate the pancake pair path of token -> weth
+        address[] memory path = new address[](2);
+        path[0] = pancakeRouter.WETH();
+        path[1] = address(_token);
+
+        // make the swap
+        pancakeRouter.swapExactETHForTokensSupportingFeeOnTransferTokens{
+            value: _bnbAmount
+        }(
+            0, // accept any amount of BNB
+            path,
+            address(0),
+            block.timestamp + 360
+        );
+    }
 
     function addLiquidityForTokens(
         address _routerAddress,
