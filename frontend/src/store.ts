@@ -3096,7 +3096,7 @@ export function createStore(web3: Web3) {
       },
       async getStaminaPerMinute({state, commit}){
         const { Characters } = state.contracts();
-        const secondsPerStamina =  await  Characters?.methods.getSecondsPerStamina().call(defaultCallOptions(state));
+        const secondsPerStamina =  await  Characters?.methods.getSecondsPerStamina(17).call(defaultCallOptions(state));
         commit('updateSecondsPerStamina', {secondsPerStamina: Number(secondsPerStamina)});
       }
     }
