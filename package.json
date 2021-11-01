@@ -75,7 +75,7 @@
     "verify:XBladeStakingRewardsUpgradeable": "npx truffle run verify XBladeStakingRewardsUpgradeable@0x80ceb112dEfDeE0626969c6c71CE9Fd3D1beBBdA --network bscmainnet",
     "verify:characters": "npx truffle run verify Characters@0x795E755fcb0af32aE6544dB318b6A55fD2BCc974 --network bscmainnet",
     "verify:stakexBLADEBNB": "npx truffle run verify BNBLPStakingRewardsUpgradeable@0x1fA56671ccFA16fFBe3f46E22c87b94e4a08143E --network bscmainnet",
-    "verify:PancakeUtil": "npx truffle run verify PancakeUtil@0x536aBbD69266A25C01F78e8621a854D45b575983 --network bscmainnet",
+    "verify:PancakeUtil": "npx truffle run verify PancakeUtil@0x1a354d146E1f6aB8a68C1e3c0ac48d36d47A1965 --network bscmainnet",
     "verify:CWController": "npx truffle run verify CWController@0xba8EB2c6e71b738AA7e841BE29b4Be190FFF7f3B --network bscmainnet",
     "verify:stakexBLADE": "npx truffle run verify BNBLPStakingRewardsUpgradeable@0x633f5bbff95CE461a135d1a7482ebC52Cf5b1B5b --network bscmainnet",
     "flattener": "truffle-flattener  contracts/xBlade.sol > temp/xBlade.sol"
