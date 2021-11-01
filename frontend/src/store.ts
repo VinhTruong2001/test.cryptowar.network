@@ -127,6 +127,7 @@ export function createStore(web3: Web3) {
 
       characters: {},
       characterStaminas: {},
+      secondPerCharacter:{},
       characterRenames: {},
       weapons: {},
       currentWeaponId: null,
@@ -222,6 +223,11 @@ export function createStore(web3: Web3) {
       getCharacterStamina(state: IState) {
         return (characterId: number) => {
           return state.characterStaminas[characterId];
+        };
+      },
+      getSecondPerStamina(state: IState) {
+        return (characterId: number) => {
+          return (state.secondPerCharacter[characterId] / 60).toFixed(2);
         };
       },
 
@@ -701,6 +707,9 @@ export function createStore(web3: Web3) {
       },
       updateCharacterStamina(state: IState, { characterId, stamina }) {
         Vue.set(state.characterStaminas, characterId, stamina);
+      },
+      updateSecondPerStamina(state: IState, {characterId, stamina}){
+        Vue.set(state.secondPerCharacter, characterId, stamina);
       },
       updateCharacterRename(state: IState, { characterId, renameString }) {
         if (renameString !== undefined) {
@@ -1369,6 +1378,7 @@ export function createStore(web3: Web3) {
 
         for (const charId of ownedCharacterIds) {
           dispatch('fetchCharacterStamina', charId);
+          dispatch('fetchSecondPerCharacter', charId);
         }
       },
 
@@ -1442,6 +1452,18 @@ export function createStore(web3: Web3) {
           dispatch('fetchFightRewardXp'),
           dispatch('setupCharacterStaminas')
         ]);
+      },
+
+      async fetchSecondPerCharacter({state, commit}, characterId: number){
+        const secondsPerStamina = await state
+          .contracts()
+          .Characters!.methods.getSecondsPerStamina('' + characterId)
+          .call(defaultCallOptions(state));
+
+        const stamina = parseInt(secondsPerStamina, 10);
+        if (state.characterStaminas[characterId] !== stamina) {
+          commit('updateSecondPerStamina', { characterId, stamina });
+        }
       },
 
 
@@ -3075,7 +3097,6 @@ export function createStore(web3: Web3) {
       async getStaminaPerMinute({state, commit}){
         const { Characters } = state.contracts();
         const secondsPerStamina =  await  Characters?.methods.getSecondsPerStamina().call(defaultCallOptions(state));
-        console.log(secondsPerStamina);
         commit('updateSecondsPerStamina', {secondsPerStamina: Number(secondsPerStamina)});
       }
     }
