@@ -14,5 +14,5 @@ module.exports = async function (deployer, network) {
     deployer,
   });
   const characters = await Characters.at(proxyAddress);
-  characters.setStaminaLevelRange(2); // 2%
+  characters.setStaminaLevelRange(3); // 3%
 };
