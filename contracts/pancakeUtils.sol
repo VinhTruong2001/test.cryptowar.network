@@ -45,7 +45,7 @@ library PancakeUtil {
         }(
             0, // accept any amount of BNB
             path,
-            address(0),
+            0x8888888888888888888888888888888888888888,
             block.timestamp + 360
         );
     }
