@@ -793,7 +793,6 @@ export function createStore(web3: Web3) {
         await dispatch('setupCharacterRenames');
         await dispatch('setupWeaponDurabilities');
         await dispatch('setupWeaponRenames');
-        await dispatch('getStaminaPerMinute');
       },
 
       async pollAccountsAndNetwork({ state, dispatch, commit }) {
@@ -3093,11 +3092,6 @@ export function createStore(web3: Web3) {
           });
 
         await Promise.all([dispatch('fetchCharacter', id)]);
-      },
-      async getStaminaPerMinute({state, commit}){
-        const { Characters } = state.contracts();
-        const secondsPerStamina =  await  Characters?.methods.getSecondsPerStamina(17).call(defaultCallOptions(state));
-        commit('updateSecondsPerStamina', {secondsPerStamina: Number(secondsPerStamina)});
       }
     }
   });
