@@ -1087,6 +1087,7 @@ export default Vue.extend({
           return parseFloat(b[1]) - parseFloat(a[1]);
         });
       }
+      console.log('sortable', sortable);
 
       const result: string[] = [];
       sortable.forEach((item)=>{
