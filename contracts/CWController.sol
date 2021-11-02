@@ -103,22 +103,31 @@ contract CWController is Initializable, OwnableUpgradeable {
         uint256 seed,
         uint8 level
     ) public view returns (uint256) {
-        uint256 tenPercent = num.div(10);
+        uint256 twentyPercent = num.div(5);
         uint256 r = combineSeeds(seed, level);
         if (r.mod(100) < 10) {
             return
-                num.sub(tenPercent).add(
-                    randomSeededMinMax(0, tenPercent.mul(2), seed)
+                num.sub(twentyPercent).add(
+                    randomSeededMinMax(0, twentyPercent.mul(2), seed)
                 );
         }
         uint256 min = getMinRollPerLevel(level);
         uint256 max = getMaxRollPerLevel(level);
-        return
-            num
-                .sub(tenPercent)
-                .add(randomSeededMinMax(0, tenPercent.mul(2), seed))
-                .mul(randomSeededMinMax(min, max, combineSeeds(r, level)))
+        uint256 randomAdd = randomSeededMinMax(0, twentyPercent.mul(2), seed);
+        uint256 randomMultiple = randomSeededMinMax(min, max, combineSeeds(r, level));
+        uint roll = num.sub(twentyPercent);
+        roll = roll.add(randomAdd)
+                .mul(randomMultiple)
                 .div(10000);
+
+        if (roll < num - twentyPercent) {
+            roll = num - twentyPercent;
+        }
+        if (roll > num + twentyPercent) {
+            roll = num + twentyPercent;
+        }
+
+        return roll;
     }
 
     function uint2str(uint256 _i)
