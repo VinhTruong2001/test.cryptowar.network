@@ -119,11 +119,11 @@ contract CWController is Initializable, OwnableUpgradeable {
                 .mul(randomSeededMinMax(min, max, combineSeeds(r, level)))
                 .div(10000);
 
-        if (roll < num - num.div(5)) {
-            roll = num - num.div(5);
+        if (roll < num - twentyPercent) {
+            roll = num - twentyPercent;
         }
-        if (roll > num + num.div(5)) {
-            roll = num + num.div(5);
+        if (roll > num + twentyPercent) {
+            roll = num + twentyPercent;
         }
 
         return roll;
