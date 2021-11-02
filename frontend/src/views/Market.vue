@@ -857,7 +857,6 @@ export default Vue.extend({
         this.nftPricesById[id] = price;
       }));
 
-      console.log('this.nftPriceById', this.nftPricesById);
     },
 
     async addListingForNft() {
@@ -1020,7 +1019,6 @@ export default Vue.extend({
         maxLevel: this.characterMaxLevelFilter()
       });
 
-      console.log('this.allListingsAmount', this.allListingsAmount);
 
       this.allSearchResults = await this.fetchAllMarketCharacterNftIdsPage({
         nftContractAddr: this.contractAddress,
@@ -1031,7 +1029,6 @@ export default Vue.extend({
         maxLevel: this.characterMaxLevelFilter()
       });
 
-      console.log('this.allSearchResults', this.allSearchResults);
 
       // filter price character
       this.minPriceFilter(parseFloat(this.characterMinPriceFilter()));
@@ -1076,7 +1073,6 @@ export default Vue.extend({
       const sortable: any[] = [];
       this.allSearchResults.forEach((item: any)=>{
         sortable.push([item, this.convertWeiToSkill(this.nftPricesById[item])]);
-        console.log('this.nftPricesById[item]', this.nftPricesById[item]);
       });
 
       if(typeSort === '-1'){
@@ -1088,7 +1084,6 @@ export default Vue.extend({
           return parseFloat(b[1]) - parseFloat(a[1]);
         });
       }
-      console.log('sortable', sortable);
 
       const result: string[] = [];
       sortable.forEach((item)=>{
