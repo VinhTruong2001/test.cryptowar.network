@@ -1076,6 +1076,7 @@ export default Vue.extend({
       const sortable = [];
       for (const item in this.allSearchResults) {
         sortable.push([item, this.nftPricesById[item]]);
+        console.log('this.nftPricesById[item]', this.nftPricesById[item]);
       }
 
       if(typeSort === '-1'){
