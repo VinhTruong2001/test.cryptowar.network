@@ -1075,11 +1075,11 @@ export default Vue.extend({
         sortable.push([item, this.convertWeiToSkill(this.nftPricesById[item])]);
       });
 
-      if(typeSort === '-1'){
+      if(typeSort === '1'){
         sortable.sort(function(a, b) {
           return parseFloat(a[1]) - parseFloat(b[1]);
         });
-      } else if(typeSort === '1'){
+      } else if(typeSort === '-1'){
         sortable.sort(function(a, b) {
           return parseFloat(b[1]) - parseFloat(a[1]);
         });
