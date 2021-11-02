@@ -1429,7 +1429,7 @@ export function createStore(web3: Web3) {
         }
       },
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      async mintCharacter({ state, dispatch }) {
+      async mintCharacter({ state, dispatch }, referralAddress) {
         if (featureFlagStakeOnly || !state.defaultAccount) return;
         await approveFee(
           state.contracts().CryptoWars!,
@@ -1443,7 +1443,7 @@ export function createStore(web3: Web3) {
 
         await state
           .contracts()
-          .CryptoWars!.methods.mintCharacter()
+          .CryptoWars!.methods.mintCharacter(referralAddress)
           .send(defaultCallOptions(state));
 
         await Promise.all([

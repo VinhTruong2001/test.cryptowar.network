@@ -309,7 +309,7 @@ export default Vue.extend({
 
     async onMintCharacter() {
       try {
-        await this.mintCharacter();
+        await this.mintCharacter(this.referralAddress ? this.referralAddress : '0');
       } catch (e) {
         (this as any).$dialog.notify.error(
           "Could not mint character: insufficient funds or transaction denied."
