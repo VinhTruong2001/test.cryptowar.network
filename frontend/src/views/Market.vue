@@ -1073,26 +1073,26 @@ export default Vue.extend({
       if(!typeSort){
         return;
       }
-      const sortable = [];
-      for (const item in this.allSearchResults) {
-        sortable.push([item, this.convertWeiToSkill(this.nftPricesById[item])]);
-        console.log('this.nftPricesById[item]', this.nftPricesById[item]);
-      }
+      const sortable: (string|NftIdType)[][] = [];
+      this.allSearchResults.forEach((item)=>{
+        sortable.push([item, this.convertWeiToSkill(this.nftPricesById[item as string])]);
+        console.log('this.nftPricesById[item]', this.nftPricesById[item as string]);
+      });
 
       if(typeSort === '-1'){
         sortable.sort(function(a, b) {
-          return parseFloat(a[1]) - parseFloat(b[1]);
+          return parseFloat(a[1] as string) - parseFloat(b[1] as string);
         });
       } else if(typeSort === '1'){
         sortable.sort(function(a, b) {
-          return parseFloat(b[1]) - parseFloat(a[1]);
+          return parseFloat(b[1] as string) - parseFloat(a[1] as string);
         });
       }
       console.log('sortable', sortable);
 
       const result: string[] = [];
       sortable.forEach((item)=>{
-        result.push(item[0]);
+        result.push(item[0] as string);
       });
 
       this.allSearchResults = result;
