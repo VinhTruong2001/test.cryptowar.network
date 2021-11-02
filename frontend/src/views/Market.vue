@@ -1073,19 +1073,19 @@ export default Vue.extend({
       if(!typeSort){
         return;
       }
-      const sortable: (string|NftIdType)[][] = [];
-      this.allSearchResults.forEach((item)=>{
-        sortable.push([item, this.convertWeiToSkill(this.nftPricesById[item as string])]);
-        console.log('this.nftPricesById[item]', this.nftPricesById[item as string]);
+      const sortable: any[] = [];
+      this.allSearchResults.forEach((item: any)=>{
+        sortable.push([item, this.convertWeiToSkill(this.nftPricesById[item])]);
+        console.log('this.nftPricesById[item]', this.nftPricesById[item]);
       });
 
       if(typeSort === '-1'){
         sortable.sort(function(a, b) {
-          return parseFloat(a[1] as string) - parseFloat(b[1] as string);
+          return parseFloat(a[1]) - parseFloat(b[1]);
         });
       } else if(typeSort === '1'){
         sortable.sort(function(a, b) {
-          return parseFloat(b[1] as string) - parseFloat(a[1] as string);
+          return parseFloat(b[1]) - parseFloat(a[1]);
         });
       }
       console.log('sortable', sortable);
