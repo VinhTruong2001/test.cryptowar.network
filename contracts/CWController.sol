@@ -107,7 +107,7 @@ contract CWController is Initializable, OwnableUpgradeable {
                     randomSeededMinMax(0, tenPercent.mul(2), seed)
                 );
         }
-        uint256 minPowerRoll = num.mul(getLevelFactor(level)).div(100);
+        uint256 minPowerRoll = num.mul(getPowerFactor(num)).div(10000);
         uint256 maxPowerRoll = num.mul(20).div(100);
         return
             num.sub(tenPercent).add(
@@ -138,13 +138,11 @@ contract CWController is Initializable, OwnableUpgradeable {
                 .div(10000);
     }
 
-    function getLevelFactor(uint8 level) public view returns (uint256) {
-        if (level == 0) {
-            return 0;
+    function getPowerFactor(uint256 power) public view returns (uint256) {
+        // 1 = 10000/10000
+        if (power < maxFactor) {
+            return power.mul(1000).div(2200);
         }
-        if (uint256(level).sub(1) < maxFactor) {
-            return uint256(level).sub(1);
-        }
-        return maxFactor;
+        return 1000; // 1%
     }
 }
