@@ -113,10 +113,11 @@ contract CWController is Initializable, OwnableUpgradeable {
         }
         uint256 min = getMinRollPerLevel(level);
         uint256 max = getMaxRollPerLevel(level);
-        uint roll = num
-                .sub(twentyPercent)
-                .add(randomSeededMinMax(0, twentyPercent.mul(2), seed))
-                .mul(randomSeededMinMax(min, max, combineSeeds(r, level)))
+        uint256 randomAdd = randomSeededMinMax(0, twentyPercent.mul(2), seed);
+        uint256 randomMultiple = randomSeededMinMax(min, max, combineSeeds(r, level));
+        uint roll = num.sub(twentyPercent);
+        roll = roll.add(randomAdd)
+                .mul(randomMultiple)
                 .div(10000);
 
         if (roll < num - twentyPercent) {

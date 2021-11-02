@@ -9633,6 +9633,85 @@
           }
         }
       }
+    },
+    "cd109cc614d16c65f880f591987707082b8250fbe91ead301af55df7c5c4ade1": {
+      "address": "0xCBC9C078dF5491a02a26e38a4d126FF4e2cEEA0a",
+      "txHash": "0x8d3835704c2a38762e87a4c354157819207957e5043194ecfd89f6e2e9e3e99c",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/Initializable.sol:25"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/Initializable.sol:30"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:31"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "_owner",
+            "type": "t_address",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:20"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:74"
+          },
+          {
+            "contract": "CWController",
+            "label": "game",
+            "type": "t_address",
+            "src": "../project:/contracts/CWController.sol:10"
+          },
+          {
+            "contract": "CWController",
+            "label": "reducePerMilestone",
+            "type": "t_uint256",
+            "src": "../project:/contracts/CWController.sol:11"
+          },
+          {
+            "contract": "CWController",
+            "label": "maxReduce",
+            "type": "t_uint256",
+            "src": "../project:/contracts/CWController.sol:12"
+          },
+          {
+            "contract": "CWController",
+            "label": "range",
+            "type": "t_uint256",
+            "src": "../project:/contracts/CWController.sol:13"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_bool": {
+            "label": "bool"
+          }
+        }
+      }
     }
   }
 }
