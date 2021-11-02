@@ -856,6 +856,8 @@ export default Vue.extend({
         void price;
         this.nftPricesById[id] = price;
       }));
+
+      console.log('this.nftPriceById', this.nftPricesById);
     },
 
     async addListingForNft() {
@@ -1018,6 +1020,7 @@ export default Vue.extend({
         maxLevel: this.characterMaxLevelFilter()
       });
 
+      console.log('this.allListingsAmount', this.allListingsAmount);
 
       this.allSearchResults = await this.fetchAllMarketCharacterNftIdsPage({
         nftContractAddr: this.contractAddress,
@@ -1027,6 +1030,8 @@ export default Vue.extend({
         minLevel: this.characterMinLevelFilter(),
         maxLevel: this.characterMaxLevelFilter()
       });
+
+      console.log('this.allSearchResults', this.allSearchResults);
 
       // filter price character
       this.minPriceFilter(parseFloat(this.characterMinPriceFilter()));
