@@ -86,12 +86,19 @@ contract CWController is Initializable, OwnableUpgradeable {
             );
     }
 
-    function plusMinus10PercentSeeded(uint256 num, uint256 seed)
+    function plusMinus10PercentSeededMonster(uint256 num, uint256 seed, uint8 level)
         public
         pure
         returns (uint256)
     {
         uint256 tenPercent = num.div(10);
+        uint256 r = combineSeeds(seed, level);
+        if (r.mod(100) < 10) {
+            return
+                num.sub(tenPercent).add(
+                    randomSeededMinMax(0, tenPercent.mul(2), seed)
+                );
+        }
         return
             num.sub(tenPercent).add(
                 randomSeededMinMax(0, tenPercent.mul(2), seed)
