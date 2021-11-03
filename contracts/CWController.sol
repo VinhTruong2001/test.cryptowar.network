@@ -139,6 +139,9 @@ contract CWController is Initializable, OwnableUpgradeable {
     }
 
     function getPowerFactor(uint256 power) public view returns (uint256) {
+        if(power < 1500) {
+            return 0;
+        }
         // 1 = 10000/10000
         if (power < maxFactor) {
             return power.mul(1000).div(2200);
