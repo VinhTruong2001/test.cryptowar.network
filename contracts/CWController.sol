@@ -96,11 +96,10 @@ contract CWController is Initializable, OwnableUpgradeable {
 
     function plusMinus10PercentSeededMonster(
         uint256 num,
-        uint256 seed,
-        uint8 level
+        uint256 seed
     ) public view returns (uint256) {
         uint256 tenPercent = num.div(10);
-        uint256 r = combineSeeds(seed, level);
+        uint256 r = combineSeeds(seed, 1);
         if (r.mod(100) < 10) {
             return
                 num.sub(tenPercent).add(

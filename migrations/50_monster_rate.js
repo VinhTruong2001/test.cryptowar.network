@@ -14,5 +14,5 @@ module.exports = async function (deployer, network) {
     deployer,
   });
   const cwController = await CWController.at(proxyAddress);
-  cwController.setMaxFactor(8); // 8%
+  cwController.setMaxFactor(4000); // Power 4000
 };
