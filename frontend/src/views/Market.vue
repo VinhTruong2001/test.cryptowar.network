@@ -856,6 +856,7 @@ export default Vue.extend({
         void price;
         this.nftPricesById[id] = price;
       }));
+
     },
 
     async addListingForNft() {
@@ -1028,6 +1029,7 @@ export default Vue.extend({
         maxLevel: this.characterMaxLevelFilter()
       });
 
+
       // filter price character
       this.minPriceFilter(parseFloat(this.characterMinPriceFilter()));
 
@@ -1068,16 +1070,16 @@ export default Vue.extend({
       if(!typeSort){
         return;
       }
-      const sortable = [];
-      for (const item in this.allSearchResults) {
-        sortable.push([item, this.nftPricesById[item]]);
-      }
+      const sortable: any[] = [];
+      this.allSearchResults.forEach((item: any)=>{
+        sortable.push([item, this.convertWeiToSkill(this.nftPricesById[item])]);
+      });
 
-      if(typeSort === '-1'){
+      if(typeSort === '1'){
         sortable.sort(function(a, b) {
           return parseFloat(a[1]) - parseFloat(b[1]);
         });
-      } else if(typeSort === '1'){
+      } else if(typeSort === '-1'){
         sortable.sort(function(a, b) {
           return parseFloat(b[1]) - parseFloat(a[1]);
         });
@@ -1085,7 +1087,7 @@ export default Vue.extend({
 
       const result: string[] = [];
       sortable.forEach((item)=>{
-        result.push(item[0]);
+        result.push(item[0] as string);
       });
 
       this.allSearchResults = result;
