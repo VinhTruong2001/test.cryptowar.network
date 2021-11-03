@@ -318,7 +318,7 @@ contract CryptoWars is
         uint64 staminaTimestamp,
         uint256 hour,
         uint32 target
-    ) public pure {
+    ) public view {
         uint32[4] memory targets = getTargetsInternal(
             getPlayerPower(playerBasePower, wepMultiplier, wepBonusPower),
             staminaTimestamp,
@@ -511,11 +511,11 @@ contract CryptoWars is
 
     function getMonsterPowerRoll(uint24 monsterPower, uint256 seed)
         internal
-        pure
+        view
         returns (uint24)
     {
         // roll for fights
-        return uint24(RandomUtil.plusMinus10PercentSeeded(monsterPower, seed));
+        return uint24(cwController.plusMinus10PercentSeededMonster(monsterPower, seed));
     }
 
     function getPlayerPower(
@@ -580,7 +580,7 @@ contract CryptoWars is
         uint24 playerPower,
         uint64 staminaTimestamp,
         uint256 currentHour
-    ) private pure returns (uint32[4] memory) {
+    ) private view returns (uint32[4] memory) {
         // 4 targets, roll powers based on character + weapon power
         // trait bonuses not accounted for
         // targets expire on the hour
@@ -595,7 +595,7 @@ contract CryptoWars is
             // we alter seed per-index or they would be all the same
             uint256 indexSeed = RandomUtil.combineSeeds(baseSeed, i);
             targets[i] = uint32(
-                RandomUtil.plusMinus10PercentSeeded(playerPower, indexSeed) | // power
+                cwController.plusMinus10PercentSeededMonster(playerPower, indexSeed) | // power
                     (uint32(indexSeed % 4) << 24) // trait
             );
         }

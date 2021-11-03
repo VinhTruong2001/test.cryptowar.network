@@ -12,6 +12,8 @@ contract CWController is Initializable, OwnableUpgradeable {
     uint256 public maxReduce;
     uint256 public range;
 
+    uint256 public maxFactor;
+
     function initialize() public initializer {
         OwnableUpgradeable.__Ownable_init();
         maxReduce = 4700; // 47%
@@ -33,6 +35,10 @@ contract CWController is Initializable, OwnableUpgradeable {
 
     function setMaxReduce(uint256 _maxReduce) public onlyOwner {
         maxReduce = _maxReduce;
+    }
+
+    function setMaxFactor(uint256 _max) public onlyOwner {
+        maxFactor = _max;
     }
 
     function randomSeededMinMax(
@@ -71,7 +77,9 @@ contract CWController is Initializable, OwnableUpgradeable {
         if (level < 8) {
             return base;
         }
-        (bool success, uint256 reduce) = base.trySub(uint256(level).mul(reducePerMilestone));
+        (bool success, uint256 reduce) = base.trySub(
+            uint256(level).mul(reducePerMilestone)
+        );
 
         if (reduce < maxReduce || !success) {
             reduce = maxReduce;
@@ -86,15 +94,23 @@ contract CWController is Initializable, OwnableUpgradeable {
             );
     }
 
-    function plusMinus10PercentSeeded(uint256 num, uint256 seed)
-        public
-        pure
-        returns (uint256)
-    {
+    function plusMinus10PercentSeededMonster(
+        uint256 num,
+        uint256 seed
+    ) public view returns (uint256) {
         uint256 tenPercent = num.div(10);
+        uint256 r = combineSeeds(seed, 1);
+        if (r.mod(100) < 10) {
+            return
+                num.sub(tenPercent).add(
+                    randomSeededMinMax(0, tenPercent.mul(2), seed)
+                );
+        }
+        uint256 minPowerRoll = num.mul(getPowerFactor(num)).div(10000);
+        uint256 maxPowerRoll = num.mul(20).div(100);
         return
             num.sub(tenPercent).add(
-                randomSeededMinMax(0, tenPercent.mul(2), seed)
+                randomSeededMinMax(minPowerRoll, maxPowerRoll, seed)
             );
     }
 
@@ -130,26 +146,14 @@ contract CWController is Initializable, OwnableUpgradeable {
         return roll;
     }
 
-    function uint2str(uint256 _i)
-        internal
-        pure
-        returns (string memory _uintAsString)
-    {
-        if (_i == 0) {
-            return "0";
+    function getPowerFactor(uint256 power) public view returns (uint256) {
+        if(power < 1500) {
+            return 0;
         }
-        uint256 j = _i;
-        uint256 len;
-        while (j != 0) {
-            len++;
-            j /= 10;
+        // 1 = 10000/10000
+        if (power < maxFactor) {
+            return power.mul(1000).div(2200);
         }
-        bytes memory bstr = new bytes(len);
-        uint256 k = len - 1;
-        while (_i != 0) {
-            bstr[k--] = bytes1(uint8(48 + (_i % 10)));
-            _i /= 10;
-        }
-        return string(bstr);
+        return 100; // 1%
     }
 }
