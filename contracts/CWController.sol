@@ -152,8 +152,8 @@ contract CWController is Initializable, OwnableUpgradeable {
         }
         // 1 = 10000/10000
         if (power < maxFactor) {
-            return power.mul(1000).div(2200);
+            return power.mul(1000).div(maxFactor);
         }
-        return 100; // 1%
+        return 1000; // 10%
     }
 }
