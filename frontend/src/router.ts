@@ -10,6 +10,7 @@ import Market from './views/Market.vue';
 import Leaderboard from './views/Leaderboard.vue';
 import Options from './views/Options.vue';
 import Shop from './views/Shop.vue';
+import P2PLayout from './views/P2PLayout.vue';
 
 import {
   raid as featureFlagRaid,
@@ -45,7 +46,8 @@ function createRouter() {
       // { path: '/stake', name: 'select-stake-type', component: SelectStakeType },
       // { path: '/stake/:stakeType', name: 'stake', component: Stake, props: true },
       { path: '/options', name: 'options', component: Options },
-      { path: '/shop', name: 'shop', component: Shop }
+      { path: '/shop', name: 'shop', component: Shop },
+      { path: '/p2playout', name: 'P2P', component: P2PLayout }
     ]
   });
 

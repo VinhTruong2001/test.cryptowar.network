@@ -802,6 +802,10 @@ button.close {
   border-bottom: none !important;
 }
 
+.tab-categories.nav-tabs{
+  border-bottom: 1px solid #f76d00 !important;
+}
+
 .nav-justified > .nav-link, .nav-justified .nav-item{
   flex-basis: initial;
   flex-grow: initial;
