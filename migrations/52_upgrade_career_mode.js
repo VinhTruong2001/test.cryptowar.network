@@ -18,9 +18,9 @@ module.exports = async function (deployer, network, accounts) {
     xBladeAddress = "";
   }
   await upgradeProxy(
-    // "0x2cc0edf838aA1Ff151eC0423eA0d2D7D1B4ad688",
+    "0x2cc0edf838aA1Ff151eC0423eA0d2D7D1B4ad688",
     CareerMode,
-    [xBladeAddress, characterAddress, weaponAddress, randomAddress],
+    // [xBladeAddress, characterAddress, weaponAddress, randomAddress],
     {
       deployer,
     }
