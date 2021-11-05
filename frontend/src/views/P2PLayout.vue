@@ -275,15 +275,10 @@
                           />
                           <!-- <svg>
         <use xlink:href='@/assets/images/p2pimages/img2.svg#img'></use>
-      </svg> -->
-                          </button
+      </svg> --></button
                         ><button
                           type="button"
-                          class="
-                            search-suggest__btn
-                            ml-1
-                            btn btn-buy btn-sm
-                          "
+                          class="search-suggest__btn ml-1 btn btn-buy btn-sm"
                         >
                           Reset
                         </button>
@@ -291,7 +286,7 @@
                     </div>
                   </div>
                   <div class="col-sm-4 col-md-4 col-lg-6 col-xl-12">
-                    <div class="card-boss__zoan card-boss__pk card">
+                    <div class="card-boss__zoan card-boss__pk card" @click="openHeroPicker()">
                       <div class="card-header">
                         <span
                           variant="primary"
@@ -360,7 +355,7 @@
                       col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4
                     "
                   >
-                    <div class="card card-zoan market ">
+                    <div class="card card-zoan market">
                       <div class="zoan-id">
                         <span class="badge badge-primary badge-pill">#328</span>
                       </div>
@@ -1402,10 +1397,72 @@
       </div>
     </div>
     <div class="Toastify"></div>
+    <b-modal
+      class="centered-modal"
+      ref="character-change-trait-modal"
+      @ok="openHeroPicker"
+      size="large"
+    >
+      <template #modal-title> Change Character's Trait </template>
+      <span> Pick a trait to switch to. </span>
+      <character-list
+        :value="currentCharacterId"
+        @input="console.log"
+      />
+    </b-modal>
   </div>
 </template>
 <script lang="ts">
+import { BModal } from "bootstrap-vue";
 import Vue from "vue";
+import { mapGetters, mapState } from "vuex";
+import CharacterList from "../components/smart/CharacterList.vue";
 // import "@/assets/scss/p2playout/p2pstyle.css";
-export default Vue.extend({});
+export default Vue.extend({
+  components: {
+    CharacterList,
+  },
+  methods: {
+    openHeroPicker() {
+      (this.$refs['character-change-trait-modal'] as BModal).show();
+    },
+  },
+  computed: {
+    ...mapState([
+      "characters",
+      "maxStamina",
+      "currentCharacterId",
+      "defaultAccount",
+      "skillBalance",
+    ]),
+    ...mapGetters([
+      "contracts",
+      "ownCharacters",
+      "ownWeapons",
+      "currentCharacter",
+      "currentCharacterStamina",
+      "getCharacterName",
+      "getExchangeUrl",
+    ]),
+
+    character(): any {
+      if (!this.currentCharacter) {
+        return {
+          id: null,
+          name: "???",
+          level: -1,
+          experience: -1,
+        };
+      }
+
+      const c = this.currentCharacter;
+      return {
+        id: c.id,
+        name: this.getCharacterName(c.id),
+        level: c.level,
+        experience: c.xp,
+      };
+    },
+  },
+});
 </script>
