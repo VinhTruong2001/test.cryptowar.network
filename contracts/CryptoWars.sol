@@ -1002,9 +1002,9 @@ contract CryptoWars is
         minimumFightTax = tax;
     }
 
-    // function setSupportFeeRate(uint8 rate) public restricted {
-    //     supportFeeRate = rate;
-    // }
+    function setSupportFeeRate(uint8 rate) public restricted {
+        supportFeeRate = rate;
+    }
 
     // function setPancakeRouter(address _pancakeRouter) public restricted {
     //     pancakeRouter = IPancakeRouter02(_pancakeRouter);
