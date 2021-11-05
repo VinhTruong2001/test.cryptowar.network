@@ -131,10 +131,10 @@ contract CWController is Initializable, OwnableUpgradeable {
         uint256 max = getMaxRollPerLevel(level);
         uint256 randomAdd = randomSeededMinMax(0, twentyPercent.mul(2), seed);
         uint256 randomMultiple = randomSeededMinMax(min, max, combineSeeds(r, level));
-        uint roll = num.sub(twentyPercent);
-        roll = roll.add(randomAdd)
-                .mul(randomMultiple)
-                .div(10000);
+        // uint roll = num.sub(twentyPercent);
+        // roll = roll.add(randomAdd)
+        //         .mul(randomMultiple)
+        //         .div(10000);
 
         // temporary disable
         // if (roll < num - twentyPercent) {
@@ -144,7 +144,12 @@ contract CWController is Initializable, OwnableUpgradeable {
         //     roll = num + twentyPercent;
         // }
 
-        return roll;
+        return
+            num
+                .sub(twentyPercent)
+                .add(randomSeededMinMax(0, twentyPercent.mul(2), seed))
+                .mul(randomSeededMinMax(min, max, combineSeeds(r, level)))
+                .div(10000);
     }
 
     function getPowerFactor(uint256 power) public view returns (uint256) {
