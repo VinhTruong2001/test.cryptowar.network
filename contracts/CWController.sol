@@ -119,7 +119,7 @@ contract CWController is Initializable, OwnableUpgradeable {
         uint256 seed,
         uint8 level
     ) public view returns (uint256) {
-        uint256 twentyPercent = num.div(5);
+        uint256 twentyPercent = num.div(10);
         uint256 r = combineSeeds(seed, level);
         if (r.mod(100) < 10) {
             return
@@ -136,12 +136,13 @@ contract CWController is Initializable, OwnableUpgradeable {
                 .mul(randomMultiple)
                 .div(10000);
 
-        if (roll < num - twentyPercent) {
-            roll = num - twentyPercent;
-        }
-        if (roll > num + twentyPercent) {
-            roll = num + twentyPercent;
-        }
+        // temporary disable
+        // if (roll < num - twentyPercent) {
+        //     roll = num - twentyPercent;
+        // }
+        // if (roll > num + twentyPercent) {
+        //     roll = num + twentyPercent;
+        // }
 
         return roll;
     }

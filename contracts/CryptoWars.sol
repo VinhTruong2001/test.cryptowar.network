@@ -467,8 +467,7 @@ contract CryptoWars is
             PancakeUtil.getAmountTokenFromBNB(
                 address(pancakeRouter),
                 address(xBlade),
-                minimumFightTax
-            )
+                minimumFightTax)
         ).mul(supportFeeRate).div(100);
 
         return
@@ -918,6 +917,7 @@ contract CryptoWars is
         tokenRewards[playerAddress] = tokenRewards[playerAddress].sub(
             fromTokenRewards
         );
+
         xBlade.transferFrom(playerAddress, address(this), fromUserWallet);
 
         return (fromInGameOnlyFunds, fromTokenRewards, fromUserWallet);
@@ -963,6 +963,7 @@ contract CryptoWars is
     }
 
     function setFightRewardBaselineValue(uint256 tenthcents) public restricted {
+
         fightRewardBaseline = ABDKMath64x64.divu(tenthcents, 1000); // !!! THIS TAKES TENTH OF CENTS !!!
     }
 
@@ -982,9 +983,9 @@ contract CryptoWars is
         reforgeWeaponFee = burnWeaponFee + reforgeWeaponWithDustFee;
     }
 
-    function setStaminaCostFight(uint8 points) public restricted {
-        staminaCostFight = points;
-    }
+    // function setStaminaCostFight(uint8 points) public restricted {
+    //     staminaCostFight = points;
+    // }
 
     function setDurabilityCostFight(uint8 points) public restricted {
         durabilityCostFight = points;
