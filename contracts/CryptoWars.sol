@@ -423,7 +423,7 @@ contract CryptoWars is
             address(pancakeRouter),
             BUSDAddress,
             address(xBlade),
-            getTokenGainForFight(targetPower, fightMultiplier).mulu(1)
+            getTokenGainForFight(targetPower, fightMultiplier)
         );
 
 
@@ -654,7 +654,7 @@ contract CryptoWars is
                     address(pancakeRouter),
                     BUSDAddress,
                     address(xBlade),
-                    promos.firstCharacterPromoInGameOnlyFundsGivenInUsd().mulu(1)
+                    promos.firstCharacterPromoInGameOnlyFundsGivenInUsd()
                 )
             );
         }
@@ -738,7 +738,7 @@ contract CryptoWars is
                 address(pancakeRouter),
                 BUSDAddress,
                 address(xBlade),
-                usdAmount.mulu(1)
+                usdAmount
             );
     }
 
@@ -819,7 +819,7 @@ contract CryptoWars is
                 address(pancakeRouter),
                 BUSDAddress,
                 address(xBlade),
-                usdAmount.mulu(1)
+                usdAmount
             ) // xblade amount
         );
 
@@ -882,7 +882,7 @@ contract CryptoWars is
                     address(pancakeRouter),
                     BUSDAddress,
                     address(xBlade),
-                    usdAmount.mulu(1)
+                    usdAmount
                 )
             );
     }
@@ -930,7 +930,7 @@ contract CryptoWars is
                 address(pancakeRouter),
                 BUSDAddress,
                 address(xBlade),
-                baseAmount.mulu(1)
+                baseAmount
             )
         );
     }
