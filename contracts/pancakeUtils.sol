@@ -106,7 +106,7 @@ library PancakeUtil {
         address _routerAddress,
         address usdAddress,
         address xBlade,
-        int128 usdAmount
+        uint256 usdAmount
     ) public view returns (uint256) {
         IPancakeRouter02 pancakeRouter = IPancakeRouter02(_routerAddress);
         // generate the pancake pair path of token -> weth
@@ -114,7 +114,7 @@ library PancakeUtil {
         path[0] = usdAddress;
         path[1] = xBlade;
 
-        return pancakeRouter.getAmountsOut(uint256(usdAmount), path)[1];
+        return pancakeRouter.getAmountsOut(usdAmount, path)[1];
     }
 
     function getPath(address tokenA, address tokenB)
