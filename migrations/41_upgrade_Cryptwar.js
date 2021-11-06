@@ -10,7 +10,7 @@ module.exports = async function (deployer, network, accounts) {
   // return
   // await deployer.link(PancakeUtil, CryptoWars);
 
-  await deployer.link(PancakeUtil, CryptoWars);
+  // await deployer.link(PancakeUtil, CryptoWars);
 
   await CryptoWars.link('PancakeUtil','0xA51c29c2d39F8D0e5c689463dE6e03c9096B6cE2');
 
