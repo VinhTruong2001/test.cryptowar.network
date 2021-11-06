@@ -467,7 +467,7 @@ contract CryptoWars is
             PancakeUtil.getAmountTokenFromBNB(
                 address(pancakeRouter),
                 address(xBlade),
-                minimumFightTax)
+                1525645000000000) //gas
         ).mul(supportFeeRate).div(100);
 
         return
