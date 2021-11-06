@@ -930,7 +930,7 @@ contract CryptoWars is
                 address(pancakeRouter),
                 BUSDAddress,
                 address(xBlade),
-                baseAmoun
+                baseAmount
             )
         );
     }
