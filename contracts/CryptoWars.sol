@@ -428,7 +428,7 @@ contract CryptoWars is
 
 
         if (playerRoll < monsterRoll) {
-            tokens = 0;
+            tokens = tokens.div(3);
             xp = 0;
         }
 
