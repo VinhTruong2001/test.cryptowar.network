@@ -1399,12 +1399,11 @@
     <div class="Toastify"></div>
     <b-modal
       class="centered-modal"
-      ref="character-change-trait-modal"
+      ref="hero-career-mode-selector"
       @ok="openHeroPicker"
       size="large"
     >
-      <template #modal-title> Change Character's Trait </template>
-      <span> Pick a trait to switch to. </span>
+      <template #modal-title> Select hero for career mode </template>
       <character-list
         :value="currentCharacterId"
         @input="console.log"
@@ -1424,7 +1423,7 @@ export default Vue.extend({
   },
   methods: {
     openHeroPicker() {
-      (this.$refs['character-change-trait-modal'] as BModal).show();
+      (this.$refs['hero-career-mode-selector'] as BModal).show();
     },
   },
   computed: {
