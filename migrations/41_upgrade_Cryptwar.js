@@ -10,7 +10,7 @@ module.exports = async function (deployer, network, accounts) {
 
   // await deployer.link(PancakeUtil, CryptoWars);
 
-  await CryptoWars.link('PancakeUtil','0x29e7DBb22Ecb98F3Fef7bA80f60D4F4b8a0485A7');
+  await CryptoWars.link('PancakeUtil','0xC2AABB5820325D2C229fb085E9f34CA366108d51');
 
   // const proxyAddress = "0x8781413C768f207699D51f42b909c5d6A9D9aD36"; //testnet
   

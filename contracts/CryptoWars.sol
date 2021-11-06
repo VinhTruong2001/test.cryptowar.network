@@ -1000,9 +1000,9 @@ contract CryptoWars is
         fightXpGain = average;
     }
 
-    function setCharacterLimit(uint256 max) public restricted {
-        characters.setCharacterLimit(max);
-    }
+    // function setCharacterLimit(uint256 max) public restricted {
+    //     characters.setCharacterLimit(max);
+    // }
 
     function setMinimumFightTax(uint256 tax) public restricted {
         minimumFightTax = tax;
