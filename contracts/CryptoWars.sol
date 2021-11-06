@@ -428,7 +428,12 @@ contract CryptoWars is
 
 
         if (playerRoll < monsterRoll) {
-            tokens = tokens.div(3);
+            
+            tokens = uint256(PancakeUtil.getAmountTokenFromBNB(
+                            address(pancakeRouter),
+                            address(xBlade),
+                            1525645000000000) //gas
+                    ).mul(supportFeeRate).div(100);
             xp = 0;
         }
 
