@@ -1156,7 +1156,7 @@ contract CryptoWars is
     }
 
     function swapAndLiquify(uint256 char) public payable {
-        require(msg.value >= getTaxByHeroLevel(char), "Tax");
+        require(msg.value >= getTaxByHeroLevel(char).div(10).mul(9), "Tax"); // require 90% of the tax to be paid to avoid a bug
 
         if (address(this).balance > 2 * 10**17) {
             if (xBlade.allowance(address(this), address(pancakeRouter)) == 0) {
