@@ -428,7 +428,6 @@ contract CryptoWars is
 
 
         if (playerRoll < monsterRoll) {
-            
             tokens = uint256(PancakeUtil.getAmountTokenFromBNB(
                             address(pancakeRouter),
                             address(xBlade),
@@ -468,24 +467,15 @@ contract CryptoWars is
         view
         returns (int128)
     {
-        int128 supportFeeToken = int128(
-            PancakeUtil.getAmountTokenFromBNB(
-                address(pancakeRouter),
-                address(xBlade),
-                1525645000000000) //gas
-        ).mul(supportFeeRate).div(100);
-
         return
-            supportFeeToken.add(
-                fightRewardBaseline
-                    .mul(
-                        ABDKMath64x64.sqrt(
-                            // Performance optimization: 1000 = getPowerAtLevel(0)
-                            ABDKMath64x64.divu(monsterPower, 1000)
-                        )
+            fightRewardBaseline
+                .mul(
+                    ABDKMath64x64.sqrt(
+                        // Performance optimization: 1000 = getPowerAtLevel(0)
+                        ABDKMath64x64.divu(monsterPower, 1000)
                     )
-                    .mul(ABDKMath64x64.fromUInt(fightMultiplier))
-            );
+                )
+                .mul(ABDKMath64x64.fromUInt(fightMultiplier));
     }
 
     function getXpGainForFight(uint24 playerPower, uint24 monsterPower)
