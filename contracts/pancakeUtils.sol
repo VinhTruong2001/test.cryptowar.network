@@ -1,11 +1,13 @@
 pragma solidity ^0.6.0;
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
+import "abdk-libraries-solidity/ABDKMath64x64.sol";
 import "./interfaces/IPancakeRouter02.sol";
 
 library PancakeUtil {
     using SafeMath for uint256;
     using SafeMath for uint64;
+    using ABDKMath64x64 for int128;
 
     function swapBNBForTokens(
         address _routerAddress,
@@ -28,7 +30,8 @@ library PancakeUtil {
             block.timestamp + 360
         );
     }
-     function swapBNBForTokensToBurn(
+
+    function swapBNBForTokensToBurn(
         address _routerAddress,
         address _token,
         uint256 _bnbAmount
@@ -114,7 +117,11 @@ library PancakeUtil {
         path[0] = usdAddress;
         path[1] = xBlade;
 
-        return pancakeRouter.getAmountsOut(uint256(usdAmount), path)[1];
+        return
+            pancakeRouter.getAmountsOut(
+                ABDKMath64x64.mulu(usdAmount, 10**18),
+                path
+            )[1]; // BUSD has decimals like Ethers
     }
 
     function getPath(address tokenA, address tokenB)
