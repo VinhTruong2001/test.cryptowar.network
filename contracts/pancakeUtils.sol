@@ -135,3 +135,33 @@ library PancakeUtil {
         return path;
     }
 }
+
+
+contract PancakeUtilTest {
+    using SafeMath for uint256;
+    using SafeMath for uint64;
+    using ABDKMath64x64 for int128;
+
+    function usdToxBlade(
+        address _routerAddress,
+        address usdAddress,
+        address xBlade,
+        int128 usdAmount
+    ) public view returns (uint256) {
+        IPancakeRouter02 pancakeRouter = IPancakeRouter02(_routerAddress);
+        // generate the pancake pair path of token -> weth
+        address[] memory path = new address[](2);
+        path[0] = usdAddress;
+        path[1] = xBlade;
+
+        return
+            pancakeRouter.getAmountsOut(
+                ABDKMath64x64.mulu(usdAmount, 10**18),
+                path
+            )[1]; // BUSD has decimals like Ethers
+    }
+
+    function muluuuu(int128 value) public pure returns (uint256) {
+        return ABDKMath64x64.mulu(value, 10**18);
+    }
+}
