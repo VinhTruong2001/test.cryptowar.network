@@ -44,11 +44,11 @@
       </li>
     </router-link>
 
-    <!-- <router-link :to="{ name: 'P2P' }" exact class="nav-link">
+    <router-link :to="{ name: 'P2P' }" exact class="nav-link">
       <li class="nav-item nav-top-links">
         <span class="gtag-link-others" tagname="pvp_screen">PvP</span>
       </li>
-    </router-link> -->
+    </router-link>
 
     <div exact class="nav-link">
       <li class="nav-item nav-top-links">
