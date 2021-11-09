@@ -285,8 +285,12 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-sm-4 col-md-4 col-lg-6 col-xl-12">
-                    <div class="card-boss__zoan card-boss__pk card" @click="openHeroPicker()">
+                  <div class="col-sm-4 col-md-4 col-lg-6 col-xl-12" >
+                    <div
+                      class="card-boss__zoan card-boss__pk card"
+                      @click="openHeroPicker()"
+                      v-if="!characterId"
+                    >
                       <div class="card-header">
                         <span
                           variant="primary"
@@ -298,6 +302,11 @@
                         src="@/assets/images/p2pimages/add-zoan.svg"
                         class="img-add-zoan card-img"
                       />
+                    </div>
+                    <div v-if="characterId" @click="openHeroPicker()" class="character-item">
+                      <div class="art">
+                        <CharacterArt :character="selectedCharacter" />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1404,10 +1413,7 @@
       size="large"
     >
       <template #modal-title> Select hero for career mode </template>
-      <character-list
-        :value="currentCharacterId"
-        @input="console.log"
-      />
+      <character-list :value="currentCharacterId" v-model="characterId" />
     </b-modal>
   </div>
 </template>
@@ -1416,33 +1422,34 @@ import { BModal } from "bootstrap-vue";
 import Vue from "vue";
 import { mapGetters, mapState } from "vuex";
 import CharacterList from "../components/smart/CharacterList.vue";
+import CharacterArt from "../components/CharacterArt.vue";
 // import "@/assets/scss/p2playout/p2pstyle.css";
 export default Vue.extend({
   components: {
     CharacterList,
+    CharacterArt,
+  },
+  data() {
+    return {
+      characterId: null,
+      selectedCharacter: null
+    };
+  },
+  watch: {
+    characterId(val) {
+      this.selectedCharacter = this.characters[val];
+      // @ts-ignore
+      // console.log(this.characters.find(c=> c.id === val));
+    },
   },
   methods: {
     openHeroPicker() {
-      (this.$refs['hero-career-mode-selector'] as BModal).show();
+      (this.$refs["hero-career-mode-selector"] as BModal).show();
     },
   },
   computed: {
-    ...mapState([
-      "characters",
-      "maxStamina",
-      "currentCharacterId",
-      "defaultAccount",
-      "skillBalance",
-    ]),
-    ...mapGetters([
-      "contracts",
-      "ownCharacters",
-      "ownWeapons",
-      "currentCharacter",
-      "currentCharacterStamina",
-      "getCharacterName",
-      "getExchangeUrl",
-    ]),
+    ...mapState(["characters", "currentCharacterId"]),
+    ...mapGetters(["currentCharacter", "getCharacterName"]),
 
     character(): any {
       if (!this.currentCharacter) {
@@ -1455,6 +1462,7 @@ export default Vue.extend({
       }
 
       const c = this.currentCharacter;
+
       return {
         id: c.id,
         name: this.getCharacterName(c.id),
