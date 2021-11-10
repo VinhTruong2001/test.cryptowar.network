@@ -3145,6 +3145,30 @@ export function createStore(web3: Web3) {
           });
 
         await Promise.all([dispatch('fetchCharacter', id)]);
+      },
+      async createCareerRoom({state},{ character, weapon, matchReward, totalDeposit} ) {
+        const { CareerMode, xBladeToken, Characters, Weapons } = state.contracts();
+
+        if(!state.defaultAccount || !CareerMode?.options.address){
+          return;
+        }
+        const allowance = await xBladeToken.methods.allowance(state.defaultAccount, CareerMode?.options.address).call(defaultCallOptions(state));
+        if(toBN(allowance).isEqualTo(toBN('0'))){
+          await xBladeToken.methods.approve(CareerMode?.options.address, Web3.utils.toWei('100000000')).send({
+            from: state.defaultAccount
+          });
+        }
+
+        await Characters?.methods.approve(CareerMode?.options.address, character).send({
+          from: state.defaultAccount
+        });
+        await Weapons?.methods.approve(CareerMode?.options.address, weapon).send({
+          from: state.defaultAccount
+        });
+        await CareerMode?.methods.createRoom(character, weapon, Web3.utils.toWei(`${matchReward}`),  Web3.utils.toWei(`${totalDeposit}`)).send({
+          from: state.defaultAccount,
+          gas: '500000'
+        });
       }
     }
   });

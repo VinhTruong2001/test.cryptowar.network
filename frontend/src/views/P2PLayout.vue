@@ -285,7 +285,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-sm-4 col-md-4 col-lg-6 col-xl-12" >
+                  <div class="col-sm-4 col-md-4 col-lg-6 col-xl-12">
                     <div
                       class="card-boss__zoan card-boss__pk card"
                       @click="openHeroPicker()"
@@ -295,7 +295,7 @@
                         <span
                           variant="primary"
                           class="badge badge-secondary badge-pill"
-                          >#pick a ZOAN to Challenge</span
+                          >#pick a Hero to Challenge</span
                         >
                       </div>
                       <img
@@ -303,11 +303,53 @@
                         class="img-add-zoan card-img"
                       />
                     </div>
-                    <div v-if="characterId" @click="openHeroPicker()" class="character-item">
+                    <div
+                      v-if="characterId"
+                      @click="openHeroPicker()"
+                      class="character-item"
+                    >
                       <div class="art">
                         <CharacterArt :character="selectedCharacter" />
                       </div>
                     </div>
+
+                    <div
+                      class="card-boss__zoan card-boss__pk card"
+                      @click="openWeaponPicker()"
+                      v-if="!selectedWeapon"
+                    >
+                      <div class="card-header">
+                        <span
+                          variant="primary"
+                          class="badge badge-secondary badge-pill"
+                          >#pick a Weapon to Challenge</span
+                        >
+                      </div>
+                      <img
+                        src="@/assets/images/p2pimages/add-zoan.svg"
+                        class="img-add-zoan card-img"
+                      />
+                    </div>
+                    <div class="weapon">
+                      <div
+                        class="weapon-icon-wrapper"
+                        v-if="selectedWeapon"
+                        @click="openWeaponPicker()"
+                      >
+                        <weapon-icon
+                          :weapon="selectedWeapon"
+                          class="weapon-icon"
+                        />
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      class="search-suggest__btn ml-1 btn btn-buy btn-sm"
+                      @click="handleCreateRoom()"
+                    >
+                      Create Room
+                    </button>
                   </div>
                 </div>
               </div>
@@ -1415,41 +1457,73 @@
       <template #modal-title> Select hero for career mode </template>
       <character-list :value="currentCharacterId" v-model="characterId" />
     </b-modal>
+
+    <b-modal
+      class="centered-modal"
+      ref="weapon-career-mode-selector"
+      @ok="openWeaponPicker"
+      size="large"
+    >
+      <template #modal-title> Select weapon for career mode </template>
+      <!-- <nft-list v-model="selectedWeapon"/> -->
+      <weapon-grid v-model="weaponId" />
+    </b-modal>
   </div>
 </template>
 <script lang="ts">
 import { BModal } from "bootstrap-vue";
 import Vue from "vue";
-import { mapGetters, mapState } from "vuex";
+import { mapGetters, mapState, mapActions } from "vuex";
 import CharacterList from "../components/smart/CharacterList.vue";
 import CharacterArt from "../components/CharacterArt.vue";
+// import NftList from '@/components/smart/NftList.vue';
+import WeaponGrid from "@/components/smart/WeaponGrid.vue";
+// import WeaponIcon from "../components/WeaponIcon.vue";
 // import "@/assets/scss/p2playout/p2pstyle.css";
 export default Vue.extend({
   components: {
     CharacterList,
     CharacterArt,
+    // NftList,
+    WeaponGrid,
+    // WeaponIcon
   },
   data() {
     return {
       characterId: null,
-      selectedCharacter: null
+      weaponId: null,
+      selectedCharacter: null,
+      selectedWeapon: null,
     };
   },
   watch: {
     characterId(val) {
       this.selectedCharacter = this.characters[val];
-      // @ts-ignore
-      // console.log(this.characters.find(c=> c.id === val));
+    },
+    weaponId(val) {
+      this.selectedWeapon = this.ownWeapons.find((w: any) => w.id === val);
     },
   },
   methods: {
+    ...mapActions(["createCareerRoom"]),
     openHeroPicker() {
       (this.$refs["hero-career-mode-selector"] as BModal).show();
     },
+    openWeaponPicker() {
+      (this.$refs["weapon-career-mode-selector"] as BModal).show();
+    },
+    handleCreateRoom(){
+      this.createCareerRoom({
+        character: this.characterId,
+        weapon: this.weaponId,
+        matchReward:1000,
+        totalDeposit: 10000
+      });
+    }
   },
   computed: {
     ...mapState(["characters", "currentCharacterId"]),
-    ...mapGetters(["currentCharacter", "getCharacterName"]),
+    ...mapGetters(["currentCharacter", "getCharacterName", "ownWeapons"]),
 
     character(): any {
       if (!this.currentCharacter) {
