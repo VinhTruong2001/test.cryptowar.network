@@ -1,4 +1,5 @@
 pragma solidity ^0.6.0;
+pragma experimental ABIEncoderV2;
 
 import "@openzeppelin/contracts-upgradeable/proxy/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
@@ -450,5 +451,18 @@ contract CareerMode is
 
     function getStartTime(uint256 id) public view returns (uint256) {
         return roomTimerStart[id];
+    }
+
+    function getRooms(uint256 cursor) public view returns (Room[] memory) {
+        uint256 length = 20;
+        if (length > totalRooms() - cursor) {
+            length = totalRooms() - cursor;
+        }
+
+        Room[] memory values = new Room[](length);
+        for (uint256 i = 0; i < length; i++) {
+            values[i] = careerModeRooms[i + cursor];
+        }
+        return values;
     }
 }

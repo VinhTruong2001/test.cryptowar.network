@@ -50,7 +50,14 @@ export interface IRaidState {
 
   isOwnedCharacterRaidingById: Record<number, boolean>; // ?
 }
-
+export interface CareerModeRoom {
+  characterId: string
+  claimed: boolean
+  matchReward: string
+  owner: string
+  totalDeposit: string
+  weaponId: string
+}
 export interface IState {
   contracts: () => Contracts;
   eventSubscriptions: () => IWeb3EventSubscription[];
@@ -112,4 +119,5 @@ export interface IState {
   commonBoxPrice: string;
   rareBoxPrice: string;
   secondsPerStamina: number;
+  careerModeRooms: CareerModeRoom[];
 }

@@ -15,6 +15,7 @@ import {
   shieldFromContract
 } from './contract-models';
 import {
+  CareerModeRoom,
   Contract,
   Contracts,
   isStakeType,
@@ -175,7 +176,8 @@ export function createStore(web3: Web3) {
       waxBridgeTimeUntilLimitExpires: 0,
       commonBoxPrice: web3.utils.toWei('0', 'ether'),
       rareBoxPrice: web3.utils.toWei('0', 'ether'),
-      secondsPerStamina: 1
+      secondsPerStamina: 1,
+      careerModeRooms: [],
     },
 
     getters: {
@@ -779,6 +781,11 @@ export function createStore(web3: Web3) {
 
       updateSecondsPerStamina(state: IState, payload: {secondsPerStamina: number}){
         state.secondsPerStamina = payload.secondsPerStamina;
+      },
+
+      updateCareerRoom(state: IState, payload: { rooms: CareerModeRoom[] }){
+        console.log(payload.rooms);
+        state.careerModeRooms = payload.rooms;
       }
     },
 
@@ -3167,8 +3174,21 @@ export function createStore(web3: Web3) {
         });
         await CareerMode?.methods.createRoom(character, weapon, Web3.utils.toWei(`${matchReward}`),  Web3.utils.toWei(`${totalDeposit}`)).send({
           from: state.defaultAccount,
-          gas: '500000'
+          gas: '800000'
         });
+      },
+      async getCareerRooms({ state, commit }){
+        const { CareerMode } = state.contracts();
+        // @ts-ignore
+        const result: any[] = await CareerMode?.methods.getRooms(0).call(defaultCallOptions(state));
+        commit('updateCareerRoom', { rooms: result.map(r=> ({
+          characterId: r[4],
+          claimed: r[5],
+          matchReward: r[1],
+          owner: r[0],
+          totalDeposit: r[2],
+          weaponId: r[3]
+        }))});
       }
     }
   });
