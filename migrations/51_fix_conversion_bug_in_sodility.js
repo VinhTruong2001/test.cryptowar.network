@@ -1,7 +1,7 @@
 const { upgradeProxy } = require("@openzeppelin/truffle-upgrades");
 
 const CryptoWars = artifacts.require("CryptoWars");
-let PancakeUtil = artifacts.require("PancakeUtilTest");
+let PancakeUtil = artifacts.require("PancakeUtil");
 
 
 module.exports = async function (deployer, network, accounts) {
