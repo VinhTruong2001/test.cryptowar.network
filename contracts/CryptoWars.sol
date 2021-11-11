@@ -475,7 +475,8 @@ contract CryptoWars is
                         ABDKMath64x64.divu(monsterPower, 1000)
                     )
                 )
-                .mul(ABDKMath64x64.fromUInt(fightMultiplier));
+                .mul(cwController.rewardMultiplier(fightMultiplier))
+                .divi(ABDKMath64x64.fromUInt(10));
     }
 
     function getXpGainForFight(uint24 playerPower, uint24 monsterPower)
