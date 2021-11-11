@@ -113,9 +113,10 @@ library PancakeUtil {
     ) public view returns (uint256) {
         IPancakeRouter02 pancakeRouter = IPancakeRouter02(_routerAddress);
         // generate the pancake pair path of token -> weth
-        address[] memory path = new address[](2);
+        address[] memory path = new address[](3);
         path[0] = usdAddress;
-        path[1] = xBlade;
+        path[1] = pancakeRouter.WETH();
+        path[2] = xBlade;
 
         return
             pancakeRouter.getAmountsOut(
