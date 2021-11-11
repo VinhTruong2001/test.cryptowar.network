@@ -1088,6 +1088,10 @@ contract CryptoWars is
         return tokenRewards[msg.sender];
     }
 
+    function getMintPrice() public view returns (uint256) {
+        return cwController.getMintPriceByToken();
+    }
+
     function getXpRewards(uint256 char) public view returns (uint256) {
         return xpRewards[char];
     }

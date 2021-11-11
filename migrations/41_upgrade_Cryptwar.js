@@ -23,8 +23,8 @@ module.exports = async function (deployer, network, accounts) {
   });
 
   // const cwControllerAddress = "0xAadfa537ecA54d3d7655C4117bBFB83B9bF6035a"; // controller address
-  const game = await CryptoWars.at('0x8BA9f0841cFA75d7e2c7a316b048b04c98C95cA4');
-  await game.setFightRewardBaselineValue(200);
+  // const game = await CryptoWars.at('0x8BA9f0841cFA75d7e2c7a316b048b04c98C95cA4');
+  // await game.setFightRewardBaselineValue(200);
 
 
 };

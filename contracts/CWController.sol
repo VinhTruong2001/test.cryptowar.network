@@ -194,7 +194,7 @@ contract CWController is Initializable, OwnableUpgradeable {
         path[1] = pancakeRouter.WETH();
         path[2] = xBladeAddress;
 
-        return pancakeRouter.getAmountsOut(usdAmount, path)[1]; // BUSD has decimals like Ethers
+        return pancakeRouter.getAmountsOut(usdAmount, path)[2]; // BUSD has decimals like Ethers
     }
 
     function getMintPriceByToken() public view returns (uint256) {

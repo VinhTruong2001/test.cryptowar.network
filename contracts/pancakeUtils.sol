@@ -122,7 +122,7 @@ library PancakeUtil {
             pancakeRouter.getAmountsOut(
                 ABDKMath64x64.mulu(usdAmount, 10**18),
                 path
-            )[1]; // BUSD has decimals like Ethers
+            )[2]; // BUSD has decimals like Ethers
     }
 
     function getPath(address tokenA, address tokenB)
