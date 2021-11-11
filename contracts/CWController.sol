@@ -200,4 +200,13 @@ contract CWController is Initializable, OwnableUpgradeable {
     function getMintPriceByToken() public view returns (uint256) {
         return usdToxBlade(mintPrice);
     }
+
+    function rewardMultiplier(uint8 fightMultiplier) public pure returns (int128) {
+        if (fightMultiplier == 0 || fightMultiplier > 5){
+            return ABDKMath64x64.fromUInt(0);
+        }
+        uint8[5] memory multTable  = [10, 15, 20, 25, 30];
+
+        return ABDKMath64x64.fromUInt(multTable[fightMultiplier-1]);
+    }
 }
