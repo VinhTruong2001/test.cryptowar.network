@@ -21,6 +21,7 @@ contract CWController is Initializable, OwnableUpgradeable {
     address public BUSDAddress;
 
     uint256 public mintPrice;
+    uint256 public powerWeight;
 
     function initialize() public initializer {
         OwnableUpgradeable.__Ownable_init();
@@ -63,6 +64,10 @@ contract CWController is Initializable, OwnableUpgradeable {
 
     function setMintPrice(uint256 _price) public onlyOwner {
         mintPrice = _price;
+    }
+
+    function setPowerWeight(uint256 _weight) public onlyOwner {
+        powerWeight = _weight;
     }
 
     function randomSeededMinMax(
@@ -201,12 +206,26 @@ contract CWController is Initializable, OwnableUpgradeable {
         return usdToxBlade(mintPrice);
     }
 
-    function rewardMultiplier(uint8 fightMultiplier) public pure returns (int128) {
-        if (fightMultiplier == 0 || fightMultiplier > 5){
+    function rewardMultiplier(uint8 fightMultiplier)
+        public
+        pure
+        returns (int128)
+    {
+        if (fightMultiplier == 0 || fightMultiplier > 5) {
             return ABDKMath64x64.fromUInt(0);
         }
-        uint8[5] memory multTable  = [10, 15, 20, 25, 30];
+        uint8[5] memory multTable = [10, 15, 20, 25, 30];
 
-        return ABDKMath64x64.fromUInt(multTable[fightMultiplier-1]);
+        return ABDKMath64x64.fromUInt(multTable[fightMultiplier - 1]);
+    }
+
+    function rewardRate(uint24 monsterPower) public view returns (int128) {
+        return
+            ABDKMath64x64.sqrt(
+                ABDKMath64x64.sqrt(
+                    // Performance optimization: 1000 = getPowerAtLevel(0)
+                    ABDKMath64x64.divu(monsterPower, powerWeight)
+                )
+            );
     }
 }

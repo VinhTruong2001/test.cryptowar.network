@@ -469,12 +469,7 @@ contract CryptoWars is
     {
         return
             fightRewardBaseline
-                .mul(
-                    ABDKMath64x64.sqrt(
-                        // Performance optimization: 1000 = getPowerAtLevel(0)
-                        ABDKMath64x64.divu(monsterPower, 1000)
-                    )
-                )
+                .mul(cwController.rewardRate(monsterPower))
                 .mul(cwController.rewardMultiplier(fightMultiplier))
                 .divi(ABDKMath64x64.fromUInt(10));
     }
