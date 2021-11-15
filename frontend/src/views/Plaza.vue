@@ -6,8 +6,7 @@
     <div v-if="ownCharacters.length === 0" class="blank-slate">
       <div class="current-promotion promotion-hero-left" v-if="heroAmount > 0">
         <strong class="upper-text"
-          >Only
-          <strong class="upper-text promotion-number">{{ heroAmount }}</strong>
+          ><strong class="upper-text promotion-number">{{ heroAmount }}</strong>
           heroes left!</strong
         >
       </div>
@@ -20,7 +19,8 @@
         >
       </div>
       <div class="current-promotion">
-        <strong class="upper-text">Start earning today!</strong>
+        <strong class="upper-text">Mint Hero NFT to Play and Earn for {{recruitCost}} xBlade
+        </strong>
       </div>
       <big-button
         v-if="heroAmount === 0"
@@ -32,7 +32,7 @@
       <big-button
         v-if="heroAmount > 0"
         class="button"
-        :mainText="`Recruit character for ${recruitCost} xBlade`"
+        :mainText="`Mint Hero`"
         :disabled="!canRecruit() || heroAmount < 1"
         @click="onMintCharacter"
         tagname="recruit_character"
@@ -458,7 +458,7 @@ export default Vue.extend({
 @media all and (max-width: 767.98px) {
   .current-promotion {
     width: 100vw;
-    margin-top: 90px;
+    /* margin-top: 90px; */
     padding-left: 15px;
   }
 
@@ -483,8 +483,8 @@ export default Vue.extend({
 }
 
 .promotion-hero-left {
-  font-size: 5rem;
-  width: 60%;
+  /* font-size: 5rem; */
+  /* width: 60%; */
 }
 
 .promotion-number {
