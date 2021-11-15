@@ -1,5 +1,8 @@
 <template>
+
   <div class="main-nav-div">
+    <div v-if="referralAddress" style="color:#7F327C; text-align:center; background: white">
+      Congratulations! You get 7% discount to when mint new heroes, only valid in 24 hours.  </div>
     <b-navbar class="main-nav" toggleable="sm">
       <b-navbar-brand href="#" class="nav-logo">
         <img
@@ -73,7 +76,15 @@ export default Vue.extend({
   },
 
   computed: {
-    ...mapGetters(["getIsCharacterViewExpanded", "ownCharacters"]),
+    ...mapGetters(["getIsCharacterViewExpanded", "ownCharacters","defaultAccount"]),
+    referralAddress(): string {
+      // @ts-ignore
+      const referralAddress = this.$route.query.r;
+      if (referralAddress && referralAddress !== this.defaultAccount) {
+        return referralAddress;
+      }
+      return '';
+    },
   },
 
   methods: {

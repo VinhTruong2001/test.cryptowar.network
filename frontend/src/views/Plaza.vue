@@ -1,8 +1,8 @@
 <template>
   <div class="body main-font">
-    <div v-if="referralAddress">
+    <!-- <div v-if="referralAddress">
       Mint hero discount 7% with referral address {{ referralAddress }}
-    </div>
+    </div> -->
     <div v-if="ownCharacters.length === 0" class="blank-slate">
       <div class="current-promotion promotion-hero-left" v-if="heroAmount > 0">
         <strong class="upper-text"

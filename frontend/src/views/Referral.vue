@@ -37,6 +37,7 @@ export default {
       navigator.clipboard.writeText(
         `https://play.cryptowar.network/#/?r=${defaultAccount}`
       );
+      alert("Referral link copied to clipboard");
     },
   },
 };

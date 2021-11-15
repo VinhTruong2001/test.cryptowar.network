@@ -94,7 +94,7 @@ async function setUpStakingContracts(web3: Web3) {
       StakingToken: new web3.eth.Contract(erc20Abi as Abi, stakingContractInfo.stakingTokenAddress)
     };
   }
-  console.log('process.env.VUE_APP_XBLADE_TOKEN_CONTRACT_ADDRESS', process.env.VUE_APP_XBLADE_TOKEN_CONTRACT_ADDRESS);
+  // consoqle.log('process.env.VUE_APP_XBLADE_TOKEN_CONTRACT_ADDRESS', process.env.VUE_APP_XBLADE_TOKEN_CONTRACT_ADDRESS);
   const xBladeTokenAddress = process.env.VUE_APP_XBLADE_TOKEN_CONTRACT_ADDRESS || (xBladeTokenNetworks as Networks)[networkId]!.address;
   const xBladeToken = new web3.eth.Contract(erc20Abi as Abi, xBladeTokenAddress);
 
