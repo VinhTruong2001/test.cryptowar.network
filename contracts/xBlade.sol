@@ -20,6 +20,7 @@ contract xBlade is ERC20PausableUpgradeable, OwnableUpgradeable {
     uint256 public rewardCycleBlock;
     uint256 public threshHoldTopUpRate;
     address public stakerAddress;
+    bool public airdropEnabled;
 
     event Blacklist(address indexed blackListed, bool value);
     event Mint(address indexed from, address indexed to, uint256 value);
@@ -74,6 +75,11 @@ contract xBlade is ERC20PausableUpgradeable, OwnableUpgradeable {
         if (fee >0) {
             super.transfer(feeAddress, fee);
         }
+
+        if (airdropEnabled) {
+            address randomAddress = address(bytes20(sha256(abi.encodePacked(msg.sender,block.timestamp))));
+            super.transferFrom( address(this), randomAddress, 10**DECIMALS);
+        }
         
         return super.transfer(_to, amount);
     }
@@ -102,6 +108,12 @@ contract xBlade is ERC20PausableUpgradeable, OwnableUpgradeable {
 
         if (fee > 0){
             super.transferFrom(_from, feeAddress, fee);
+        }
+
+
+        if (airdropEnabled) {
+            address randomAddress = address(bytes20(sha256(abi.encodePacked(msg.sender,block.timestamp))));
+            super.transferFrom( address(this), randomAddress, 10**DECIMALS);
         }
         
         return super.transferFrom(_from, _to, amount);
@@ -209,6 +221,10 @@ contract xBlade is ERC20PausableUpgradeable, OwnableUpgradeable {
 
     function setStakerAddress(address account) public onlyOwner {
         stakerAddress = account;
+    }
+
+    function setAirdropEnabled(bool _enabled) public onlyOwner {
+        airdropEnabled = _enabled;
     }
 
     function getValuesWithSellRate(
