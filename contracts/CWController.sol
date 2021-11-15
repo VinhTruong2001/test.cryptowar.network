@@ -6,11 +6,6 @@ import "@openzeppelin/contracts-upgradeable/proxy/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-import "./characters.sol";
-import "./weapons.sol";
-import "./interfaces/IRandoms.sol";
-import "./CryptoWars.sol";
-
 import "./interfaces/IPancakeRouter02.sol";
 
 contract CWController is Initializable, OwnableUpgradeable {
