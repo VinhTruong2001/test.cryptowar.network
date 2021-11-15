@@ -21,7 +21,7 @@
       <div class="current-promotion">
         <strong class="upper-text">Mint Hero NFT
           <span class="price" v-if="referralAddress == '0x0000000000000000000000000000000000000000'">{{recruitCost}}</span>
-          <span class="price"  v-if="referralAddress != '0x0000000000000000000000000000000000000000'"> {{ referralAddress}}ddd
+          <span class="price"  v-if="referralAddress != '0x0000000000000000000000000000000000000000'">
             <span style=" text-decoration: line-through;">{{recruitCost}}</span>
                   {{ (recruitCost * 0.93).toFixed(2) }}</span>
             xBlade
