@@ -20,8 +20,8 @@
       </div>
       <div class="current-promotion">
         <strong class="upper-text">Mint Hero NFT
-          <span class="price" v-if="referralAddress">{{recruitCost}}</span>
-          <span class="price"  v-if="!referralAddress">
+          <span class="price" v-if="referralAddress == '0x0000000000000000000000000000000000000000'">{{recruitCost}}</span>
+          <span class="price"  v-if="referralAddress != '0x0000000000000000000000000000000000000000'"> {{ referralAddress}}ddd
             <span style=" text-decoration: line-through;">{{recruitCost}}</span>
                   {{ (recruitCost * 0.93).toFixed(2) }}</span>
             xBlade
@@ -83,10 +83,10 @@
                 tagname="recruit_character"
               >
                 Recruit (<span
-                  :class="`${referralAddress ? 'old-price' : ''}`"
+                  :class="`${referralAddress == '0x0000000000000000000000000000000000000000' ? 'old-price' : ''}`"
                   >{{ recruitCost }}</span
                 >
-                <span v-if="referralAddress">
+                <span v-if="referralAddress != '0x0000000000000000000000000000000000000000'">
                   {{ (recruitCost * 0.93).toFixed(2) }}</span
                 >
                 xBlade)&nbsp;
@@ -255,7 +255,7 @@ export default Vue.extend({
       if (referralAddress && referralAddress !== this.defaultAccount) {
         return referralAddress;
       }
-      return '';
+      return '0x0000000000000000000000000000000000000000';
     },
   },
 
