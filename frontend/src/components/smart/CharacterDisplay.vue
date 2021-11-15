@@ -63,7 +63,7 @@
       </div>
     </transition>
 
-    <div class="character-full-list" :class="[getIsCharacterViewExpanded? '': 'move-center']" v-if="!isMobile()">
+    <div class="character-full-list" :class="[getIsCharacterViewExpanded? '': 'hidden']" v-if="!isMobile()">
       <ul
         class="character-list"
         v-bind:class="[
@@ -406,5 +406,8 @@ li.character-highlight {
   transform: translateY(-30px);
   overflow: hidden;
   opacity: 0;
+}
+.hidden {
+  display: none;
 }
 </style>

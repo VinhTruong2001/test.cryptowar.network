@@ -204,7 +204,7 @@ export default {
         page_title: to.name,
         page_location: to.fullPath,
         page_path: to.path,
-        send_to: "G-C5RLX74PEW",
+        // send_to: "G-C5RLX74PEW",
       });
     },
   },

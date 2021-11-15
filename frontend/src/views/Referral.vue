@@ -1,11 +1,18 @@
 <template>
   <div class="body main-font">
     <h1>Referral</h1>
+    <p>🤝 Invite your friends to play Cryptowar when your friend mint new Heroes, both of you will share a reward as following:
+
+      <ul style="text-align:left">
+        <li>You get 10% bonus</li>
+        <li>Your friend get 7% discount</li>
+      </ul>
+    </p>
     <b-input-group prepend="Your referral link:" class="mt-3">
       <b-form-input
         class="referral-input"
         disabled
-        :value="`https://play.crytowar.network/#/?r=${defaultAccount}`"
+        :value="`https://play.cryptowar.network/#/?r=${defaultAccount}`"
       ></b-form-input>
       <b-input-group-append>
         <b-button  @click="copyReferralLink(defaultAccount)"
@@ -28,7 +35,7 @@ export default {
   methods: {
     copyReferralLink: (defaultAccount: string) => {
       navigator.clipboard.writeText(
-        `https://play.crytowar.network/#/?r=${defaultAccount}`
+        `https://play.cryptowar.network/#/?r=${defaultAccount}`
       );
     },
   },
