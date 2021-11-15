@@ -2,7 +2,7 @@
 
   <div class="main-nav-div">
     <div v-if="referralAddress" style="color:#7F327C; text-align:center; background: white; padding:10px">
-     ✨ Congratulations! You get 7% discount when mint new heroes ⚔️, only valid in 24 hours ⏰  </div>
+     ✨ Congratulations! You get 7% discount when mint new heroes ⚔️ only valid in 24 hours ⏰  </div>
     <b-navbar class="main-nav" toggleable="sm">
       <b-navbar-brand href="#" class="nav-logo">
         <img
