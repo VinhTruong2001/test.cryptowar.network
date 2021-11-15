@@ -12,6 +12,8 @@ module.exports = async function (deployer, network, accounts) {
     const controller = await CWController.at(cwProxyAddress);
     await controller.setDiscountRate(7);
     await controller.setBonusRate(10);
+    await controller.setToken("0x27a339d9b59b21390d7209b78a839868e319301b");
+
     const gameProxyAddress = "0x8BA9f0841cFA75d7e2c7a316b048b04c98C95cA4"; //mainnet
     await upgradeProxy(gameProxyAddress, CryptoWars, {
       deployer,
