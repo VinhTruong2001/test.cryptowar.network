@@ -41,6 +41,7 @@
         <br />
         You can buy more xBlade from
         <a v-bind:href="`${getExchangeUrl}`" target="_blank">here</a>.
+         Join <a href="https://t.me/elasticbitcoinxbt" target="_blank" >Telegram community</a> to get support!
       </div>
     </div>
     <div class="row mt-3" v-if="ownCharacters.length > 0">
@@ -483,7 +484,7 @@ export default Vue.extend({
 }
 
 .promotion-hero-left {
-  /* font-size: 5rem; */
+  font-size: 2rem;
   /* width: 60%; */
 }
 
