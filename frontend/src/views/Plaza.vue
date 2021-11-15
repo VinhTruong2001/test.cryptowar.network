@@ -19,7 +19,12 @@
         >
       </div>
       <div class="current-promotion">
-        <strong class="upper-text">Mint Hero NFT to Play and Earn for {{recruitCost}} xBlade
+        <strong class="upper-text">Mint Hero NFT
+          <span class="price" v-if="referralAddress">{{recruitCost}}</span>
+          <span class="price"  v-if="!referralAddress">
+            <span style=" text-decoration: line-through;">{{recruitCost}}</span>
+                  {{ (recruitCost * 0.93).toFixed(2) }}</span>
+            xBlade
         </strong>
       </div>
       <big-button
@@ -306,8 +311,9 @@ export default Vue.extend({
     ]),
 
     async onMintCharacter() {
+      // await this.mintCharacter(this.referralAddress ? this.referralAddress : '0x0000000000000000000000000000000000000000');
       try {
-        await this.mintCharacter(this.referralAddress ? this.referralAddress : '0');
+        await this.mintCharacter(this.referralAddress ? this.referralAddress : '0x0000000000000000000000000000000000000000');
       } catch (e) {
         (this as any).$dialog.notify.error(
           "Could not mint character: insufficient funds or transaction denied."
@@ -499,5 +505,9 @@ export default Vue.extend({
 .old-price {
   text-decoration: line-through;
   font-size: 14px;
+}
+.price{
+  color:#f58b5b;
+  text-shadow: 1px 2px 3px #666;
 }
 </style>
