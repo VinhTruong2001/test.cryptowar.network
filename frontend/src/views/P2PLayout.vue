@@ -400,92 +400,15 @@
                 </div>
                 <div
                   v-for="room in this.careerModeRooms"
-                  :key="room"
+                  :key="room.characterId"
                   class="justify-content-center row"
                 >
-                <character-room :id="room.characterId"/>
-                  <!-- <div
-                    class="
-                      text-center
-                      mb-4
-                      col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4
-                    "
-                  >
-                    <div class="card card-zoan market">
-                      <div class="zoan-id">
-                        <span class="badge badge-primary badge-pill">#328</span>
-                      </div>
-                      <div class="card-zoan__img" id="Stonic">
-                        <img
-                          alt="tribe"
-                          src="@/assets/images/p2pimages/Golem_1.gif"
-                        />
-                      </div>
-                      <div class="card-header">Golem</div>
-                      <div class="card-body">
-                        <table class="zoan-statis">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <div class="zoan-statis__title">
-                                  Rare: &nbsp;<span class="zoan-statis__value"
-                                    >4</span
-                                  >
-                                </div>
-                              </td>
-                              <td>
-                                <div class="zoan-statis__title">
-                                  Level: &nbsp;<span class="zoan-statis__value"
-                                    >1/<span class="small">73.26exp</span></span
-                                  >
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <div class="zoan-statis__title">
-                                Tribe: &nbsp;<span class="zoan-statis__value"
-                                  >Stonic</span
-                                >
-                              </div>
-                              <td>
-                                <div class="zoan-statis__title">
-                                  Class: &nbsp;<span class="zoan-statis__value"
-                                    >Golem</span
-                                  >
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <div class="zoan-statis__title">
-                                  Attack: &nbsp;<span class="zoan-statis__value"
-                                    >35</span
-                                  >
-                                </div>
-                              </td>
-                              <td>
-                                <div class="zoan-statis__title">
-                                  Defense: &nbsp;<span
-                                    class="zoan-statis__value"
-                                    >70</span
-                                  >
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                        <div class="line-info">Ranking: <span>0</span></div>
-                        <div class="line-info">
-                          Owner: <span>0x4933...44644</span>
-                        </div>
-                      </div>
-                      <div class="card-footer">
-                        <button type="button" class="btn btn-danger btn-block">
-                          Connect
-                        </button>
-                      </div>
-                    </div>
-                  </div> -->
+                  <character-room
+                    :characterId="room.characterId"
+                    :room="room"
+                    :selectedCharacterId="this.characterId"
+                    :selectedWeaponId="this.weaponId"
+                  />
                 </div>
 
                 <div class="justify-content-center row">
@@ -538,19 +461,16 @@ import Vue from "vue";
 import { mapGetters, mapState, mapActions } from "vuex";
 import CharacterList from "../components/smart/CharacterList.vue";
 import CharacterArt from "../components/CharacterArt.vue";
-// import NftList from '@/components/smart/NftList.vue';
 import WeaponGrid from "@/components/smart/WeaponGrid.vue";
 import CharacterRoom from "@/components/CharacterRoom.vue";
-// import WeaponIcon from "../components/WeaponIcon.vue";
+
 // import "@/assets/scss/p2playout/p2pstyle.css";
 export default Vue.extend({
   components: {
     CharacterList,
     CharacterArt,
-    // NftList,
     WeaponGrid,
-    CharacterRoom,
-    // WeaponIcon
+    CharacterRoom
   },
   data() {
     return {

@@ -3189,6 +3189,16 @@ export function createStore(web3: Web3) {
           totalDeposit: r[2],
           weaponId: r[3]
         }))});
+      },
+      // @ts-ignore
+      async requestFight({ state }, { roomId, weaponId, characterId}){
+        const { CareerMode } = state.contracts();
+        const result = await CareerMode?.methods.requestFight(roomId, weaponId, characterId).send({
+          from: state.defaultAccount,
+          gas: '800000'
+        });
+        console.log(result);
+        console.log('Request fight');
       }
     }
   });
