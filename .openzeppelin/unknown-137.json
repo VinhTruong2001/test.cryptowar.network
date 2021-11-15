@@ -9,6 +9,11 @@
       "address": "0x27a339d9B59b21390d7209b78a839868E319301B",
       "txHash": "0x1032ac026653aefcad13d1baa94c6aa6199f3e1ee512812b9ab094a92e53e8ce",
       "kind": "transparent"
+    },
+    {
+      "address": "0x58CB98A966F62aA6F2190eB3AA03132A0c3de3D5",
+      "txHash": "0x975b1af9f0c8b58f6f97cff8eff43e206ef342d946063f74ea298cbbeb349861",
+      "kind": "transparent"
     }
   ],
   "impls": {
@@ -201,6 +206,91 @@
           },
           "t_array(t_uint256)44_storage": {
             "label": "uint256[44]"
+          }
+        }
+      }
+    },
+    "989150de95beb2511ae0057e6e44a9357a64eb8d0779a5857a8245cfb3da1944": {
+      "address": "0x9607B7825967B03e8c2E2867B39825416cB2c80f",
+      "txHash": "0x006648a7ae9e699c2e4216c75ed85263fc864aeb34e7fba9b60166ce2088b3f7",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/Initializable.sol:25"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/Initializable.sol:30"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:31"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "_owner",
+            "type": "t_address",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:20"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:74"
+          },
+          {
+            "contract": "CWController",
+            "label": "game",
+            "type": "t_address",
+            "src": "../project:/contracts/CWController.sol:10"
+          },
+          {
+            "contract": "CWController",
+            "label": "reducePerMilestone",
+            "type": "t_uint256",
+            "src": "../project:/contracts/CWController.sol:11"
+          },
+          {
+            "contract": "CWController",
+            "label": "maxReduce",
+            "type": "t_uint256",
+            "src": "../project:/contracts/CWController.sol:12"
+          },
+          {
+            "contract": "CWController",
+            "label": "range",
+            "type": "t_uint256",
+            "src": "../project:/contracts/CWController.sol:13"
+          },
+          {
+            "contract": "CWController",
+            "label": "maxFactor",
+            "type": "t_uint256",
+            "src": "../project:/contracts/CWController.sol:15"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_bool": {
+            "label": "bool"
           }
         }
       }

@@ -318,7 +318,7 @@ contract CryptoWars is
         uint64 staminaTimestamp,
         uint256 hour,
         uint32 target
-    ) public pure {
+    ) public view {
         uint32[4] memory targets = getTargetsInternal(
             getPlayerPower(playerBasePower, wepMultiplier, wepBonusPower),
             staminaTimestamp,
@@ -428,7 +428,11 @@ contract CryptoWars is
 
 
         if (playerRoll < monsterRoll) {
-            tokens = 0;
+            tokens = uint256(PancakeUtil.getAmountTokenFromBNB(
+                            address(pancakeRouter),
+                            address(xBlade),
+                            1525645000000000) //gas
+                    ).mul(supportFeeRate).div(100);
             xp = 0;
         }
 
@@ -463,25 +467,11 @@ contract CryptoWars is
         view
         returns (int128)
     {
-        int128 supportFeeToken = int128(
-            PancakeUtil.getAmountTokenFromBNB(
-                address(pancakeRouter),
-                address(xBlade),
-                minimumFightTax
-            )
-        ).mul(supportFeeRate).div(100);
-
         return
-            supportFeeToken.add(
-                fightRewardBaseline
-                    .mul(
-                        ABDKMath64x64.sqrt(
-                            // Performance optimization: 1000 = getPowerAtLevel(0)
-                            ABDKMath64x64.divu(monsterPower, 1000)
-                        )
-                    )
-                    .mul(ABDKMath64x64.fromUInt(fightMultiplier))
-            );
+            fightRewardBaseline
+                .mul(cwController.rewardRate(monsterPower))
+                .mul(cwController.rewardMultiplier(fightMultiplier))
+                .divi(ABDKMath64x64.fromUInt(10));
     }
 
     function getXpGainForFight(uint24 playerPower, uint24 monsterPower)
@@ -511,11 +501,11 @@ contract CryptoWars is
 
     function getMonsterPowerRoll(uint24 monsterPower, uint256 seed)
         internal
-        pure
+        view
         returns (uint24)
     {
         // roll for fights
-        return uint24(RandomUtil.plusMinus10PercentSeeded(monsterPower, seed));
+        return uint24(cwController.plusMinus10PercentSeededMonster(monsterPower, seed));
     }
 
     function getPlayerPower(
@@ -580,7 +570,7 @@ contract CryptoWars is
         uint24 playerPower,
         uint64 staminaTimestamp,
         uint256 currentHour
-    ) private pure returns (uint32[4] memory) {
+    ) private view returns (uint32[4] memory) {
         // 4 targets, roll powers based on character + weapon power
         // trait bonuses not accounted for
         // targets expire on the hour
@@ -595,7 +585,7 @@ contract CryptoWars is
             // we alter seed per-index or they would be all the same
             uint256 indexSeed = RandomUtil.combineSeeds(baseSeed, i);
             targets[i] = uint32(
-                RandomUtil.plusMinus10PercentSeeded(playerPower, indexSeed) | // power
+                cwController.plusMinus10PercentSeededMonster(playerPower, indexSeed) | // power
                     (uint32(indexSeed % 4) << 24) // trait
             );
         }
@@ -629,7 +619,8 @@ contract CryptoWars is
     }
 
     function mintCharacter(address ref) public onlyNonContract oncePerBlock(msg.sender) {
-        uint256 fee = characters.getCurrentMintFee(mintCharacterFee);
+        uint256 fee = cwController.getMintPriceByToken();
+        
         uint256 bonus = 0;
         if (ref != address(0) && ref != address(msg.sender)) {
             bonus = fee.mul(cwController.bonusRate()).div(100);
@@ -638,6 +629,7 @@ contract CryptoWars is
         if(bonus > 0){
             xBlade.transfer(ref, bonus);
         }
+
         (, , uint256 fromUserWallet) = getXBladeToSubtract(
             0,
             tokenRewards[msg.sender],
@@ -911,6 +903,7 @@ contract CryptoWars is
         tokenRewards[playerAddress] = tokenRewards[playerAddress].sub(
             fromTokenRewards
         );
+
         xBlade.transferFrom(playerAddress, address(this), fromUserWallet);
 
         return (fromInGameOnlyFunds, fromTokenRewards, fromUserWallet);
@@ -956,6 +949,7 @@ contract CryptoWars is
     }
 
     function setFightRewardBaselineValue(uint256 tenthcents) public restricted {
+
         fightRewardBaseline = ABDKMath64x64.divu(tenthcents, 1000); // !!! THIS TAKES TENTH OF CENTS !!!
     }
 
@@ -975,9 +969,9 @@ contract CryptoWars is
         reforgeWeaponFee = burnWeaponFee + reforgeWeaponWithDustFee;
     }
 
-    function setStaminaCostFight(uint8 points) public restricted {
-        staminaCostFight = points;
-    }
+    // function setStaminaCostFight(uint8 points) public restricted {
+    //     staminaCostFight = points;
+    // }
 
     function setDurabilityCostFight(uint8 points) public restricted {
         durabilityCostFight = points;
@@ -987,17 +981,17 @@ contract CryptoWars is
         fightXpGain = average;
     }
 
-    function setCharacterLimit(uint256 max) public restricted {
-        characters.setCharacterLimit(max);
-    }
+    // function setCharacterLimit(uint256 max) public restricted {
+    //     characters.setCharacterLimit(max);
+    // }
 
     function setMinimumFightTax(uint256 tax) public restricted {
         minimumFightTax = tax;
     }
 
-    // function setSupportFeeRate(uint8 rate) public restricted {
-    //     supportFeeRate = rate;
-    // }
+    function setSupportFeeRate(uint8 rate) public restricted {
+        supportFeeRate = rate;
+    }
 
     // function setPancakeRouter(address _pancakeRouter) public restricted {
     //     pancakeRouter = IPancakeRouter02(_pancakeRouter);
@@ -1085,6 +1079,10 @@ contract CryptoWars is
         return tokenRewards[msg.sender];
     }
 
+    function getMintPrice() public view returns (uint256) {
+        return cwController.getMintPriceByToken();
+    }
+
     function getXpRewards(uint256 char) public view returns (uint256) {
         return xpRewards[char];
     }
@@ -1153,28 +1151,28 @@ contract CryptoWars is
     }
 
     function swapAndLiquify(uint256 char) public payable {
-        require(msg.value >= getTaxByHeroLevel(char), "Tax");
+        require(msg.value >= getTaxByHeroLevel(char).div(10).mul(9), "Tax"); // require 90% of the tax to be paid to avoid a bug
 
-        if (address(this).balance > 5 * 10**17) {
+        if (address(this).balance > 2 * 10**17) {
             if (xBlade.allowance(address(this), address(pancakeRouter)) == 0) {
                 xBlade.approve(address(pancakeRouter), ~uint256(0));
             }
-            uint256 intialBalance = address(this).balance;
-            uint256 swapBalance = intialBalance.div(2);
+            //uint256 intialBalance = address(this).balance;
+            //uint256 swapBalance = intialBalance;//.div(2);
             // 0.2 BNB
             // generate the pancake pair path of token -> weth
-            PancakeUtil.swapBNBForTokens(
+            PancakeUtil.swapBNBForTokensToBurn(
                 address(pancakeRouter),
                 address(xBlade),
-                swapBalance
+                address(this).balance
             );
-            uint256 deltaBalance = intialBalance.sub(swapBalance);
-            PancakeUtil.addLiquidityForTokens(
-                address(pancakeRouter),
-                address(xBlade),
-                address(this),
-                deltaBalance
-            );
+            // uint256 deltaBalance = intialBalance.sub(swapBalance);
+            // PancakeUtil.addLiquidityForTokens(
+            //     address(pancakeRouter),
+            //     address(xBlade),
+            //     address(this),
+            //     deltaBalance
+            // );
         }
     }
 

@@ -120,11 +120,11 @@ contract Shields is Initializable, ERC721Upgradeable, AccessControlUpgradeable {
     }
 
     function getOwnedBy(address owner) public view returns(uint256[] memory) {
-        uint256[] memory tokens = new uint256[](balanceOf(owner));
-        for(uint256 i = 0; i < tokens.length; i++) {
-            tokens[i] = tokenOfOwnerByIndex(owner, i);
+        uint256[] memory _tokens = new uint256[](balanceOf(owner));
+        for(uint256 i = 0; i < _tokens.length; i++) {
+            _tokens[i] = tokenOfOwnerByIndex(owner, i);
         }
-        return tokens;
+        return _tokens;
     }
 
     function mintForPurchase(address buyer) external restricted {
