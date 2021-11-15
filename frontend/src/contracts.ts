@@ -20,6 +20,7 @@ import { abi as randomsAbi } from '../../build/contracts/IRandoms.json';
 import { abi as marketAbi, networks as marketNetworks } from '../../build/contracts/NFTMarket.json';
 import { abi as xBladeTokenAbi, networks as xBladeTokenNetworks } from '../../build/contracts/xBlade.json';
 import { abi as secretBoxAbi } from '../../build/contracts/SecretBox.json';
+import { abi as cwControllerAbi } from '../../build/contracts/CWController.json';
 import Web3 from 'web3';
 import { Contracts, isStakeType, StakeType, StakingContracts } from './interfaces';
 
@@ -94,7 +95,7 @@ async function setUpStakingContracts(web3: Web3) {
       StakingToken: new web3.eth.Contract(erc20Abi as Abi, stakingContractInfo.stakingTokenAddress)
     };
   }
-
+  // consoqle.log('process.env.VUE_APP_XBLADE_TOKEN_CONTRACT_ADDRESS', process.env.VUE_APP_XBLADE_TOKEN_CONTRACT_ADDRESS);
   const xBladeTokenAddress = process.env.VUE_APP_XBLADE_TOKEN_CONTRACT_ADDRESS || (xBladeTokenNetworks as Networks)[networkId]!.address;
   const xBladeToken = new web3.eth.Contract(erc20Abi as Abi, xBladeTokenAddress);
 
@@ -126,6 +127,7 @@ export async function setUpContracts(web3: Web3): Promise<Contracts> {
   const Weapons = new web3.eth.Contract(weaponsAbi as Abi, weaponsAddr);
   const Blacksmith = new web3.eth.Contract(blacksmithAbi as Abi, blacksmithAddr);
   const SecretBox = new web3.eth.Contract(secretBoxAbi as Abi, process.env.VUE_APP_SECRET_BOX_ADDRESS);
+  const CWController = new web3.eth.Contract(cwControllerAbi as Abi, process.env.VUE_APP_CW_CONTROLLER_ADDRESS);
 
   const xBladeTokenAddress = process.env.VUE_APP_XBLADE_TOKEN_CONTRACT_ADDRESS;
   const xBladeToken = new web3.eth.Contract(xBladeTokenAbi as Abi, xBladeTokenAddress);
@@ -179,6 +181,7 @@ export async function setUpContracts(web3: Web3): Promise<Contracts> {
     ...stakingContracts,
     CryptoWars, Randoms, Characters, Weapons, Blacksmith, Shields, WeaponRenameTagConsumables, CharacterRenameTagConsumables,
     CharacterFireTraitChangeConsumables, CharacterEarthTraitChangeConsumables, CharacterWaterTraitChangeConsumables, CharacterLightningTraitChangeConsumables,
+    CWController,
     ...raidContracts,
     ...marketContracts,
     xBladeToken,

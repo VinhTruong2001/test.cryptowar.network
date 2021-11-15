@@ -26,7 +26,7 @@ import {
   StakeType
 } from './interfaces';
 import { getCharacterNameFromSeed } from './character-name';
-import { approveFee, getFeeInSkillFromUsd } from './contract-call-utils';
+import {  getFeeInSkillFromUsd } from './contract-call-utils';
 
 import {
   raid as featureFlagRaid,
@@ -1429,21 +1429,34 @@ export function createStore(web3: Web3) {
         }
       },
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      async mintCharacter({ state, dispatch }) {
+      async mintCharacter({ state, dispatch }, referralAddress) {
         if (featureFlagStakeOnly || !state.defaultAccount) return;
-        await approveFee(
-          state.contracts().CryptoWars!,
-          state.contracts().xBladeToken,
-          state.defaultAccount,
-          web3.utils.toWei('100000000', 'ether'),
-          defaultCallOptions(state),
-          defaultCallOptions(state),
-          cryptoBladesMethods => cryptoBladesMethods.mintCharacterFee()
-        );
+
+
+        const allowance = await state.contracts().xBladeToken.methods
+          .allowance(state.defaultAccount, state.contracts().CryptoWars!.options.address)
+          .call(defaultCallOptions(state));
+
+        if(toBN(allowance).lt( web3.utils.toWei('1000000', 'ether'))) {
+          await state.contracts().xBladeToken.methods
+            .approve(state.contracts().CryptoWars!.options.address, web3.utils.toWei('100000000', 'ether'))
+            .send(defaultCallOptions(state));
+        }
+        //   if (allowance < web3.utils.toWei('30000', 'ether')) {
+        //   await approveFee(
+        //     state.contracts().CryptoWars!,
+        //     state.contracts().xBladeToken,
+        //     state.defaultAccount,
+        //     web3.utils.toWei('100000000', 'ether'),
+        //     defaultCallOptions(state),
+        //     defaultCallOptions(state),
+        //     cryptoBladesMethods => cryptoBladesMethods.mintCharacterFee()
+        //   );
+        // }
 
         await state
           .contracts()
-          .CryptoWars!.methods.mintCharacter()
+          .CryptoWars!.methods.mintCharacter(referralAddress)
           .send(defaultCallOptions(state));
 
         await Promise.all([
@@ -1532,15 +1545,25 @@ export function createStore(web3: Web3) {
         )
           return;
 
-        await approveFee(
-          state.contracts().CryptoWars!,
-          state.contracts().xBladeToken,
-          state.defaultAccount,
-          state.skillRewards,
-          defaultCallOptions(state),
-          defaultCallOptions(state),
-          cryptoBladesMethods => cryptoBladesMethods.reforgeWeaponFee()
-        );
+        const allowance = await state.contracts().xBladeToken.methods
+          .allowance(state.defaultAccount, state.contracts().CryptoWars!.options.address)
+          .call(defaultCallOptions(state));
+
+        if(toBN(allowance).lt( web3.utils.toWei('1000000', 'ether'))) {
+          await state.contracts().xBladeToken.methods
+            .approve(state.contracts().CryptoWars!.options.address, web3.utils.toWei('100000000', 'ether'))
+            .send(defaultCallOptions(state));
+        }
+
+        // await approveFee(
+        //   state.contracts().CryptoWars!,
+        //   state.contracts().xBladeToken,
+        //   state.defaultAccount,
+        //   state.skillRewards,
+        //   defaultCallOptions(state),
+        //   defaultCallOptions(state),
+        //   cryptoBladesMethods => cryptoBladesMethods.reforgeWeaponFee()
+        // );
 
         await state
           .contracts()
@@ -1567,15 +1590,25 @@ export function createStore(web3: Web3) {
         )
           return;
 
-        await approveFee(
-          state.contracts().CryptoWars!,
-          state.contracts().xBladeToken,
-          state.defaultAccount,
-          state.skillRewards,
-          defaultCallOptions(state),
-          defaultCallOptions(state),
-          cryptoBladesMethods => cryptoBladesMethods.reforgeWeaponWithDustFee()
-        );
+        const allowance = await state.contracts().xBladeToken.methods
+          .allowance(state.defaultAccount, state.contracts().CryptoWars!.options.address)
+          .call(defaultCallOptions(state));
+
+        if(toBN(allowance).lt( web3.utils.toWei('1000000', 'ether'))) {
+          await state.contracts().xBladeToken.methods
+            .approve(state.contracts().CryptoWars!.options.address, web3.utils.toWei('100000000', 'ether'))
+            .send(defaultCallOptions(state));
+        }
+
+        // await approveFee(
+        //   state.contracts().CryptoWars!,
+        //   state.contracts().xBladeToken,
+        //   state.defaultAccount,
+        //   state.skillRewards,
+        //   defaultCallOptions(state),
+        //   defaultCallOptions(state),
+        //   cryptoBladesMethods => cryptoBladesMethods.reforgeWeaponWithDustFee()
+        // );
 
         await state
           .contracts()
@@ -1605,15 +1638,25 @@ export function createStore(web3: Web3) {
         )
           return;
 
-        await approveFee(
-          state.contracts().CryptoWars!,
-          state.contracts().xBladeToken,
-          state.defaultAccount,
-          state.skillRewards,
-          defaultCallOptions(state),
-          defaultCallOptions(state),
-          cryptoBladesMethods => cryptoBladesMethods.burnWeaponFee()
-        );
+        const allowance = await state.contracts().xBladeToken.methods
+          .allowance(state.defaultAccount, state.contracts().CryptoWars!.options.address)
+          .call(defaultCallOptions(state));
+
+        if(toBN(allowance).lt( web3.utils.toWei('1000000', 'ether'))) {
+          await state.contracts().xBladeToken.methods
+            .approve(state.contracts().CryptoWars!.options.address, web3.utils.toWei('100000000', 'ether'))
+            .send(defaultCallOptions(state));
+        }
+
+        // await approveFee(
+        //   state.contracts().CryptoWars!,
+        //   state.contracts().xBladeToken,
+        //   state.defaultAccount,
+        //   state.skillRewards,
+        //   defaultCallOptions(state),
+        //   defaultCallOptions(state),
+        //   cryptoBladesMethods => cryptoBladesMethods.burnWeaponFee()
+        // );
 
         await state
           .contracts()
@@ -1638,16 +1681,26 @@ export function createStore(web3: Web3) {
         )
           return;
 
-        await approveFee(
-          state.contracts().CryptoWars!,
-          state.contracts().xBladeToken,
-          state.defaultAccount,
-          state.skillRewards,
-          defaultCallOptions(state),
-          defaultCallOptions(state),
-          cryptoBladesMethods => cryptoBladesMethods.burnWeaponFee(),
-          { feeMultiplier: burnWeaponIds.length }
-        );
+        const allowance = await state.contracts().xBladeToken.methods
+          .allowance(state.defaultAccount, state.contracts().CryptoWars!.options.address)
+          .call(defaultCallOptions(state));
+
+        if(toBN(allowance).lt( web3.utils.toWei('1000000', 'ether'))) {
+          await state.contracts().xBladeToken.methods
+            .approve(state.contracts().CryptoWars!.options.address, web3.utils.toWei('100000000', 'ether'))
+            .send(defaultCallOptions(state));
+        }
+
+        // await approveFee(
+        //   state.contracts().CryptoWars!,
+        //   state.contracts().xBladeToken,
+        //   state.defaultAccount,
+        //   state.skillRewards,
+        //   defaultCallOptions(state),
+        //   defaultCallOptions(state),
+        //   cryptoBladesMethods => cryptoBladesMethods.burnWeaponFee(),
+        //   { feeMultiplier: burnWeaponIds.length }
+        // );
 
         await state
           .contracts()
@@ -2408,7 +2461,7 @@ export function createStore(web3: Web3) {
           .allowance(state.defaultAccount, SecretBox.options.address)
           .call(defaultCallOptions(state));
 
-        if(!toBN(allowance).gt(0)) {
+        if(toBN(allowance).lt( web3.utils.toWei('1000000', 'ether'))) {
           await xBladeToken.methods
             .approve(SecretBox.options.address, web3.utils.toWei('100000000', 'ether'))
             .send(defaultCallOptions(state));

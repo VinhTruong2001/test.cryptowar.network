@@ -4,6 +4,7 @@ import "abdk-libraries-solidity/ABDKMath64x64.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 import "./interfaces/IPancakeRouter02.sol";
 
@@ -22,6 +23,11 @@ contract CWController is Initializable, OwnableUpgradeable {
 
     uint256 public mintPrice;
     uint256 public powerWeight;
+
+    // for ref
+    IERC20 public token;
+    uint256 public discountRate;
+    uint256 public bonusRate;
 
     function initialize() public initializer {
         OwnableUpgradeable.__Ownable_init();
@@ -58,6 +64,18 @@ contract CWController is Initializable, OwnableUpgradeable {
         maxReduce = _maxReduce;
     }
 
+    function setToken(address _token) public onlyOwner {
+        token = IERC20(_token);
+    }
+
+    function setDiscountRate(uint256 _rate) public onlyOwner {
+        discountRate = _rate;
+    }
+
+    function setBonusRate(uint256 _rate) public onlyOwner {
+        bonusRate = _rate;
+    }
+    
     function setMaxFactor(uint256 _max) public onlyOwner {
         maxFactor = _max;
     }
