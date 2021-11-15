@@ -4,7 +4,7 @@ import type {
   CryptoWars, Characters, Weapons, RaidBasic, IRandoms,
   NFTMarket, WaxBridge, Blacksmith, Shields, CharacterRenameTagConsumables,
   WeaponRenameTagConsumables, CharacterFireTraitChangeConsumables, CharacterEarthTraitChangeConsumables,
-  CharacterWaterTraitChangeConsumables, CharacterLightningTraitChangeConsumables, SecretBox
+  CharacterWaterTraitChangeConsumables, CharacterLightningTraitChangeConsumables, SecretBox, CWController
 } from '../../../build/abi-interfaces';
 import { StakeType } from './State';
 
@@ -39,4 +39,5 @@ export interface Contracts {
   CharacterWaterTraitChangeConsumables?: Contract <CharacterWaterTraitChangeConsumables>;
   CharacterLightningTraitChangeConsumables?: Contract <CharacterLightningTraitChangeConsumables>;
   SecretBox?: Contract<SecretBox>;
+  CWController?: Contract<CWController>;
 }
