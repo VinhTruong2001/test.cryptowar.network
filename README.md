@@ -1,4 +1,4 @@
-# CryptoWar / xBlade
+# CryptoWar xBlade
 
 ## Currency Setup
 
