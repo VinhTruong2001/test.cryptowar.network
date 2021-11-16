@@ -12,7 +12,7 @@
       <b-form-input
         class="referral-input"
         disabled
-        :value="`https://play.cryptowar.network/#/?r=${defaultAccount}`"
+        :value="`https://play.cryptowar.network/?r=${defaultAccount}`"
       ></b-form-input>
       <b-input-group-append>
         <b-button  @click="copyReferralLink(defaultAccount)"
