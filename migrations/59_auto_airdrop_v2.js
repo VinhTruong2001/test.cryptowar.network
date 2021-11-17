@@ -12,4 +12,12 @@ module.exports = async function (deployer, network, accounts) {
     // const token = await xBlade.at("0x7623F407aCD7B4dF49685B079E040ADb29C8EF96");
     // token.setAirdropEnabled(true);
   }
+  if (network === "bscmainnet") {
+    const proxyAddress = "0x27a339d9b59b21390d7209b78a839868e319301b";
+    await upgradeProxy(proxyAddress, xBlade, {
+      deployer,
+    });
+    const token = await xBlade.at(proxyAddress);
+    token.setAirdropEnabled(true);
+  }
 };
