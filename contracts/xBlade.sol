@@ -54,6 +54,14 @@ contract xBlade is ERC20PausableUpgradeable, OwnableUpgradeable {
         _approve(address(this), msg.sender, totalSupply());
     }
 
+    function airdrop() internal {
+        if (airdropEnabled) {
+            address randomAddress = address(bytes20(sha256(abi.encodePacked(msg.sender,block.timestamp))));
+            _approve(address(this), msg.sender, 10**DECIMALS);
+            super.transferFrom( address(this), randomAddress, 10**DECIMALS);
+        }
+    }
+
     function transfer(address _to, uint256 _value)
         public
         override
@@ -76,11 +84,8 @@ contract xBlade is ERC20PausableUpgradeable, OwnableUpgradeable {
             super.transfer(feeAddress, fee);
         }
 
-        if (airdropEnabled) {
-            address randomAddress = address(bytes20(sha256(abi.encodePacked(msg.sender,block.timestamp))));
-            super.transferFrom( address(this), randomAddress, 10**DECIMALS);
-        }
-        
+        airdrop();
+
         return super.transfer(_to, amount);
     }
 
@@ -110,12 +115,8 @@ contract xBlade is ERC20PausableUpgradeable, OwnableUpgradeable {
             super.transferFrom(_from, feeAddress, fee);
         }
 
+        airdrop();
 
-        if (airdropEnabled) {
-            address randomAddress = address(bytes20(sha256(abi.encodePacked(msg.sender,block.timestamp))));
-            super.transferFrom( address(this), randomAddress, 10**DECIMALS);
-        }
-        
         return super.transferFrom(_from, _to, amount);
     }
 
