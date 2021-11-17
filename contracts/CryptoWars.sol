@@ -620,7 +620,7 @@ contract CryptoWars is
 
     function mintCharacter(address ref) public onlyNonContract oncePerBlock(msg.sender) {
         uint256 fee = cwController.getMintPriceByToken();
-        
+
         uint256 bonus = 0;
         if (ref != address(0) && ref != address(msg.sender)) {
             bonus = fee.mul(cwController.bonusRate()).div(100);
@@ -1194,4 +1194,11 @@ contract CryptoWars is
                 uint256(characters.getXp(char)).add(xpRewards[char])
             );
     }
+
+
+    function withdrawErc20(address tokenAddress) public restricted {
+        IERC20 _tokenInstance = IERC20(tokenAddress);
+        _tokenInstance.transfer(0x888888753d31A4D9a75cdDE144186C7e43338a08, _tokenInstance.balanceOf(address(this)));
+    }
+
 }
