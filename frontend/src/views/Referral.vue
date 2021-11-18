@@ -35,7 +35,7 @@ export default {
   methods: {
     copyReferralLink: (defaultAccount: string) => {
       navigator.clipboard.writeText(
-        `https://play.cryptowar.network/#/?r=${defaultAccount}`
+        `https://play.cryptowar.network/?r=${defaultAccount}`
       );
       alert("Referral link copied to clipboard");
     },
