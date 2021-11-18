@@ -462,6 +462,7 @@ import { mapGetters, mapState, mapActions } from "vuex";
 import CharacterList from "../components/smart/CharacterList.vue";
 import CharacterArt from "../components/CharacterArt.vue";
 import WeaponGrid from "@/components/smart/WeaponGrid.vue";
+import WeaponIcon from "@/components/WeaponIcon.vue";
 import CharacterRoom from "@/components/CharacterRoom.vue";
 
 // import "@/assets/scss/p2playout/p2pstyle.css";
@@ -470,7 +471,8 @@ export default Vue.extend({
     CharacterList,
     CharacterArt,
     WeaponGrid,
-    CharacterRoom
+    CharacterRoom,
+    WeaponIcon
   },
   data() {
     return {
@@ -485,7 +487,7 @@ export default Vue.extend({
       this.selectedCharacter = this.characters[val];
     },
     weaponId(val) {
-      this.selectedWeapon = this.ownWeapons.find((w: any) => w.id === val);
+      this.selectedWeapon = this.ownWeapons.find((w: any) => !!w && w.id === val);
     },
   },
   methods: {
@@ -528,6 +530,10 @@ export default Vue.extend({
         experience: c.xp,
       };
     },
+    x(): any {
+      console.log("tesst", this.careerModeRooms);
+      return null;
+    }
   },
   mounted() {
     this.getCareerRooms();

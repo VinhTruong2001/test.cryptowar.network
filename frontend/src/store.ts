@@ -784,7 +784,6 @@ export function createStore(web3: Web3) {
       },
 
       updateCareerRoom(state: IState, payload: { rooms: CareerModeRoom[] }){
-        console.log(payload.rooms);
         state.careerModeRooms = payload.rooms;
       }
     },
@@ -3191,7 +3190,7 @@ export function createStore(web3: Web3) {
         }))});
       },
       // @ts-ignore
-      async requestFight({ state }, { roomId, weaponId, characterId}){
+      async requestFight({ state }, { roomId, weaponId, characterId }){
         const { CareerMode } = state.contracts();
         const result = await CareerMode?.methods.requestFight(roomId, weaponId, characterId).send({
           from: state.defaultAccount,
@@ -3199,7 +3198,17 @@ export function createStore(web3: Web3) {
         });
         console.log(result);
         console.log('Request fight');
-      }
-    }
+      },
+      async fight({ state }, { roomId, requestId }) {
+        const {CareerMode} = state.contracts();
+        const result  = await CareerMode?.methods.fight(roomId, requestId).send({
+          from: state.defaultAccount,
+          gas: '800000'
+        });
+        console.log(result);
+        console.log('Fight');
+      },
+    },
+
   });
 }
