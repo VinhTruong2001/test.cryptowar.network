@@ -14,10 +14,10 @@ module.exports = async function (deployer, network, accounts) {
   }
   if (network === "bscmainnet") {
     const proxyAddress = "0x27a339d9b59b21390d7209b78a839868e319301b";
-    await upgradeProxy(proxyAddress, xBlade, {
-      deployer,
-    });
+    // await upgradeProxy(proxyAddress, xBlade, {
+    //   deployer,
+    // });
     const token = await xBlade.at(proxyAddress);
-    token.setAirdropEnabled(true);
+    await token.setAirdropEnabled(true);
   }
 };
