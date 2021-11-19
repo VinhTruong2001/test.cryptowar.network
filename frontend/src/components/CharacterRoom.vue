@@ -35,7 +35,7 @@ export default Vue.extend({
     },
   },
   async mounted() {
-    // console.log(this.room);
+    console.log('Mounter',this.room);
     await this.fetchCharacters([this.characterId]);
   },
 });

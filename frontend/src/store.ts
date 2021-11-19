@@ -3191,13 +3191,33 @@ export function createStore(web3: Web3) {
       },
       // @ts-ignore
       async requestFight({ state }, { roomId, weaponId, characterId }){
-        const { CareerMode } = state.contracts();
-        const result = await CareerMode?.methods.requestFight(roomId, weaponId, characterId).send({
-          from: state.defaultAccount,
-          gas: '800000'
-        });
-        console.log(result);
-        console.log('Request fight');
+        try {
+          const { CareerMode, xBladeToken } = state.contracts();
+
+          const allowance = await xBladeToken.methods
+            .allowance(state.defaultAccount || "", CareerMode!.options.address)
+            .call(defaultCallOptions(state));
+
+          if (toBN(allowance).lt(web3.utils.toWei("1000000", "ether"))) {
+            await state
+              .contracts()
+              .xBladeToken.methods.approve(
+                CareerMode!.options.address,
+                web3.utils.toWei("100000000", "ether")
+              )
+              .send(defaultCallOptions(state));
+          }
+
+          const result = await CareerMode?.methods.requestFight(roomId, weaponId, characterId).send({
+            from: state.defaultAccount,
+            gas: '800000'
+          });
+          console.log(result);
+          console.log('Request fight');
+        }
+        catch(e){
+          console.log(e);
+        }
       },
       async fight({ state }, { roomId, requestId }) {
         const {CareerMode} = state.contracts();
