@@ -379,16 +379,16 @@
                 <div class="justify-content-center row">
                   <div class="text-center col-12">
                     <ul class="tab-categories nav nav-tabs">
-                      <li class="nav-item">
+                      <!-- <li class="nav-item">
                         <a class="nav-link active"
                           >Challenge Mode
                           <span class="badge badge-success badge-pill"
                             >534</span
                           ></a
                         >
-                      </li>
+                      </li> -->
                       <li class="nav-item">
-                        <a class="nav-link"
+                        <a class="nav-link active"
                           >Career Mode
                           <span class="badge badge-secondary badge-pill"
                             >1186</span
@@ -399,15 +399,15 @@
                   </div>
                 </div>
                 <div
-                  v-for="room in this.careerModeRooms"
-                  :key="room.characterId"
+                  v-for="r in careerModeRooms"
+                  :key="r.characterId"
                   class="justify-content-center row"
                 >
-                  <character-room
-                    :characterId="room.characterId"
-                    :room="room"
-                    :selectedCharacterId="this.characterId"
-                    :selectedWeaponId="this.weaponId"
+                  <CharacterRoom
+                    :characterId="r.characterId"
+                    :room="r"
+                    :selectedCharacterId="characterId"
+                    :selectedWeaponId="weaponId"
                   />
                 </div>
 
@@ -530,10 +530,6 @@ export default Vue.extend({
         experience: c.xp,
       };
     },
-    x(): any {
-      console.log("tesst", this.careerModeRooms);
-      return null;
-    }
   },
   mounted() {
     this.getCareerRooms();
