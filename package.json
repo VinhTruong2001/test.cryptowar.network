@@ -73,7 +73,7 @@
     "verify:promos": "npx truffle run verify Promos@0x3289d71fc107bb2a686879e35895bae6634a1df9 --network bscmainnet",
     "verify:raidBasic": "npx truffle run verify RaidBasic@0x8087ee61FC0c42d4A39f3ec78Bf69b245A684880 --network bscmainnet",
     "verify:NFTMarket": "npx truffle run verify NFTMarket@0xfe50D30f787BfAD9296332C86F4bf8252c3E2c1a --network bscmainnet",
-    "verify:secretBox": "npx truffle run verify SecretBox@0xe474F205d4FBDd21C0b1E0E709776E46a6722b84 --network bscmainnet",
+    "verify:secretBox": "npx truffle run verify SecretBox@0x4a0Ef0E81f0ce6e0CB289fD9f19b955dc07745BB --network bscmainnet",
     "verify:shields": "npx truffle run verify Shields@0xBe67D7Dbf14967109dFDB6bFCDE8C57bb76F78BB --network bscmainnet",
     "verify:XBladeStakingRewardsUpgradeable": "npx truffle run verify XBladeStakingRewardsUpgradeable@0x80ceb112dEfDeE0626969c6c71CE9Fd3D1beBBdA --network bscmainnet",
     "verify:characters": "npx truffle run verify Characters@0x795E755fcb0af32aE6544dB318b6A55fD2BCc974 --network bscmainnet",
