@@ -21,6 +21,6 @@ module.exports = async function (deployer, network, accounts) {
     const cwControllerAddress = "0xAadfa537ecA54d3d7655C4117bBFB83B9bF6035a";
     await secretBox.setCwController(cwControllerAddress);
     await secretBox.setCommonBoxPrice(50 * 10 ** 18);
-    await secretBox.setRareBoxPrice(100 * 10 ** 18);
+    await secretBox.setRareBoxPrice(150 * 10 ** 18);
   }
 };
