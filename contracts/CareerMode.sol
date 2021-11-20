@@ -465,4 +465,20 @@ contract CareerMode is
         }
         return values;
     }
+
+    function getRequests(uint256 cursor, uint256 roomId)
+        public
+        view
+        returns (RequestFight[] memory)
+    {
+        uint256 length = 20;
+        if (length > requestFightList[roomId].length - cursor) {
+            length = requestFightList[roomId].length - cursor;
+        }
+        RequestFight[] memory values = new RequestFight[](length);
+        for (uint256 i = 0; i < length; i++) {
+            values[i] = requestFightList[roomId][i + cursor];
+        }
+        return values;
+    }
 }
