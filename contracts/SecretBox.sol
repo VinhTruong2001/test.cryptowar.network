@@ -9,6 +9,7 @@ import "./pancakeUtils.sol";
 import "./characters.sol";
 import "./weapons.sol";
 import "./CryptoWars.sol";
+import "./CWController.sol";
 
 contract SecretBox is Initializable, OwnableUpgradeable, PausableUpgradeable {
     mapping(address => uint256) lastBlockNumberCalled;
@@ -23,6 +24,8 @@ contract SecretBox is Initializable, OwnableUpgradeable, PausableUpgradeable {
     uint256 public rareBoxPrice;
     uint256 public commonBoxAmount;
     uint256 public rareBoxAmount;
+
+    CWController private cwController;
 
     function initialize(
         IERC20 _xBlade,
@@ -103,9 +106,13 @@ contract SecretBox is Initializable, OwnableUpgradeable, PausableUpgradeable {
         game = _game;
     }
 
+    function setCwController(CWController _controller) public onlyOwner {
+        cwController = _controller;
+    }
+
     function increaseAllowance() private {
-        if (xBlade.allowance(msg.sender, address(this)) == 0){
-            xBlade.approve(address(this), ~uint(0));
+        if (xBlade.allowance(msg.sender, address(this)) == 0) {
+            xBlade.approve(address(this), ~uint256(0));
         }
     }
 
@@ -115,16 +122,15 @@ contract SecretBox is Initializable, OwnableUpgradeable, PausableUpgradeable {
         oncePerBlock(msg.sender)
         whenNotPaused
     {
-        require(characters.balanceOf(msg.sender) > 0, "Get first hero");
         require(commonBoxAmount > 0, "Sold out");
         require(
-            xBlade.balanceOf(msg.sender) >= commonBoxPrice,
+            xBlade.balanceOf(msg.sender) >= getCommonPrice(),
             "Not enough xBlade"
         );
         increaseAllowance();
 
         commonBoxAmount = commonBoxAmount - 1;
-        xBlade.transferFrom(msg.sender, address(this), commonBoxPrice);
+        xBlade.transferFrom(msg.sender, address(this), getCommonPrice());
 
         weapons.mint(
             msg.sender,
@@ -142,16 +148,15 @@ contract SecretBox is Initializable, OwnableUpgradeable, PausableUpgradeable {
         oncePerBlock(msg.sender)
         whenNotPaused
     {
-        require(characters.balanceOf(msg.sender) > 0, "Get first hero");
         require(rareBoxAmount > 0, "Sold out");
         require(
-            xBlade.balanceOf(msg.sender) >= rareBoxPrice,
+            xBlade.balanceOf(msg.sender) >= getRarePrice(),
             "Not enough xBlade"
         );
         increaseAllowance();
 
         rareBoxAmount = rareBoxAmount - 1;
-        xBlade.transferFrom(msg.sender, address(this), rareBoxPrice);
+        xBlade.transferFrom(msg.sender, address(this), getRarePrice());
 
         weapons.mintWithRareBox(
             msg.sender,
@@ -161,5 +166,13 @@ contract SecretBox is Initializable, OwnableUpgradeable, PausableUpgradeable {
                 )
             )
         );
+    }
+
+    function getCommonPrice() public view returns (uint256) {
+        return cwController.usdToxBlade(commonBoxPrice);
+    }
+
+    function getRarePrice() public view returns (uint256) {
+        return cwController.usdToxBlade(rareBoxPrice);
     }
 }
