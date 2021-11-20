@@ -2623,8 +2623,8 @@ export function createStore(web3: Web3) {
         const { SecretBox } = state.contracts();
         if (!SecretBox || !state.defaultAccount) return;
 
-        const commonPrice = await SecretBox.methods.commonBoxPrice().call(defaultCallOptions(state));
-        const rarePrice = await SecretBox.methods.rareBoxPrice().call(defaultCallOptions(state));
+        const commonPrice = await SecretBox.methods.getCommonPrice().call(defaultCallOptions(state));
+        const rarePrice = await SecretBox.methods.getRarePrice().call(defaultCallOptions(state));
         commit('updateBoxPrice', {
           commonPrice,
           rarePrice
