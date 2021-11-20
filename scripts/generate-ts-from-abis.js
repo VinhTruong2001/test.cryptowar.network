@@ -90,6 +90,7 @@ function transformAbiTypeToOutputTsType(abiType) {
     const m = solidityTypeGrammar.match(abiType);
 
     if(!m.succeeded()) {
+        return
         throw new Error(`Unknown ABI type "${abiType}"`);
     }
 
