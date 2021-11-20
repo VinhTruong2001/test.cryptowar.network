@@ -379,19 +379,19 @@
                 <div class="justify-content-center row">
                   <div class="text-center col-12">
                     <ul class="tab-categories nav nav-tabs">
-                      <!-- <li class="nav-item">
-                        <a class="nav-link active"
-                          >Challenge Mode
-                          <span class="badge badge-success badge-pill"
-                            >534</span
-                          ></a
-                        >
-                      </li> -->
                       <li class="nav-item">
                         <a class="nav-link active"
                           >Career Mode
                           <span class="badge badge-secondary badge-pill"
                             >1186</span
+                          ></a
+                        >
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link"
+                          >Requests
+                          <span class="badge badge-success badge-pill"
+                            >534</span
                           ></a
                         >
                       </li>
@@ -491,7 +491,7 @@ export default Vue.extend({
     },
   },
   methods: {
-    ...mapActions(["createCareerRoom", "getCareerRooms"]),
+    ...mapActions(["createCareerRoom", "getCareerRooms", "getRequests"]),
     openHeroPicker() {
       (this.$refs["hero-career-mode-selector"] as BModal).show();
     },
@@ -531,8 +531,9 @@ export default Vue.extend({
       };
     },
   },
-  mounted() {
-    this.getCareerRooms();
+  async mounted() {
+    await this.getCareerRooms();
+    await this.getRequests({roomId: '0'});
   },
 });
 </script>

@@ -3228,6 +3228,12 @@ export function createStore(web3: Web3) {
         console.log(result);
         console.log('Fight');
       },
+      async getRequests({ state }, { roomId }) {
+        console.log("room id: ", roomId);
+        const {CareerMode} = state.contracts();
+        const result = await CareerMode?.methods.getRequests(0, roomId).call(defaultCallOptions(state));
+        console.log("some", result);
+      }
     },
 
   });
