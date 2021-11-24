@@ -1,4 +1,5 @@
 interface RoomRequest {
+  id: number;
   weaponId: string
   heroId: string
   requester: string

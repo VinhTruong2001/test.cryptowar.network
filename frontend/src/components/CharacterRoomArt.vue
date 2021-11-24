@@ -164,7 +164,7 @@ export default {
 
     getCharacterArt,
     handleRequestFight() {
-      this.requestFight(0, this.selectedWeaponId, this.selectedCharacterId);
+      this.requestFight({roomId: 0, weaponId: this.selectedWeaponId, characterId: this.selectedCharacterId});
     },
   },
   mounted() {

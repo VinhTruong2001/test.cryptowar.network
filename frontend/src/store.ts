@@ -3187,13 +3187,15 @@ export function createStore(web3: Web3) {
         // @ts-ignore
         const result: any[] = await CareerMode?.methods.getRooms(0).call(defaultCallOptions(state));
         commit('updateCareerRoom', { rooms: result.map(r=> ({
-          characterId: r[4],
-          claimed: r[5],
-          matchReward: r[1],
-          owner: r[0],
-          totalDeposit: r[2],
-          weaponId: r[3]
-        }))});
+          characterId: r[5],
+          claimed: r[6],
+          matchReward: r[2],
+          owner: r[1],
+          totalDeposit: r[3],
+          weaponId: r[4],
+          id: r[0],
+        })).filter(r => r.owner !== state.defaultAccount)
+        });
       },
       // @ts-ignore
       async requestFight({ state }, { roomId, weaponId, characterId }){
@@ -3247,6 +3249,7 @@ export function createStore(web3: Web3) {
             heroId: v.char,
             requester: v.requester,
             done: v.done,
+            id: v.id,
           }))
         });
       }

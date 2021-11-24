@@ -8,12 +8,8 @@
             <div class="row">
               <div class="col-12">
                 <h2>
-                  534 <span class="text-white">ZOANs In Challenge Mode</span>
+                  1 <span class="text-white">Hero In Career Mode</span>
                 </h2>
-                <h2>
-                  1186 <span class="text-white">ZOANs In Career Mode</span>
-                </h2>
-                <h3>70 <span class="text-white">ZOANs In Duel Mode</span></h3>
               </div>
             </div>
           </div>
@@ -23,268 +19,6 @@
             <div class="justify-content-center row">
               <div class="mb-4 col-sm-12 col-md-12 col-lg-12 col-xl-3">
                 <div class="justify-content-center row">
-                  <div class="col-sm-8 col-md-8 col-lg-6 col-xl-12">
-                    <div class="market-search">
-                      <div class="market-search__form form-group">
-                        <input
-                          placeholder="Search Your ZOANs..."
-                          type="text"
-                          class="form-control"
-                        />
-                      </div>
-                      <div class="market-search__filter">
-                        <div class="form-group">
-                          <h5>Rare</h5>
-                          <div>
-                            <div class="filter-checkbox">
-                              <input
-                                class="filter-checkbox-input"
-                                type="checkbox"
-                                id="filterRare1"
-                                value="1"
-                              /><label
-                                class="filter-checkbox-label"
-                                for="filterRare1"
-                                >1</label
-                              >
-                            </div>
-                            <div class="filter-checkbox">
-                              <input
-                                class="filter-checkbox-input"
-                                type="checkbox"
-                                id="filterRare2"
-                                value="2"
-                              /><label
-                                class="filter-checkbox-label"
-                                for="filterRare2"
-                                >2</label
-                              >
-                            </div>
-                            <div class="filter-checkbox">
-                              <input
-                                class="filter-checkbox-input"
-                                type="checkbox"
-                                id="filterRare3"
-                                value="3"
-                              /><label
-                                class="filter-checkbox-label"
-                                for="filterRare3"
-                                >3</label
-                              >
-                            </div>
-                            <div class="filter-checkbox">
-                              <input
-                                class="filter-checkbox-input"
-                                type="checkbox"
-                                id="filterRare4"
-                                value="4"
-                              /><label
-                                class="filter-checkbox-label"
-                                for="filterRare4"
-                                >4</label
-                              >
-                            </div>
-                            <div class="filter-checkbox">
-                              <input
-                                class="filter-checkbox-input"
-                                type="checkbox"
-                                id="filterRare5"
-                                value="5"
-                              /><label
-                                class="filter-checkbox-label"
-                                for="filterRare5"
-                                >5</label
-                              >
-                            </div>
-                            <div class="filter-checkbox">
-                              <input
-                                class="filter-checkbox-input"
-                                type="checkbox"
-                                id="filterRare6"
-                                value="6"
-                              /><label
-                                class="filter-checkbox-label"
-                                for="filterRare6"
-                                >6</label
-                              >
-                            </div>
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <h5>Level</h5>
-                          <div>
-                            <div class="filter-checkbox">
-                              <input
-                                class="filter-checkbox-input"
-                                type="checkbox"
-                                id="filterLevel1"
-                                value="1"
-                              /><label
-                                class="filter-checkbox-label"
-                                for="filterLevel1"
-                                >1</label
-                              >
-                            </div>
-                            <div class="filter-checkbox">
-                              <input
-                                class="filter-checkbox-input"
-                                type="checkbox"
-                                id="filterLevel2"
-                                value="2"
-                              /><label
-                                class="filter-checkbox-label"
-                                for="filterLevel2"
-                                >2</label
-                              >
-                            </div>
-                            <div class="filter-checkbox">
-                              <input
-                                class="filter-checkbox-input"
-                                type="checkbox"
-                                id="filterLevel3"
-                                value="3"
-                              /><label
-                                class="filter-checkbox-label"
-                                for="filterLevel3"
-                                >3</label
-                              >
-                            </div>
-                            <div class="filter-checkbox">
-                              <input
-                                class="filter-checkbox-input"
-                                type="checkbox"
-                                id="filterLevel4"
-                                value="4"
-                              /><label
-                                class="filter-checkbox-label"
-                                for="filterLevel4"
-                                >4</label
-                              >
-                            </div>
-                            <div class="filter-checkbox">
-                              <input
-                                class="filter-checkbox-input"
-                                type="checkbox"
-                                id="filterLevel5"
-                                value="5"
-                              /><label
-                                class="filter-checkbox-label"
-                                for="filterLevel5"
-                                >5</label
-                              >
-                            </div>
-                            <div class="filter-checkbox">
-                              <input
-                                class="filter-checkbox-input"
-                                type="checkbox"
-                                id="filterLevel6"
-                                value="6"
-                              /><label
-                                class="filter-checkbox-label"
-                                for="filterLevel6"
-                                >6</label
-                              >
-                            </div>
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <h5>Tribe</h5>
-                          <div>
-                            <div class="filter-checkbox">
-                              <input
-                                class="filter-checkbox-input"
-                                type="checkbox"
-                                id="filterTribe0"
-                                value="0"
-                              /><label
-                                class="filter-checkbox-label"
-                                for="filterTribe0"
-                                >Skyler</label
-                              >
-                            </div>
-                            <div class="filter-checkbox">
-                              <input
-                                class="filter-checkbox-input"
-                                type="checkbox"
-                                id="filterTribe1"
-                                value="1"
-                              /><label
-                                class="filter-checkbox-label"
-                                for="filterTribe1"
-                                >Hydrein</label
-                              >
-                            </div>
-                            <div class="filter-checkbox">
-                              <input
-                                class="filter-checkbox-input"
-                                type="checkbox"
-                                id="filterTribe2"
-                                value="2"
-                              /><label
-                                class="filter-checkbox-label"
-                                for="filterTribe2"
-                                >Plasmer</label
-                              >
-                            </div>
-                            <div class="filter-checkbox">
-                              <input
-                                class="filter-checkbox-input"
-                                type="checkbox"
-                                id="filterTribe3"
-                                value="3"
-                              /><label
-                                class="filter-checkbox-label"
-                                for="filterTribe3"
-                                >Stonic</label
-                              >
-                            </div>
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <h5>Egg</h5>
-                          <div>
-                            <div class="filter-checkbox">
-                              <input
-                                class="filter-checkbox-input"
-                                type="checkbox"
-                                id="filterEgg0"
-                                value="0"
-                              /><label
-                                class="filter-checkbox-label"
-                                for="filterEgg0"
-                              ></label>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="market-search__suggest">
-                        <button
-                          type="button"
-                          class="
-                            search-suggest__btn
-                            mb-1
-                            btn btn-outline-primary btn-sm
-                          "
-                        >
-                          Value sort:
-                          <img
-                            src="@/assets/images/p2pimages/img2.svg"
-                            class="svg-inline--fa fa-sort-numeric-up fa-w-14"
-                            style="fill: red"
-                            alt=""
-                          />
-                          <!-- <svg>
-        <use xlink:href='@/assets/images/p2pimages/img2.svg#img'></use>
-      </svg> --></button
-                        ><button
-                          type="button"
-                          class="search-suggest__btn ml-1 btn btn-buy btn-sm"
-                        >
-                          Reset
-                        </button>
-                      </div>
-                    </div>
-                  </div>
                   <div class="col-sm-4 col-md-4 col-lg-6 col-xl-12">
                     <div
                       class="card-boss__zoan card-boss__pk card"
@@ -342,6 +76,10 @@
                         />
                       </div>
                     </div>
+                    <div>Match reward</div>
+                    <input v-model="matchReward" placeholder="Match reward"/>
+                    <div>Total reward</div>
+                    <input v-model="totalDeposit" placeholder="Total reward"/>
 
                     <button
                       type="button"
@@ -354,28 +92,6 @@
                 </div>
               </div>
               <div class="col-lg-12 col-xl-9">
-                <div class="justify-content-center mb-2 row">
-                  <div class="text-center col-12">
-                    <div
-                      class="
-                        zoon-custom-switch
-                        custom-switch custom-switch-lg custom-control
-                      "
-                    >
-                      <input
-                        type="checkbox"
-                        id="exampleCustomSwitch"
-                        name="customSwitch"
-                        class="custom-control-input"
-                        checked=""
-                      /><label
-                        class="custom-control-label"
-                        for="exampleCustomSwitch"
-                        >Show your ZOANs</label
-                      >
-                    </div>
-                  </div>
-                </div>
                 <div class="justify-content-center row">
                   <div class="text-center col-12">
                     <ul class="tab-categories nav nav-tabs">
@@ -506,6 +222,8 @@ export default Vue.extend({
       selectedCharacter: null,
       selectedWeapon: null,
       currentTab: "career_mode",
+      matchReward: 0,
+      totalDeposit: 0,
     };
   },
   watch: {
@@ -533,8 +251,8 @@ export default Vue.extend({
       this.createCareerRoom({
         character: this.characterId,
         weapon: this.weaponId,
-        matchReward: 1000,
-        totalDeposit: 10000,
+        matchReward: this.matchReward,
+        totalDeposit: this.totalDeposit,
       });
     },
   },
