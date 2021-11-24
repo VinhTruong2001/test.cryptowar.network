@@ -38,6 +38,7 @@ import { IERC721, IStakingRewards, IERC20 } from '../../build/abi-interfaces';
 import { stakeTypeThatCanHaveUnclaimedRewardsStakedTo } from './stake-types';
 import { Nft } from './interfaces/Nft';
 import { getWeaponNameFromSeed } from '@/weapon-name';
+import RoomRequest from './interfaces/RoomRequest';
 
 const defaultCallOptions = (state: IState) => ({ from: state.defaultAccount });
 
@@ -178,6 +179,7 @@ export function createStore(web3: Web3) {
       rareBoxPrice: web3.utils.toWei('0', 'ether'),
       secondsPerStamina: 1,
       careerModeRooms: [],
+      careerModeRequest: []
     },
 
     getters: {
@@ -785,6 +787,10 @@ export function createStore(web3: Web3) {
 
       updateCareerRoom(state: IState, payload: { rooms: CareerModeRoom[] }){
         state.careerModeRooms = payload.rooms;
+      },
+
+      updateCareerModeRequest(state: IState, payload: { requests: RoomRequest[] }){
+        state.careerModeRequest = payload.requests;
       }
     },
 
@@ -3228,11 +3234,21 @@ export function createStore(web3: Web3) {
         console.log(result);
         console.log('Fight');
       },
-      async getRequests({ state }, { roomId }) {
-        console.log("room id: ", roomId);
-        const {CareerMode} = state.contracts();
-        const result = await CareerMode?.methods.getRequests(0, roomId).call(defaultCallOptions(state));
-        console.log("some", result);
+      async getRequests({ state, commit }, { roomId }) {
+        const { CareerMode } = state.contracts();
+        // @ts-ignore
+        const result: any[] = await CareerMode?.methods.getRequests(0, roomId).call(defaultCallOptions(state));
+        if(!result){
+          return;
+        }
+        commit('updateCareerModeRequest', {
+          requests : result.map(v=>({
+            weaponId: v.wep,
+            heroId: v.char,
+            requester: v.requester,
+            done: v.done,
+          }))
+        });
       }
     },
 

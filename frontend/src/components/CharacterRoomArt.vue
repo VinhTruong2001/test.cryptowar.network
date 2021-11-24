@@ -45,14 +45,15 @@
           Match reward: <span class="white">{{ this.matchReward }} xBlade</span>
         </div>
       </div>
-
-      <button
-        type="button"
-        class="btn btn-buy btn-sm"
-        @click="handleRequestFight()"
-      >
-        Request Fight
-      </button>
+      <div class="request-fight-container">
+        <button
+          type="button"
+          class="btn btn-buy btn-sm"
+          @click="handleRequestFight()"
+        >
+          Request Fight
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -377,5 +378,12 @@ export default {
   right: 0;
   text-align: center;
   color: #fff;
+}
+
+.request-fight-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 4px 0;
 }
 </style>
