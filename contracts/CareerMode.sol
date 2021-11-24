@@ -35,6 +35,7 @@ contract CareerMode is
     IRandoms public randoms;
 
     struct Room {
+        uint256 id;
         address owner;
         uint256 matchReward;
         uint256 totalDeposit;
@@ -44,6 +45,7 @@ contract CareerMode is
     }
 
     struct RequestFight {
+        uint256 id;
         address requester;
         uint256 char;
         uint256 wep;
@@ -189,8 +191,17 @@ contract CareerMode is
             _wep
         );
         roomTimerStart[careerModeRooms.length] = block.timestamp;
+        uint256 roomId = careerModeRooms.length;
         careerModeRooms.push(
-            Room(msg.sender, _matchReward, _totalDeposit, _wep, _char, false)
+            Room(
+                roomId,
+                msg.sender,
+                _matchReward,
+                _totalDeposit,
+                _wep,
+                _char,
+                false
+            )
         );
         emit CreateCareerRoom(
             msg.sender,
@@ -217,7 +228,7 @@ contract CareerMode is
 
         uint256 requestId = requestFightList[_roomId].length;
         requestFightList[_roomId].push(
-            RequestFight(msg.sender, _char, _wep, false)
+            RequestFight(requestId, msg.sender, _char, _wep, false)
         );
         requestFightByAddress[msg.sender][_roomId].push(requestId);
         emit RequestFightOutcome(msg.sender, _roomId, _char, _wep);
@@ -437,7 +448,7 @@ contract CareerMode is
         Room memory r = careerModeRooms[id];
         RequestFight memory rf = requestFightList[id][requestId];
 
-        if (r.owner != msg.sender){
+        if (r.owner != msg.sender) {
             return false;
         }
         return

@@ -52,6 +52,7 @@ export interface IRaidState {
   isOwnedCharacterRaidingById: Record<number, boolean>; // ?
 }
 export interface CareerModeRoom {
+  id: number
   characterId: string
   claimed: boolean
   matchReward: string
