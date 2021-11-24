@@ -3243,6 +3243,7 @@ export function createStore(web3: Web3) {
         if(!result){
           return;
         }
+        console.log(result);
         commit('updateCareerModeRequest', {
           requests : result.map(v=>({
             weaponId: v.wep,

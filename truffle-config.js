@@ -69,7 +69,7 @@ module.exports = {
             process.env.BINANCE_WALLET_MNEMONIC,
             {
               // providerOrUrl: "wss://data-seed-prebsc-1-s1.binance.org:8545/",
-              providerOrUrl: "https://data-seed-prebsc-1-s1.binance.org:8545/"
+              providerOrUrl: "https://data-seed-prebsc-2-s2.binance.org:8545/"
             }
           )
         ),
