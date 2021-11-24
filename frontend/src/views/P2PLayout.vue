@@ -380,35 +380,58 @@
                   <div class="text-center col-12">
                     <ul class="tab-categories nav nav-tabs">
                       <li class="nav-item">
-                        <a class="nav-link active"
+                        <a
+                          :class="`nav-link ${
+                            currentTab === 'career_mode' ? 'active' : ''
+                          }`"
+                          @click="currentTab = 'career_mode'"
                           >Career Mode
                           <span class="badge badge-secondary badge-pill"
-                            >1186</span
+                            >1</span
                           ></a
                         >
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link"
+                        <a
+                          :class="`nav-link ${
+                            currentTab === 'request' ? 'active' : ''
+                          }`"
+                          @click="currentTab = 'request'"
                           >Requests
                           <span class="badge badge-success badge-pill"
-                            >534</span
+                            >1</span
                           ></a
                         >
                       </li>
                     </ul>
                   </div>
                 </div>
-                <div
-                  v-for="r in careerModeRooms"
-                  :key="r.characterId"
-                  class="justify-content-center row"
-                >
-                  <CharacterRoom
-                    :characterId="r.characterId"
-                    :room="r"
-                    :selectedCharacterId="characterId"
-                    :selectedWeaponId="weaponId"
-                  />
+                <div v-if="currentTab === 'career_mode'">
+                  <div
+                    v-for="r in careerModeRooms"
+                    :key="r.characterId"
+                    class="justify-content-center row"
+                  >
+                    <CharacterRoom
+                      :characterId="r.characterId"
+                      :room="r"
+                      :selectedCharacterId="characterId"
+                      :selectedWeaponId="weaponId"
+                    />
+                  </div>
+                </div>
+
+
+                <div v-if="currentTab === 'request'">
+                  <div
+                    v-for="r in careerModeRequest"
+                    :key="r.requester"
+                    class="justify-content-center row"
+                  >
+                    <RoomRequest
+                      :request="r"
+                    />
+                  </div>
                 </div>
 
                 <div class="justify-content-center row">
@@ -464,6 +487,7 @@ import CharacterArt from "../components/CharacterArt.vue";
 import WeaponGrid from "@/components/smart/WeaponGrid.vue";
 import WeaponIcon from "@/components/WeaponIcon.vue";
 import CharacterRoom from "@/components/CharacterRoom.vue";
+import RoomRequest from "@/components/RoomRequest.vue";
 
 // import "@/assets/scss/p2playout/p2pstyle.css";
 export default Vue.extend({
@@ -472,7 +496,8 @@ export default Vue.extend({
     CharacterArt,
     WeaponGrid,
     CharacterRoom,
-    WeaponIcon
+    WeaponIcon,
+    RoomRequest,
   },
   data() {
     return {
@@ -480,6 +505,7 @@ export default Vue.extend({
       weaponId: null,
       selectedCharacter: null,
       selectedWeapon: null,
+      currentTab: "career_mode",
     };
   },
   watch: {
@@ -487,8 +513,13 @@ export default Vue.extend({
       this.selectedCharacter = this.characters[val];
     },
     weaponId(val) {
-      this.selectedWeapon = this.ownWeapons.find((w: any) => !!w && w.id === val);
+      this.selectedWeapon = this.ownWeapons.find(
+        (w: any) => !!w && w.id === val
+      );
     },
+    careerModeRequest(val){
+      console.log(val);
+    }
   },
   methods: {
     ...mapActions(["createCareerRoom", "getCareerRooms", "getRequests"]),
@@ -508,7 +539,7 @@ export default Vue.extend({
     },
   },
   computed: {
-    ...mapState(["characters", "currentCharacterId", "careerModeRooms"]),
+    ...mapState(["characters", "currentCharacterId", "careerModeRooms", "careerModeRequest"]),
     ...mapGetters(["currentCharacter", "getCharacterName", "ownWeapons"]),
 
     character(): any {
@@ -533,7 +564,7 @@ export default Vue.extend({
   },
   async mounted() {
     await this.getCareerRooms();
-    await this.getRequests({roomId: '0'});
+    await this.getRequests({ roomId: "0" });
   },
 });
 </script>

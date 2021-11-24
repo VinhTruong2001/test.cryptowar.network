@@ -4,6 +4,7 @@ import { ITarget } from './Target';
 import { Contracts } from './Contracts';
 import { Nft } from './Nft';
 import { IShield } from './Shield';
+import RoomRequest from './RoomRequest';
 
 export type StakeType = 'lp' | 'lp2';
 export const allStakeTypes: StakeType[] = ['lp'];
@@ -120,4 +121,5 @@ export interface IState {
   rareBoxPrice: string;
   secondsPerStamina: number;
   careerModeRooms: CareerModeRoom[];
+  careerModeRequest:  RoomRequest[];
 }

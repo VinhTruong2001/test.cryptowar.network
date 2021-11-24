@@ -437,6 +437,9 @@ contract CareerMode is
         Room memory r = careerModeRooms[id];
         RequestFight memory rf = requestFightList[id][requestId];
 
+        if (r.owner != msg.sender){
+            return false;
+        }
         return
             r.totalDeposit > 0 &&
             !r.claimed &&
