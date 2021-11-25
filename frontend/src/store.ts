@@ -3186,14 +3186,15 @@ export function createStore(web3: Web3) {
         const { CareerMode } = state.contracts();
         // @ts-ignore
         const result: any[] = await CareerMode?.methods.getRooms(0).call(defaultCallOptions(state));
+        console.log(result);
         commit('updateCareerRoom', { rooms: result.map(r=> ({
-          characterId: r[5],
-          claimed: r[6],
-          matchReward: r[2],
-          owner: r[1],
-          totalDeposit: r[3],
-          weaponId: r[4],
-          id: r[0],
+          characterId: r.characterId,
+          claimed: r.claimed,
+          matchReward: r.matchReward,
+          owner: r.owner,
+          totalDeposit: r.totalDeposit,
+          weaponId: r.weaponId,
+          id: r.id,
         })).filter(r => r.owner !== state.defaultAccount)
         });
       },

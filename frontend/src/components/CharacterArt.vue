@@ -93,12 +93,6 @@ export default {
   components: {
     //SmallButton,
   },
-  watch: {
-    character() {
-      this.clearScene();
-    },
-  },
-
   data() {
     return {
       allLoaded: false,
