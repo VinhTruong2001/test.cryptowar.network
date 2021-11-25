@@ -45,6 +45,11 @@
           Match reward: <span class="white">{{ this.matchReward }} xBlade</span>
         </div>
       </div>
+       <div class="score-id-container">
+        <div class="black-outline" v-if="!portrait">
+          Total reward: <span class="white">{{ this.totalReward }} xBlade</span>
+        </div>
+      </div>
       <div class="request-fight-container">
         <button
           type="button"
@@ -63,6 +68,7 @@ import { getCharacterArt } from "../character-arts-placeholder";
 import { CharacterTrait, RequiredXp } from "../interfaces";
 import { mapGetters, mapState, mapActions } from "vuex";
 import { getCleanName } from "../rename-censor";
+import Web3 from "web3";
 
 export default {
   props: [
@@ -115,6 +121,9 @@ export default {
         CharacterTrait[this.character.trait]
       );
     },
+    totalReward(){
+      return Web3.utils.fromWei(this.room.totalDeposit, "ether");
+    }
   },
 
   methods: {
@@ -159,10 +168,15 @@ export default {
 
     getCharacterArt,
     handleRequestFight() {
-      this.requestFight({roomId: 0, weaponId: this.selectedWeaponId, characterId: this.selectedCharacterId});
+      this.requestFight({
+        roomId: this.room.id,
+        weaponId: this.selectedWeaponId,
+        characterId: this.selectedCharacterId,
+      });
     },
   },
   mounted() {
+    console.log(this.room);
     this.allLoaded = true;
     this.showPlaceholder = true;
     return;
