@@ -13,7 +13,6 @@
   </div>
 </template>
 
-
 <script lang="ts">
 import Vue from "vue";
 import CharacterRoomArt from "../components/CharacterRoomArt.vue";
@@ -42,14 +41,16 @@ export default Vue.extend({
 
 <style scoped>
 .character-item {
-  width: 340px;
+  width: 299px;
   max-width: 100%;
   background-image: url("../assets/images/bg-item-top.png");
   background-position: 50% 50%;
   background-repeat: no-repeat;
-  margin-top: 50px;
-  background-size: cover;
+  /* background-size: contain; */
   position: relative;
+  height: 27rem;
+  margin-top: 2.7rem;
+  align-items: center;
 }
 
 .character-item .art {
@@ -59,6 +60,10 @@ export default Vue.extend({
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* background-color: red; */
 }
 .character-list {
   list-style: none;
@@ -66,6 +71,17 @@ export default Vue.extend({
   justify-content: center;
   padding-left: 0px;
 }
+
+  .containerButton {
+    background-image: url('../assets/images/bg-fight-button.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+        margin-top: 1.7rem;
+  }
+
+  .buttonFight {
+    object-fit: scale-down;
+  }
 
 @media (max-width: 576px) {
   .character-item img {
@@ -86,5 +102,6 @@ export default Vue.extend({
     text-align: center;
     justify-content: center;
   }
+
 }
 </style>

@@ -6,6 +6,12 @@
       ></span>
     </div>
 
+    <!-- <div class="trait" v-if="!portrait">
+      <span
+        :class="characterTrait.toLowerCase() + '-icon circle-element'"
+      ></span>
+    </div> -->
+
     <div class="placeholder d-flex align-items-start justify-content-center">
       <div
         :style="{

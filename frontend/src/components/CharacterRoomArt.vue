@@ -1,11 +1,24 @@
 <template>
   <div class="character-art" v-tooltip="tooltipHtml(character)" ref="el">
-    <div class="trait" v-if="!portrait">
+    <div class="containerTop">
       <span
         :class="characterTrait.toLowerCase() + '-icon circle-element'"
       ></span>
+    <div>
+       <div class="name-lvl-container">
+        <div
+          class="name black-outline"
+          :title="getCleanCharacterName(character.id)"
+          v-if="!portrait"
+        >
+          {{'#'+ character.id }}
+        </div>
+        <div class="lv" v-if="!portrait">
+          Lv.<span class="">{{ character.level + 1 }}</span>
+        </div>
+      </div>
     </div>
-
+    </div>
     <div class="placeholder d-flex align-items-start justify-content-center">
       <div
         :style="{
@@ -22,34 +35,22 @@
       <i class="fas fa-spinner fa-spin"></i>
     </div>
     <div :class="{ 'market-bot': !portrait }">
-      <div class="name-lvl-container">
-        <div
-          class="name black-outline"
-          :title="getCleanCharacterName(character.id)"
-          v-if="!portrait"
-        >
-          {{ getCleanCharacterName(character.id) }}
-        </div>
-        <div class="lv" v-if="!portrait">
-          Lv.<span class="">{{ character.level + 1 }}</span>
-        </div>
-      </div>
       <div class="score-id-container">
         <div class="black-outline" v-if="!portrait">
-          ID <span class="white">{{ character.id }}</span>
+          <span class="white">{{ getCleanCharacterName(character.id) }}</span>
         </div>
       </div>
 
       <div class="score-id-container">
         <div class="black-outline" v-if="!portrait">
-          Match reward: <span class="white">{{ this.matchReward }} xBlade</span>
+          Owner: <span class="white">{{ this.matchReward }} xBlade</span>
         </div>
       </div>
-       <div class="score-id-container">
+       <!-- <div class="score-id-container">
         <div class="black-outline" v-if="!portrait">
           Total reward: <span class="white">{{ this.totalReward }} xBlade</span>
         </div>
-      </div>
+      </div> -->
       <div class="request-fight-container">
         <button
           type="button"
@@ -104,6 +105,7 @@ export default {
   },
 
   computed: {
+    console: () => console,
     ...mapState(["maxStamina"]),
     ...mapGetters([
       "getCharacterName",
@@ -179,6 +181,7 @@ export default {
     console.log(this.room);
     this.allLoaded = true;
     this.showPlaceholder = true;
+    console.log(this.character);
     return;
   },
 };
@@ -224,12 +227,16 @@ export default {
   position: absolute;
 }
 
-.trait {
-  top: -8px;
-  justify-self: center;
-  margin: 0 auto;
-  position: relative;
+.containerTop {
   display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-left: 1.5rem;
+  padding-right: 2rem;
+  margin-top: 1rem;
+}
+
+.trait {
 }
 
 .id {
@@ -315,6 +322,13 @@ export default {
   text-overflow: ellipsis;
 }
 
+.lv {
+  color:#dabf75;
+  font-weight: bold;
+  font-size: 1rem;
+  font-family: 'Rubik';
+}
+
 .market-bot .lv {
   font-size: 1.1rem;
   color: #dabf75;
@@ -329,25 +343,32 @@ export default {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  width: 100%;
-  height: 100%;
+  width: 40%;
+  height: 20%;
 }
 
 .circle-element {
-  width: 4.5rem;
-  height: 4.5rem;
+  width: 3rem;
+  height: 3rem;
   border: 1px solid #f48757;
   border-radius: 50%;
   padding: 0.5rem;
   background-color: #15052e;
 }
 
-.name-lvl-container,
-.score-id-container {
+.name-lvl-container {
   display: flex;
   justify-content: space-between;
   position: relative;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.score-id-container {
+  display: flex;
+  justify-content: center;
+  position: relative;
   padding: 0 3rem;
+  align-items: center;
 }
 
 .market-bot .name-lvl-container {
@@ -360,7 +381,8 @@ export default {
 }
 
 .white {
-  color: rgb(204, 204, 204);
+  color: var(--white);
+  font-weight: bold;
 }
 
 .small-stamina-char {
