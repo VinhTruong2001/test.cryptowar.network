@@ -772,7 +772,7 @@ button.close {
 }
 
 .tab-categories.nav-tabs{
-  border-bottom: 1px solid #f76d00 !important;
+  // border-bottom: 1px solid #f76d00 !important;
 }
 
 .nav-justified > .nav-link, .nav-justified .nav-item{
@@ -792,6 +792,7 @@ button.close {
   border-left-color: transparent !important;
   border-right-color: transparent !important;
   background-color: transparent !important;
+  font-family: 'Rubik';
 }
 
 .nav-tabs .nav-link:hover {

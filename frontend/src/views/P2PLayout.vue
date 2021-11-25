@@ -7,7 +7,19 @@
           <div class="container">
             <div class="row">
               <div class="col-12">
-                <h2>1 <span class="text-white">Hero In Career Mode</span></h2>
+                <h2>
+                  1 <span class="text-white">Heroes In Challenge Mode</span>
+                </h2>
+              </div>
+              <div class="col-12">
+                <h2>1 <span class="text-white">Heroes In Career Mode</span></h2>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="container">
+                <div class="col-12">
+                  <span>123123123</span>
+                </div>
               </div>
             </div>
           </div>
@@ -16,7 +28,14 @@
           <div class="container">
             <div class="justify-content-center row">
               <div class="mb-4 col-sm-12 col-md-12 col-lg-12 col-xl-3">
-                <div class="justify-content-center row">
+                <div class="justify-content-center col">
+                  <div class="col-sm-4 col-md-4 col-lg-6 col-xl-12">
+                    <span class="titleSearch">
+                      Stamina Cost per Fight
+                    </span>
+                    <input class="searchHeroes" placeholder="| Search your HEROES"/>
+                    <div class="justify-content-start row"><span>2222</span><span>2222</span></div>
+                  </div>
                   <div class="col-sm-4 col-md-4 col-lg-6 col-xl-12">
                     <div
                       class="card-boss__zoan card-boss__pk card"
@@ -30,10 +49,10 @@
                           >#pick a Hero to Challenge</span
                         >
                       </div>
-                      <img
+                      <!-- <img
                         src="@/assets/images/p2pimages/add-zoan.svg"
                         class="img-add-zoan card-img"
-                      />
+                      /> -->
                     </div>
                     <div
                       v-if="characterId"
@@ -41,11 +60,10 @@
                       class="character-item"
                     >
                       <div class="art">
-                        <CharacterArt :character="selectedCharacter" />
+                        <CharacterRoomArt :character="selectedCharacter" />
                       </div>
                     </div>
-
-                    <div
+                    <!-- <div
                       class="card-boss__zoan card-boss__pk card"
                       @click="openWeaponPicker()"
                       v-if="!selectedWeapon"
@@ -73,8 +91,8 @@
                           class="weapon-icon"
                         />
                       </div>
-                    </div>
-                    <div>Match reward</div>
+                    </div> -->
+                    <!-- <div>Match reward</div>
                     <input v-model="matchReward" placeholder="Match reward" />
                     <div>Total reward</div>
                     <input v-model="totalDeposit" placeholder="Total reward" />
@@ -85,14 +103,26 @@
                       @click="handleCreateRoom()"
                     >
                       Create Room
-                    </button>
+                    </button> -->
                   </div>
                 </div>
               </div>
               <div class="col-lg-12 col-xl-9">
                 <div class="justify-content-center row">
-                  <div class="text-center col-12">
+                  <div class="text-center col-8">
                     <ul class="tab-categories nav nav-tabs">
+                      <li class="nav-item">
+                        <a
+                          :class="`nav-link ${
+                            currentTab === 'challenge_mode' ? 'active' : ''
+                          }`"
+                          @click="currentTab = 'challenge_mode'"
+                          >Challenge Mode
+                          <span class="badge badge-secondary badge-pill"
+                            >123</span
+                          ></a
+                        >
+                      </li>
                       <li class="nav-item">
                         <a
                           :class="`nav-link ${
@@ -120,11 +150,22 @@
                     </ul>
                   </div>
                 </div>
-                <div v-if="currentTab === 'career_mode'">
+
+                <div v-if="currentTab === 'challenge_mode'">
                   <div
                     v-for="r in careerModeRooms"
                     :key="r.characterId"
                     class="justify-content-center row"
+                  >
+                    <span>challenge_mode</span>
+                  </div>
+                </div>
+                <div v-if="currentTab === 'career_mode'">
+                  <ul class="listCareerMode">
+                    <div
+                    v-for="r in careerModeRooms"
+                    :key="r.characterId"
+                    class="row"
                   >
                     <CharacterRoom
                       :characterId="r.characterId"
@@ -133,6 +174,7 @@
                       :selectedWeaponId="weaponId"
                     />
                   </div>
+                  </ul>
                 </div>
 
                 <div v-if="currentTab === 'request'">
@@ -147,8 +189,8 @@
 
                 <div class="justify-content-center row">
                   <div class="market-footer col-12">
-                    <hr />
                     <div class="paging">
+                      <hr />
                       <div class="total-page">1/45</div>
                       <button type="button" class="mr-1 btn btn-secondary">
                         <img
@@ -193,9 +235,9 @@ import { BModal } from "bootstrap-vue";
 import Vue from "vue";
 import { mapGetters, mapState, mapActions } from "vuex";
 import CharacterList from "../components/smart/CharacterList.vue";
-import CharacterArt from "../components/CharacterArt.vue";
+import CharacterRoomArt from "../components/CharacterRoomArt.vue";
 import WeaponGrid from "@/components/smart/WeaponGrid.vue";
-import WeaponIcon from "@/components/WeaponIcon.vue";
+// import WeaponIcon from "@/components/WeaponIcon.vue";
 import CharacterRoom from "@/components/CharacterRoom.vue";
 import RoomRequest from "@/components/RoomRequest.vue";
 
@@ -211,14 +253,13 @@ interface IData {
   fetchRequestInterval: any;
 }
 
-
 export default Vue.extend({
   components: {
     CharacterList,
-    CharacterArt,
+    CharacterRoomArt,
     WeaponGrid,
     CharacterRoom,
-    WeaponIcon,
+    // WeaponIcon,
     RoomRequest,
   },
   data() {
