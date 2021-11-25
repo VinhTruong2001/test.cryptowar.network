@@ -100,9 +100,9 @@
                           }`"
                           @click="currentTab = 'career_mode'"
                           >Career Mode
-                          <span class="badge badge-secondary badge-pill"
-                            >{{ careerModeRooms.length }}</span
-                          ></a
+                          <span class="badge badge-secondary badge-pill">{{
+                            careerModeRooms.length
+                          }}</span></a
                         >
                       </li>
                       <li class="nav-item">
@@ -112,8 +112,8 @@
                           }`"
                           @click="currentTab = 'request'"
                           >Requests
-                          <span class="badge badge-success badge-pill"
-                            > {{ careerModeRequest.length }}</span
+                          <span class="badge badge-success badge-pill">
+                            {{ careerModeRequest.length }}</span
                           ></a
                         >
                       </li>
@@ -184,7 +184,6 @@
       size="large"
     >
       <template #modal-title> Select weapon for career mode </template>
-      <!-- <nft-list v-model="selectedWeapon"/> -->
       <weapon-grid v-model="weaponId" />
     </b-modal>
   </div>
@@ -200,7 +199,19 @@ import WeaponIcon from "@/components/WeaponIcon.vue";
 import CharacterRoom from "@/components/CharacterRoom.vue";
 import RoomRequest from "@/components/RoomRequest.vue";
 
-// import "@/assets/scss/p2playout/p2pstyle.css";
+interface IData {
+  characterId?: number;
+  weaponId?: number;
+  selectedCharacter?: any;
+  selectedWeapon?: any;
+  currentTab: "career_mode" | "request";
+  matchReward: number;
+  totalDeposit: number;
+  fetchRoomInterval: any;
+  fetchRequestInterval: any;
+}
+
+
 export default Vue.extend({
   components: {
     CharacterList,
@@ -212,16 +223,16 @@ export default Vue.extend({
   },
   data() {
     return {
-      characterId: null,
-      weaponId: null,
+      characterId: undefined,
+      weaponId: undefined,
       selectedCharacter: null,
       selectedWeapon: null,
       currentTab: "career_mode",
       matchReward: 0,
       totalDeposit: 0,
       fetchRoomInterval: null,
-      fetchRequestInterval: null
-    };
+      fetchRequestInterval: null,
+    } as IData;
   },
   watch: {
     characterId(val) {
