@@ -3245,24 +3245,37 @@ export function createStore(web3: Web3) {
           return;
         }
         const promises = [];
-        for(let i = 0; i < rooms.length; i++){
-          promises.push(new Promise((resolve)=>{
-            CareerMode?.methods.getRequests(0, rooms[i]).call(defaultCallOptions(state)).then(resolve);
-          }));
+        for (let i = 0; i < rooms.length; i++) {
+          promises.push(
+            new Promise(resolve => {
+              CareerMode?.methods
+                .getRequests(0, rooms[i])
+                .call(defaultCallOptions(state))
+                .then((requestList) =>{
+                  if (!requestList){
+                    resolve([]);
+                    return;
+                  }
+                  resolve((requestList as any[]).map(r => ({...r, roomId: rooms[i]})));
+                });
+            })
+          );
         }
         // @ts-ignore
         const result: any[] = await Promise.all(promises);
+
         if(!result){
           return;
         }
 
         commit('updateCareerModeRequest', {
-          requests : result.map(v=>({
+          requests : ([] as any[]).concat(...result).map(v=>({
             weaponId: v.wep,
             heroId: v.char,
             requester: v.requester,
             done: v.done,
             id: v.id,
+            roomId: v.roomId,
           }))
         });
       }

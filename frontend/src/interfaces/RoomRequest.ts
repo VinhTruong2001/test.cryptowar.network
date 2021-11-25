@@ -4,6 +4,7 @@ interface RoomRequest {
   heroId: string
   requester: string
   done: boolean
+  roomId: string
 }
 
 export default RoomRequest;
