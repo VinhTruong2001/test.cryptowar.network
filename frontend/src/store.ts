@@ -3186,7 +3186,6 @@ export function createStore(web3: Web3) {
         const { CareerMode } = state.contracts();
         // @ts-ignore
         const result: any[] = await CareerMode?.methods.getRooms(0).call(defaultCallOptions(state));
-        console.log(result);
         commit('updateCareerRoom', { rooms: result.map(r=> ({
           characterId: r.characterId,
           claimed: r.claimed,
@@ -3195,7 +3194,7 @@ export function createStore(web3: Web3) {
           totalDeposit: r.totalDeposit,
           weaponId: r.weaponId,
           id: r.id,
-        })).filter(r => r.owner !== state.defaultAccount)
+        })).filter(r => (r.owner as string)?.toLowerCase() !== state.defaultAccount?.toLowerCase())
         });
       },
       // @ts-ignore
@@ -3217,34 +3216,46 @@ export function createStore(web3: Web3) {
               .send(defaultCallOptions(state));
           }
 
-          const result = await CareerMode?.methods.requestFight(roomId, weaponId, characterId).send({
+          await CareerMode?.methods.requestFight(roomId, weaponId, characterId).send({
             from: state.defaultAccount,
             gas: '800000'
           });
-          console.log(result);
-          console.log('Request fight');
         }
         catch(e){
           console.log(e);
         }
       },
       async fight({ state }, { roomId, requestId }) {
-        const {CareerMode} = state.contracts();
-        const result  = await CareerMode?.methods.fight(roomId, requestId).send({
+        const { CareerMode } = state.contracts();
+        await CareerMode?.methods.fight(roomId, requestId).send({
           from: state.defaultAccount,
           gas: '800000'
         });
-        console.log(result);
-        console.log('Fight');
       },
-      async getRequests({ state, commit }, { roomId }) {
+      async getRequests({ state, commit }) {
         const { CareerMode } = state.contracts();
+        if (!state.defaultAccount){
+          return;
+        }
+
         // @ts-ignore
-        const result: any[] = await CareerMode?.methods.getRequests(0, roomId).call(defaultCallOptions(state));
+        const rooms: number[] = await CareerMode?.methods.getRoomsByAddress(state.defaultAccount).call(defaultCallOptions(state));
+
+        if(!rooms){
+          return;
+        }
+        const promises = [];
+        for(let i = 0; i < rooms.length; i++){
+          promises.push(new Promise((resolve)=>{
+            CareerMode?.methods.getRequests(0, rooms[i]).call(defaultCallOptions(state)).then(resolve);
+          }));
+        }
+        // @ts-ignore
+        const result: any[] = await Promise.all(promises);
         if(!result){
           return;
         }
-        console.log(result);
+
         commit('updateCareerModeRequest', {
           requests : result.map(v=>({
             weaponId: v.wep,
