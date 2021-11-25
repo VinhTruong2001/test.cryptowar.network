@@ -7,9 +7,7 @@
           <div class="container">
             <div class="row">
               <div class="col-12">
-                <h2>
-                  1 <span class="text-white">Hero In Career Mode</span>
-                </h2>
+                <h2>1 <span class="text-white">Hero In Career Mode</span></h2>
               </div>
             </div>
           </div>
@@ -77,9 +75,9 @@
                       </div>
                     </div>
                     <div>Match reward</div>
-                    <input v-model="matchReward" placeholder="Match reward"/>
+                    <input v-model="matchReward" placeholder="Match reward" />
                     <div>Total reward</div>
-                    <input v-model="totalDeposit" placeholder="Total reward"/>
+                    <input v-model="totalDeposit" placeholder="Total reward" />
 
                     <button
                       type="button"
@@ -103,7 +101,7 @@
                           @click="currentTab = 'career_mode'"
                           >Career Mode
                           <span class="badge badge-secondary badge-pill"
-                            >1</span
+                            >{{ careerModeRooms.length }}</span
                           ></a
                         >
                       </li>
@@ -115,7 +113,7 @@
                           @click="currentTab = 'request'"
                           >Requests
                           <span class="badge badge-success badge-pill"
-                            >1</span
+                            > {{ careerModeRequest.length }}</span
                           ></a
                         >
                       </li>
@@ -137,16 +135,13 @@
                   </div>
                 </div>
 
-
                 <div v-if="currentTab === 'request'">
                   <div
                     v-for="r in careerModeRequest"
                     :key="r.requester"
                     class="justify-content-center row"
                   >
-                    <RoomRequest
-                      :request="r"
-                    />
+                    <RoomRequest :request="r" />
                   </div>
                 </div>
 
@@ -224,6 +219,8 @@ export default Vue.extend({
       currentTab: "career_mode",
       matchReward: 0,
       totalDeposit: 0,
+      fetchRoomInterval: null,
+      fetchRequestInterval: null
     };
   },
   watch: {
@@ -235,9 +232,6 @@ export default Vue.extend({
         (w: any) => !!w && w.id === val
       );
     },
-    careerModeRequest(val){
-      console.log(val);
-    }
   },
   methods: {
     ...mapActions(["createCareerRoom", "getCareerRooms", "getRequests"]),
@@ -257,7 +251,12 @@ export default Vue.extend({
     },
   },
   computed: {
-    ...mapState(["characters", "currentCharacterId", "careerModeRooms", "careerModeRequest"]),
+    ...mapState([
+      "characters",
+      "currentCharacterId",
+      "careerModeRooms",
+      "careerModeRequest",
+    ]),
     ...mapGetters(["currentCharacter", "getCharacterName", "ownWeapons"]),
 
     character(): any {
@@ -281,8 +280,14 @@ export default Vue.extend({
     },
   },
   async mounted() {
-    await this.getCareerRooms();
-    await this.getRequests({ roomId: "0" });
+    // @ts-ignore
+    this.fetchRoomInterval = setInterval(async () => {
+      await this.getCareerRooms();
+    }, 3000);
+    // @ts-ignore
+    this.fetchRequestInterval = setInterval(async () => {
+      await this.getRequests({ roomId: "0" });
+    }, 3000);
   },
 });
 </script>

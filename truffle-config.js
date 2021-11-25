@@ -78,6 +78,7 @@ module.exports = {
       confirmations: 2,
       gas: 8000000, //8000000,
       skipDryRun: true,
+      gasPrice: 60000000000
     },
     bscmainnet: {
       provider: () =>
