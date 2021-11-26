@@ -3256,7 +3256,8 @@ export function createStore(web3: Web3) {
                     resolve([]);
                     return;
                   }
-                  resolve((requestList as any[]).map(r => ({...r, roomId: rooms[i]})));
+                  // @ts-ignore
+                  resolve(requestList.map(r => ({...r, roomId: rooms[i]})));
                 });
             })
           );
