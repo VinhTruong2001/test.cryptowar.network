@@ -10,6 +10,17 @@
         :selectedCharacterId="this.selectedCharacterId"
       />
     </div>
+    <div class="containerButton">
+        <button
+          type="button"
+          class="buttonFight"
+          @click="handleRequestFight()"
+        >
+        <span class="titleButtonFight">
+          REQUEST FIGHT
+        </span>
+        </button>
+      </div>
   </div>
 </template>
 
@@ -20,12 +31,19 @@ import { mapActions, mapState } from "vuex";
 import Web3 from "web3";
 
 export default Vue.extend({
-  props: ["characterId", "room", "selectedWeaponId", "selectedCharacterId"],
+  props: ["characterId", "room", "selectedWeaponId", "selectedCharacterId", "requestFight", "fetchCharacters"],
   components: {
     CharacterRoomArt,
   },
   methods: {
-    ...mapActions(["fetchCharacters"]),
+    ...mapActions(["fetchCharacters", "requestFight"]),
+    handleRequestFight() {
+      this.requestFight({
+        roomId: this.room.id,
+        weaponId: this.selectedWeaponId,
+        characterId: this.selectedCharacterId,
+      });
+    },
   },
   computed: {
     ...mapState(["characters"]),
@@ -50,6 +68,7 @@ export default Vue.extend({
   position: relative;
   height: 27rem;
   margin-top: 2.7rem;
+  margin-left: 2.5rem;
   align-items: center;
 }
 
@@ -63,6 +82,7 @@ export default Vue.extend({
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: transparent;
   /* background-color: red; */
 }
 .character-list {
@@ -73,15 +93,30 @@ export default Vue.extend({
 }
 
   .containerButton {
-    background-image: url('../assets/images/bg-fight-button.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-        margin-top: 1.7rem;
+    padding-top: 0.85rem;
+    padding-bottom: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 47px;
   }
-
   .buttonFight {
-    object-fit: scale-down;
+    border: none;
+    background-image: url('../assets/images/bg-fight-button.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: transparent;
   }
+.titleButtonFight {
+  color: var(--white);
+  font-size: 20px;
+  padding-left: 23.5px;
+  padding-right: 23.5px;
+  font-size: 19px;
+  font-weight: bold;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
 
 @media (max-width: 576px) {
   .character-item img {

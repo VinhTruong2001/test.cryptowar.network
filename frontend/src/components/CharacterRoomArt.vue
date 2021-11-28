@@ -23,6 +23,7 @@
       <div
         :style="{
           'background-image': 'url(' + getCharacterArt(character) + ')',
+          'z-index': 999
         }"
         :class="{
           'w-100': portrait,
@@ -30,6 +31,10 @@
           'h-75': isMarket,
         }"
       ></div>
+      <div class="traitOfCharacter" :style="{
+        'background-image': 'url(' + getCharacterTrait(character) + ')',
+        }">
+      </div>
     </div>
     <div class="loading-container" v-if="!allLoaded">
       <i class="fas fa-spinner fa-spin"></i>
@@ -43,7 +48,7 @@
 
       <div class="score-id-container">
         <div class="black-outline" v-if="!portrait">
-          Owner: <span class="white">{{ this.matchReward }} xBlade</span>
+          Owner: <span class="ownerText">{{ renderOwner(this.room.owner) }}</span>
         </div>
       </div>
        <!-- <div class="score-id-container">
@@ -51,21 +56,12 @@
           Total reward: <span class="white">{{ this.totalReward }} xBlade</span>
         </div>
       </div> -->
-      <div class="request-fight-container">
-        <button
-          type="button"
-          class="btn btn-buy btn-sm"
-          @click="handleRequestFight()"
-        >
-          Request Fight
-        </button>
-      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { getCharacterArt } from "../character-arts-placeholder";
+import { getCharacterArt, getCharacterTrait } from "../character-arts-placeholder";
 import { CharacterTrait, RequiredXp } from "../interfaces";
 import { mapGetters, mapState, mapActions } from "vuex";
 import { getCleanName } from "../rename-censor";
@@ -169,6 +165,7 @@ export default {
     },
 
     getCharacterArt,
+    getCharacterTrait,
     handleRequestFight() {
       this.requestFight({
         roomId: this.room.id,
@@ -176,9 +173,22 @@ export default {
         characterId: this.selectedCharacterId,
       });
     },
+
+    renderOwner(owner) {
+      if(!owner) {
+        return '';
+      }
+      else if(owner?.length<11) {
+        return owner;
+      }else {
+        const hiddenString = owner.slice(5, owner?.length-5);
+        const hiddenOwner = owner.split(hiddenString).join('...');
+        return hiddenOwner;
+      }
+    }
   },
   mounted() {
-    console.log(this.room);
+    // console.log(this.room);
     this.allLoaded = true;
     this.showPlaceholder = true;
     console.log(this.character);
@@ -189,7 +199,7 @@ export default {
 
 <style scoped>
 .character-art {
-  width: 100%;
+  width: 299px;
   height: 100%;
   position: relative;
   display: flex;
@@ -233,7 +243,7 @@ export default {
   justify-content: space-between;
   padding-left: 1.5rem;
   padding-right: 2rem;
-  margin-top: 1rem;
+  margin-top: 2rem;
 }
 
 .trait {
@@ -416,5 +426,17 @@ export default {
   align-items: center;
   justify-content: center;
   margin: 4px 0;
+}
+
+.traitOfCharacter {
+  position: absolute;
+  top:8.5rem;
+  background-color: transparent;
+  transform: scale(2.5);
+}
+.ownerText {
+  color:#FEA829;
+  font-size: 18px;
+  font-weight: bold;
 }
 </style>
