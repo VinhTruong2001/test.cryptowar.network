@@ -29,7 +29,7 @@
     <claim-rewards-bar v-if="canShowRewardsBar" />
     <div class="container_row">
       <!-- <img src="../assets/divider4.png" class="expander-divider" /> -->
-      <b-button
+      <!-- <b-button
         class="expander-button"
         @click="toggleCharacterView"
         v-if="ownCharacters.length > 0"
@@ -43,7 +43,7 @@
           v-if="getIsCharacterViewExpanded"
           aria-hidden="true"
         />
-      </b-button>
+      </b-button> -->
     </div>
   </div>
 </template>

@@ -667,6 +667,8 @@ export function createStore(web3: Web3) {
       },
 
       updateCharacter(state: IState, { characterId, character }) {
+        console.log('zzz', characterId);
+        console.log('yyy', character);
         Vue.set(state.characters, characterId, character);
       },
 
@@ -1214,14 +1216,19 @@ export function createStore(web3: Web3) {
 
         await Promise.all([
           (async () => {
+
+            const owner = await Characters.methods.ownerOf(characterId).call(defaultCallOptions(state));
+            console.log('test owner', owner);
             const character = characterFromContract(
               characterId,
               await Characters.methods
                 .get('' + characterId)
                 .call(defaultCallOptions(state))
             );
+            const _character = {...character, owner};
+            console.log('haizzz', _character);
 
-            commit('updateCharacter', { characterId, character });
+            commit('updateCharacter', { characterId,character: _character });
           })(),
           dispatch('fetchCharacterTransferCooldown', characterId)
         ]);
