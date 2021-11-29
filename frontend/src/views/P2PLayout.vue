@@ -315,7 +315,7 @@ export default Vue.extend({
     }, 3000);
     // @ts-ignore
     this.fetchRequestInterval = setInterval(async () => {
-      await this.getRequests({ roomId: "0" });
+      await this.getRequests();
     }, 3000);
   }
 });

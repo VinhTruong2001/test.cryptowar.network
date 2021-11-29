@@ -64,11 +64,7 @@
         "extends": [
             "plugin:vue/essential",
             "eslint:recommended",
-            "@vue/typescript",
-            "eslint-config-prettier"
-        ],
-        "plugins": [
-            "eslint-plugin-prettier"
+            "@vue/typescript"
         ],
         "parserOptions": {
             "project": [
