@@ -193,13 +193,13 @@ contract Weapons is Initializable, ERC721Upgradeable, AccessControlUpgradeable {
         if(roll < 4) {
             stars = 4;
         }
-        else if(roll < 15) {
+        else if(roll < 10) {
             stars = 3;
         }
-        else if(roll < 95) {
+        else if(roll < 79) {
             stars = 2;
         }
-        else if(roll < 365) {
+        else if(roll < 269) {
             stars = 1;
         }
         else {
@@ -216,10 +216,10 @@ contract Weapons is Initializable, ERC721Upgradeable, AccessControlUpgradeable {
         if(roll < 8) {
             stars = 4;
         }
-        else if(roll < 50) {
+        else if(roll < 41) {
             stars = 3;
         }
-        else if(roll < 190) {
+        else if(roll < 139) {
             stars = 2;
         }
         else {
