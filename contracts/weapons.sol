@@ -190,16 +190,16 @@ contract Weapons is Initializable, ERC721Upgradeable, AccessControlUpgradeable {
         uint256 stars;
         uint256 roll = seed % 1000;
         // will need revision, possibly manual configuration if we support more than 5 stars
-        if(roll < 4) {
+        if (roll < 5) {
             stars = 4;
         }
-        else if(roll < 10) {
+        else if (roll < 15) {
             stars = 3;
         }
-        else if(roll < 79) {
+        else if (roll < 35) {
             stars = 2;
         }
-        else if(roll < 269) {
+        else if (roll < 120) {
             stars = 1;
         }
         else {
@@ -213,17 +213,20 @@ contract Weapons is Initializable, ERC721Upgradeable, AccessControlUpgradeable {
         uint256 stars;
         uint256 roll = seed % 1000;
         // will need revision, possibly manual configuration if we support more than 5 stars
-        if(roll < 8) {
+        if (roll < 25) {
             stars = 4;
         }
-        else if(roll < 41) {
+        else if (roll < 75) {
             stars = 3;
         }
-        else if(roll < 139) {
+        else if (roll < 175) {
             stars = 2;
         }
-        else {
+        else if (roll < 735) {
             stars = 1;
+        }
+        else {
+            stars = 0;
         }
 
         return mintWeaponWithStars(minter, stars, seed);
