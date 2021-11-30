@@ -3268,8 +3268,6 @@ export function createStore(web3: Web3) {
         // @ts-ignore
         const result: any[] = await Promise.all(promises);
 
-        console.log('result fight', result);
-
         if(!result){
           return;
         }
