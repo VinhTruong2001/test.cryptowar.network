@@ -4,113 +4,87 @@
     <div class="z" id="training">
       <div class="z-body">
         <div class="page-header" id="marketplace">
-          <div class="container2">
-            <div class="row">
               <div class="col-12">
                 <span class="heroAmount">{{ownCharacters.length}} <span class="heroAmountWhiteText">Heroes In Career Mode</span></span>
-              </div>
-            </div>
-            <div class="col-12">
-              <div class="row">
-                <div class="col-sm-4"></div>
-                <div class="col-sm-4">
+                <div class="containerInformation">
+                  <div class="containerPickHero">
+                    <div
+                      v-if="characterId"
+                      @click="openHeroPicker()"
+                      class="character-item"
+                    >
+                    <span>{{this.selectedCharacter}}</span>
+                    <span>{{this.selectedWeapon}}</span>
+                      <div class="art">
+                        <CharacterRoom
+                            :selectedCharacterId="characterId"
+                            :selectedWeaponId="weaponId"
+                          />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="containerPickHero">
+                    <div
+                      v-if="characterId"
+                      @click="openHeroPicker()"
+                      class="character-item"
+                    >
+                    <span>{{this.selectedCharacter}}</span>
+                    <span>{{this.selectedWeapon}}</span>
+                      <div class="art">
+                        <CharacterRoom
+                            :selectedCharacterId="characterId"
+                            :selectedWeaponId="weaponId"
+                          />
+                      </div>
+                    </div>
+                  </div>
+                <div class="containerBoxInfor">
                   <div class="panelInfor">
                     <span id="titleBox">Your Information</span>
                     <div class="container">
                       <span class="titleAmountHeroes">HEROES available</span>
                       <div class="boxText">
-                        <span>4</span>
+                        <span>{{ownCharacters.length}}</span>
                       </div>
                     </div>
                     <div class="container">
-                      <div class="selectButton">
+                      <div class="selectButton" @click="openHeroPicker()">
                         <span>SELECT HERO</span>
                       </div>
-                      <div class="selectButton">
+                      <div class="selectButton" @click="openWeaponPicker()">
                         <span>SELECT WEAPON</span>
                       </div>
                     </div>
                     <div class="containerAround">
                       <span>Amount a match</span>
-                      <input type="text" v-model="matchReward">
+                      <div style="containerInputAmount">
+                        <input class="inputAmountBox" type="text" v-model="matchReward">
+                      </div>
                     </div>
                     <div class="containerAround">
                       <span>Total deposit</span>
-                      <input type="text" v-model="totalDeposit">
+                      <div style="containerInputAmount">
+                        <div class="cwIconBlock"></div>
+                        <input class="inputAmountBox" type="text" v-model="totalDeposit">
+                      </div>
+                    </div>
+                    <div class="containerTwoRoomButton">
+                      <div class="createRoomButton" @click="handleCreateRoom()">
+                        <span class="titleCreateRoom">List HERO to Career Mode</span>
+                      </div>
+                      <div class="createRoomButton">
+                        <span class="titleCreateRoom">List HERO to Challenge Mode</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div class="col-sm-4"></div>
+                </div>
               </div>
             </div>
-          </div>
         </div>
         <div class="bodyPage">
           <div class="containerContent">
-            <div class="containerLeft">
-              <div class="leftPanel">
-                <div>
-                  <span class="titleSearch"> Stamina Cost per Fight </span>
-                </div>
-                <div>
-                  <input
-                    class="searchHeroes"
-                    placeholder="| Search your HEROES"
-                  />
-                </div>
-                <div class="rowCheckbox">
-                  <input type="checkbox" name="heroes" id="checkboxHeroes" />
-                  <span class="titleCheckbox">Browse Heroes</span>
-                </div>
-                <div class="rowCheckbox">
-                  <input type="checkbox" name="heroes" id="checkboxHeroes" />
-                  <span class="titleCheckbox">Browse Weapons</span>
-                </div>
-                <div class="containerButtonReset">
-                  <button id="resetButton">
-                    <span class="titleResetButton">RESET</span>
-                  </button>
-                </div>
-                <div class="containerButtonSelectHeroes">
-                <div
-                  class="card-boss__zoan card-boss__pk card"
-                  @click="openHeroPicker()"
-                  v-if="!characterId"
-                >
-                  <div class="card-header">
-                    <span
-                      variant="primary"
-                      class="badge badge-secondary badge-pill"
-                      >#pick a Hero to Challenge</span
-                    >
-                  </div>
-                  <!-- <img
-                        src="@/assets/images/p2pimages/add-zoan.svg"
-                        class="img-add-zoan card-img"
-                      /> -->
-                </div>
-                </div>
-                <div
-                  v-if="characterId"
-                  @click="openHeroPicker()"
-                  class="character-item"
-                >
-                  <div class="art">
-                    <CharacterRoomArt :character="selectedCharacter" />
-                  </div>
-                </div>
-                <div class="pickWeaponButton" @click="openWeaponPicker()">
-                    <span class="titlePickWeapon">#SELECT WEAPON TO FIGHT</span>
-                </div>
-                <button
-                  type="button"
-                  class="search-suggest__btn ml-1 btn btn-buy btn-sm"
-                  @click="handleCreateRoom()"
-                >
-                  Create Room
-                </button>
-              </div>
-            </div>
             <div class="containerRight">
               <div class="tabView">
                 <ul class="tab-categories nav nav-tabs">
@@ -148,7 +122,7 @@
                       @click="currentTab = 'request'"
                       >Requests
                       <span class="badge badge-success badge-pill">
-                        {{ careerModeRequest.length }}</span
+                        {{ this.filterCareerModeRequest(careerModeRequest).length }}</span
                       ></a
                     >
                   </li>
@@ -183,7 +157,7 @@
 
                 <div v-if="currentTab === 'request'">
                   <div
-                    v-for="r in careerModeRequest"
+                    v-for="r in this.filterCareerModeRequest(careerModeRequest)"
                     :key="r.requester"
                     class="justify-content-center row"
                   >
@@ -194,7 +168,6 @@
             </div>
           </div>
         </div>
-      </div>
     </div>
     <div class="Toastify"></div>
     <b-modal
@@ -223,7 +196,7 @@ import { BModal } from "bootstrap-vue";
 import Vue from "vue";
 import { mapGetters, mapState, mapActions } from "vuex";
 import CharacterList from "../components/smart/CharacterList.vue";
-import CharacterRoomArt from "../components/CharacterRoomArt.vue";
+// import CharacterRoomArt from "../components/CharacterRoomArt.vue";
 import WeaponGrid from "@/components/smart/WeaponGrid.vue";
 // import WeaponIcon from "@/components/WeaponIcon.vue";
 import CharacterRoom from "@/components/CharacterRoom.vue";
@@ -245,7 +218,7 @@ interface IData {
 export default Vue.extend({
   components: {
     CharacterList,
-    CharacterRoomArt,
+    // CharacterRoomArt,
     WeaponGrid,
     CharacterRoom,
     // WeaponIcon,
@@ -294,6 +267,10 @@ export default Vue.extend({
         matchReward: this.matchReward,
         totalDeposit: this.totalDeposit
       });
+    },
+
+    filterCareerModeRequest () {
+      return this.careerModeRequest.filter((item: any) => !item.done);
     }
   },
   computed: {

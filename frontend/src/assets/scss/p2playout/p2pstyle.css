@@ -20484,6 +20484,7 @@ button.swiper-pagination-bullet {
 
 .containerContent {
     display: flex;
+    flex: 1;
 }
 
 .containerLeft {
@@ -20499,7 +20500,7 @@ button.swiper-pagination-bullet {
 }
 
 .containerRight {
-    flex: 0.8;
+    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -20657,18 +20658,80 @@ margin-bottom: 1.5rem;
   width: 100%;
   padding-left: 3.7rem;
   padding-right: 3.7rem;
+  margin-top: 1rem;
 }
 .containerAround span {
   display: flex;
   flex: 1;
+  font-size: 21px;
+  
 }
 .containerAround input {
-  display: flex;
-  flex: 1;
-  margin-left: 10px;
+  
 }
 .titleAmountHeroes {
   margin-left: 2rem;
   font-size: 21px;
   line-height: 25px;
+}
+
+.containerInputAmount {
+    display: flex;
+    align-items: center;
+}
+.cwIconBlock {
+
+}
+
+.inputAmountBox {
+    width: 100%;
+    display: flex;
+  margin-left: 10px;
+  background-color: #000;
+  border: 1px solid #707070;
+  height: 59px;
+  color: #f58b5b;
+  padding-left: 22px;
+  font-size: 21px;
+}
+
+.createRoomButton {
+    width: 100%;
+    height: 51px;
+    background-image: linear-gradient(#f3859c, #7f327c);
+    border-radius: 5px;
+    width: 78%;
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.titleCreateRoom {
+    font-size: 21px;
+    height: 25px;
+    color: var(--white);
+}
+
+.containerInformation {
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
+    width: 80%;
+}
+.containerBoxInfor {
+    display: flex;
+    flex:0.45
+}
+
+.containerTwoRoomButton {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 3rem;
+    align-items: center;
+}
+
+.containerPickHero {
+    flex: 0.22
 }

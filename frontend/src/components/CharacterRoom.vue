@@ -61,7 +61,7 @@ export default Vue.extend({
 
 <style scoped>
 .character-item {
-  width: 299px;
+  width: 100%;
   max-width: 100%;
   background-image: url("../assets/images/bg-item-top.png");
   background-position: 50% 50%;
@@ -70,7 +70,7 @@ export default Vue.extend({
   position: relative;
   height: 27rem;
   margin-top: 2.7rem;
-  margin-left: 2.5rem;
+  /* margin-left: 2.5rem; */
   align-items: center;
 }
 
