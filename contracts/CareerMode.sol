@@ -257,9 +257,10 @@ contract CareerMode is
         uint24 _playerPower,
         uint24 _opponentPower
     ) internal {
-        RequestFight memory _requestFight = requestFightList[_roomId][
+        RequestFight storage _requestFight = requestFightList[_roomId][
             _requestId
         ];
+        _requestFight.done = true;
         uint256 seed = randoms.getRandomSeed(_requestFight.requester);
 
         uint24 playerRoll = getPlayerPowerRoll(_playerPower, seed);
