@@ -31,13 +31,14 @@ import { mapActions, mapState } from "vuex";
 import Web3 from "web3";
 
 export default Vue.extend({
-  props: ["characterId", "room", "selectedWeaponId", "selectedCharacterId", "requestFight", "fetchCharacters"],
+  props: ["characterId", "room", "selectedWeaponId", "selectedCharacterId"],
   components: {
     CharacterRoomArt,
   },
   methods: {
     ...mapActions(["fetchCharacters", "requestFight"]),
     handleRequestFight() {
+      //@ts-ignore
       this.requestFight({
         roomId: this.room.id,
         weaponId: this.selectedWeaponId,
@@ -52,6 +53,7 @@ export default Vue.extend({
     },
   },
   async mounted() {
+    //@ts-ignore
     await this.fetchCharacters([this.characterId]);
   },
 });
@@ -93,15 +95,13 @@ export default Vue.extend({
 }
 
   .containerButton {
-    padding-top: 0.85rem;
-    padding-bottom: 0.85rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 47px;
   }
   .buttonFight {
     border: none;
+    height: 47px;
     background-image: url('../assets/images/bg-fight-button.png');
     background-size: 100% 100%;
     background-repeat: no-repeat;

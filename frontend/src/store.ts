@@ -667,8 +667,6 @@ export function createStore(web3: Web3) {
       },
 
       updateCharacter(state: IState, { characterId, character }) {
-        console.log('zzz', characterId);
-        console.log('yyy', character);
         Vue.set(state.characters, characterId, character);
       },
 
@@ -1218,7 +1216,6 @@ export function createStore(web3: Web3) {
           (async () => {
 
             const owner = await Characters.methods.ownerOf(characterId).call(defaultCallOptions(state));
-            console.log('test owner', owner);
             const character = characterFromContract(
               characterId,
               await Characters.methods
@@ -1226,7 +1223,6 @@ export function createStore(web3: Web3) {
                 .call(defaultCallOptions(state))
             );
             const _character = {...character, owner};
-            console.log('haizzz', _character);
 
             commit('updateCharacter', { characterId,character: _character });
           })(),
@@ -3271,6 +3267,8 @@ export function createStore(web3: Web3) {
         }
         // @ts-ignore
         const result: any[] = await Promise.all(promises);
+
+        console.log('result fight', result);
 
         if(!result){
           return;

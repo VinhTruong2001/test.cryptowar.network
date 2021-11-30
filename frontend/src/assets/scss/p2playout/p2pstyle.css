@@ -16994,7 +16994,6 @@ a:hover {
 
 .page-header {
     text-align: center;
-    padding-top: 50px;
     padding-bottom: 50px;
 }
 
@@ -20538,12 +20537,16 @@ button.swiper-pagination-bullet {
 }
 
 .panelInfor {
+    display: flex;
     background-color: #000;
+    flex: 1;
+    margin-top: 2.35rem;
 }
 
 #titleBox {
     font-family: 'Rubik-Bold';
     font-size: 2rem;
+    margin-top: 1.5rem;
 }
 
 .panelInfor {
@@ -20579,4 +20582,93 @@ button.swiper-pagination-bullet {
     color: var(--white);
     font-size: 17px;
     font-weight: bold;
+}
+
+.containerListHero {
+    display: flex;
+    flex: 1;
+}
+
+.containerButtonSelect {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    background-color: red;
+}
+
+.heroAmount {
+    font-size: 32px;
+    color: #f2be3e;
+}
+
+.heroAmountWhiteText {
+    color: var(--white)
+}
+
+.selectButton span {
+    font-family: 'Rubik-Bold';
+    font-size: 1rem;
+    color: var(--white);
+    padding-top: 0.4rem ;
+    padding-bottom: 0.4rem ;
+    padding-left:1.2rem;
+    padding-right:1.2rem;
+    line-height: 19px;
+}
+
+.selectButton {
+    background-image: url("../../images/bg-fight-button.png");
+background-size: 100% 100%;
+/* flex: 1; */
+background-repeat: no-repeat;
+display: flex;
+justify-content: center;
+align-items: center;
+height: 47px;
+margin-left: 2rem;
+margin-bottom: 1.5rem;
+}
+.boxText {
+  width: 196px;
+  height: 59px;
+  border: 1px solid #707070;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 2rem;
+}
+.boxText span {
+  font-size: 33px;
+  line-height: 39px;
+  color:#f3bf2b;
+
+}
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+.containerAround {
+  display: flex;
+  flex:1;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding-left: 3.7rem;
+  padding-right: 3.7rem;
+}
+.containerAround span {
+  display: flex;
+  flex: 1;
+}
+.containerAround input {
+  display: flex;
+  flex: 1;
+  margin-left: 10px;
+}
+.titleAmountHeroes {
+  margin-left: 2rem;
+  font-size: 21px;
+  line-height: 25px;
 }
