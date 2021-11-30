@@ -63,7 +63,5 @@ export function getCharacterTrait(character: ICharacter) {
     return null;
   }
   // @ts-ignore
-  console.log('aaaa', trait[traitName]);
-  // @ts-ignore
   return trait[traitName];
 }

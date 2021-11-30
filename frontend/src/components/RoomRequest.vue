@@ -29,7 +29,6 @@ export default Vue.extend({
   methods: {
     ...mapActions(["fetchCharacters", "fight"]),
     handleFight() {
-      console.log(this.request);
       this.fight({ roomId: this.request.roomId, requestId: this.request.id });
     },
   },

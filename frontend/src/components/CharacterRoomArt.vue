@@ -125,7 +125,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(["requestFight"]),
+    ...mapActions(["requestFight, fetchCharacters"]),
     RequiredXp,
 
     tooltipHtml(character) {
@@ -191,7 +191,6 @@ export default {
     // console.log(this.room);
     this.allLoaded = true;
     this.showPlaceholder = true;
-    console.log(this.character);
     return;
   },
 };
@@ -430,9 +429,9 @@ export default {
 
 .traitOfCharacter {
   position: absolute;
-  top:8.5rem;
+  top:7rem;
   background-color: transparent;
-  transform: scale(2.5);
+  transform: scale(4);
 }
 .ownerText {
   color:#FEA829;

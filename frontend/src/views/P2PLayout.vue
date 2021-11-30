@@ -7,12 +7,7 @@
           <div class="container2">
             <div class="row">
               <div class="col-12">
-                <h2>
-                  1 <span class="text-white">Heroes In Challenge Mode</span>
-                </h2>
-              </div>
-              <div class="col-12">
-                <h2>1 <span class="text-white">Heroes In Career Mode</span></h2>
+                <span class="heroAmount">{{ownCharacters.length}} <span class="heroAmountWhiteText">Heroes In Career Mode</span></span>
               </div>
             </div>
             <div class="col-12">
@@ -21,11 +16,27 @@
                 <div class="col-sm-4">
                   <div class="panelInfor">
                     <span id="titleBox">Your Information</span>
-                    <div class="row">
-                      <span>HEROES available</span>
-                      <div>
-                        4
+                    <div class="container">
+                      <span class="titleAmountHeroes">HEROES available</span>
+                      <div class="boxText">
+                        <span>4</span>
                       </div>
+                    </div>
+                    <div class="container">
+                      <div class="selectButton">
+                        <span>SELECT HERO</span>
+                      </div>
+                      <div class="selectButton">
+                        <span>SELECT WEAPON</span>
+                      </div>
+                    </div>
+                    <div class="containerAround">
+                      <span>Amount a match</span>
+                      <input type="text" v-model="matchReward">
+                    </div>
+                    <div class="containerAround">
+                      <span>Total deposit</span>
+                      <input type="text" v-model="totalDeposit">
                     </div>
                   </div>
                 </div>
@@ -217,6 +228,7 @@ import WeaponGrid from "@/components/smart/WeaponGrid.vue";
 // import WeaponIcon from "@/components/WeaponIcon.vue";
 import CharacterRoom from "@/components/CharacterRoom.vue";
 import RoomRequest from "@/components/RoomRequest.vue";
+// import InforBar from '@/components/smart/InforBar.vue';
 
 interface IData {
   characterId?: number;
@@ -237,7 +249,8 @@ export default Vue.extend({
     WeaponGrid,
     CharacterRoom,
     // WeaponIcon,
-    RoomRequest
+    RoomRequest,
+    // InforBar
   },
   data() {
     return {
@@ -271,6 +284,10 @@ export default Vue.extend({
       (this.$refs["weapon-career-mode-selector"] as BModal).show();
     },
     handleCreateRoom() {
+      console.log('1111', this.characterId);
+      console.log('2222', this.weaponId);
+      console.log('3333', this.matchReward);
+      console.log('4444', this.totalDeposit);
       this.createCareerRoom({
         character: this.characterId,
         weapon: this.weaponId,
@@ -286,7 +303,7 @@ export default Vue.extend({
       "careerModeRooms",
       "careerModeRequest"
     ]),
-    ...mapGetters(["currentCharacter", "getCharacterName", "ownWeapons"]),
+    ...mapGetters(["currentCharacter", "getCharacterName", "ownWeapons", "ownCharacters"]),
 
     character(): any {
       if (!this.currentCharacter) {
