@@ -42,6 +42,7 @@ module.exports = async function (deployer, network, accounts) {
 
   const wep = await Weapons.at(weaponAddress);
   const char = await Characters.at(characterAddress);
+
   await wep.migrate_blindBox(blindBox.address);
   await char.migrate_blindBox(blindBox.address);
 };
