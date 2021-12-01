@@ -7,7 +7,6 @@ const Weapons = artifacts.require("Weapons");
 module.exports = async function (deployer, network, accounts) {
   let weaponAddress, characterAddress, blindBox, cwControllerAddress, xBlade;
   if (network === "bsctestnet") {
-<<<<<<< HEAD
     characterAddress = "0x89f874F2e809974e49220B077B0e256bFDdae4f7";
     weaponAddress = "0xFCf01FA5B11bf8506f4E674e747403c3D7fdC70B";
     cwControllerAddress = "0x8560CFC9fdFdd9499be4EE8f9E4b36C48662de45";
@@ -35,21 +34,6 @@ module.exports = async function (deployer, network, accounts) {
     deployer,
   });
   await upgradeProxy(characterAddress, Characters, {
-=======
-    characterAddress = "0x169e12572b318984f0e6ba89230ad2060f7dbb24";
-    weaponAddress = "0x2cb15b0a2bd10beaad6105e0b7219d6edc8288a1";
-  }
-  if (network === "bscmainnet") {
-    characterAddress = "0x169e12572b318984f0e6ba89230ad2060f7dbb24";
-    weaponAddress = "0x2cb15b0a2bd10beaad6105e0b7219d6edc8288a1";
-  }
-  blindBox = await deployProxy(BlindBox, [], {
-    deployer,
-  });
-
-
-  await upgradeProxy(weaponAddress, Weapons, {
->>>>>>> 65ffa8f (feat: update migration)
     deployer,
   });
   await upgradeProxy(characterAddress, Characters, {
