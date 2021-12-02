@@ -3230,10 +3230,12 @@ export function createStore(web3: Web3) {
       },
       async fight({ state }, { roomId, requestId }) {
         const { CareerMode } = state.contracts();
-        await CareerMode?.methods.fight(roomId, requestId).send({
+        const res = await CareerMode?.methods.fight(roomId, requestId).send({
           from: state.defaultAccount,
           gas: '800000'
         });
+
+        return res?.events.FightOutCome.returnValues;
       },
       async getRequests({ state, commit }) {
         const { CareerMode } = state.contracts();
@@ -3282,8 +3284,14 @@ export function createStore(web3: Web3) {
             roomId: v.roomId,
           }))
         });
-      }
-    },
+      },
 
+      async getRoom({ state }, { roomId }) {
+        const { CareerMode } = state.contracts();
+        const res = await CareerMode?.methods.getRoom(roomId).call(defaultCallOptions(state));
+        console.log('kkkkk', res);
+        return res;
+      },
+    },
   });
 }

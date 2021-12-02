@@ -10,7 +10,7 @@
         :selectedCharacterId="this.selectedCharacterId"
       />
     </div>
-    <div class="containerButton">
+    <div v-if="this.isRequest == true" class="containerButton">
         <button
           type="button"
           class="buttonFight"
@@ -31,7 +31,7 @@ import { mapActions, mapState } from "vuex";
 import Web3 from "web3";
 
 export default Vue.extend({
-  props: ["characterId", "room", "selectedWeaponId", "selectedCharacterId"],
+  props: ["characterId", "room", "selectedWeaponId", "selectedCharacterId", "isRequest"],
   components: {
     CharacterRoomArt,
   },
@@ -53,6 +53,7 @@ export default Vue.extend({
     },
   },
   async mounted() {
+    console.log('aaaa', this.isRequest);
     //@ts-ignore
     await this.fetchCharacters([this.characterId]);
   },
@@ -61,24 +62,24 @@ export default Vue.extend({
 
 <style scoped>
 .character-item {
-  width: 100%;
+  width: 299px;
   max-width: 100%;
   background-image: url("../assets/images/bg-item-top.png");
-  background-position: 50% 50%;
   background-repeat: no-repeat;
-  /* background-size: contain; */
-  position: relative;
-  height: 27rem;
+  background-size: 100% 100%;;
   margin-top: 2.7rem;
+  margin-bottom: 2.7rem;
   /* margin-left: 2.5rem; */
   align-items: center;
+  justify-items: center;
+  max-height: 432px;
 }
 
 .character-item .art {
   width: 100%;
   min-height: 0;
   height: 100%;
-  background-position: center;
+  /* background-position: center; */
   background-repeat: no-repeat;
   background-size: contain;
   display: flex;
@@ -98,6 +99,7 @@ export default Vue.extend({
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-bottom: 2rem;
   }
   .buttonFight {
     border: none;

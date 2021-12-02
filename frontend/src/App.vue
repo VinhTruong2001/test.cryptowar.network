@@ -593,32 +593,32 @@ button,
 .str-icon {
   color: red;
   content: url("assets/elements/fire.png");
-  width: 1em;
-  height: 1em;
+  width: 2.3rem;
+  height: 2.3rem;
 }
 
 .earth-icon,
 .dex-icon {
   color: green;
   content: url("assets/elements/earth.png");
-  width: 1em;
-  height: 1em;
+  width: 2.3rem;
+  height: 2.3rem;
 }
 
 .water-icon,
 .int-icon {
   color: cyan;
   content: url("assets/elements/water.png");
-  width: 1em;
-  height: 1em;
+  width: 2.3rem;
+  height: 2.3rem;
 }
 
 .lightning-icon,
 .cha-icon {
   color: yellow;
   content: url("assets/elements/lightning.png");
-  width: 1em;
-  height: 1em;
+  width: 2.3rem;
+  height: 2.3rem;
 }
 
 .loading-container {
