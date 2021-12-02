@@ -323,6 +323,8 @@ export default Vue.extend({
     },
     handleCreateRoom() {
       // @ts-ignore
+      console.log('show me the answer', this.characterId);
+      // @ts-ignore
       this.createCareerRoom({
         // @ts-ignore
         character: this.characterId,
