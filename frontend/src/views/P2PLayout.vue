@@ -285,25 +285,31 @@ export default Vue.extend({
       };
     },
     updateResults() {
+      // @ts-ignore
       return [this.fightResults, this.error];
     },
   },
   watch: {
     characterId(val) {
+      // @ts-ignore
       this.selectedCharacter = this.characters[val];
     },
     weaponId(val) {
+      // @ts-ignore
       this.selectedWeapon = this.ownWeapons.find(
         (w: any) => !!w && w.id === val
       );
     },
     async updateResults([fightResults, error]) {
+      // @ts-ignore
       this.resultsAvailable = fightResults !== null;
+      // @ts-ignore
       this.waitingResults = fightResults === null && error === null;
       // this.setIsInCombat(this.waitingResults);
       if(fightResults) {
         console.log('test gifhgt', fightResults);
       }
+      // @ts-ignore
       if (this.resultsAvailable && error === null) this.$bvModal.show('fightResultsModal');
     },
   },
@@ -316,31 +322,41 @@ export default Vue.extend({
       (this.$refs["weapon-career-mode-selector"] as BModal).show();
     },
     handleCreateRoom() {
+      // @ts-ignore
       this.createCareerRoom({
+        // @ts-ignore
         character: this.characterId,
+        // @ts-ignore
         weapon: this.weaponId,
+        // @ts-ignore
         matchReward: this.matchReward,
+        // @ts-ignore
         totalDeposit: this.totalDeposit
       });
     },
     async handleFight(roomId: any,requestId: any) {
       console.log('a1', roomId);
       console.log('b2', requestId);
+      // @ts-ignore
       this.waitingResults = true;
-
+      // @ts-ignore
       this.fightResults = null;
+      // @ts-ignore
       this.error = null;
       // this.setIsInCombat(this.waitingResults);
       try{
+        // @ts-ignore
         const results = await this.fight({
           roomId, requestId
         });
         console.log('gi v ta', results);
-
+        // @ts-ignore
         this.fightResults=results;
+        // @ts-ignore
         this.error=null;
       } catch (e: any) {
         console.error(e);
+        // @ts-ignore
         this.error = e.message;
       }
     },
@@ -351,10 +367,12 @@ export default Vue.extend({
   async mounted() {
     // @ts-ignore
     this.fetchRoomInterval = setInterval(async () => {
+      // @ts-ignore
       await this.getCareerRooms();
     }, 3000);
     // @ts-ignore
     this.fetchRequestInterval = setInterval(async () => {
+      // @ts-ignore
       await this.getRequests();
     }, 3000);
   }
