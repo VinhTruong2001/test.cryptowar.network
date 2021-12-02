@@ -5,6 +5,8 @@ interface RoomRequest {
   requester: string
   done: boolean
   roomId: string
+  matchReward: number
+  totalDeposit: number
 }
 
 export default RoomRequest;

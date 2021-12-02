@@ -1,41 +1,74 @@
 <template>
-  <div
-    style="
-      border-radius: 6px;
-      border: 1px solid #f76d00;
-      padding: 12px;
-      margin: 12px;
-    "
-  >
-    <div>
-      <div>Hero ID {{ this.request.heroId }}</div>
-      <div>Requester {{ this.request.requester }}</div>
-      <div>
-        <button type="button" class="btn btn-buy btn-sm" @click="handleFight()">
-          Fight
+ <div style="containerListRequest">
+   <BackgroundItem
+   v-if="this.request.heroId"
+   :character="characters[this.request.heroId]" :selectedCharacterId="this.request.heroId" :selectedWeaponId="this.request.weaponId" :noMargin="false" />
+   <div class="containerButton">
+        <button
+          type="button"
+          class="buttonFight"
+          @click="() =>this.handleFight(this.request.roomId, this.request.id)"
+        >
+        <span class="titleButtonFight">
+          FIGHT
+        </span>
         </button>
       </div>
-    </div>
-  </div>
+
+
+     <!-- <div class="character-item">
+       <div class="art">
+         <div class="name-lvl-container">
+        <div
+          class="name black-outline"
+          :title="getCleanCharacterName(this.request.heroId)"
+        >
+          {{'#'+ this.request.heroId }}
+        </div>
+      </div>
+       </div>
+     </div> -->
+     </div>
 </template>
 
 
 <script lang="ts">
 import Vue from "vue";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState,mapMutations, mapGetters } from "vuex";
+import { getCleanName } from "../rename-censor";
+// import CharacterRoom from "./CharacterRoom.vue";
+// import CharacterRoomArt from "./CharacterRoomArt.vue";
+import BackgroundItem from "./BackgroundItem.vue";
+// import CharacterRoomArt from "./CharacterRoomArt.vue";
 
 export default Vue.extend({
-  props: ["request"],
+
+  data() {
+    return {
+      waitingResults: false,
+      resultsAvailable: false,
+      fightResults: null,
+      error: null,
+      room: null,
+    };
+  },
+  components: { BackgroundItem },
+  props: ["request", "handleFight"],
+  computed: {
+    ...mapState(["characters", "careerModeRooms"]),
+    ...mapGetters(["getCharacterName"]),
+  },
+
   methods: {
-    ...mapActions(["fetchCharacters", "fight"]),
-    handleFight() {
-      this.fight({ roomId: this.request.roomId, requestId: this.request.id });
+    ...mapActions(["fetchCharacters", "fight", "getRoom"]),
+    ...mapMutations(['setIsInCombat']),
+    getCleanCharacterName(id: number) {
+      return getCleanName(this.getCharacterName(id));
     },
   },
-  computed: {
-    ...mapState(["characters"]),
-  },
+
   async mounted() {
+    console.log('lai ne', this.request);
     if (this.request.heroId) {
       await this.fetchCharacters([this.request.heroId]);
     }
@@ -44,6 +77,10 @@ export default Vue.extend({
 </script>
 
 <style scoped>
+
+.containerListRequest {
+  margin-top: 3.5rem;
+}
 .character-item {
   width: 340px;
   max-width: 100%;
@@ -68,6 +105,31 @@ export default Vue.extend({
   flex-wrap: wrap;
   justify-content: center;
   padding-left: 0px;
+}
+
+.containerButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+  .buttonFight {
+    border: none;
+    height: 47px;
+    background-image: url('../assets/images/bg-fight-button.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: transparent;
+  }
+.titleButtonFight {
+  color: var(--white);
+  font-size: 20px;
+  padding-left: 23.5px;
+  padding-right: 23.5px;
+  font-size: 19px;
+  font-weight: bold;
+  padding-top: 12px;
+  padding-bottom: 12px;
 }
 
 @media (max-width: 576px) {

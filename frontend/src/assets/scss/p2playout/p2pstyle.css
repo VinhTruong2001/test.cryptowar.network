@@ -20476,6 +20476,7 @@ button.swiper-pagination-bullet {
 .listCareerMode {
     display: flex;
     flex-wrap: wrap;
+    margin-top:3.5rem
 }
 
 .listCareerMode .row {
@@ -20538,10 +20539,7 @@ button.swiper-pagination-bullet {
 }
 
 .panelInfor {
-    display: flex;
-    background-color: #000;
-    flex: 1;
-    margin-top: 2.35rem;
+
 }
 
 #titleBox {
@@ -20558,6 +20556,8 @@ button.swiper-pagination-bullet {
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: #000;
+    margin-top: 2.35rem;
 }
 
 .containerButtonSelectHeroes {
@@ -20716,8 +20716,8 @@ margin-bottom: 1.5rem;
 .containerInformation {
     display: flex;
     flex: 1;
-    justify-content: flex-end;
-    width: 80%;
+    justify-content: center;
+    width: 100%;
 }
 .containerBoxInfor {
     display: flex;
@@ -20734,4 +20734,11 @@ margin-bottom: 1.5rem;
 
 .containerPickHero {
     flex: 0.22
+}
+
+.weaponContainer {
+    display: flex;
+    flex-direction: column;
+    width: 299px;
+    max-width: 100%;
 }

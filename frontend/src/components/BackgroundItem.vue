@@ -7,7 +7,7 @@
     <div>
        <div class="name-lvl-container">
         <div
-          class="name black-outline"
+          class="idCharacterText"
           :title="getCleanCharacterName(character.id)"
           v-if="!portrait"
         >
@@ -46,10 +46,9 @@
           <span class="white">{{ getCleanCharacterName(character.id) }}</span>
         </div>
       </div>
-
-      <div class="score-id-container">
+       <div class="score-id-container">
         <div class="black-outline" v-if="!portrait">
-          Owner: <span class="ownerText">{{ renderOwner(this.room.owner) }}</span>
+          Owner: <span class="ownerText">{{ renderOwner(this.character.owner) }}</span>
         </div>
       </div>
     </div>
@@ -61,7 +60,6 @@ import { getCharacterArt, getCharacterTrait } from "../character-arts-placeholde
 import { CharacterTrait, RequiredXp } from "../interfaces";
 import { mapGetters, mapState, mapActions } from "vuex";
 import { getCleanName } from "../rename-censor";
-import Web3 from "web3";
 
 export default {
   props: [
@@ -115,9 +113,6 @@ export default {
         CharacterTrait[this.character.trait]
       );
     },
-    totalReward(){
-      return Web3.utils.fromWei(this.room.totalDeposit, "ether");
-    }
   },
 
   methods: {
@@ -162,13 +157,6 @@ export default {
 
     getCharacterArt,
     getCharacterTrait,
-    handleRequestFight() {
-      this.requestFight({
-        roomId: this.room.id,
-        weaponId: this.selectedWeaponId,
-        characterId: this.selectedCharacterId,
-      });
-    },
 
     renderOwner(owner) {
       if(!owner) {
@@ -184,6 +172,7 @@ export default {
     }
   },
   mounted() {
+    console.log('aaaa', this.character);
     this.allLoaded = true;
     this.showPlaceholder = true;
     return;
@@ -193,12 +182,15 @@ export default {
 
 <style scoped>
 .character-art {
-  width: 100%;
-  height: 100%;
-  position: relative;
   display: flex;
-  justify-content: center;
   flex-direction: column;
+  width: 299px;
+  max-width: 100%;
+  background-image: url("../assets/images/bg-item-top.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;;
+  max-height: 432px;
+  /* margin-left: 2.5rem; */
 }
 
 .character-portrait .character-art {
@@ -235,9 +227,9 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding-left: 1.5rem;
-  padding-right: 2rem;
-  margin-top: 2rem;
+  padding-left: 1.75rem;
+  padding-right: 1.75rem;
+  margin-top: 1.75rem;
 }
 
 .trait {
@@ -331,6 +323,12 @@ export default {
   font-weight: bold;
   font-size: 1rem;
   font-family: 'Rubik';
+}
+
+.idCharacterText {
+    font-size: 21px;
+    height: 25px;
+    font-weight: 600;
 }
 
 .market-bot .lv {

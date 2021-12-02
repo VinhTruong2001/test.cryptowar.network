@@ -3,43 +3,43 @@
     <div class="disabled-animation-modal"></div>
     <div class="z" id="training">
       <div class="z-body">
+           <b-modal id="fightResultsModal" hide-footer title="Fight Results">
+              <CombatResults v-if="resultsAvailable" :results="fightResults" />
+              <b-button class="mt-3 btn-buy" block @click="$bvModal.hide('fightResultsModal')">Close</b-button>
+            </b-modal>
         <div class="page-header" id="marketplace">
-              <div class="col-12">
+              <div class="col-sm-12">
                 <span class="heroAmount">{{ownCharacters.length}} <span class="heroAmountWhiteText">Heroes In Career Mode</span></span>
-                <div class="containerInformation">
-                  <div class="containerPickHero">
+                <div class="row justify-content-center align-items-center">
+                  <div class="col-xs-12 p-0 col-sm-3 col-md-2">
                     <div
                       v-if="characterId"
                       @click="openHeroPicker()"
                       class="character-item"
                     >
-                    <span>{{this.selectedCharacter}}</span>
-                    <span>{{this.selectedWeapon}}</span>
                       <div class="art">
-                        <CharacterRoom
+                        <BackgroundItem
+                            v-if="characterId"
+                            :character="characters[characterId]"
                             :selectedCharacterId="characterId"
                             :selectedWeaponId="weaponId"
                           />
                       </div>
                     </div>
                   </div>
-                  <div class="containerPickHero">
-                    <div
-                      v-if="characterId"
-                      @click="openHeroPicker()"
-                      class="character-item"
-                    >
-                    <span>{{this.selectedCharacter}}</span>
-                    <span>{{this.selectedWeapon}}</span>
-                      <div class="art">
-                        <CharacterRoom
-                            :selectedCharacterId="characterId"
-                            :selectedWeaponId="weaponId"
-                          />
+                  <div class="col-xs-12 p-0 col-sm-3 col-md-2 mr-5">
+                      <div
+                        class="weaponContainer"
+                        v-if="selectedWeapon"
+                        @click="openWeaponPicker()"
+                      >
+                        <WeaponBackground
+                          :weapon="selectedWeapon"
+                        />
                       </div>
-                    </div>
                   </div>
-                <div class="containerBoxInfor">
+                <!-- <div class="col-6"> -->
+                  <div class="col-xs-12 p-0 col-sm-5 col-md-4">
                   <div class="panelInfor">
                     <span id="titleBox">Your Information</span>
                     <div class="container">
@@ -78,7 +78,8 @@
                       </div>
                     </div>
                   </div>
-                </div>
+                  </div>
+                <!-- </div> -->
                 </div>
               </div>
             </div>
@@ -150,19 +151,22 @@
                         :room="r"
                         :selectedCharacterId="characterId"
                         :selectedWeaponId="weaponId"
+                        :isRequest="true"
                       />
                     </div>
                   </ul>
                 </div>
 
                 <div v-if="currentTab === 'request'">
+                  <ul class="listCareerMode">
                   <div
                     v-for="r in this.filterCareerModeRequest(careerModeRequest)"
-                    :key="r.requester"
-                    class="justify-content-center row"
+                    :key="r.id"
+                    class="row"
                   >
-                    <RoomRequest :request="r" />
+                    <RoomRequest :request="r" :handleFight="handleFight" />
                   </div>
+                  </ul>
                 </div>
               </div>
             </div>
@@ -196,11 +200,12 @@ import { BModal } from "bootstrap-vue";
 import Vue from "vue";
 import { mapGetters, mapState, mapActions } from "vuex";
 import CharacterList from "../components/smart/CharacterList.vue";
-// import CharacterRoomArt from "../components/CharacterRoomArt.vue";
+import BackgroundItem from "../components/BackgroundItem.vue";
 import WeaponGrid from "@/components/smart/WeaponGrid.vue";
-// import WeaponIcon from "@/components/WeaponIcon.vue";
 import CharacterRoom from "@/components/CharacterRoom.vue";
 import RoomRequest from "@/components/RoomRequest.vue";
+import WeaponBackground from '@/components/WeaponSelect.vue';
+import CombatResults from "@/components/CombatResults.vue";
 // import InforBar from '@/components/smart/InforBar.vue';
 
 interface IData {
@@ -213,16 +218,22 @@ interface IData {
   totalDeposit: number;
   fetchRoomInterval: any;
   fetchRequestInterval: any;
+  waitingResults: any,
+  resultsAvailable: any,
+  fightResults: any,
+  error: any,
+  room: any,
 }
 
 export default Vue.extend({
   components: {
     CharacterList,
-    // CharacterRoomArt,
+    BackgroundItem,
     WeaponGrid,
     CharacterRoom,
-    // WeaponIcon,
     RoomRequest,
+    WeaponBackground,
+    CombatResults
     // InforBar
   },
   data() {
@@ -235,44 +246,15 @@ export default Vue.extend({
       matchReward: 0,
       totalDeposit: 0,
       fetchRoomInterval: null,
-      fetchRequestInterval: null
+      fetchRequestInterval: null,
+      waitingResults: false,
+      resultsAvailable: false,
+      fightResults: null,
+      error: null,
+      room: null,
     } as IData;
   },
-  watch: {
-    characterId(val) {
-      this.selectedCharacter = this.characters[val];
-    },
-    weaponId(val) {
-      this.selectedWeapon = this.ownWeapons.find(
-        (w: any) => !!w && w.id === val
-      );
-    }
-  },
-  methods: {
-    ...mapActions(["createCareerRoom", "getCareerRooms", "getRequests"]),
-    openHeroPicker() {
-      (this.$refs["hero-career-mode-selector"] as BModal).show();
-    },
-    openWeaponPicker() {
-      (this.$refs["weapon-career-mode-selector"] as BModal).show();
-    },
-    handleCreateRoom() {
-      console.log('1111', this.characterId);
-      console.log('2222', this.weaponId);
-      console.log('3333', this.matchReward);
-      console.log('4444', this.totalDeposit);
-      this.createCareerRoom({
-        character: this.characterId,
-        weapon: this.weaponId,
-        matchReward: this.matchReward,
-        totalDeposit: this.totalDeposit
-      });
-    },
 
-    filterCareerModeRequest () {
-      return this.careerModeRequest.filter((item: any) => !item.done);
-    }
-  },
   computed: {
     ...mapState([
       "characters",
@@ -281,6 +263,7 @@ export default Vue.extend({
       "careerModeRequest"
     ]),
     ...mapGetters(["currentCharacter", "getCharacterName", "ownWeapons", "ownCharacters"]),
+    // ...mapMutations(["setIsInCombat"]),
 
     character(): any {
       if (!this.currentCharacter) {
@@ -300,7 +283,70 @@ export default Vue.extend({
         level: c.level,
         experience: c.xp
       };
-    }
+    },
+    updateResults() {
+      return [this.fightResults, this.error];
+    },
+  },
+  watch: {
+    characterId(val) {
+      this.selectedCharacter = this.characters[val];
+    },
+    weaponId(val) {
+      this.selectedWeapon = this.ownWeapons.find(
+        (w: any) => !!w && w.id === val
+      );
+    },
+    async updateResults([fightResults, error]) {
+      this.resultsAvailable = fightResults !== null;
+      this.waitingResults = fightResults === null && error === null;
+      // this.setIsInCombat(this.waitingResults);
+      if(fightResults) {
+        console.log('test gifhgt', fightResults);
+      }
+      if (this.resultsAvailable && error === null) this.$bvModal.show('fightResultsModal');
+    },
+  },
+  methods: {
+    ...mapActions(["createCareerRoom", "getCareerRooms", "getRequests", "fight"]),
+    openHeroPicker() {
+      (this.$refs["hero-career-mode-selector"] as BModal).show();
+    },
+    openWeaponPicker() {
+      (this.$refs["weapon-career-mode-selector"] as BModal).show();
+    },
+    handleCreateRoom() {
+      this.createCareerRoom({
+        character: this.characterId,
+        weapon: this.weaponId,
+        matchReward: this.matchReward,
+        totalDeposit: this.totalDeposit
+      });
+    },
+    async handleFight(roomId: any,requestId: any) {
+      console.log('a1', roomId);
+      console.log('b2', requestId);
+      this.waitingResults = true;
+
+      this.fightResults = null;
+      this.error = null;
+      // this.setIsInCombat(this.waitingResults);
+      try{
+        const results = await this.fight({
+          roomId, requestId
+        });
+        console.log('gi v ta', results);
+
+        this.fightResults=results;
+        this.error=null;
+      } catch (e: any) {
+        console.error(e);
+        this.error = e.message;
+      }
+    },
+    filterCareerModeRequest () {
+      return this.careerModeRequest.filter((item: any) => !item.done);
+    },
   },
   async mounted() {
     // @ts-ignore
