@@ -312,7 +312,7 @@ contract CryptoWars is
             weaponMultTarget,
             weaponBonusPower,
             timestamp,
-            now.div(1 hours),
+            now.div(2 hours),
             target
         );
     }
@@ -568,7 +568,7 @@ contract CryptoWars is
                     weaponBonusPower
                 ),
                 characters.getStaminaTimestamp(char),
-                now.div(1 hours)
+                now.div(2 hours)
             );
     }
 
