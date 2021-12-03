@@ -33,7 +33,7 @@ module.exports = async function (deployer, network, accounts) {
     // const controller = await CWController.at(proxyAddress);
     // await controller.migrateTokenPrice();
     // await deployer.deploy(PancakeUtil);
-    await CryptoWars.link('PancakeUtil','0x4694737FD094f091C718698855A93DB235171315');
+    // await CryptoWars.link('PancakeUtil','0x4694737FD094f091C718698855A93DB235171315');
 
     // Upgrade CW
     const cwAddress = "0x8BA9f0841cFA75d7e2c7a316b048b04c98C95cA4";
