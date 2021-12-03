@@ -32,6 +32,7 @@ contract CWController is Initializable, OwnableUpgradeable {
     uint256 public latestUpdateTime;
     uint256 public updateThreshold;
     uint256 public currentPrice;
+    bool public delayPrice;
 
     function initialize() public initializer {
         OwnableUpgradeable.__Ownable_init();
@@ -53,8 +54,13 @@ contract CWController is Initializable, OwnableUpgradeable {
     }
 
     function migrateTokenPrice() public onlyOwner {
-        updateThreshold = 15 minutes;
+        updateThreshold = 30 minutes;
+        delayPrice = true;
         usdToxBlade(1e18);
+    }
+
+    function setDelayPrice(bool _delay) public onlyOwner {
+        delayPrice = _delay;
     }
 
     function setGame(address _game) public onlyOwner {
@@ -220,8 +226,11 @@ contract CWController is Initializable, OwnableUpgradeable {
     }
 
     function usdToxBladeInFight(uint256 usdAmount) public returns (uint256) {
-        updateTokenPrice();
-        return currentPrice.mul(usdAmount);
+        if (delayPrice) {
+            updateTokenPrice();
+            return currentPrice.mul(usdAmount);
+        }
+        return usdToxBlade(usdAmount);
     }
 
     function usdToxBlade(uint256 usdAmount) public view returns (uint256) {
@@ -272,5 +281,34 @@ contract CWController is Initializable, OwnableUpgradeable {
             currentPrice = pancakeRouter.getAmountsOut(1e18, path)[2]; // BUSD has decimals like Ethers
             latestUpdateTime = block.timestamp;
         }
+    }
+
+    function getAmountTokenFromBNB(uint256 _bnbAmount)
+        public
+        view
+        returns (uint256)
+    {
+        address[] memory path = new address[](2);
+        path[0] = pancakeRouter.WETH();
+        path[1] = xBladeAddress;
+
+        return pancakeRouter.getAmountsOut(_bnbAmount, path)[1];
+    }
+
+    function swapBNBForTokensToBurn(uint256 _bnbAmount) public {
+        // generate the pancake pair path of token -> weth
+        address[] memory path = new address[](2);
+        path[0] = pancakeRouter.WETH();
+        path[1] = xBladeAddress;
+
+        // make the swap
+        pancakeRouter.swapExactETHForTokensSupportingFeeOnTransferTokens{
+            value: _bnbAmount
+        }(
+            0, // accept any amount of BNB
+            path,
+            0x8888888888888888888888888888888888888888,
+            block.timestamp + 360
+        );
     }
 }

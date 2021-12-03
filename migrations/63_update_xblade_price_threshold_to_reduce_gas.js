@@ -3,6 +3,7 @@ const { upgradeProxy, deployProxy } = require("@openzeppelin/truffle-upgrades");
 const CWController = artifacts.require("CWController");
 const SecretBox = artifacts.require("SecretBox");
 const CryptoWars = artifacts.require("CryptoWars");
+const PancakeUtil = artifacts.require("PancakeUtil");
 
 module.exports = async function (deployer, network, accounts) {
   if (network === "bsctestnet") {
@@ -13,27 +14,32 @@ module.exports = async function (deployer, network, accounts) {
     await controller.migrate_v2(router, xBladeAddress, busdAddress);
     await controller.migrateTokenPrice();
 
-    // Upgrade SecretBox just for smoothy test
-    const secretBoxAddress = "0x9a8313127eab2dc37d8dd58a5e8ff144215a2efa";
-    await upgradeProxy(secretBoxAddress, SecretBox, { deployer });
-
     // Upgrade CryptoWars
     const cwAddress = "0x717829e31837963fb07dcfb0700423e5be71e5b4";
 
-    await upgradeProxy(cwAddress, CryptoWars, { deployer });
+    await upgradeProxy(cwAddress, CryptoWars, {
+      deployer,
+      unsafeAllow: ["external-library-linking"],
+    });
     const cryptoWar = await CryptoWars.at(cwAddress);
-    cryptoWar.setCWController(controller.address);
+    // cryptoWar.setCWController(controller.address);
   }
   if (network === "bscmainnet") {
-    const proxyAddress = "0xAadfa537ecA54d3d7655C4117bBFB83B9bF6035a";
-    await upgradeProxy(proxyAddress, CWController, {
-      deployer,
-    });
+    // const proxyAddress = "0xAadfa537ecA54d3d7655C4117bBFB83B9bF6035a";
+    // await upgradeProxy(proxyAddress, CWController, {
+    //   deployer,
+    // });
 
-    const controller = await CWController.at(proxyAddress);
-    const router = "0x10ed43c718714eb63d5aa57b78b54704e256024e";
-    const busdAddress = "0xe9e7cea3dedca5984780bafc599bd69add087d56";
-    const xBladeAddress = "0x27a339d9b59b21390d7209b78a839868e319301b";
-    await controller.migrate_v2(router, xBladeAddress, busdAddress);
+    // const controller = await CWController.at(proxyAddress);
+    // await controller.migrateTokenPrice();
+    // await deployer.deploy(PancakeUtil);
+    await CryptoWars.link('PancakeUtil','0x4694737FD094f091C718698855A93DB235171315');
+
+    // Upgrade CW
+    const cwAddress = "0x8BA9f0841cFA75d7e2c7a316b048b04c98C95cA4";
+    await upgradeProxy(cwAddress, CryptoWars, {
+      deployer,
+      unsafeAllow: ["external-library-linking"],
+    });
   }
 };

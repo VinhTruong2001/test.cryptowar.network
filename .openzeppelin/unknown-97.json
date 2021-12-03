@@ -129,6 +129,21 @@
       "address": "0xF5074C4Fa68ea1bAa8f6f192fc467D5Ada8dfE62",
       "txHash": "0x20fc7e8b3086f9708ae5aff3a41e320bdbe8f4296ef22d3614fddf87b69e7640",
       "kind": "transparent"
+    },
+    {
+      "address": "0xa31Dc6a098BED47EBdc73b29de4cffd219D3006a",
+      "txHash": "0xaa2078ad7e5bb8ec44f942aca518091a621437fe7760d24b81f8ee7465c9a65e",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x18860a6739EBaa5d67c5f195a44F522DC2800524",
+      "txHash": "0x44718f0be7d7ceef6b9fb3b3fe1c0c2a62c8a62c6882e5a88ba6012a4e77b8d8",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x6CE1Ce20766872815615039b3DC526A7EB4BE20e",
+      "txHash": "0x0ab3f6a1e460e19d740d09e471b32e8882ae38ec367fc85bce1d6caee06bfebd",
+      "kind": "transparent"
     }
   ],
   "impls": {
@@ -16846,6 +16861,326 @@
           },
           "t_bool": {
             "label": "bool"
+          }
+        }
+      }
+    },
+    "0eb3bc3482ae8c728c55a23eb8cd8f0d96f37185feb6436f32b0aa5f555e75b5": {
+      "address": "0x1d53484b3719bc0d5A1Ae121c544505beB088670",
+      "txHash": "0xeceafc39e583a8caa82aecee68fa5aae6a6e3a927227627a432ff51f00020114",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/Initializable.sol:25"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/Initializable.sol:30"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:31"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "_owner",
+            "type": "t_address",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:20"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:74"
+          },
+          {
+            "contract": "CWController",
+            "label": "game",
+            "type": "t_address",
+            "src": "CWController.sol:13"
+          },
+          {
+            "contract": "CWController",
+            "label": "reducePerMilestone",
+            "type": "t_uint256",
+            "src": "CWController.sol:14"
+          },
+          {
+            "contract": "CWController",
+            "label": "maxReduce",
+            "type": "t_uint256",
+            "src": "CWController.sol:15"
+          },
+          {
+            "contract": "CWController",
+            "label": "range",
+            "type": "t_uint256",
+            "src": "CWController.sol:16"
+          },
+          {
+            "contract": "CWController",
+            "label": "maxFactor",
+            "type": "t_uint256",
+            "src": "CWController.sol:18"
+          },
+          {
+            "contract": "CWController",
+            "label": "pancakeRouter",
+            "type": "t_contract(IPancakeRouter02)13749",
+            "src": "CWController.sol:20"
+          },
+          {
+            "contract": "CWController",
+            "label": "xBladeAddress",
+            "type": "t_address",
+            "src": "CWController.sol:21"
+          },
+          {
+            "contract": "CWController",
+            "label": "BUSDAddress",
+            "type": "t_address",
+            "src": "CWController.sol:22"
+          },
+          {
+            "contract": "CWController",
+            "label": "mintPrice",
+            "type": "t_uint256",
+            "src": "CWController.sol:24"
+          },
+          {
+            "contract": "CWController",
+            "label": "powerWeight",
+            "type": "t_uint256",
+            "src": "CWController.sol:25"
+          },
+          {
+            "contract": "CWController",
+            "label": "token",
+            "type": "t_contract(IERC20)29864",
+            "src": "CWController.sol:28"
+          },
+          {
+            "contract": "CWController",
+            "label": "discountRate",
+            "type": "t_uint256",
+            "src": "CWController.sol:29"
+          },
+          {
+            "contract": "CWController",
+            "label": "bonusRate",
+            "type": "t_uint256",
+            "src": "CWController.sol:30"
+          },
+          {
+            "contract": "CWController",
+            "label": "latestUpdateTime",
+            "type": "t_uint256",
+            "src": "CWController.sol:32"
+          },
+          {
+            "contract": "CWController",
+            "label": "updateThreshold",
+            "type": "t_uint256",
+            "src": "CWController.sol:33"
+          },
+          {
+            "contract": "CWController",
+            "label": "currentPrice",
+            "type": "t_uint256",
+            "src": "CWController.sol:34"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_contract(IPancakeRouter02)13749": {
+            "label": "contract IPancakeRouter02"
+          },
+          "t_contract(IERC20)29864": {
+            "label": "contract IERC20"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_bool": {
+            "label": "bool"
+          }
+        }
+      }
+    },
+    "dadfbfbbb0d28d291f25023c0004a00d86977189b3371b39856921f0825eab2a": {
+      "address": "0x8456c3ddC3607b8aC1A989Ae6018185B6E6dA50C",
+      "txHash": "0x67cfc89f7c7ae48076492dc3c6c94b0f25ea1b5e92aeeaf3395e8f7ab9027d09",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/Initializable.sol:25"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/Initializable.sol:30"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:31"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "_owner",
+            "type": "t_address",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:20"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:74"
+          },
+          {
+            "contract": "CWController",
+            "label": "game",
+            "type": "t_address",
+            "src": "CWController.sol:13"
+          },
+          {
+            "contract": "CWController",
+            "label": "reducePerMilestone",
+            "type": "t_uint256",
+            "src": "CWController.sol:14"
+          },
+          {
+            "contract": "CWController",
+            "label": "maxReduce",
+            "type": "t_uint256",
+            "src": "CWController.sol:15"
+          },
+          {
+            "contract": "CWController",
+            "label": "range",
+            "type": "t_uint256",
+            "src": "CWController.sol:16"
+          },
+          {
+            "contract": "CWController",
+            "label": "maxFactor",
+            "type": "t_uint256",
+            "src": "CWController.sol:18"
+          },
+          {
+            "contract": "CWController",
+            "label": "pancakeRouter",
+            "type": "t_contract(IPancakeRouter02)13814",
+            "src": "CWController.sol:20"
+          },
+          {
+            "contract": "CWController",
+            "label": "xBladeAddress",
+            "type": "t_address",
+            "src": "CWController.sol:21"
+          },
+          {
+            "contract": "CWController",
+            "label": "BUSDAddress",
+            "type": "t_address",
+            "src": "CWController.sol:22"
+          },
+          {
+            "contract": "CWController",
+            "label": "mintPrice",
+            "type": "t_uint256",
+            "src": "CWController.sol:24"
+          },
+          {
+            "contract": "CWController",
+            "label": "powerWeight",
+            "type": "t_uint256",
+            "src": "CWController.sol:25"
+          },
+          {
+            "contract": "CWController",
+            "label": "token",
+            "type": "t_contract(IERC20)29929",
+            "src": "CWController.sol:28"
+          },
+          {
+            "contract": "CWController",
+            "label": "discountRate",
+            "type": "t_uint256",
+            "src": "CWController.sol:29"
+          },
+          {
+            "contract": "CWController",
+            "label": "bonusRate",
+            "type": "t_uint256",
+            "src": "CWController.sol:30"
+          },
+          {
+            "contract": "CWController",
+            "label": "latestUpdateTime",
+            "type": "t_uint256",
+            "src": "CWController.sol:32"
+          },
+          {
+            "contract": "CWController",
+            "label": "updateThreshold",
+            "type": "t_uint256",
+            "src": "CWController.sol:33"
+          },
+          {
+            "contract": "CWController",
+            "label": "currentPrice",
+            "type": "t_uint256",
+            "src": "CWController.sol:34"
+          },
+          {
+            "contract": "CWController",
+            "label": "delayPrice",
+            "type": "t_bool",
+            "src": "CWController.sol:35"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_contract(IPancakeRouter02)13814": {
+            "label": "contract IPancakeRouter02"
+          },
+          "t_contract(IERC20)29929": {
+            "label": "contract IERC20"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
           }
         }
       }
