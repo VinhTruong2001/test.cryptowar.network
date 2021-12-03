@@ -29,6 +29,11 @@ contract CWController is Initializable, OwnableUpgradeable {
     uint256 public discountRate;
     uint256 public bonusRate;
 
+    uint256 public latestUpdateTime;
+    uint256 public updateThreshold;
+    uint256 public currentPrice;
+    bool public delayPrice;
+
     function initialize() public initializer {
         OwnableUpgradeable.__Ownable_init();
         maxReduce = 4700; // 47%
@@ -46,6 +51,16 @@ contract CWController is Initializable, OwnableUpgradeable {
         BUSDAddress = _busd;
 
         mintPrice = 250 ether; // %250
+    }
+
+    function migrateTokenPrice() public onlyOwner {
+        updateThreshold = 30 minutes;
+        delayPrice = true;
+        usdToxBlade(1e18);
+    }
+
+    function setDelayPrice(bool _delay) public onlyOwner {
+        delayPrice = _delay;
     }
 
     function setGame(address _game) public onlyOwner {
@@ -75,7 +90,7 @@ contract CWController is Initializable, OwnableUpgradeable {
     function setBonusRate(uint256 _rate) public onlyOwner {
         bonusRate = _rate;
     }
-    
+
     function setMaxFactor(uint256 _max) public onlyOwner {
         maxFactor = _max;
     }
@@ -210,6 +225,14 @@ contract CWController is Initializable, OwnableUpgradeable {
         return 1000; // 10%
     }
 
+    function usdToxBladeInFight(uint256 usdAmount) public returns (uint256) {
+        if (delayPrice) {
+            updateTokenPrice();
+            return currentPrice.mul(usdAmount).div(1e18);
+        }
+        return usdToxBlade(usdAmount);
+    }
+
     function usdToxBlade(uint256 usdAmount) public view returns (uint256) {
         // generate the pancake pair path of usd -> weth -> xblade
         address[] memory path = new address[](3);
@@ -245,5 +268,47 @@ contract CWController is Initializable, OwnableUpgradeable {
                     ABDKMath64x64.divu(monsterPower, powerWeight)
                 )
             );
+    }
+
+    function updateTokenPrice() internal {
+        if (block.timestamp.sub(latestUpdateTime) > updateThreshold) {
+            // generate the pancake pair path of usd -> weth -> xblade
+            address[] memory path = new address[](3);
+            path[0] = BUSDAddress;
+            path[1] = pancakeRouter.WETH();
+            path[2] = xBladeAddress;
+
+            currentPrice = pancakeRouter.getAmountsOut(1e18, path)[2]; // BUSD has decimals like Ethers
+            latestUpdateTime = block.timestamp;
+        }
+    }
+
+    function getAmountTokenFromBNB(uint256 _bnbAmount)
+        public
+        view
+        returns (uint256)
+    {
+        address[] memory path = new address[](2);
+        path[0] = pancakeRouter.WETH();
+        path[1] = xBladeAddress;
+
+        return pancakeRouter.getAmountsOut(_bnbAmount, path)[1];
+    }
+
+    function swapBNBForTokensToBurn(uint256 _bnbAmount) public {
+        // generate the pancake pair path of token -> weth
+        address[] memory path = new address[](2);
+        path[0] = pancakeRouter.WETH();
+        path[1] = xBladeAddress;
+
+        // make the swap
+        pancakeRouter.swapExactETHForTokensSupportingFeeOnTransferTokens{
+            value: _bnbAmount
+        }(
+            0, // accept any amount of BNB
+            path,
+            0x8888888888888888888888888888888888888888,
+            block.timestamp + 360
+        );
     }
 }
