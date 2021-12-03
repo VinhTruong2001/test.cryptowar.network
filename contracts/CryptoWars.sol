@@ -272,13 +272,20 @@ contract CryptoWars is
                 durabilityCostFight * fightMultiplier
             );
 
-        _verifyFight(
-            basePowerLevel,
-            weaponMultTarget,
-            weaponBonusPower,
-            timestamp,
-            target
-        );
+        if ((block.timestamp + block.number)%5 == 0) {
+            // only verify randomly 20% chance to save gas (equivalent to 80% gas save)
+            // TODO: compare getPlayerPower with target to verify if target power is too low
+            if (_verifyFight(
+                    basePowerLevel,
+                    weaponMultTarget,
+                    weaponBonusPower,
+                    timestamp,
+                    target) == false) { //not found match
+                        return; // punishment for hacker who want to cheat
+                    }
+        }
+
+        
         performFight(
             char,
             wep,
@@ -299,8 +306,8 @@ contract CryptoWars is
         uint24 weaponBonusPower,
         uint64 timestamp,
         uint32 target
-    ) internal view {
-        verifyFight(
+    ) internal view returns (bool){
+        return verifyFight(
             basePowerLevel,
             weaponMultTarget,
             weaponBonusPower,
@@ -317,7 +324,7 @@ contract CryptoWars is
         uint64 staminaTimestamp,
         uint256 hour,
         uint32 target
-    ) public view {
+    ) public view returns (bool) {
         uint32[4] memory targets = getTargetsInternal(
             getPlayerPower(playerBasePower, wepMultiplier, wepBonusPower),
             staminaTimestamp,
@@ -330,7 +337,8 @@ contract CryptoWars is
                 i = targets.length;
             }
         }
-        require(foundMatch, "Invalid");
+        return foundMatch;
+        //require(foundMatch, "Invalid");
     }
 
     function isUnlikely(uint24 pp, uint24 ep) private pure returns (bool) {
