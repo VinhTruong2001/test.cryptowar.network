@@ -169,10 +169,10 @@ contract SecretBox is Initializable, OwnableUpgradeable, PausableUpgradeable {
     }
 
     function getCommonPrice() public view returns (uint256) {
-        return cwController.currentPrice() * commonBoxPrice;
+        return cwController.usdToxBlade(commonBoxPrice);
     }
 
     function getRarePrice() public view returns (uint256) {
-        return cwController.currentPrice() * rareBoxPrice;
+        return cwController.usdToxBlade(rareBoxPrice);
     }
 }
