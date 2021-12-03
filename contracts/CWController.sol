@@ -228,7 +228,7 @@ contract CWController is Initializable, OwnableUpgradeable {
     function usdToxBladeInFight(uint256 usdAmount) public returns (uint256) {
         if (delayPrice) {
             updateTokenPrice();
-            return currentPrice.mul(usdAmount);
+            return currentPrice.mul(usdAmount).div(1e18);
         }
         return usdToxBlade(usdAmount);
     }

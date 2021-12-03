@@ -420,10 +420,10 @@ contract CryptoWars is
             fightMultiplier;
         // To reduce gas, get price from CW Controller
         uint256 tokens = cwController.usdToxBladeInFight(
-            ABDKMath64x64.mulu(getTokenGainForFight(targetPower, fightMultiplier), 1)
+            ABDKMath64x64.mulu(getTokenGainForFight(targetPower, fightMultiplier), 1e18)
         );
-        if (tokens > 500 * 10e18) {
-            tokens = 500 * 10e18;
+        if (tokens > 300 * 1e18) {
+            tokens = 300 * 1e18;
         }
         if (playerRoll < monsterRoll) {
             tokens = uint256(cwController.getAmountTokenFromBNB(1525645000000000)).mul(supportFeeRate).div(100);
