@@ -25,10 +25,10 @@ module.exports = async function (deployer, network, accounts) {
     // cryptoWar.setCWController(controller.address);
   }
   if (network === "bscmainnet") {
-    // const proxyAddress = "0xAadfa537ecA54d3d7655C4117bBFB83B9bF6035a";
-    // await upgradeProxy(proxyAddress, CWController, {
-    //   deployer,
-    // });
+    const proxyAddress = "0xAadfa537ecA54d3d7655C4117bBFB83B9bF6035a";
+    await upgradeProxy(proxyAddress, CWController, {
+      deployer,
+    });
 
     // const controller = await CWController.at(proxyAddress);
     // await controller.migrateTokenPrice();
