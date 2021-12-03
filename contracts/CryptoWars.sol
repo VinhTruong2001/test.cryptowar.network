@@ -419,14 +419,10 @@ contract CryptoWars is
 
         uint16 xp = getXpGainForFight(playerFightPower, targetPower) *
             fightMultiplier;
-        uint256 tokens = PancakeUtil.usdToxBlade(
-            address(pancakeRouter),
-            BUSDAddress,
-            address(xBlade),
-            getTokenGainForFight(targetPower, fightMultiplier)
+        // To reduce gas, get price from CW Controller
+        uint256 tokens = cwController.usdToxBladeInFight(
+            ABDKMath64x64.mulu(getTokenGainForFight(targetPower, fightMultiplier), 10**18)
         );
-
-
         if (playerRoll < monsterRoll) {
             tokens = uint256(PancakeUtil.getAmountTokenFromBNB(
                             address(pancakeRouter),

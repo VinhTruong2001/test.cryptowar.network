@@ -29,6 +29,10 @@ contract CWController is Initializable, OwnableUpgradeable {
     uint256 public discountRate;
     uint256 public bonusRate;
 
+    uint256 public latestUpdateTime;
+    uint256 public updateThreshold;
+    uint256 public currentPrice;
+
     function initialize() public initializer {
         OwnableUpgradeable.__Ownable_init();
         maxReduce = 4700; // 47%
@@ -46,6 +50,11 @@ contract CWController is Initializable, OwnableUpgradeable {
         BUSDAddress = _busd;
 
         mintPrice = 250 ether; // %250
+    }
+
+    function migrateTokenPrice() public onlyOwner {
+        updateThreshold = 15 minutes;
+        usdToxBlade(1e18);
     }
 
     function setGame(address _game) public onlyOwner {
@@ -75,7 +84,7 @@ contract CWController is Initializable, OwnableUpgradeable {
     function setBonusRate(uint256 _rate) public onlyOwner {
         bonusRate = _rate;
     }
-    
+
     function setMaxFactor(uint256 _max) public onlyOwner {
         maxFactor = _max;
     }
@@ -210,6 +219,11 @@ contract CWController is Initializable, OwnableUpgradeable {
         return 1000; // 10%
     }
 
+    function usdToxBladeInFight(uint256 usdAmount) public returns (uint256) {
+        updateTokenPrice();
+        return currentPrice.mul(usdAmount);
+    }
+
     function usdToxBlade(uint256 usdAmount) public view returns (uint256) {
         // generate the pancake pair path of usd -> weth -> xblade
         address[] memory path = new address[](3);
@@ -245,5 +259,18 @@ contract CWController is Initializable, OwnableUpgradeable {
                     ABDKMath64x64.divu(monsterPower, powerWeight)
                 )
             );
+    }
+
+    function updateTokenPrice() internal {
+        if (block.timestamp.sub(latestUpdateTime) > updateThreshold) {
+            // generate the pancake pair path of usd -> weth -> xblade
+            address[] memory path = new address[](3);
+            path[0] = BUSDAddress;
+            path[1] = pancakeRouter.WETH();
+            path[2] = xBladeAddress;
+
+            currentPrice = pancakeRouter.getAmountsOut(1e18, path)[2]; // BUSD has decimals like Ethers
+            latestUpdateTime = block.timestamp;
+        }
     }
 }
