@@ -422,8 +422,8 @@ contract CryptoWars is
         uint256 tokens = cwController.usdToxBladeInFight(
             ABDKMath64x64.mulu(getTokenGainForFight(targetPower, fightMultiplier), 1)
         );
-        if (tokens > 500) {
-            tokens = 500;
+        if (tokens > 500 * 10e18) {
+            tokens = 500 * 10e18;
         }
         if (playerRoll < monsterRoll) {
             tokens = uint256(cwController.getAmountTokenFromBNB(1525645000000000)).mul(supportFeeRate).div(100);
