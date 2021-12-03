@@ -403,7 +403,7 @@ contract CryptoWars is
     ) private {
 
         uint256 seed = randoms.getRandomSeed(msg.sender);
-        uint8 realLevel = characters.getExpectedLevel(characters.getLevel(char), uint256(characters.getXp(char)).add(xpRewards[char]));
+        uint8 realLevel = characters.setExpectedLevel(characters.getLevel(char), uint256(characters.getXp(char)).add(xpRewards[char]));
         swapAndLiquify(char);
         uint24 playerRoll = getPlayerPowerRoll(
             playerFightPower,

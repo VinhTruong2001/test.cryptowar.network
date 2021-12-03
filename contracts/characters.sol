@@ -103,6 +103,8 @@ contract Characters is Initializable, ERC721Upgradeable, AccessControlUpgradeabl
     uint256 public availableAmount;
     uint256 public staminaLevelRange;
 
+    mapping(uint256 => mapping(uint256 => uint8)) public expectedLevel;
+
     event NewCharacter(uint256 indexed character, address indexed minter);
     event LevelUp(address indexed owner, uint256 indexed character, uint16 level);
 
@@ -214,6 +216,9 @@ contract Characters is Initializable, ERC721Upgradeable, AccessControlUpgradeabl
     }
 
     function getExpectedLevel(uint8 level, uint256 xp) public view returns (uint8) {
+        if (expectedLevel[level][xp] > 0){
+            return expectedLevel[level][xp];
+        }
         uint requiredToLevel = experienceTable[level]; // technically next level
         while(xp >= requiredToLevel) {
             xp = xp - requiredToLevel;
@@ -250,6 +255,24 @@ contract Characters is Initializable, ERC721Upgradeable, AccessControlUpgradeabl
 
     function setStaminaTimestamp(uint256 id, uint64 timestamp) public restricted {
         tokens[id].staminaTimestamp = timestamp;
+    }
+
+    function setExpectedLevel(uint8 level, uint256 xp) public restricted returns (uint8) {
+        if (expectedLevel[level][xp] > 0){
+            return expectedLevel[level][xp];
+        }
+        uint requiredToLevel = experienceTable[level]; // technically next level
+        uint8 oldLevel = level;
+        while(xp >= requiredToLevel) {
+            xp = xp - requiredToLevel;
+            level += 1;
+            if(level < 255)
+                requiredToLevel = experienceTable[level];
+            else
+                xp = 0;
+        }
+        expectedLevel[oldLevel][xp] = level;
+        return level;
     }
 
     function getSecondsPerStamina(uint256 id) public view returns (uint256) {
