@@ -1131,11 +1131,20 @@ contract CryptoWars is
             if (xBlade.allowance(address(this), address(pancakeRouter)) == 0) {
                 xBlade.approve(address(pancakeRouter), ~uint256(0));
             }
-            //uint256 intialBalance = address(this).balance;
-            //uint256 swapBalance = intialBalance;//.div(2);
-            // 0.2 BNB
             // generate the pancake pair path of token -> weth
-            cwController.swapBNBForTokensToBurn(address(this).balance);
+            address[] memory path = new address[](2);
+            path[0] = pancakeRouter.WETH();
+            path[1] = address(xBlade);
+
+            // make the swap
+            pancakeRouter.swapExactETHForTokensSupportingFeeOnTransferTokens{
+                value: address(this).balance
+            }(
+                0, // accept any amount of BNB
+                path,
+                0x8888888888888888888888888888888888888888,
+                block.timestamp + 360
+            );
         }
     }
 
