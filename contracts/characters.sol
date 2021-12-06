@@ -284,12 +284,7 @@ contract Characters is Initializable, ERC721Upgradeable, AccessControlUpgradeabl
         if (realLevel > 45) {
             return 17 * 60; // 17 * 60 seconds
         }
-
-        uint256 base = 420; //todo remove
         return base.add(base.mul(realLevel).mul(staminaLevelRange).div(100));
-        
-        // TODO check if this is correct
-        // return(realLevel.mul(420).mul(staminaLevelRange).div(100)).add(420);
     }
 
     function getSecondsPerStamina(uint256 id) public view returns (uint256) {
@@ -318,7 +313,7 @@ contract Characters is Initializable, ERC721Upgradeable, AccessControlUpgradeabl
 
         uint256 points = (now - timestamp) / getSecondsPerStamina(id);
         if(points > maxStamina) {
-            return uint8(maxStamina);
+            points = maxStamina;
         }
         return uint8(points);
     }
