@@ -272,8 +272,10 @@ contract CryptoWars is
                 durabilityCostFight * fightMultiplier
             );
 
-        if ((block.timestamp + block.number)%5 == 0) {
-            // only verify randomly 20% chance to save gas (equivalent to 80% gas save)
+        if ((block.timestamp + block.number)%3 == 0) {
+            // only verify randomly 33% chance to save gas (equivalent to 67% gas save)
+            // players will lost tax & stamina, so if they cheat, they will lose 1.5$ tax + chance to win 2.5$ (total ~ 3.5$)
+            // so, if they cheat, they win 2 time and lose 1 time, which is still the same rate 
             // TODO: compare getPlayerPower with target to verify if target power is too low
             if (_verifyFight(
                     basePowerLevel,
@@ -281,6 +283,18 @@ contract CryptoWars is
                     weaponBonusPower,
                     timestamp,
                     target) == false) { //not found match
+
+
+                        emit FightOutcome(
+                            msg.sender,
+                            char,
+                            wep,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0
+                        );
                         return; // punishment for hacker who want to cheat
                     }
         }
