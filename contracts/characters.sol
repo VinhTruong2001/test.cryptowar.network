@@ -103,6 +103,8 @@ contract Characters is Initializable, ERC721Upgradeable, AccessControlUpgradeabl
     uint256 public availableAmount;
     uint256 public staminaLevelRange;
 
+    mapping(uint256 => mapping(uint256 => uint8)) public expectedLevel;
+
     event NewCharacter(uint256 indexed character, address indexed minter);
     event LevelUp(address indexed owner, uint256 indexed character, uint16 level);
 
@@ -214,6 +216,9 @@ contract Characters is Initializable, ERC721Upgradeable, AccessControlUpgradeabl
     }
 
     function getExpectedLevel(uint8 level, uint256 xp) public view returns (uint8) {
+        if (expectedLevel[level][xp] > 0){
+            return expectedLevel[level][xp];
+        }
         uint requiredToLevel = experienceTable[level]; // technically next level
         while(xp >= requiredToLevel) {
             xp = xp - requiredToLevel;
@@ -252,17 +257,31 @@ contract Characters is Initializable, ERC721Upgradeable, AccessControlUpgradeabl
         tokens[id].staminaTimestamp = timestamp;
     }
 
+    function setExpectedLevel(uint8 level, uint256 xp) public restricted returns (uint8) {
+        if (expectedLevel[level][xp] > 0){
+            return expectedLevel[level][xp];
+        }
+        uint requiredToLevel = experienceTable[level]; // technically next level
+        uint8 oldLevel = level;
+        while(xp >= requiredToLevel) {
+            xp = xp - requiredToLevel;
+            level += 1;
+            if(level < 255)
+                requiredToLevel = experienceTable[level];
+            else
+                xp = 0;
+        }
+        expectedLevel[oldLevel][xp] = level;
+        return level;
+    }
+
     function getSecondsPerStamina(uint256 id) public view returns (uint256) {
+        uint256 base = 420;
         uint256 realLevel = getExpectedLevel(getLevel(id), getXp(id));
         if (realLevel > 45) {
             return 17 * 60; // 17 * 60 seconds
         }
-
-        uint256 base = 420; //todo remove
         return base.add(base.mul(realLevel).mul(staminaLevelRange).div(100));
-        
-        // TODO check if this is correct
-        // return(realLevel.mul(420).mul(staminaLevelRange).div(100)).add(420);
     }
 
     function getStaminaPoints(uint256 id) public view noFreshLookup(id) returns (uint8) {
@@ -275,7 +294,7 @@ contract Characters is Initializable, ERC721Upgradeable, AccessControlUpgradeabl
 
         uint256 points = (now - timestamp) / getSecondsPerStamina(id);
         if(points > maxStamina) {
-            return uint8(maxStamina);
+            points = maxStamina;
         }
         return uint8(points);
     }
