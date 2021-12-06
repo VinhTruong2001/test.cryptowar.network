@@ -105,6 +105,9 @@ contract Characters is Initializable, ERC721Upgradeable, AccessControlUpgradeabl
 
     mapping(uint256 => mapping(uint256 => uint8)) public expectedLevel;
 
+    mapping(uint256 => uint256) public cachedSecondsPerStamina;
+    mapping(uint256 => uint256) public latestUpdateTimestamp;
+
     event NewCharacter(uint256 indexed character, address indexed minter);
     event LevelUp(address indexed owner, uint256 indexed character, uint16 level);
 
@@ -275,13 +278,29 @@ contract Characters is Initializable, ERC721Upgradeable, AccessControlUpgradeabl
         return level;
     }
 
-    function getSecondsPerStamina(uint256 id) public view returns (uint256) {
+    function _calculateSecondsPerStamina(uint256 id) internal view returns (uint256) {
         uint256 base = 420;
         uint256 realLevel = getExpectedLevel(getLevel(id), getXp(id));
         if (realLevel > 45) {
             return 17 * 60; // 17 * 60 seconds
         }
         return base.add(base.mul(realLevel).mul(staminaLevelRange).div(100));
+    }
+
+    function getSecondsPerStamina(uint256 id) public view returns (uint256) {
+        if (cachedSecondsPerStamina[id] > 0 ) {
+            return cachedSecondsPerStamina[id];
+        }
+        return _calculateSecondsPerStamina(id);
+    }
+
+    function setSecondsPerStamina(uint256 id) public returns (uint256){
+        // Cached time: 5 days
+        if (block.timestamp.sub(latestUpdateTimestamp[id]) > 432000) {
+            cachedSecondsPerStamina[id] =  _calculateSecondsPerStamina(id);
+            latestUpdateTimestamp[id] = block.timestamp;
+        }
+        return cachedSecondsPerStamina[id];
     }
 
     function getStaminaPoints(uint256 id) public view noFreshLookup(id) returns (uint8) {
@@ -312,7 +331,7 @@ contract Characters is Initializable, ERC721Upgradeable, AccessControlUpgradeabl
         uint8 staminaPoints = getStaminaPointsFromTimestamp(char.staminaTimestamp, id);
         require(staminaPoints >= amount, "Not enough stamina!");
 
-        uint64 drainTime = uint64(amount * getSecondsPerStamina(id));
+        uint64 drainTime = uint64(amount * setSecondsPerStamina(id));
         uint64 preTimestamp = char.staminaTimestamp;
         if(staminaPoints >= maxStamina) { // if stamina full, we reset timestamp and drain from that
             char.staminaTimestamp = uint64(now - getStaminaMaxWait(id) + drainTime);
