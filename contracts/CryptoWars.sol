@@ -953,6 +953,10 @@ contract CryptoWars is
         burnWeaponFee = ABDKMath64x64.divu(cents, 100);
     }
 
+    function  setPancakeRouter(address _address) public restricted {
+        pancakeRouter = IPancakeRouter02(_address);
+    }
+
     function setReforgeWeaponValue(uint256 cents) public restricted {
         int128 newReforgeWeaponFee = ABDKMath64x64.divu(cents, 100);
         require(newReforgeWeaponFee > burnWeaponFee, "Include burn fee");
