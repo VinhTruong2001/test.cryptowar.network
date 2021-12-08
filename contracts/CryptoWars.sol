@@ -275,7 +275,7 @@ contract CryptoWars is
         if ((block.timestamp + block.number)%3 == 0) {
             // only verify randomly 33% chance to save gas (equivalent to 67% gas save)
             // players will lost tax & stamina, so if they cheat, they will lose 1.5$ tax + chance to win 2.5$ (total ~ 3.5$)
-            // so, if they cheat, they win 2 time and lose 1 time, which is still the same rate 
+            // so, if they cheat, they win 2 time and lose 1 time, which is still the same rate
             // TODO: compare getPlayerPower with target to verify if target power is too low
             if (_verifyFight(
                     basePowerLevel,
@@ -299,7 +299,7 @@ contract CryptoWars is
                     }
         }
 
-        
+
         performFight(
             char,
             wep,
@@ -969,9 +969,9 @@ contract CryptoWars is
         reforgeWeaponFee = burnWeaponFee + reforgeWeaponWithDustFee;
     }
 
-    // function setStaminaCostFight(uint8 points) public restricted {
-    //     staminaCostFight = points;
-    // }
+    function setStaminaCostFight(uint8 points) public restricted {
+        staminaCostFight = points;
+    }
 
     function setDurabilityCostFight(uint8 points) public restricted {
         durabilityCostFight = points;
@@ -997,9 +997,9 @@ contract CryptoWars is
     //     pancakeRouter = IPancakeRouter02(_pancakeRouter);
     // }
 
-    function setBUSDAddress(address _busdAddress) public restricted {
-        BUSDAddress = _busdAddress;
-    }
+    // function setBUSDAddress(address _busdAddress) public restricted {
+    //     BUSDAddress = _busdAddress;
+    // }
 
     // function setFightRewardGasOffsetValue(uint256 cents) public restricted {
     //     fightRewardGasOffset = ABDKMath64x64.divu(cents, 100);
