@@ -53,7 +53,6 @@ export default Vue.extend({
     },
   },
   async mounted() {
-    console.log('aaaa', this.isRequest);
     //@ts-ignore
     await this.fetchCharacters([this.characterId]);
   },
@@ -67,7 +66,7 @@ export default Vue.extend({
   background-image: url("../assets/images/bg-item-top.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;;
-  margin-top: 2.7rem;
+  margin-top: 1rem;
   margin-bottom: 2.7rem;
   /* margin-left: 2.5rem; */
   align-items: center;

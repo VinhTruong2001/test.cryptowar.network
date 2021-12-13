@@ -172,7 +172,6 @@ export default {
     }
   },
   mounted() {
-    console.log('aaaa', this.character);
     this.allLoaded = true;
     this.showPlaceholder = true;
     return;
@@ -184,13 +183,13 @@ export default {
 .character-art {
   display: flex;
   flex-direction: column;
-  width: 299px;
-  max-width: 100%;
+  width: 100%;
+  max-width: 299px;
   background-image: url("../assets/images/bg-item-top.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;;
   max-height: 432px;
-  /* margin-left: 2.5rem; */
+  margin-left: 2.5rem;
 }
 
 .character-portrait .character-art {

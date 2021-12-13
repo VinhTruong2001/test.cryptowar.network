@@ -82,8 +82,8 @@ export default Vue.extend({
   margin-top: 3.5rem;
 }
 .character-item {
-  width: 340px;
-  max-width: 100%;
+  width: 100%;
+  max-width: 340px;
   background-image: url("../assets/images/bg-item-top.png");
   background-position: 50% 50%;
   background-repeat: no-repeat;
