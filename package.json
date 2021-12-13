@@ -49,6 +49,7 @@
     "checksize": "truffle compile —all && truffle run contract-size --checkMaxSize --contracts CryptoWars",
     "postbuild": "node scripts/generate-ts-from-abis.js",
     "test": "truffle test",
+    
     "deploy": "truffle migrate --reset",
     "deploy-testnet": "truffle migrate --network bsctestnet",
     "postdeploy-testnet": "run-s \"backup-networks 97\" \"verify-contracts -- --network bsctestnet\"",
