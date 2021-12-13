@@ -41,26 +41,16 @@
         </b-button>
     </div>
 
-    <ul class="character-list d-flex">
+    <ul class="character-list">
       <li
         class="character-item"
         :class="[{ selected: value === c.id }, {isMarket: isSell}]"
         v-for="c in filteredCharacters"
         :key="c.id"
-        @click="$emit('input', c.id)"
       >
-        <div class="above-wrapper" v-if="$slots.above || $scopedSlots.above">
-          <slot name="above" :character="c"></slot>
-        </div>
-        <slot name="sold" :character="c"></slot>
-        <div class="art">
-          <CharacterArt :character="c" :isMarket="isMarket"/>
-        </div>
-        <div class="sell-box" v-if="isSell">
-          <b-button @click="sellClick()">
-            Sell
-          </b-button>
-        </div>
+        <!-- <div class="art"> -->
+          <background-item :character="c"/>
+        <!-- </div> -->
       </li>
     </ul>
   </div>
@@ -69,8 +59,8 @@
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
 import { getCharacterArt } from '../../character-arts-placeholder';
-// import BackgroundItem from '../BackgroundItem.vue';
-import CharacterArt from '../CharacterArt.vue';
+import BackgroundItem from '../BackgroundItem.vue';
+// import CharacterArt from '../CharacterArt.vue';
 
 const sorts = [
   { name: 'Any', dir: '' },
@@ -202,8 +192,8 @@ export default {
   },
 
   components: {
-    CharacterArt,
-    // BackgroundItem,
+    // CharacterArt,
+    BackgroundItem,
   },
 
   mounted() {
@@ -231,14 +221,6 @@ export default {
 }
 
 .character-item{
-  width: 100%;
-  max-width: 299px;
-  background-image: url('../../assets/images/bg-item-top.png');
-  /* background-position: 50% 50%; */
-  background-repeat: no-repeat;
-  margin-top: 50px;
-  background-size: 100% 100%;
-  position: relative;
 }
 
 .character-item .art {
@@ -282,7 +264,7 @@ export default {
 
 .character-list{
   list-style: none;
-  flex-wrap: wrap;
+  display: flex;
   justify-content: center;
   padding-left: 0px;
 }

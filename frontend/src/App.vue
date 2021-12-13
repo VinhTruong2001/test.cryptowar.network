@@ -714,15 +714,9 @@ button.close {
   border-radius: 20px;
 }
 .modal-header {
-  color: #fff !important;
-  background: rgb(31, 31, 34);
-  border-color: rgba(24, 27, 30, 0.5) !important;
-  font-weight: 600;
 }
 
 .modal-body {
-  color: rgb(187, 187, 187) !important;
-  background: rgb(31, 31, 34);
 }
 
 .modal-footer {

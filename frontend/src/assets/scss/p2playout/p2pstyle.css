@@ -10527,7 +10527,7 @@ a.close.disabled {
     flex-direction: column;
     width: 100%;
     pointer-events: auto;
-    background-color: #fff;
+    /* background-color: #fff; */
     background-clip: padding-box;
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 0.3rem;
@@ -10557,7 +10557,6 @@ a.close.disabled {
     align-items: flex-start;
     justify-content: space-between;
     padding: 1rem;
-    border-bottom: 1px solid #dee2e6;
     border-top-left-radius: calc(0.3rem - 1px);
     border-top-right-radius: calc(0.3rem - 1px);
 }
@@ -18288,15 +18287,12 @@ a:hover {
 }
 
 .modal-content {
-    background-color: #ede7c7;
-    border-radius: 20px;
-    border: 5px solid var(--primary);
-    color: var(--brown);
+    background-image: url("../../images/modal-view.png");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
 }
 
 .modal-header {
-    border: none;
-    color: var(--brown);
 }
 
 .modal-header .close {
@@ -20476,11 +20472,14 @@ button.swiper-pagination-bullet {
 .listCareerMode {
     display: flex;
     flex-wrap: wrap;
-    margin-top:3.5rem
+    align-items:center;
+    justify-content: space-around;
+    margin-top: 2.7rem;
+
 }
 
 .listCareerMode .row {
-    margin-left: 1.5rem;
+    /* margin-left: 1.5rem; */
 }
 
 .containerContent {
@@ -20739,6 +20738,29 @@ margin-bottom: 1.5rem;
 .weaponContainer {
     display: flex;
     flex-direction: column;
-    width: 299px;
-    max-width: 100%;
+    width: 100%;
+    max-width: 299px;
+}
+
+.createRoomButton {
+    cursor: pointer;
+}
+.selectButton  {
+    cursor: pointer;
+}
+
+.contentModal {
+    background: red;
+}
+
+.containerContentModal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.titleModalBox {
+    color: #F58B5B;
+    font-size: 46;
+    font-weight: bold;
 }

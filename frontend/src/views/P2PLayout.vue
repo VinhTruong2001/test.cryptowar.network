@@ -7,6 +7,15 @@
               <CombatResults v-if="resultsAvailable" :results="fightResults" />
               <b-button class="mt-3 btn-buy" block @click="$bvModal.hide('fightResultsModal')">Close</b-button>
             </b-modal>
+
+            <b-modal id="error-request-fight" hide-header centered hide-footer title="Fight Results">
+              <!-- <CombatResults v-if="resultsAvailable" :results="fightResults" /> -->
+              <div class="containerContentModal">
+                <span class="titleModalBox">CryptoWar Message</span>
+                <span>{{errorMessage}}</span>
+              <b-button class="mt-3 btn-buy" block @click="$bvModal.hide('error-request-fight')">Close</b-button>
+              </div>
+            </b-modal>
         <div class="page-header" id="marketplace">
               <div class="col-sm-12">
                 <span class="heroAmount">{{ownCharacters.length}} <span class="heroAmountWhiteText">Heroes In Career Mode</span></span>
@@ -175,13 +184,14 @@
     </div>
     <div class="Toastify"></div>
     <b-modal
-      class="centered-modal"
       ref="hero-career-mode-selector"
       @ok="openHeroPicker"
       size="large"
+      hide-footer
+      centered
     >
-      <template #modal-title> Select hero for career mode </template>
-      <character-list :value="currentCharacterId" v-model="characterId" />
+      <!-- <template #modal-title> Select hero for career mode </template> -->
+      <character-select-list :value="currentCharacterId" v-model="characterId" />
     </b-modal>
 
     <b-modal
@@ -199,13 +209,14 @@
 import { BModal } from "bootstrap-vue";
 import Vue from "vue";
 import { mapGetters, mapState, mapActions } from "vuex";
-import CharacterList from "../components/smart/CharacterList.vue";
 import BackgroundItem from "../components/BackgroundItem.vue";
 import WeaponGrid from "@/components/smart/WeaponGrid.vue";
 import CharacterRoom from "@/components/CharacterRoom.vue";
 import RoomRequest from "@/components/RoomRequest.vue";
 import WeaponBackground from '@/components/WeaponSelect.vue';
 import CombatResults from "@/components/CombatResults.vue";
+import CharacterSelectList from "../components/smart/CharacterSelectList.vue";
+// import CustomModal from "@/components/CustomModal.vue";
 // import InforBar from '@/components/smart/InforBar.vue';
 
 interface IData {
@@ -223,17 +234,21 @@ interface IData {
   fightResults: any,
   error: any,
   room: any,
+  errorMessage: string;
+  isVisibleModal: boolean;
+  showHeroPicker: boolean;
 }
 
 export default Vue.extend({
   components: {
-    CharacterList,
     BackgroundItem,
     WeaponGrid,
     CharacterRoom,
     RoomRequest,
     WeaponBackground,
-    CombatResults
+    CombatResults,
+    CharacterSelectList
+    // CustomModal
     // InforBar
   },
   data() {
@@ -252,6 +267,9 @@ export default Vue.extend({
       fightResults: null,
       error: null,
       room: null,
+      errorMessage: '',
+      isVisibleModal: false,
+      showHeroPicker: false
     } as IData;
   },
 
@@ -317,6 +335,7 @@ export default Vue.extend({
     ...mapActions(["createCareerRoom", "getCareerRooms", "getRequests", "fight"]),
     openHeroPicker() {
       (this.$refs["hero-career-mode-selector"] as BModal).show();
+      // this.showHeroPicker = true;
     },
     openWeaponPicker() {
       (this.$refs["weapon-career-mode-selector"] as BModal).show();
@@ -324,21 +343,26 @@ export default Vue.extend({
     handleCreateRoom() {
       // @ts-ignore
       console.log('show me the answer', this.characterId);
-      // @ts-ignore
-      this.createCareerRoom({
+      if(!this.selectedCharacter || !this.selectedWeapon) {
+        this.errorMessage = 'Please select weapon and hero!';
+        this.$bvModal.show('error-request-fight');
+      }
+      else {
         // @ts-ignore
-        character: this.characterId,
+        this.createCareerRoom({
         // @ts-ignore
-        weapon: this.weaponId,
-        // @ts-ignore
-        matchReward: this.matchReward,
-        // @ts-ignore
-        totalDeposit: this.totalDeposit
-      });
+          character: this.characterId,
+          // @ts-ignore
+          weapon: this.weaponId,
+          // @ts-ignore
+          matchReward: this.matchReward,
+          // @ts-ignore
+          totalDeposit: this.totalDeposit
+        });
+      }
+
     },
     async handleFight(roomId: any,requestId: any) {
-      console.log('a1', roomId);
-      console.log('b2', requestId);
       // @ts-ignore
       this.waitingResults = true;
       // @ts-ignore
