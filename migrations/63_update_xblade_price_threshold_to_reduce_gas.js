@@ -26,12 +26,12 @@ module.exports = async function (deployer, network, accounts) {
   }
   if (network === "bscmainnet") {
     // Upgrade CW
-    const cwAddress = "0x8BA9f0841cFA75d7e2c7a316b048b04c98C95cA4";
-    await upgradeProxy(cwAddress, CryptoWars, {
-      deployer,
-    });
+    // const cwAddress = "0x8BA9f0841cFA75d7e2c7a316b048b04c98C95cA4";
+    // await upgradeProxy(cwAddress, CryptoWars, {
+    //   deployer,
+    // });
 
-    const weaponsAddress = "0x52683412f6ea2b6302cea8406eff928510466c2c ";
+    const weaponsAddress = "0x52683412f6ea2b6302cea8406eff928510466c2c";
     const characterAddress = "0xc38470bfe1b08c3bafdaf699eba2fca1fd2b040b";
     await upgradeProxy(weaponsAddress, Weapons, { deployer });
     await upgradeProxy(characterAddress, Characters, { deployer });
