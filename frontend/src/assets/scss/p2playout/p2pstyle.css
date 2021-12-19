@@ -8805,7 +8805,11 @@ input[type="submit"].btn-block {
 
 .navbar {
     position: relative;
-    padding: 0.5rem 1rem;
+    padding: 0rem 1rem;
+}
+
+.main-nav-div .main-nav{
+    background: #000;
 }
 
 .navbar,
@@ -8823,8 +8827,6 @@ input[type="submit"].btn-block {
 
 .navbar-brand {
     display: inline-block;
-    padding-top: 0.3125rem;
-    padding-bottom: 0.3125rem;
     margin-right: 1rem;
     font-size: 1.25rem;
     line-height: inherit;
@@ -8842,6 +8844,7 @@ input[type="submit"].btn-block {
     padding-left: 0;
     margin-bottom: 0;
     list-style: none;
+    align-items: center;
 }
 
 .navbar-nav .nav-link {
@@ -20764,3 +20767,158 @@ margin-bottom: 1.5rem;
     font-size: 46;
     font-weight: bold;
 }
+
+.character-item{
+    height: 398px;
+    width: 294px;
+    /* background-position: 50% 50%; */
+    background-repeat: no-repeat;
+    margin-top: 50px;
+    background-size: 100% 100%;
+    position: relative;
+    border: 1px solid #3CDE9B;
+    border-radius: 15px 40px 15px 15px;
+    background: #0D2F9Cbb;
+    background-image: radial-gradient(#cc7d3c -30%, transparent 70%);
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  .character-item::before{
+    content: ' ';
+    width: 76px;
+    height: 72px;
+    background: url('../../../assets/v2/corner_green.svg') no-repeat 0 0;
+    background-size: cover;
+    position: absolute;
+    right: -6px;
+    top: -8px;
+  }
+  .character-item.addnew{
+    background-image:linear-gradient(to bottom, #F56F56, transparent), url('../../../assets/v2/bg-recruit.svg');
+    background-color: linear-gradient(to bottom, #F56F56, transparent);
+    background-repeat: no-repeat;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-color: #F2BE3E;
+  }
+  
+  .character-item.addnew::before{
+    background: url('../../../assets/v2/corner_yellow.svg') no-repeat 0 0;
+  }
+  
+  .recruit.btn-secondary{
+    background: url('../../../assets/v2/recruit.svg') no-repeat 50% 50%;
+    width: 141px;
+    height: 144px;
+    background-color: transparent;
+    border-radius: 0;
+    border: 0 solid;
+    color: #ECD931;
+    font-size: 1.4em;
+    font-weight: bold;
+  }
+  .recruit.btn-secondary i{
+    font-size: 2.5em;
+    color: #fff;
+  }
+  
+  .character-item .art {
+    width: 100%;
+    min-height: 0;
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    position: relative;
+  }
+  
+  .valign-middle {
+    vertical-align: middle;
+  }
+  
+  .character-item img {
+    object-fit: contain;
+  }
+  
+  .character-item.selected {
+  
+      background-image: url('../../../assets/images/bg-item-top-select.png');
+  }
+  
+  .above-wrapper {
+    position: absolute;
+    top: 270px;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    text-shadow: 0 0 5px #333, 0 0 10px #333, 0 0 15px #333, 0 0 10px #333;
+  }
+  
+  .clear-filters-button {
+    height: fit-content;
+    display: flex;
+    flex-direction: row;
+    align-self: flex-end;
+    margin:0 15px;
+  }
+  
+  .character-list{
+    list-style: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-left: 0px;
+  }
+  
+  @media (max-width: 576px) {
+    .character-list {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .clear-filters-button {
+      width: 100%;
+      text-align: center;
+      justify-content: center;
+    }
+  }
+  
+  .sold {
+    height: 40px;
+    width: 300px;
+    background-color: rgb(187, 33, 0);
+    transform: rotate(30deg);
+    left: -40px;
+    position: absolute;
+    top: 150px;
+    z-index: 100;
+  }
+  
+  .sold span {
+      text-align: center;
+      width: auto;
+      color: white;
+      display: block;
+      font-size: 30px;
+      font-weight: bold;
+      line-height: 40px;
+      text-shadow: 0 0 5px #333, 0 0 10px #333, 0 0 15px #333, 0 0 10px #333;
+      text-transform: uppercase;
+  }
+  
+  .fix-h24 {
+    height: 24px;
+  }
+  
+  .sell-box{
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .isMarket{
+    margin-bottom: 3rem;
+  }

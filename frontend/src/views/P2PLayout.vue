@@ -343,8 +343,11 @@ export default Vue.extend({
     handleCreateRoom() {
       // @ts-ignore
       console.log('show me the answer', this.characterId);
+      // @ts-ignore
       if(!this.selectedCharacter || !this.selectedWeapon) {
+        // @ts-ignore
         this.errorMessage = 'Please select weapon and hero!';
+        // @ts-ignore
         this.$bvModal.show('error-request-fight');
       }
       else {

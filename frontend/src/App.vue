@@ -1,5 +1,5 @@
 <template>
-  <div class="app">
+  <div class="app app-v2">
     <div class="container-box">
       <nav-bar />
       <character-bar
