@@ -16,7 +16,7 @@
             class="shop-button"
             @click="buyItem(nft)">
             <span class="gtag-link-others" v-if="!nft.isSoldOut">
-              Buy ({{ nft.nftPrice}} xBlade)
+              Buy ({{ Math.round(nft.nftPrice) }} xBlade)
             </span>
             <span  v-if="nft.isSoldOut && !isLoading && nft.id !== 2">
               SOLD OUT
