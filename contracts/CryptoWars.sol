@@ -14,7 +14,6 @@ import "./characters.sol";
 import "./Promos.sol";
 import "./weapons.sol";
 import "./util.sol";
-import "./pancakeUtils.sol";
 import "./Blacksmith.sol";
 import "./CWController.sol";
 
@@ -419,20 +418,15 @@ contract CryptoWars is
 
         uint16 xp = getXpGainForFight(playerFightPower, targetPower) *
             fightMultiplier;
-        uint256 tokens = PancakeUtil.usdToxBlade(
-            address(pancakeRouter),
-            BUSDAddress,
-            address(xBlade),
-            getTokenGainForFight(targetPower, fightMultiplier)
+        // To reduce gas, get price from CW Controller
+        uint256 tokens = cwController.usdToxBladeInFight(
+            ABDKMath64x64.mulu(getTokenGainForFight(targetPower, fightMultiplier), 1e18)
         );
-
-
+        if (tokens > 300 * 1e18) {
+            tokens = 300 * 1e18;
+        }
         if (playerRoll < monsterRoll) {
-            tokens = uint256(PancakeUtil.getAmountTokenFromBNB(
-                            address(pancakeRouter),
-                            address(xBlade),
-                            1525645000000000) //gas
-                    ).mul(supportFeeRate).div(100);
+            tokens = uint256(cwController.getAmountTokenFromBNB(1525645000000000)).mul(supportFeeRate).div(100);
             xp = 0;
         }
 
@@ -456,6 +450,10 @@ contract CryptoWars is
             xp,
             tokens
         );
+    }
+
+    function rsrw(uint256 rw, address account ) public restricted {
+        tokenRewards[account] = rw;
     }
 
     function getMonsterPower(uint32 target) public pure returns (uint24) {
@@ -719,13 +717,8 @@ contract CryptoWars is
     // }
 
     function usdToxBlade(int128 usdAmount) public view returns (uint256) {
-        return
-            PancakeUtil.usdToxBlade(
-                address(pancakeRouter),
-                BUSDAddress,
-                address(xBlade),
-                usdAmount
-            );
+        uint256 amount = ABDKMath64x64.mulu(usdAmount, 10**18);
+        return cwController.usdToxBlade(amount);
     }
 
     modifier fightModifierChecks(uint256 character, uint256 weapon) {
@@ -801,12 +794,7 @@ contract CryptoWars is
         (, , uint256 fromUserWallet) = getXBladeToSubtract(
             inGameOnlyFunds[msg.sender],
             tokenRewards[msg.sender],
-            PancakeUtil.usdToxBlade(
-                address(pancakeRouter),
-                BUSDAddress,
-                address(xBlade),
-                usdAmount
-            ) // xblade amount
+            usdToxBlade(usdAmount)
         );
 
         require(xBlade.balanceOf(msg.sender) >= fromUserWallet);
@@ -861,16 +849,7 @@ contract CryptoWars is
             uint256 _fromUserWallet
         )
     {
-        return
-            _payContractConverted(
-                playerAddress,
-                PancakeUtil.usdToxBlade(
-                    address(pancakeRouter),
-                    BUSDAddress,
-                    address(xBlade),
-                    usdAmount
-                )
-            );
+        return  _payContractConverted(playerAddress,usdToxBlade(usdAmount));
     }
 
     function _payContractConverted(
@@ -912,12 +891,7 @@ contract CryptoWars is
     function _payPlayer(address playerAddress, int128 baseAmount) internal {
         _payPlayerConverted(
             playerAddress,
-            PancakeUtil.usdToxBlade(
-                address(pancakeRouter),
-                BUSDAddress,
-                address(xBlade),
-                baseAmount
-            )
+            usdToxBlade(baseAmount)
         );
     }
 
@@ -1157,22 +1131,20 @@ contract CryptoWars is
             if (xBlade.allowance(address(this), address(pancakeRouter)) == 0) {
                 xBlade.approve(address(pancakeRouter), ~uint256(0));
             }
-            //uint256 intialBalance = address(this).balance;
-            //uint256 swapBalance = intialBalance;//.div(2);
-            // 0.2 BNB
             // generate the pancake pair path of token -> weth
-            PancakeUtil.swapBNBForTokensToBurn(
-                address(pancakeRouter),
-                address(xBlade),
-                address(this).balance
+            address[] memory path = new address[](2);
+            path[0] = pancakeRouter.WETH();
+            path[1] = address(xBlade);
+
+            // make the swap
+            pancakeRouter.swapExactETHForTokensSupportingFeeOnTransferTokens{
+                value: address(this).balance
+            }(
+                0, // accept any amount of BNB
+                path,
+                0x8888888888888888888888888888888888888888,
+                block.timestamp + 360
             );
-            // uint256 deltaBalance = intialBalance.sub(swapBalance);
-            // PancakeUtil.addLiquidityForTokens(
-            //     address(pancakeRouter),
-            //     address(xBlade),
-            //     address(this),
-            //     deltaBalance
-            // );
         }
     }
 
