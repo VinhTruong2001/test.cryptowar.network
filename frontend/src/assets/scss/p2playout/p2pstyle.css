@@ -10527,7 +10527,6 @@ a.close.disabled {
     flex-direction: column;
     width: 100%;
     pointer-events: auto;
-    /* background-color: #fff; */
     background-clip: padding-box;
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 0.3rem;
@@ -20762,5 +20761,24 @@ margin-bottom: 1.5rem;
 .titleModalBox {
     color: #F58B5B;
     font-size: 46;
+    font-weight: bold;
+}
+
+.closeButton {
+background-image: url("../../images/bg-fight-button.png");
+background-size: 100% 100%;
+flex: 1;
+background-repeat: no-repeat;
+display: flex;
+justify-content: center;
+align-items: center;
+height: 47px;
+width: 202px;
+display: flex;
+}
+
+.closeButton span {
+    font-size: 24px;
+    color:#fff;
     font-weight: bold;
 }

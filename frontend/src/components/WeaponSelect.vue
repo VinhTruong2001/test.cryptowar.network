@@ -268,8 +268,9 @@ export default {
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-position: center;
-  /* width: 299px; */
+  width: 299px;
   height: 432px;
+  margin-left: 20px;
 }
 
 .glow-container {

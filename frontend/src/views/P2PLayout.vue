@@ -3,13 +3,14 @@
     <div class="disabled-animation-modal"></div>
     <div class="z" id="training">
       <div class="z-body">
-           <b-modal id="fightResultsModal" hide-footer title="Fight Results">
-              <CombatResults v-if="resultsAvailable" :results="fightResults" />
-              <b-button class="mt-3 btn-buy" block @click="$bvModal.hide('fightResultsModal')">Close</b-button>
+           <b-modal id="fightResultsModal" hide-footer centered>
+              <FightResult v-if="resultsAvailable" :results="fightResults" />
+                <div class="closeButton" block @click="$bvModal.hide('fightResultsModal')">
+                  <span>Close</span>
+                </div>
             </b-modal>
 
             <b-modal id="error-request-fight" hide-header centered hide-footer title="Fight Results">
-              <!-- <CombatResults v-if="resultsAvailable" :results="fightResults" /> -->
               <div class="containerContentModal">
                 <span class="titleModalBox">CryptoWar Message</span>
                 <span>{{errorMessage}}</span>
@@ -28,7 +29,7 @@
                     >
                       <div class="art">
                         <BackgroundItem
-                            v-if="characterId"
+                            v-if="selectedCharacter"
                             :character="characters[characterId]"
                             :selectedCharacterId="characterId"
                             :selectedWeaponId="weaponId"
@@ -81,9 +82,6 @@
                     <div class="containerTwoRoomButton">
                       <div class="createRoomButton" @click="handleCreateRoom()">
                         <span class="titleCreateRoom">List HERO to Career Mode</span>
-                      </div>
-                      <div class="createRoomButton">
-                        <span class="titleCreateRoom">List HERO to Challenge Mode</span>
                       </div>
                     </div>
                   </div>
@@ -182,16 +180,17 @@
           </div>
         </div>
     </div>
-    <div class="Toastify"></div>
-    <b-modal
+     <div class="Toastify"></div>
+    <!-- <CustomModal v-if="isVisibleModal" /> -->
+    <!-- <div class="Toastify"></div> -->
+     <b-modal
+      class="centered-modal"
       ref="hero-career-mode-selector"
       @ok="openHeroPicker"
       size="large"
-      hide-footer
-      centered
     >
-      <!-- <template #modal-title> Select hero for career mode </template> -->
-      <character-select-list :value="currentCharacterId" v-model="characterId" />
+      <template #modal-title> Select hero for career mode </template>
+      <character-list :value="currentCharacterId" v-model="characterId" />
     </b-modal>
 
     <b-modal
@@ -214,8 +213,9 @@ import WeaponGrid from "@/components/smart/WeaponGrid.vue";
 import CharacterRoom from "@/components/CharacterRoom.vue";
 import RoomRequest from "@/components/RoomRequest.vue";
 import WeaponBackground from '@/components/WeaponSelect.vue';
-import CombatResults from "@/components/CombatResults.vue";
-import CharacterSelectList from "../components/smart/CharacterSelectList.vue";
+import FightResult from "@/components/v2/FightResult.vue";
+import CharacterList from "@/components/smart/CharacterList.vue";
+// import CharacterSelectList from "../components/smart/CharacterSelectList.vue";
 // import CustomModal from "@/components/CustomModal.vue";
 // import InforBar from '@/components/smart/InforBar.vue';
 
@@ -246,8 +246,9 @@ export default Vue.extend({
     CharacterRoom,
     RoomRequest,
     WeaponBackground,
-    CombatResults,
-    CharacterSelectList
+    FightResult,
+    CharacterList
+    // CharacterSelectList
     // CustomModal
     // InforBar
   },
@@ -334,17 +335,22 @@ export default Vue.extend({
   methods: {
     ...mapActions(["createCareerRoom", "getCareerRooms", "getRequests", "fight"]),
     openHeroPicker() {
+      console.log('test');
+      // this.isVisibleModal = true;
       (this.$refs["hero-career-mode-selector"] as BModal).show();
-      // this.showHeroPicker = true;
     },
     openWeaponPicker() {
       (this.$refs["weapon-career-mode-selector"] as BModal).show();
     },
-    handleCreateRoom() {
+    async handleCreateRoom() {
       // @ts-ignore
       console.log('show me the answer', this.characterId);
       if(!this.selectedCharacter || !this.selectedWeapon) {
         this.errorMessage = 'Please select weapon and hero!';
+        this.$bvModal.show('error-request-fight');
+      }
+      else if(!this.matchReward || !this.totalDeposit) {
+        this.errorMessage = 'Please input match reward and total deposit!';
         this.$bvModal.show('error-request-fight');
       }
       else {
@@ -359,6 +365,11 @@ export default Vue.extend({
           // @ts-ignore
           totalDeposit: this.totalDeposit
         });
+
+        this.selectedCharacter=null;
+        this.selectedWeapon= null;
+        this.matchReward=0;
+        this.totalDeposit=0;
       }
 
     },
@@ -375,7 +386,7 @@ export default Vue.extend({
         const results = await this.fight({
           roomId, requestId
         });
-        console.log('gi v ta', results);
+        console.log('gi v ta', this.careerModeRequest.filter((item: any) => item.roomId === roomId));
         // @ts-ignore
         this.fightResults=results;
         // @ts-ignore
@@ -389,6 +400,10 @@ export default Vue.extend({
     filterCareerModeRequest () {
       return this.careerModeRequest.filter((item: any) => !item.done);
     },
+
+    onSelectHero() {
+      console.log('1111');
+    }
   },
   async mounted() {
     // @ts-ignore

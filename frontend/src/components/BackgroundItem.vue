@@ -1,5 +1,5 @@
 <template>
-  <div class="character-art" v-tooltip="tooltipHtml(character)" ref="el">
+  <div class="character-art" v-tooltip="tooltipHtml(character)" ref="el" @click="onPressTest">
     <div class="containerTop">
       <span
         :class="characterTrait.toLowerCase() + '-icon circle-element'"
@@ -70,6 +70,7 @@ export default {
     "room",
     "selectedWeaponId",
     "selectedCharacterId",
+    "onSelectHero"
   ],
   components: {
     //SmallButton,
@@ -169,6 +170,9 @@ export default {
         const hiddenOwner = owner.split(hiddenString).join('...');
         return hiddenOwner;
       }
+    },
+    onPressTest() {
+      console.log('h1h1h1', this.character);
     }
   },
   mounted() {
@@ -186,10 +190,13 @@ export default {
   width: 100%;
   max-width: 299px;
   background-image: url("../assets/images/bg-item-top.png");
+  /* background-color: red; */
   background-repeat: no-repeat;
   background-size: 100% 100%;;
   max-height: 432px;
-  margin-left: 2.5rem;
+  margin-left: 1.25rem;
+  margin-right: 1.25rem;
+  cursor: pointer;
 }
 
 .character-portrait .character-art {

@@ -32,7 +32,7 @@ const art = {
 };
 
 const trait = {
-  Lighting: lightningFrame,
+  Lightning: lightningFrame,
   Water: waterFrame,
   Fire: fireFrame,
   Earth: earthFrame

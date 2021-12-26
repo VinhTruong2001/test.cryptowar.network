@@ -47,6 +47,7 @@
         :class="[{ selected: value === c.id }, {isMarket: isSell}]"
         v-for="c in filteredCharacters"
         :key="c.id"
+        @click="$emit('input', c.id)"
       >
         <!-- <div class="art"> -->
           <background-item :character="c"/>
@@ -265,8 +266,12 @@ export default {
 .character-list{
   list-style: none;
   display: flex;
-  justify-content: center;
+  flex-wrap: wrap;
   padding-left: 0px;
+}
+
+.character-list li {
+  flex: 0.33
 }
 
 @media (max-width: 576px) {

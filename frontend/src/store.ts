@@ -3235,6 +3235,8 @@ export function createStore(web3: Web3) {
           gas: '800000'
         });
 
+        console.log('resss', res);
+
         return res?.events.FightOutCome.returnValues;
       },
       async getRequests({ state, commit }) {
