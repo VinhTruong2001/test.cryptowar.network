@@ -345,12 +345,18 @@ export default Vue.extend({
     async handleCreateRoom() {
       // @ts-ignore
       console.log('show me the answer', this.characterId);
+      // @ts-ignore
       if(!this.selectedCharacter || !this.selectedWeapon) {
+        // @ts-ignore
         this.errorMessage = 'Please select weapon and hero!';
+        // @ts-ignore
         this.$bvModal.show('error-request-fight');
       }
+      // @ts-ignore
       else if(!this.matchReward || !this.totalDeposit) {
+        // @ts-ignore
         this.errorMessage = 'Please input match reward and total deposit!';
+        // @ts-ignore
         this.$bvModal.show('error-request-fight');
       }
       else {
@@ -365,10 +371,13 @@ export default Vue.extend({
           // @ts-ignore
           totalDeposit: this.totalDeposit
         });
-
+        // @ts-ignore
         this.selectedCharacter=null;
+        // @ts-ignore
         this.selectedWeapon= null;
+        // @ts-ignore
         this.matchReward=0;
+        // @ts-ignore
         this.totalDeposit=0;
       }
 
