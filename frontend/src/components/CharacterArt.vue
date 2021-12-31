@@ -5,12 +5,7 @@
         :class="characterTrait.toLowerCase() + '-icon circle-element'"
       ></span>
       <div class="black-outline" v-if="!portrait">
-          <div>
-            ID <span class="white">{{ character.id }}</span>
-          </div>
-          <div class="lv">
-            Lv.<span class="">{{ character.level + 1 }}</span>
-          </div>
+          ID <span class="white">{{ character.id }}</span>
       </div>
     </div>
 
@@ -19,8 +14,7 @@
         :class="characterTrait.toLowerCase() + '-icon circle-element'"
       ></span>
     </div> -->
-
-    <div class="placeholder" :class="characterTrait.toLowerCase() + '-bg'">
+    <div class="placeholder d-flex align-items-start justify-content-center " :class="characterTrait.toLowerCase() + '-bg'">
       <div
         :style="{
           'background-image': 'url(' + getCharacterArt(character) + ')',
@@ -40,6 +34,9 @@
       <div class="name-lvl-container">
         <div class="name black-outline" :title="getCleanCharacterName(character.id)" v-if="!portrait">
           {{ getCleanCharacterName(character.id) }}
+        </div>
+        <div class="lv" v-if="!portrait">
+          Lv.<span class="">{{ character.level + 1 }}</span>
         </div>
       </div>
 
@@ -215,14 +212,14 @@ export default {
 }
 
 .trait {
+  margin: 0 auto;
   position: relative;
   display: flex;
   height: 75px;
   width: 100%;
   justify-content: space-between;
+  padding: 0 1.5em 0 0.8em;
   align-items: center;
-  margin-top: 8px;
-  padding: 0 15px;
 }
 
 .id {
@@ -233,16 +230,10 @@ export default {
 
 .black-outline{
   color: #fff;
-  font-size: 18px;
+  font-weight: bold;
+  font-size: 1.3em;
   text-shadow: none;
-  text-align: end;
 }
-
-.black-outline .lv{
-  color: rgb(242,190,62);
-  line-height: 0.8;
-}
-
 .black-outline .white{
   color: #fff;
 }
@@ -263,18 +254,16 @@ export default {
 }
 
 .xp {
+  width: 261px;
   background-image: url("../assets/v2/xp_bg.svg");
   background-repeat: no-repeat;
   background-position: 50% 50%;
-  background-size: contain;
+  height: 19px;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0 0px;
-  margin: auto;
-  width: 260px;
-  margin-top: 45px;
-  margin-bottom: 45px;
+  margin: 7px auto;
 }
 
 .xp .bg-success {
@@ -282,8 +271,8 @@ export default {
   background-image: url("../assets/v2/xp_progress.svg");
   background-repeat: no-repeat;
   width: 261px;
-  height: 15px;
-  background-color: transparent !important;;
+  height: 19px;
+  background-color: transparent !important;
 }
 
 .xp-text {
@@ -320,6 +309,7 @@ export default {
 }
 
 .market-bot {
+  height: 95px;
   overflow: hidden;
   background-position: 0 0;
   background-repeat: no-repeat;
@@ -372,7 +362,7 @@ export default {
 .name-lvl-container .name{
   max-width: 100%;
   max-height: inherit;
-  font-size: 1em;
+  font-size: 1.2em;
 }
 
 .market-bot .score-id-container {
@@ -415,15 +405,12 @@ export default {
   background-repeat: no-repeat;
   background-position: center bottom;
 }
-
 .fire-bg{
   background-image: url('../assets/images/fire.png');
 }
-
 .lightning-bg{
   background-image: url('../assets/images/lightning.png');
 }
-
 .earth-bg{
   background-image: url('../assets/images/earth.png');
 }
