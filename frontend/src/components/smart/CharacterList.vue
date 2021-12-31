@@ -104,45 +104,24 @@
           > <i class="fas fa-plus"></i><br>
             Recruit
           </b-button>
+        </div>
+      </li>
+
+      <li
+        class="character-item addnew"
+      >
+        <b-button
+                class="recruit"
+                @click="onMintCharacter"
+                v-tooltip="'Recruit new character'"
+                tagname="recruit_character"
+              >
+              <i class="fas fa-plus"></i><br>
+                Recruit
+              </b-button>
+      </li>
+    </ul>
         </li> -->
-      </ul>
-    </div>
-    <div class="col-12 col-xl-12" v-if="!checklist">
-      <ul class="character-list row">
-        <li class="character-item"
-          :class="[{ selected: value === c.id }, {isMarket: isSell}]"
-          v-for="c in filteredCharacters"
-          :key="c.id"
-          @click="$emit('input', c.id)"
-        >
-          <div class="above-wrapper" v-if="$slots.above || $scopedSlots.above">
-            <slot name="above" :character="c"></slot>
-          </div>
-          <slot name="sold" :character="c"></slot>
-          <div class="art">
-            <CharacterArt :character="c" :isMarket="isMarket"/>
-          </div>
-
-
-          <div class="sell-box" v-if="isSell">
-            <button @click="sellClick()">
-              SELL
-            </button>
-          </div>
-        </li>
-
-        <!-- <li class="character-item addnew">
-          <b-button
-            class="recruit"
-            @click="onMintCharacter"
-            v-tooltip="'Recruit new character'"
-            tagname="recruit_character"
-          > <i class="fas fa-plus"></i><br>
-            Recruit
-          </b-button>
-        </li> -->
-      </ul>
-    </div>
   </div>
 </template>
 
@@ -310,6 +289,20 @@ export default {
 </script>
 
 <style scoped>
+
+.character{
+  margin: 10px 0;
+}
+
+.filters {
+   justify-content: center;
+   width: 100%;
+   max-width: 900px;
+   margin: 0 auto;
+   align-content: center;
+   border-bottom: 0.2px solid rgba(102, 80, 80, 0.1);
+   margin-bottom: 20px;
+}
 
 .filters{
   padding: 0 60px;
