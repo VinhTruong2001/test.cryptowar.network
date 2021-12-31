@@ -17,6 +17,14 @@
               <b-button class="mt-3 btn-buy" block @click="$bvModal.hide('error-request-fight')">Close</b-button>
               </div>
             </b-modal>
+
+            <b-modal id="listHeroToCareerModal" hide-footer>
+        <div class="icon-close-container"><div class="icon-close" @click="$bvModal.hide('listHeroToCareerModal')"></div></div>
+        <div class="listHeroToCareerModal-head">CryptoWar Message</div>
+        <div class="listHeroToCareerModal-body">Listing HERO to Career: <span>Done</span></div>
+        <button @click="$bvModal.hide('listHeroToCareerModal'), careerMode = true, changeMode = false, requestChallenge = false,
+          checkSelect = false, addClass = ''" class="listHeroToCareerModal-btn confirm">GO TO CHECK</button>
+      </b-modal>
         <div class="page-header" id="marketplace">
               <div class="col-sm-12">
                 <span class="heroAmount">{{ownCharacters.length}} <span class="heroAmountWhiteText">Heroes In Career Mode</span></span>
@@ -159,6 +167,7 @@
                         :selectedCharacterId="characterId"
                         :selectedWeaponId="weaponId"
                         :isRequest="true"
+                        :isPvp="true"
                       />
                     </div>
                   </ul>
@@ -184,13 +193,40 @@
     <!-- <CustomModal v-if="isVisibleModal" /> -->
     <!-- <div class="Toastify"></div> -->
      <b-modal
-      class="centered-modal"
       ref="hero-career-mode-selector"
       @ok="openHeroPicker"
-      size="large"
+      id="selectHeroOrWeaponModal" class="modal-box" hide-footer
     >
-      <template #modal-title> Select hero for career mode </template>
-      <character-list :value="currentCharacterId" v-model="characterId" />
+      <div class="icon-close-container"><div class="icon-close" @click="$bvModal.hide('selectHeroOrWeaponModal')"></div></div>
+        <!-- <div class="title-results">{{titleResults}}</div>
+        <CombatResults v-if="resultsAvailable" :results="fightResults" /> -->
+        <div class="row list">
+          <div class="item" v-for="i in ownCharacters" :key="i">
+            <div class="info">
+              <div class="info-head">
+                  <span class="property"></span>
+              </div>
+              <div class="item-id">
+                  <span>#123456</span>
+                  <div class="leve">Lv.1</div>
+              </div>
+              <div class="img-hero-around">
+                <div class="img-hero" :style="{
+          'background-image': 'url(' + getCharacterArt(i) + ')',
+          'z-index': 999
+        }"></div>
+              </div>
+              <div class="info-footer">
+                <div class="hero-name">Amiria Angurvidel</div>
+                <div class="orner-hero">Owner: <span>0x4933...44644</span></div>
+                <div class="remain-hero">Remain: <span>345.9098</span></div>
+                <div class="cost"><div></div> 100</div>
+              </div>
+            </div>
+            <div class="button-container"><button @click="onSelectHero(i),
+               addClass = 'background'" class="btn-request-fight">SELECT</button></div>
+          </div>
+        </div>
     </b-modal>
 
     <b-modal
@@ -200,7 +236,7 @@
       size="large"
     >
       <template #modal-title> Select weapon for career mode </template>
-      <weapon-grid v-model="weaponId" />
+      <weapon-grid isPvp v-model="weaponId" />
     </b-modal>
   </div>
 </template>
@@ -214,10 +250,11 @@ import CharacterRoom from "@/components/CharacterRoom.vue";
 import RoomRequest from "@/components/RoomRequest.vue";
 import WeaponBackground from '@/components/WeaponSelect.vue';
 import FightResult from "@/components/v2/FightResult.vue";
-import CharacterList from "@/components/smart/CharacterList.vue";
+// import CharacterList from "@/components/smart/CharacterList.vue";
 // import CharacterSelectList from "../components/smart/CharacterSelectList.vue";
 // import CustomModal from "@/components/CustomModal.vue";
 // import InforBar from '@/components/smart/InforBar.vue';
+import { getCharacterArt } from "../character-arts-placeholder";
 
 interface IData {
   characterId?: number;
@@ -247,7 +284,7 @@ export default Vue.extend({
     RoomRequest,
     WeaponBackground,
     FightResult,
-    CharacterList
+    // CharacterList
     // CharacterSelectList
     // CustomModal
     // InforBar
@@ -342,6 +379,7 @@ export default Vue.extend({
     openWeaponPicker() {
       (this.$refs["weapon-career-mode-selector"] as BModal).show();
     },
+    getCharacterArt,
     async handleCreateRoom() {
       // @ts-ignore
       console.log('show me the answer', this.characterId);
@@ -361,7 +399,7 @@ export default Vue.extend({
       }
       else {
         // @ts-ignore
-        this.createCareerRoom({
+        const resultsCreate = await this.createCareerRoom({
         // @ts-ignore
           character: this.characterId,
           // @ts-ignore
@@ -371,14 +409,15 @@ export default Vue.extend({
           // @ts-ignore
           totalDeposit: this.totalDeposit
         });
+        console.log('hic', resultsCreate);
+        if(resultsCreate) {
+          this.selectedCharacter = null;
+          this.selectedWeapon = null;
+          this.matchReward = 0;
+          this.totalDeposit = 0;
+        }
+        // $bvModal.show('listHeroToCareerModal');
         // @ts-ignore
-        this.selectedCharacter=null;
-        // @ts-ignore
-        this.selectedWeapon= null;
-        // @ts-ignore
-        this.matchReward=0;
-        // @ts-ignore
-        this.totalDeposit=0;
       }
 
     },
@@ -410,8 +449,11 @@ export default Vue.extend({
       return this.careerModeRequest.filter((item: any) => !item.done);
     },
 
-    onSelectHero() {
-      console.log('1111');
+    onSelectHero(selectedCharacter) {
+      console.log('1111', selectedCharacter.id);
+      this.selectedCharacter = selectedCharacter;
+      this.characterId = selectedCharacter.id;
+      (this.$refs["hero-career-mode-selector"] as BModal).hide();
     }
   },
   async mounted() {
@@ -427,4 +469,7 @@ export default Vue.extend({
     }, 3000);
   }
 });
+
+
 </script>
+

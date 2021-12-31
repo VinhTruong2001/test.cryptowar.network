@@ -1,5 +1,5 @@
 <template>
-  <div class="app">
+  <div class="app app-v2">
     <div class="container-box">
       <nav-bar />
       <character-bar
@@ -576,7 +576,7 @@ button,
 
 .earth,
 .dex {
-  color: green;
+  color: white;
 }
 
 .water,
@@ -595,6 +595,7 @@ button,
   content: url("assets/elements/fire.png");
   width: 2.3rem;
   height: 2.3rem;
+  margin-right: 4px;
 }
 
 .earth-icon,
@@ -603,6 +604,7 @@ button,
   content: url("assets/elements/earth.png");
   width: 2.3rem;
   height: 2.3rem;
+  margin-right: 4px;
 }
 
 .water-icon,
@@ -611,6 +613,7 @@ button,
   content: url("assets/elements/water.png");
   width: 2.3rem;
   height: 2.3rem;
+  margin-right: 4px;
 }
 
 .lightning-icon,
@@ -619,6 +622,7 @@ button,
   content: url("assets/elements/lightning.png");
   width: 2.3rem;
   height: 2.3rem;
+  margin-right: 4px;
 }
 
 .loading-container {
@@ -719,6 +723,31 @@ button.close {
 .modal-body {
 }
 
+#selectHeroOrWeaponModal .modal-dialog{
+  max-width: 1150px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#selectHeroOrWeaponModal ::-webkit-scrollbar{
+  width: 10px;
+  background: #707070;
+  border-radius: 10px;
+  right: 10px;
+}
+
+#selectHeroOrWeaponModal .list {
+  color: #fff;
+  overflow-y: scroll;
+  padding: 0;
+  margin-top: 20px;
+  margin-bottom: 40px;
+  scroll-margin-left: 50px;
+}
+
+
 .modal-footer {
   background: rgb(31, 31, 34);
   border-color: rgba(24, 27, 30, 0.5) !important;
@@ -761,6 +790,13 @@ button.close {
   display: flex;
   justify-content: center;
 }
+
+.nav.nav-tabs.nav-justified{
+  background-color: rgba(0, 0, 0, .5);
+  border-radius: 20px;
+  padding: 0 30px;
+}
+
 .nav-tabs {
   border-bottom: none !important;
 }

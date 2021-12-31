@@ -31,7 +31,7 @@ import { mapActions, mapState } from "vuex";
 import Web3 from "web3";
 
 export default Vue.extend({
-  props: ["characterId", "room", "selectedWeaponId", "selectedCharacterId", "isRequest"],
+  props: ["characterId", "room", "selectedWeaponId", "selectedCharacterId", "isRequest", "isPvp"],
   components: {
     CharacterRoomArt,
   },

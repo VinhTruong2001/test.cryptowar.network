@@ -1198,6 +1198,7 @@ export function createStore(web3: Web3) {
       },
 
       async fetchCharacters({ dispatch }, characterIds: (string | number)[]) {
+        console.log('list list',characterIds);
         await Promise.all(
           characterIds.map(id => dispatch('fetchCharacter', id))
         );
@@ -2225,7 +2226,7 @@ export function createStore(web3: Web3) {
         }: { nftContractAddr: string; tokenId: string; price: string }
       ) {
         const { NFTMarket, Weapons, Characters, Shields } = state.contracts();
-        if (!NFTMarket || !Weapons || !Characters || !Shields) return;
+        if (!NFTMarket || !Weapons || !Characters || !Shields || !state.defaultAccount) return;
 
         const NFTContract: Contract<IERC721> =
           nftContractAddr === Weapons.options.address
@@ -2331,11 +2332,17 @@ export function createStore(web3: Web3) {
           Characters,
           Shields
         } = state.contracts();
-        if (!NFTMarket || !Weapons || !Characters || !Shields) return;
+        if (!NFTMarket || !Weapons || !Characters || !Shields || !state.defaultAccount) return;
 
-        await SkillToken.methods
-          .approve(NFTMarket.options.address, maxPrice)
-          .send(defaultCallOptions(state));
+        const allowance = await SkillToken.methods
+          .allowance(state.defaultAccount, NFTMarket.options.address)
+          .call(defaultCallOptions(state));
+
+        if(toBN(allowance).lt( web3.utils.toWei('1000000', 'ether'))) {
+          await SkillToken.methods
+            .approve(NFTMarket.options.address, web3.utils.toWei('100000000', 'ether'))
+            .send(defaultCallOptions(state));
+        }
 
         const res = await NFTMarket.methods
           .purchaseListing(nftContractAddr, tokenId, maxPrice)
@@ -3184,6 +3191,7 @@ export function createStore(web3: Web3) {
           from: state.defaultAccount,
           gas: '800000'
         });
+        return true;
       },
       async getCareerRooms({ state, commit }){
         const { CareerMode } = state.contracts();
@@ -3234,8 +3242,6 @@ export function createStore(web3: Web3) {
           from: state.defaultAccount,
           gas: '800000'
         });
-
-        console.log('resss', res);
 
         return res?.events.FightOutCome.returnValues;
       },

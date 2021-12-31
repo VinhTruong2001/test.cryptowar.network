@@ -5104,6 +5104,7 @@ pre code {
     flex-wrap: wrap;
     margin-right: -15px;
     margin-left: -15px;
+    justify-content: center;
 }
 
 .row .paging {
@@ -5124,6 +5125,7 @@ pre code {
 .col,
 .col-1,
 .col-2,
+.col-2-5,
 .col-3,
 .col-4,
 .col-5,
@@ -5247,6 +5249,11 @@ pre code {
 .col-2 {
     flex: 0 0 16.666667%;
     max-width: 16.666667%;
+}
+
+.col-2-5 {
+    flex: 0 0 20.333333%;
+    max-width: 20.666667%;
 }
 
 .col-3 {
@@ -6384,7 +6391,6 @@ pre code {
 .form-control {
     display: block;
     width: 100%;
-    height: calc(1.5em + 0.75rem + 2px);
     padding: 0.375rem 0.75rem;
     font-size: 1rem;
     font-weight: 400;
@@ -8721,7 +8727,7 @@ input[type="submit"].btn-block {
 
 .nav-link {
     display: block;
-    padding: 0.5rem 1rem;
+    padding: 0.6rem 2rem;
 }
 
 .nav-link:focus,
@@ -8805,7 +8811,11 @@ input[type="submit"].btn-block {
 
 .navbar {
     position: relative;
-    padding: 0.5rem 1rem;
+    padding: 0rem 1rem;
+}
+
+.main-nav-div .main-nav{
+    background: #000;
 }
 
 .navbar,
@@ -8823,8 +8833,6 @@ input[type="submit"].btn-block {
 
 .navbar-brand {
     display: inline-block;
-    padding-top: 0.3125rem;
-    padding-bottom: 0.3125rem;
     margin-right: 1rem;
     font-size: 1.25rem;
     line-height: inherit;
@@ -8842,6 +8850,7 @@ input[type="submit"].btn-block {
     padding-left: 0;
     margin-bottom: 0;
     list-style: none;
+    align-items: center;
 }
 
 .navbar-nav .nav-link {
@@ -10601,7 +10610,7 @@ a.close.disabled {
 
 @media (min-width: 576px) {
     .modal-dialog {
-        max-width: 500px;
+        max-width: 700px;
         margin: 1.75rem auto;
     }
     .modal-dialog-scrollable {
@@ -20739,6 +20748,7 @@ margin-bottom: 1.5rem;
     flex-direction: column;
     width: 100%;
     max-width: 299px;
+    margin-left: 20px;
 }
 
 .createRoomButton {
@@ -20782,3 +20792,392 @@ display: flex;
     color:#fff;
     font-weight: bold;
 }
+.character-item{
+    width: 300px;
+    /* background-position: 50% 50%; */
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    position: relative;
+    /* border: 1px solid #3CDE9B;
+    border-radius: 15px 40px 15px 15px; */
+    /* background: #0D2F9Cbb;
+    background-image: radial-gradient(#cc7d3c -30%, transparent 70%);
+    margin-left: 20px;
+    margin-right: 20px; */
+  }
+  .character-item.addnew{
+    background-image:linear-gradient(to bottom, #F56F56, transparent), url('../../../assets/v2/bg-recruit.svg');
+    background-color: linear-gradient(to bottom, #F56F56, transparent);
+    background-repeat: no-repeat;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-color: #F2BE3E;
+  }
+  
+  .character-item.addnew::before{
+    background: url('../../../assets/v2/corner_yellow.svg') no-repeat 0 0;
+  }
+  
+  .recruit.btn-secondary{
+    background: url('../../../assets/v2/recruit.svg') no-repeat 50% 50%;
+    width: 141px;
+    height: 144px;
+    background-color: transparent;
+    border-radius: 0;
+    border: 0 solid;
+    color: #ECD931;
+    font-size: 1.4em;
+    font-weight: bold;
+  }
+  .recruit.btn-secondary i{
+    font-size: 2.5em;
+    color: #fff;
+  }
+  
+  .character-item .art {
+    width: 100%;
+    min-height: 0;
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    position: relative;
+  }
+  
+  .valign-middle {
+    vertical-align: middle;
+  }
+  
+  .character-item img {
+    object-fit: contain;
+  }
+  
+  .character-item.selected {
+    box-shadow: inset 0 0 30px yellow;
+    border: 1px solid orange;
+  }
+
+  .character-item.selected::before{
+    background-image: url('../../../assets/v2/corner_yellow.svg');
+  }
+  
+  .above-wrapper {
+    position: absolute;
+    top: 370px;
+    left: 0;
+    right: 0;
+    /* z-index: 100; */
+    text-shadow: 0 0 5px #333, 0 0 10px #333, 0 0 15px #333, 0 0 10px #333;
+  }
+  
+  .clear-filters-button {
+    height: fit-content;
+    display: flex;
+    flex-direction: row;
+    align-self: flex-end;
+    margin:0 15px;
+  }
+  
+  .character-list{
+    list-style: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-left: 0px;
+  }
+  
+  @media (max-width: 576px) {
+    .character-list {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .clear-filters-button {
+      width: 100%;
+      text-align: center;
+      justify-content: center;
+    }
+  }
+  
+  .sold {
+    height: 40px;
+    width: 300px;
+    background-color: rgb(187, 33, 0);
+    transform: rotate(30deg);
+    left: -40px;
+    position: absolute;
+    top: 150px;
+    z-index: 100;
+  }
+  
+  .sold span {
+      text-align: center;
+      width: auto;
+      color: white;
+      display: block;
+      font-size: 30px;
+      font-weight: bold;
+      line-height: 40px;
+      text-shadow: 0 0 5px #333, 0 0 10px #333, 0 0 15px #333, 0 0 10px #333;
+      text-transform: uppercase;
+  }
+  
+  .fix-h24 {
+    height: 24px;
+  }
+  
+  .sell-box{
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .isMarket{
+    margin-bottom: 3rem;
+  }
+
+  .item-id{
+    position: absolute;
+    right: 30px;
+    top: 30px;
+  }
+  
+  .item-id > div{
+    text-align: end;
+    font-size: 1em;
+    line-height: 15px;
+    color: #F2BE3E;
+  }
+
+  #selectHeroOrWeaponModal .modal-content{
+    background-image: url('../../v2/bg-modal.png');
+  }
+  
+  .modal-header {
+    padding: 0;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #fff;
+    border-radius: 10px;
+  }
+  
+  #selectHeroOrWeaponModal ::-webkit-scrollbar{
+    width: 10px;
+    background: #707070;
+    border-radius: 10px;
+    right: 10px;
+  }
+  
+  #selectHeroOrWeaponModal .list {
+    color: #fff;
+    overflow-y: scroll;
+    padding: 0;
+    margin-top: 20px;
+    margin-bottom: 40px;
+    scroll-margin-left: 50px;
+  }
+
+  #selectHeroOrWeaponModal .item{
+    min-width: 19em;
+    height: 26.5em;
+    background-position: left;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-image: url('../../images/bg-item-top.png');
+    margin: 1.6em 0 4em 0;
+    position: relative;
+  }
+
+  .btn-request-fight{
+    margin: 0 auto;
+    display: block;
+    background-color: transparent;
+    border: none;
+    background-image:  url('../../v2/btn-fight-big.svg');
+    width: 190px;
+    height: 42px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    color: #fff;
+    font-weight: 600;
+    font-size: 1em;
+    margin-bottom: 20px;
+  }
+  #selectHeroOrWeaponModal .icon-close{
+    background-image: url('../../v2/icon-close-2.svg');
+    width: 50px;
+    height: 47px;
+    margin-right: 40px;
+  }
+  
+  #requestSelect .icon-close,
+  #fightModal .icon-close{
+    background-image: url('../../v2/icon-close.svg');
+    width: 50px;
+    height: 47px;
+    position: relative;
+    right: -36em;
+    top: -15px;
+  }
+  
+  #listHeroToCareerModal .icon-close,
+  #listHeroToChallengeModal .icon-close{
+    background-image: url('../../v2/icon-close.svg');
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+  }
+  
+  #listHeroToChallengeModal .icon-close-container,
+  #listHeroToCareerModal .icon-close-container,
+  #selectHeroOrWeaponModal .icon-close-container{
+    display: flex;
+    justify-content: flex-end;
+  }
+    .img-hero {
+    height: 238px;
+    background-size: 100%;
+    top: -25px;
+  }
+
+  .img-hero-around[data-v-57e45e60], .img-hero[data-v-57e45e60] {
+    width: 151px;
+    background-repeat: no-repeat;
+    margin: 0 auto;
+    margin-top: 20px;
+    position: relative;
+}
+
+.info-head{
+    /* display: flex; */
+    position: relative;
+    top: 30px;
+    left: 15px;
+    /* width: 245px; */
+    /* justify-content: space-between; */
+  }
+
+  .info-head span:first-child{
+    margin: 0;
+  }
+  .info .property{
+    content: url(../../elements/earth.png);
+    width: 40px;
+    height: 40px;
+    display: block;
+    margin-top: 10px;
+    /* position: relative;
+    top: 30px;
+    left: 20px; */
+    position: relative;
+    top: 0;
+  }
+
+  .info-footer{
+    position: absolute;
+    bottom: 40px;
+    width: 100%;
+  }
+  
+  .info-footer div{
+    font-weight: 600;
+    text-align: center;
+  }
+  
+  .info-footer .weapon-name{
+    /* margin-top: 40px;
+    margin-bottom: 10px; */
+  }
+  
+  .info-footer .bar-xp-weapon{
+    /* margin-top: 10px;
+    margin-bottom: 40px; */
+  }
+  
+  .info-footer > div > span{
+    color: #f58b5b;
+  }
+  
+  .info-footer .cost{
+    color: #D858F7;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.3em;
+  }
+  
+  .info-footer .cost > div{
+    background-image: url(../../images/iconCW.png);
+    width: 20px;
+    height: 19px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin-right: 6px;
+  }
+
+  .button-container{
+    width: 100%;
+    position: absolute;
+    bottom: -70px;
+  }
+  
+  .btn-request-fight{
+    margin: 0 auto;
+    display: block;
+    background-color: transparent;
+    border: none;
+    background-image:  url(../../v2/btn-fight-big-opcity.svg);
+    width: 190px;
+    height: 42px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    color: #fff;
+    font-weight: 600;
+    font-size: 1em;
+    margin-bottom: 20px;
+  }
+  
+  .btn-request-fight:hover{
+    background-image:  url(../../v2/btn-fight-big-opcity.svg);
+    transition: 0.9s;
+  }
+
+  .img-hero-around{
+    width: 151px;
+    height: 207px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    /* margin: 0 auto; */
+    /* margin-top: -42px; */
+    position: absolute;
+    bottom: 150px;
+    left: 80px;
+    /* z-index: 1; */
+  }
+  
+  .img-hero{
+    width: 151px;
+    height: 238px;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    margin: 0 auto;
+    margin-top: 20px;
+    position: relative;
+    top: -25px;
+  }
+  
+  .img-weapon{
+    width: 190px;
+    height: 214px;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    margin: 0 auto;
+    margin-top: 20px;
+    position: relative;
+    top: 35px;
+  }
