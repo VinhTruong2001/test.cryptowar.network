@@ -5,8 +5,7 @@
       <div class="row">
         <div class="col-12">
           <div class="quantity-heroes">
-            <div><span>123</span> Heroes In Chanllenge Mode{{this.select}}</div>
-            <div><span>456</span> Heroes In Career Mode</div>
+            <div><span>{{careerModeRooms.length}}</span> Heroes In Career Mode</div>
           </div>
         </div>
       </div>
@@ -104,23 +103,21 @@
         <!-- <div class="title-results">{{titleResults}}</div>
         <CombatResults v-if="resultsAvailable" :results="fightResults" /> -->
         <div class="row list" v-if="selectHero">
-          <div class="item" v-for="i in 10" :key="i">
+          <div class="item" v-for="i in ownCharacters" :key="i.id">
             <div class="info">
               <div class="info-head">
                   <span class="property"></span>
               </div>
               <div class="item-id">
-                  <span>#123456</span>
-                  <div class="leve">Lv.1</div>
+                  <span>#{{i.id}}</span>
+                  <div class="leve">Lv.{{i.level +1}}</div>
               </div>
               <div class="img-hero-around">
                 <div class="img-hero"></div>
               </div>
               <div class="info-footer">
-                <div class="hero-name">Amiria Angurvidel</div>
-                <div class="orner-hero">Owner: <span>0x4933...44644</span></div>
-                <div class="remain-hero">Remain: <span>345.9098</span></div>
-                <div class="cost"><div></div> 100</div>
+                <div class="hero-name">{{getCleanCharacterName(i.id)}}</div>
+                <div class="orner-hero"><span>Owner: {{renderOwner(i.owner)}}</span></div>
               </div>
             </div>
             <div class="button-container"><button @click="checkSelect = true, checkCurrentMode(),
@@ -163,7 +160,7 @@
         <div class="col-xl-8 col-12 nav-option-box">
           <div class="nav-option">
             <b-nav pills>
-              <b-nav-item
+              <!-- <b-nav-item
                 class="nav-item"
                 @click="
                   checkActive(),
@@ -173,7 +170,7 @@
                 "
                 :active="changeMode"
                 ><div>CHALLENGE MODE <div>123</div></div></b-nav-item
-              >
+              > -->
               <b-nav-item
                 class="nav-item"
                 @click="
@@ -183,7 +180,7 @@
                     (requestChallenge = false)
                 "
                 :active="careerMode"
-                ><div>CAREER MODE <div>456</div></div></b-nav-item
+                ><div>CAREER MODE <div>{{careerModeRooms.length}}</div></div></b-nav-item
               >
               <b-nav-item
                 class="nav-item"
@@ -212,7 +209,7 @@
       </b-modal>
       <div v-if="changeMode">
           <div class="row list-heroes" style="margin-left: 0;">
-        <div class="item" v-for="i in 10" :key="i">
+        <div class="item" v-for="i in careerModeRooms.length" :key="i.id">
             <div class="info">
               <div class="info-head">
                   <span class="property"></span>
@@ -323,6 +320,7 @@ import { toBN, fromWeiEther } from "../utils/common";
 import { mapActions, mapGetters, mapState, mapMutations } from "vuex";
 // import CharacterBar from "../components/CharacterBar.vue";
 import CombatPVPFight from "../views/CombatPVPFight.vue";
+import { getCleanName } from "../rename-censor";
 // import Events from "../events";
 
 export default {
@@ -338,8 +336,8 @@ export default {
       intervalMinutes: null,
       timeSeconds: null,
       timeMinutes: null,
-      changeMode: true,
-      careerMode: false,
+      changeMode: false,
+      careerMode: true,
       requestChallenge: false,
       fightXpGain: 16,
       selectedWeapon: null,
@@ -351,17 +349,12 @@ export default {
       checkFight: false,
       cancelRequest: false,
       checkSelectFromRPS: this.propCheckSelect,
+      listWeapon: null
     };
   },
 
-  mounted(){
-    if(this.checkSelectFromRPS){
-      this.addClass = "background";
-    }
-  },
-
   computed: {
-    ...mapState(["currentCharacterId"]),
+    ...mapState(["currentCharacterId", "careerModeRooms", "careerModeRequest","characters","ownedWeaponIds"]),
     ...mapGetters([
       "getTargetsByCharacterIdAndWeaponId",
       "ownCharacters",
@@ -371,6 +364,7 @@ export default {
       "getWeaponDurability",
       "fightGasOffset",
       "fightBaseline",
+      "getCharacterName",
     ]),
 
     targets() {
@@ -430,6 +424,11 @@ export default {
       "fetchFightRewardSkill",
       "fetchFightRewardXp",
       "getXPRewardsIfWin",
+      "createCareerRoom",
+      "getCareerRooms",
+      "getRequests",
+      "fight",
+      "fetchWeapons"
     ]),
     ...mapMutations(["setIsInCombat"]),
     checkActive(){
@@ -591,6 +590,21 @@ export default {
     setFightMultiplier() {
       localStorage.setItem("fightMultiplier", this.fightMultiplier.toString());
     },
+    getCleanCharacterName(id) {
+      return getCleanName(this.getCharacterName(id));
+    },
+    renderOwner(owner) {
+      if(!owner) {
+        return '';
+      }
+      else if(owner?.length<11) {
+        return owner;
+      }else {
+        const hiddenString = owner.slice(5, owner?.length-5);
+        const hiddenOwner = owner.split(hiddenString).join('...');
+        return hiddenOwner;
+      }
+    }
 
     // setStaminaSelectorValues() {
     //   if(this.currentCharacterStamina < 40) {
@@ -637,6 +651,21 @@ export default {
     // WeaponIcon,
     // CharacterBar,
     CombatPVPFight,
+  },
+  async mounted(){
+    if(this.checkSelectFromRPS){
+      this.addClass = "background";
+    }
+    this.fetchRoomInterval = setInterval(async () => {
+      // @ts-ignore
+      await this.getCareerRooms();
+    }, 3000);
+    // @ts-ignore
+    this.fetchRequestInterval = setInterval(async () => {
+      // @ts-ignore
+      await this.getRequests();
+    }, 3000);
+
   },
 };
 </script>
