@@ -20,9 +20,9 @@
 
     <div class="nav-link  mr-4 ml-4">
       <li class="nav-item nav-top-links ">
-        <a href="https://www.cryptowar.network/buy" target="_blank" class="gtag-link-others nav-icon-box" tagname="shop_screen">
+        <a href="https://bond.cryptowar.network/#/" target="_blank" class="gtag-link-others nav-icon-box" tagname="shop_screen">
           <img src="../assets/v2/ido_icon.svg" alt="" class="nav-icon">
-          <span class="gtag-link-others" tagname="plaza_screen">Buy IDO</span>
+          <span class="gtag-link-others" tagname="plaza_screen">Buy xBlade Bond</span>
         </a>
       </li>
     </div>
