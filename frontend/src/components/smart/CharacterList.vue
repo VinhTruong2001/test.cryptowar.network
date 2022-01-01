@@ -164,20 +164,6 @@
           </b-button>
         </div>
       </li>
-
-      <li
-        class="character-item addnew"
-      >
-        <b-button
-                class="recruit"
-                @click="onMintCharacter"
-                v-tooltip="'Recruit new character'"
-                tagname="recruit_character"
-              >
-              <i class="fas fa-plus"></i><br>
-                Recruit
-              </b-button>
-      </li>
     </ul>
   </div>
 </template>
@@ -423,3 +409,4 @@ input::-webkit-inner-spin-button {
 }
 
 </style>
+
