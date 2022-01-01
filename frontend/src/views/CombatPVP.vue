@@ -998,9 +998,10 @@ export default {
   background-position: left;
   background-repeat: no-repeat;
   background-size: contain;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
   margin-bottom: 2.5rem;
   position: relative;
+  background-image: url('../assets/images/bg-item-top.png');
 }
 
 .info {
