@@ -1,7 +1,7 @@
 <template>
   <div :class="showFilters && 'row'">
     <div
-      class="filters mt-1 pl-2"
+      class="filters pl-2"
       :class="showFilters && 'col-12 col-xl-3'"
       v-if="showFilters"
       @change="saveFilters()"
@@ -149,6 +149,7 @@
 
       <li
         class="col-6 col-lg-4 col-xl-3"
+        v-if="!isMarket"
       >
         <div class="character-item addnew ">
           <b-button
@@ -359,99 +360,10 @@ export default {
 
 <style scoped>
 
-.filters{
-  padding: 0 60px;
-}
-
-.character-item{
-  width: 100%;
-  max-width: 299px;
-  /* background-image: url('../../assets/images/bg-item-top.png'); */
-  /* background-position: 50% 50%; */
-  background-repeat: no-repeat;
-  margin-top: 50px;
-  background-size: 100% 100%;
-  position: relative;
-}
-.filters > div {
-  background-color: rgba(0, 0, 0, .5);
-  padding: 20px;
-}
-
-.filters > div > div{
-  margin-top: 30px;
-}
-
-.filters > div > div strong{
-  font-weight: normal;
-}
-
-.filters strong{
+.title{
   font-size: 20px;
-  margin-top: 10px;
+  margin-top: 50px;
 }
-
-.element{
-  border-top: 2px solid #707070;
-  border-bottom: 2px solid #707070;
-  padding: 30px 0;
-}
-
-.element img{
-  width: 40px;
-  height: 40px;
-  display: inline;
-  margin-right: 20px;
-}
-
-.element div{
-  margin-top: 15px;
-  width: fit-content;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 18px;
-  opacity: .6;
-}
-
-.Earth.earth{
-  opacity: 1;
-  filter: contrast(200%);
-}
-
-.Fire.fire{
-  opacity: 1;
-  filter: contrast(200%);
-}
-
-.Lightning.lightning{
-  opacity: 1;
-  filter: contrast(200%);
-}
-
-.Water.water{
-  opacity: 1;
-  filter: contrast(200%);
-}
-
-/* .start > div{
-  display: flex;
-  margin-top: 10px;
-  justify-content: space-between;
-}
-
-.start > div > div{
-  background: url("../../assets/v2/market-star.svg");
-  background-repeat: no-repeat;
-  background-size: contain;
-  width: 60px;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 800;
-  cursor: pointer;
-  font-size: 18px;
-} */
 
 .clear-filters-button{
   align-self: center;
@@ -486,23 +398,6 @@ input::-webkit-inner-spin-button {
   color: rgba(255, 255, 255, 0.6);
 }
 
-.search-button{
-  background: url("../../assets/v2/market-search.svg");
-  background-repeat: no-repeat;
-  background-size: contain;
-  width: 100%;
-  height: 53px;
-  border: none;
-  margin: 40px 0;
-  font-weight: bold;
-  font-size: 20px;
-  border-radius: 0;
-}
-
-.character-item{
-  margin-bottom: 80px;
-}
-
 .sell-box{
   margin-top: 20px;
 }
@@ -517,21 +412,13 @@ input::-webkit-inner-spin-button {
   color: white;
   font-weight: bold;
   font-size: 18px;
+  border-radius: 0;
 }
 
-@media all and (max-width: 767.98px) {
-  .search-button{
-    height: 44px;
-  }
-  .character-item{
-    margin: 50px 0;
-  }
-}
 
-@media (min-width: 767.98px) and (max-width: 992px){
-  .search-button{
-    height: 38px;
-    width: 220px;
+@media (min-width: 1248px) {
+  .home .character-list {
+    padding: 0 295px;
   }
 }
 
