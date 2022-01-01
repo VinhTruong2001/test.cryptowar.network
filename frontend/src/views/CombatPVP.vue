@@ -200,7 +200,7 @@
       </b-modal>
       <div v-if="changeMode">
           <div class="row list-heroes" style="margin-left: 0;">
-          <div class="itemCareer" v-for="i in this.filterMyCareerModeRooms(careerModeRooms)" :key="i.id">
+          <div class="item" v-for="i in this.filterMyCareerModeRooms(careerModeRooms)" :key="i.id">
             <CharacterRoom
               :characterId="i.characterId"
               :room="i"
@@ -229,7 +229,7 @@
       </b-modal>
       <div v-if="careerMode">
         <div class="row list-heroes" style="margin-left: 0;">
-          <div class="itemCareer" v-for="i in this.filterCareerModeRooms(careerModeRooms)" :key="i.id">
+          <div class="item" v-for="i in this.filterCareerModeRooms(careerModeRooms)" :key="i.id">
             <CharacterRoom
               :characterId="i.characterId"
               :room="i"
@@ -1001,7 +1001,6 @@ export default {
   margin-top: 1.5rem;
   margin-bottom: 2.5rem;
   position: relative;
-  background-image: url('../assets/images/bg-item-top.png');
 }
 
 .info {
