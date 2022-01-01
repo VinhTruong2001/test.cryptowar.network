@@ -3171,7 +3171,7 @@ export function createStore(web3: Web3) {
         const { CareerMode, xBladeToken, Characters, Weapons } = state.contracts();
 
         if(!state.defaultAccount || !CareerMode?.options.address){
-          return;
+          return false;
         }
         const allowance = await xBladeToken.methods.allowance(state.defaultAccount, CareerMode?.options.address).call(defaultCallOptions(state));
         if(toBN(allowance).isEqualTo(toBN('0'))){
@@ -3186,15 +3186,17 @@ export function createStore(web3: Web3) {
         await Weapons?.methods.approve(CareerMode?.options.address, weapon).send({
           from: state.defaultAccount
         });
-        await CareerMode?.methods.createRoom(character, weapon, Web3.utils.toWei(`${matchReward}`),  Web3.utils.toWei(`${totalDeposit}`)).send({
+        const res = await CareerMode?.methods.createRoom(character, weapon, Web3.utils.toWei(`${matchReward}`),  Web3.utils.toWei(`${totalDeposit}`)).send({
           from: state.defaultAccount,
           gas: '800000'
         });
+        console.log('res ne', res);
       },
       async getCareerRooms({ state, commit }){
         const { CareerMode } = state.contracts();
         // @ts-ignore
         const result: any[] = await CareerMode?.methods.getRooms(0).call(defaultCallOptions(state));
+        console.log('meo meo', result);
         commit('updateCareerRoom', { rooms: result.map(r=> ({
           characterId: r.characterId,
           claimed: r.claimed,
@@ -3203,7 +3205,7 @@ export function createStore(web3: Web3) {
           totalDeposit: r.totalDeposit,
           weaponId: r.weaponId,
           id: r.id,
-        })).filter(r => (r.owner as string)?.toLowerCase() !== state.defaultAccount?.toLowerCase())
+        }))
         });
       },
       // @ts-ignore

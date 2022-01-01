@@ -263,13 +263,10 @@ export default {
   display: flex;
   flex-direction: column;
   /* justify-content: center; */
-  align-items: center;
-  background-image: url("../assets/images/bg-item-top.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-position: center;
   /* width: 299px; */
-  height: 432px;
 }
 
 .glow-container {
@@ -331,7 +328,8 @@ export default {
   max-height: 208px;
   /* margin-left: 16px; */
   /* margin-top: 0px; */
-  transform: scale(0.5);
+  transform: scale(0.6);
+  margin-left: 2rem;
 }
 
 .name {
@@ -380,7 +378,7 @@ export default {
 
 
 .confirmReforge .small-durability-bar, .modal-body .small-durability-bar{
-  top: -10px
+  top: 0px;
 }
 
 .confirmReforge .name, .modal-body .name{

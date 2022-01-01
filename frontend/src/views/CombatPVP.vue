@@ -12,8 +12,16 @@
       <b-modal id="listHeroToCareerModal" hide-footer>
         <div class="icon-close-container"><div class="icon-close" @click="$bvModal.hide('listHeroToCareerModal')"></div></div>
         <div class="listHeroToCareerModal-head">CryptoWar Message</div>
-        <div class="listHeroToCareerModal-body">Listing HERO to Career: <span>Done</span></div>
+        <div class="listHeroToCareerModal-body" v-if="errorMessage">{{errorMessage}}</div>
+        <div class="listHeroToCareerModal-body" v-if="!errorMessage">Listing HERO to Career: <span>Done</span></div>
         <button @click="$bvModal.hide('listHeroToCareerModal'), careerMode = true, changeMode = false, requestChallenge = false,
+          checkSelect = false, addClass = ''" class="listHeroToCareerModal-btn confirm">GO TO CHECK</button>
+      </b-modal>
+      <b-modal id="fightErrorModal" hide-footer>
+        <div class="icon-close-container"><div class="icon-close" @click="$bvModal.hide('listHeroToCareerModal')"></div></div>
+        <div class="listHeroToCareerModal-head">CryptoWar Message</div>
+        <div class="listHeroToCareerModal-body" v-if="errorMessage">{{errorMessage}}</div>
+        <button @click="$bvModal.hide('fightErrorModal'), careerMode = true, changeMode = false, requestChallenge = false,
           checkSelect = false, addClass = ''" class="listHeroToCareerModal-btn confirm">GO TO CHECK</button>
       </b-modal>
       <b-modal id="listHeroToChallengeModal" hide-footer>
@@ -25,62 +33,55 @@
       </b-modal>
       <div class="row">
         <div :class="addClass" class="col-12 info-box">
-          <div v-if="checkSelectFromRPS || checkSelect" class="item-selected">
+          <div v-if="selectedCharacter" class="item-selected">
             <div class="item">
               <div class="info">
                 <div class="info-head">
                     <span class="property"></span>
                 </div>
                 <div class="item-id">
-                    <span>#123456</span>
-                    <div class="leve">Lv.1</div>
+                    <span>#{{selectedCharacter.id}}</span>
+                    <div class="leve">Lv.{{selectedCharacter.level+1}}</div>
                 </div>
-                <div class="img-hero-around">
-                  <div class="img-hero"></div>
+                <div
+                  :style="{
+                    'background-image': 'url(' + getCharacterTrait(selectedCharacter) + ')',
+                    'z-index': 999
+                    }"
+                 class="img-hero-around">
+                  <div
+                    :style="{
+                    'background-image': 'url(' + getCharacterArt(selectedCharacter) + ')',
+                    'z-index': 999
+                    }"
+                    class="img-hero"></div>
                 </div>
                 <div class="info-footer">
-                  <div class="hero-name">Amiria Angurvidel</div>
-                  <div class="orner-hero">Owner: <span>0x4933...44644</span></div>
+                  <div class="hero-name">{{getCleanCharacterName(selectedCharacter.id)}}</div>
+                  <div class="orner-hero">Owner: <span>{{renderOwner(selectedCharacter.owner)}}</span></div>
                 </div>
               </div>
             </div>
-            <div class="item">
-            <div class="info">
-              <div class="info-head">
-                <div class="info-head-left">
-                  <span class="property"></span>
-                  <div>
-                    <span class="star-weapon"></span>
-                    <div>STR+56</div>
-                  </div>
-                </div>
-                <div class="info-head-right">
-                  <span class="id-weapon">ID426</span>
-                  <div>6LB</div>
-                </div>
-              </div>
-              <div class="img-weapon"></div>
-              <div class="info-footer">
-                <div class="weapon-name">Amiria Angurvidel</div>
-                <div class="bar-xp-weapon"></div>
-              </div>
-            </div>
+          </div>
+          <div class="item-selected" v-if="selectedWeapon">
+          <div class="item" >
+            <WeaponSelect :weapon="selectedWeapon"/>
           </div>
           </div>
           <div class="info-user">
             <div class="info-user-title">Your Information</div>
             <div class="info-user-body">
               <span>HEROES available</span>
-              <div>4</div>
+              <div>{{ownCharacters.length}}</div>
             </div>
             <div class="info-user-btn">
               <button @click="$bvModal.show('selectHeroOrWeaponModal'), selectHero = true, selectWeapon = false">SELECT HERO</button>
               <button @click="$bvModal.show('selectHeroOrWeaponModal'), selectWeapon = true, selectHero = false">SELECT WEAPON</button>
             </div>
-            <div v-if="checkSelectFromRPS || checkSelect" class="info-user-footer">
+            <div v-if="selectedCharacter" class="info-user-footer">
               <div class="info-user-footer-item">
                 <div>Amount a match
-                  <div><div></div><span>123</span></div>
+                  <input class="inputAmountBox" type="text" v-model="matchReward">
                 </div>
               </div>
               <div class="info-user-footer-item">
@@ -89,11 +90,11 @@
                     Toal deposit
                     <span>Min = value * 150%</span>
                   </span>
-                  <div><div></div><span>123</span></div>
+                  <input class="inputAmountBox" type="text" v-model="totalDeposit">
                 </div>
               </div>
-              <button @click="$bvModal.show('listHeroToCareerModal')">List HERO to Career Mode</button>
-              <button @click="$bvModal.show('listHeroToChallengeModal')">List HERO to Challenge Mode</button>
+              <button @click="handleCreateRoom()">List HERO to Career Mode</button>
+              <!-- <button @click="$bvModal.show('listHeroToChallengeModal')">List HERO to Challenge Mode</button> -->
             </div>
           </div>
         </div>
@@ -112,41 +113,32 @@
                   <span>#{{i.id}}</span>
                   <div class="leve">Lv.{{i.level +1}}</div>
               </div>
-              <div class="img-hero-around">
-                <div class="img-hero"></div>
+              <div
+                :style="{
+                    'background-image': 'url(' + getCharacterTrait(i) + ')',
+                    'z-index': 999
+                    }"
+               class="img-hero-around">
+                <div
+                  :style="{
+                    'background-image': 'url(' + getCharacterArt(i) + ')',
+                    'z-index': 999
+                    }"
+                  class="img-hero"></div>
               </div>
               <div class="info-footer">
                 <div class="hero-name">{{getCleanCharacterName(i.id)}}</div>
                 <div class="orner-hero"><span>Owner: {{renderOwner(i.owner)}}</span></div>
               </div>
             </div>
-            <div class="button-container"><button @click="checkSelect = true, checkCurrentMode(),
+            <div class="button-container"><button @click="onSelectHero(i), checkCurrentMode(),
               $bvModal.hide('selectHeroOrWeaponModal'), addClass = 'background'" class="btn-request-fight">SELECT</button></div>
           </div>
         </div>
-        <div class="row list" v-if="selectWeapon">
-          <div class="item" v-for="i in 10" :key="i">
-            <div class="info">
-              <div class="info-head">
-                <div class="info-head-left">
-                  <span class="property"></span>
-                  <div>
-                    <span class="star-weapon"></span>
-                    <div>STR+56</div>
-                  </div>
-                </div>
-                <div class="info-head-right">
-                  <span class="id-weapon">ID426</span>
-                  <div>6LB</div>
-                </div>
-              </div>
-              <div class="img-weapon"></div>
-              <div class="info-footer">
-                <div class="weapon-name">Amiria Angurvidel</div>
-                <div class="bar-xp-weapon"></div>
-              </div>
-            </div>
-            <div class="button-container"><button @click="checkSelect = true, checkCurrentMode(),
+        <div class="row list" v-if="selectWeapon">>
+          <div class="item" v-for="i in ownWeapons" :key="i.id">
+            <WeaponSelect :weapon="i"/>
+            <div class="button-container"><button @click="onSelectWeapon(i), checkCurrentMode(),
               $bvModal.hide('selectHeroOrWeaponModal'),  addClass = 'background'" class="btn-request-fight">SELECT</button></div>
           </div>
         </div>
@@ -191,7 +183,7 @@
                     (requestChallenge = true)
                 "
                 :active="requestChallenge"
-                ><div>REQUEST TO CHALLENGE <div>1</div></div></b-nav-item
+                ><div>REQUEST TO CHALLENGE <div>{{this.filterCareerModeRequest(careerModeRequest).length}}</div></div></b-nav-item
               >
             </b-nav>
           </div>
@@ -247,54 +239,24 @@
       </b-modal>
       <div v-if="careerMode">
         <div class="row list-heroes" style="margin-left: 0;">
-          <div class="item" v-for="i in 10" :key="i">
-              <div class="info">
-                <div class="info-head">
-                    <span class="property"></span>
-                </div>
-                <div class="item-id">
-                    <span>#123456</span>
-                    <div class="leve">Lv.1</div>
-                </div>
-                <div class="img-hero-around">
-                  <div class="img-hero"></div>
-                </div>
-                <div class="info-footer">
-                  <div class="hero-name">Amiria Angurvidel</div>
-                  <div class="orner-hero">Owner: <span>0x4933...44644</span></div>
-                  <div class="remain-hero">Remain: <span>345.9098</span></div>
-                  <div class="cost"><div></div> 100</div>
-                </div>
-              </div>
-              <div class="button-container"><button @click="$bvModal.show('fightModal')" class="btn-request-fight">FIGHT</button></div>
+          <div class="itemCareer" v-for="i in careerModeRooms" :key="i.id">
+            <CharacterRoom
+              :characterId="i.characterId"
+              :room="i"
+              :selectedCharacterId="i.characterId"
+              :selectedWeaponId="i.weaponId"
+              :isRequest="true"
+              />
               <!-- <router-link :to="{ name: 'pvp-fight' }">
               </router-link> -->
           </div>
         </div>
       </div>
       <div v-if="requestChallenge">
-          <div class="row list-heroes" style="margin-left: 0;">
-        <div class="item">
-            <div class="info">
-                <div class="info-head">
-                    <span class="property"></span>
-                </div>
-                <div class="item-id">
-                    <span>#123456</span>
-                    <div class="leve">Lv.1</div>
-                </div>
-              <div class="img-hero-around">
-                <div class="img-hero"></div>
-              </div>
-              <div class="info-footer">
-                <div class="hero-name">Amiria Angurvidel</div>
-                <div class="orner-hero">Owner: <span>0x4933...44644</span></div>
-                <div class="remain-hero">Remain: <span>345.9098</span></div>
-                <div class="cost"><div></div> 100</div>
-              </div>
+          <div class="row list-request" style="margin-left: 0;">
+            <div class="itemCareer" v-for="i in this.filterCareerModeRequest(careerModeRequest)" :key="i.roomId">
+            <RoomRequest :request="i" :handleFight="handleFight" />
             </div>
-            <div class="button-container"><button @click="cancelRequest = true, checkFight =true" class="btn-request-fight">CANCEL REQUEST</button></div>
-          </div>
         </div>
       </div>
     </div>
@@ -309,7 +271,7 @@ import { getEnemyArtAround } from "../enemy-art-around";
 import { getEnemyArt } from "../enemy-art";
 import {
   CharacterPower,
-  CharacterTrait,
+  // CharacterTrait,
   GetTotalMultiplierForTrait,
   WeaponElement,
 } from "../interfaces";
@@ -321,6 +283,10 @@ import { mapActions, mapGetters, mapState, mapMutations } from "vuex";
 // import CharacterBar from "../components/CharacterBar.vue";
 import CombatPVPFight from "../views/CombatPVPFight.vue";
 import { getCleanName } from "../rename-censor";
+import { getCharacterArt, getCharacterTrait } from "../character-arts-placeholder";
+import CharacterRoom from "@/components/CharacterRoom.vue";
+import WeaponSelect from "@/components/WeaponSelect.vue";
+import RoomRequest from "@/components/RoomRequest.vue";
 // import Events from "../events";
 
 export default {
@@ -349,7 +315,11 @@ export default {
       checkFight: false,
       cancelRequest: false,
       checkSelectFromRPS: this.propCheckSelect,
-      listWeapon: null
+      listWeapon: null,
+      selectedCharacter: null,
+      matchReward: 0,
+      totalDeposit: 0,
+      errorMessage: ''
     };
   },
 
@@ -365,6 +335,7 @@ export default {
       "fightGasOffset",
       "fightBaseline",
       "getCharacterName",
+      "getWeaponName"
     ]),
 
     targets() {
@@ -428,7 +399,8 @@ export default {
       "getCareerRooms",
       "getRequests",
       "fight",
-      "fetchWeapons"
+      "fetchWeapons",
+      "fetchCharacters"
     ]),
     ...mapMutations(["setIsInCombat"]),
     checkActive(){
@@ -445,6 +417,11 @@ export default {
         this.changeMode = false;
       }
     },
+    getCharacterArt,
+    getCharacterTrait,
+    getCleanWeaponName(id, stars) {
+      return getCleanName(this.getWeaponName(id, stars));
+    },
     getEnemyArt,
     getEnemyArtAround,
     weaponHasDurability(id) {
@@ -452,9 +429,6 @@ export default {
     },
     charHasStamina() {
       return this.currentCharacterStamina >= this.staminaPerFight;
-    },
-    getCharacterTrait(trait) {
-      return CharacterTrait[trait];
     },
     getWinChance(enemyPower, enemyElement) {
       const characterPower = CharacterPower(this.currentCharacter.level);
@@ -604,7 +578,96 @@ export default {
         const hiddenOwner = owner.split(hiddenString).join('...');
         return hiddenOwner;
       }
-    }
+    },
+
+    onSelectHero(heroId) {
+      console.log('kkk', heroId);
+      this.selectedCharacter = heroId;
+    },
+
+    onSelectWeapon(weapon) {
+      this.selectedWeapon = weapon;
+    },
+
+    convertReward(reward) {
+      const _reward = fromWeiEther(reward);
+      return `${_reward}`;
+    },
+
+    async handleCreateRoom() {
+      // @ts-ignore
+      console.log('show me the answer', this.selectedWeapon.id, this.selectedCharacter.id, this.matchReward, this.totalDeposit);
+      // @ts-ignore
+      if(!this.selectedCharacter || !this.selectedWeapon) {
+        console.log('here');
+        // @ts-ignore
+        this.errorMessage = 'Please select weapon and hero!';
+        // @ts-ignore
+        this.$bvModal.show('listHeroToCareerModal');
+      }
+      else if(!this.totalDeposit || !this.matchReward) {
+        this.errorMessage = 'Please input total deposit and match reward!';
+        this.$bvModal.show('listHeroToCareerModal');
+      }
+      else if(this.totalDeposit< 2.1*this.matchReward) {
+        this.errorMessage = 'total deposit needs to bigger than 210% of match reward!';
+        this.$bvModal.show('listHeroToCareerModal');
+      }
+      else {
+        // @ts-ignore
+        await this.createCareerRoom({
+        // @ts-ignore
+          character: this.selectedCharacter.id,
+          // @ts-ignore
+          weapon: this.selectedWeapon.id,
+          // @ts-ignore
+          matchReward: this.matchReward,
+          // @ts-ignore
+          totalDeposit: this.totalDeposit
+        });
+        // console.log('hiihi', result);
+        // if(result) {
+        //   this.errorMessage='';
+        //   this.$bvModal.show('listHeroToCareerModal');
+        // }
+      }
+    },
+
+    async handleFight(roomId, requestId) {
+      if(!this.selectedCharacter || !this.selectedWeapon) {
+        console.log('hic');
+        this.errorMessage = 'Please select weapon and hero!';
+        // @ts-ignore
+        this.$bvModal.show('fightErrorModal');
+        return;
+      }else {
+        this.waitingResults = true;
+        // @ts-ignore
+        this.fightResults = null;
+        // @ts-ignore
+        this.error = null;
+        // this.setIsInCombat(this.waitingResults);
+        try{
+          // @ts-ignore
+          const results = await this.fight({
+            roomId, requestId
+          });
+          console.log('gi v ta', results);
+          // @ts-ignore
+          this.fightResults=results;
+          // @ts-ignore
+          this.error=null;
+        } catch (e) {
+          console.error(e);
+          // @ts-ignore
+          this.error = e.message;
+        }
+      }
+      // @ts-ignore
+    },
+    filterCareerModeRequest () {
+      return this.careerModeRequest.filter((item) => !item.done);
+    },
 
     // setStaminaSelectorValues() {
     //   if(this.currentCharacterStamina < 40) {
@@ -651,6 +714,9 @@ export default {
     // WeaponIcon,
     // CharacterBar,
     CombatPVPFight,
+    CharacterRoom,
+    WeaponSelect,
+    RoomRequest
   },
   async mounted(){
     if(this.checkSelectFromRPS){
@@ -798,6 +864,12 @@ export default {
   justify-content: center;
 }
 
+.list-request {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+}
+
 .search-hero{
   display: flex;
   align-items: center;
@@ -863,7 +935,6 @@ export default {
   display: flex;
   justify-content: center;
   height: 700px;
-  width: 90%;
   margin: 0 auto;
 }
 
@@ -875,6 +946,17 @@ export default {
   background-size: contain;
   background-image: url(../assets/images/bg-item-top.png);
   margin: 1.6em 0 4em 0;
+  position: relative;
+}
+
+.itemCareer {
+  min-width: 19em;
+  height: 26.5em;
+  background-position: left;
+  background-repeat: no-repeat;
+  background-size: contain;
+  margin-top: 1rem;
+  margin-bottom: 2.5rem;
   position: relative;
 }
 
@@ -934,7 +1016,6 @@ export default {
 .img-hero-around{
   width: 151px;
   height: 207px;
-  background-image: url(../assets/images/water.png);
   background-repeat: no-repeat;
   background-size: contain;
   /* margin: 0 auto; */
@@ -948,7 +1029,6 @@ export default {
 .img-hero{
   width: 151px;
   height: 238px;
-  background-image: url(../assets/hero/hero-water-02.png);
   background-repeat: no-repeat;
   background-size: 100%;
   margin: 0 auto;
@@ -960,7 +1040,7 @@ export default {
 .img-weapon{
   width: 190px;
   height: 214px;
-  background-image: url(../assets/sword/sword-air-04.png);
+  /* background-image: url(../assets/sword/sword-air-04.png); */
   background-repeat: no-repeat;
   background-size: 100%;
   margin: 0 auto;
@@ -1183,7 +1263,7 @@ export default {
 
 .item-selected{
   display: flex;
-  margin-right: 3.8em;
+  margin-right: 1.5rem;
 }
 
 .info-user-footer{

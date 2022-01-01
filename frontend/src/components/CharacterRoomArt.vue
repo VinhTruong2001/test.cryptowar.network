@@ -52,6 +52,7 @@
           Owner: <span class="ownerText">{{ renderOwner(this.room.owner) }}</span>
         </div>
       </div>
+      <div class="cost"><div></div> {{this.matchReward}}</div>
     </div>
   </div>
 </template>
@@ -186,6 +187,7 @@ export default {
   mounted() {
     this.allLoaded = true;
     this.showPlaceholder = true;
+    console.log('111121212');
     return;
   },
 };
@@ -433,5 +435,21 @@ export default {
   color:#FEA829;
   font-size: 18px;
   font-weight: bold;
+}
+.cost{
+  color: #D858F7;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.3em;
+}
+.cost > div{
+  background-image: url(../assets/v2/icon-crypto.svg);
+  width: 20px;
+  height: 19px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin-right: 6px;
 }
 </style>

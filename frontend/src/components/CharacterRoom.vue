@@ -4,8 +4,8 @@
       <CharacterRoomArt
         v-if="characters[this.characterId]"
         :character="characters[this.characterId]"
-        :matchReward="this.matchReward"
         :room="this.room"
+        :matchReward="this.matchReward"
         :selectedWeaponId="this.selectedWeaponId"
         :selectedCharacterId="this.selectedCharacterId"
       />
@@ -13,7 +13,7 @@
     <div v-if="this.isRequest == true" class="containerButton">
         <button
           type="button"
-          class="buttonFight"
+          class="btn-request-fight"
           @click="handleRequestFight()"
         >
         <span class="titleButtonFight">
@@ -63,7 +63,6 @@ export default Vue.extend({
 .character-item {
   width: 299px;
   max-width: 100%;
-  background-image: url("../assets/images/bg-item-top.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;;
   margin-top: 1rem;
@@ -100,19 +99,25 @@ export default Vue.extend({
     justify-content: center;
     margin-bottom: 2rem;
   }
-  .buttonFight {
-    border: none;
-    height: 47px;
-    background-image: url('../assets/images/bg-fight-button.png');
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    background-color: transparent;
-  }
+  .btn-request-fight{
+  margin: 0 auto;
+  display: block;
+  background-color: transparent;
+  border: none;
+  background-image:  url(../assets/v2/btn-fight-big.svg);
+  width: 190px;
+  height: 42px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1em;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
 .titleButtonFight {
   color: var(--white);
   font-size: 20px;
-  padding-left: 23.5px;
-  padding-right: 23.5px;
   font-size: 19px;
   font-weight: bold;
   padding-top: 12px;

@@ -802,7 +802,6 @@ export default Vue.extend({
 }
 
 .img-hero-around{
-  background: url("../../assets/images/water.png");
   background-repeat: no-repeat;
   background-size: contain;
   width: 125px;

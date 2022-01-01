@@ -342,7 +342,7 @@ export default Vue.extend({
     },
     handleCreateRoom() {
       // @ts-ignore
-      console.log('show me the answer', this.characterId);
+      console.log('show me the answer', this.weaponId);
       // @ts-ignore
       if(!this.selectedCharacter || !this.selectedWeapon) {
         // @ts-ignore
@@ -398,6 +398,7 @@ export default Vue.extend({
     this.fetchRoomInterval = setInterval(async () => {
       // @ts-ignore
       await this.getCareerRooms();
+      console.log('1111', this.careerModeRooms);
     }, 3000);
     // @ts-ignore
     this.fetchRequestInterval = setInterval(async () => {
