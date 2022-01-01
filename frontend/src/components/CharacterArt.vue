@@ -5,22 +5,10 @@
         :class="characterTrait.toLowerCase() + '-icon circle-element'"
       ></span>
       <div class="black-outline" v-if="!portrait">
-          <div>
-            ID <span class="white">{{ character.id }}</span>
-          </div>
-          <div class="lv">
-            Lv.<span class="">{{ character.level + 1 }}</span>
-          </div>
+          ID <span class="white">{{ character.id }}</span>
       </div>
     </div>
-
-    <!-- <div class="trait" v-if="!portrait">
-      <span
-        :class="characterTrait.toLowerCase() + '-icon circle-element'"
-      ></span>
-    </div> -->
-
-    <div class="placeholder" :class="characterTrait.toLowerCase() + '-bg'">
+    <div class="placeholder d-flex align-items-start justify-content-center " :class="characterTrait.toLowerCase() + '-bg'">
       <div
         :style="{
           'background-image': 'url(' + getCharacterArt(character) + ')',
@@ -41,6 +29,9 @@
         <div class="name black-outline" :title="getCleanCharacterName(character.id)" v-if="!portrait">
           {{ getCleanCharacterName(character.id) }}
         </div>
+        <div class="lv" v-if="!portrait">
+          Lv.<span class="">{{ character.level + 1 }}</span>
+        </div>
       </div>
 
       <!-- <div
@@ -58,20 +49,22 @@
         </div>
       </div> -->
 
-      <div class="xp" v-if="!portrait">
-        <b-progress
-          :max="RequiredXp(character.level)"
-          variant="success"
-          v-tooltip.bottom="
-            `Claimable XP ${this.getCharacterUnclaimedXp(character.id)}`
-          "
-        >
-          <strong class="xp-text"
-            >{{ character.xp || 0 }} /
-            {{ RequiredXp(character.level) }} XP</strong
+      <div class="xp-wrap">
+        <div class="xp" v-if="!portrait">
+          <b-progress
+            :max="RequiredXp(character.level)"
+            variant="success"
+            v-tooltip.bottom="
+              `Claimable XP ${this.getCharacterUnclaimedXp(character.id)}`
+            "
           >
-          <b-progress-bar :value="character.xp || 0"></b-progress-bar>
-        </b-progress>
+            <strong class="xp-text"
+              >{{ character.xp || 0 }} /
+              {{ RequiredXp(character.level) }} XP</strong
+            >
+            <b-progress-bar :value="character.xp || 0"></b-progress-bar>
+          </b-progress>
+        </div>
       </div>
     </div>
   </div>
@@ -215,14 +208,14 @@ export default {
 }
 
 .trait {
+  margin: 0 auto;
   position: relative;
   display: flex;
   height: 75px;
   width: 100%;
   justify-content: space-between;
+  padding: 0 1.5em 0 0.8em;
   align-items: center;
-  margin-top: 8px;
-  padding: 0 15px;
 }
 
 .id {
@@ -231,18 +224,12 @@ export default {
   font-style: italic;
 }
 
-.black-outline{
+.black-outline {
   color: #fff;
-  font-size: 18px;
+  font-weight: bold;
+  font-size: 1.3em;
   text-shadow: none;
-  text-align: end;
 }
-
-.black-outline .lv{
-  color: rgb(242,190,62);
-  line-height: 0.8;
-}
-
 .black-outline .white{
   color: #fff;
 }
@@ -262,28 +249,32 @@ export default {
   text-align: center;
 }
 
+.xp-wrap {
+  padding: 0 10px;
+}
+
 .xp {
+  width: 100%;
   background-image: url("../assets/v2/xp_bg.svg");
   background-repeat: no-repeat;
-  background-position: 50% 50%;
-  background-size: contain;
+  background-size: cover;
+  height: 19px;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0 0px;
-  margin: auto;
-  width: 260px;
-  margin-top: 45px;
-  margin-bottom: 45px;
+  margin: 7px 0;
+  border-radius: 16px;
 }
 
 .xp .bg-success {
   background-position: 0 0;
   background-image: url("../assets/v2/xp_progress.svg");
   background-repeat: no-repeat;
-  width: 261px;
-  height: 15px;
-  background-color: transparent !important;;
+  background-size: cover;
+  width: 100%;
+  height: 19px;
+  background-color: transparent !important;
 }
 
 .xp-text {
@@ -293,7 +284,7 @@ export default {
   color: #000;
 }
 
-.xp .progress{
+.xp .progress {
   background-color: initial;
   width: 100%;
   height: 19px;
@@ -309,17 +300,11 @@ export default {
   position: relative;
   -o-object-fit: contain;
   object-fit: contain;
-  display: flex;
-  align-items: flex-end;
-  background-repeat: no-repeat;
-  background-size: cover;
-  width: 70%;
-  margin: auto;
-  height: 85%;
-  margin-top: -40px;
+  height: 300px;
 }
 
 .market-bot {
+  height: 95px;
   overflow: hidden;
   background-position: 0 0;
   background-repeat: no-repeat;
@@ -332,7 +317,7 @@ export default {
 
 .market-bot .lv {
   font-size: 1.2rem;
-  color: #dabf75;
+  color: #FEA829;
   font-weight: bold;
   line-height: 1;
 }
@@ -372,7 +357,7 @@ export default {
 .name-lvl-container .name{
   max-width: 100%;
   max-height: inherit;
-  font-size: 1em;
+  font-size: 1.2em;
 }
 
 .market-bot .score-id-container {
@@ -410,21 +395,75 @@ export default {
   color: #fff;
 }
 
-.water-bg, .fire-bg, .lightning-bg, .earth-bg{
+.water-bg, .fire-bg, .lightning-bg, .earth-bg {
   background-image: url('../assets/images/water.png');
   background-repeat: no-repeat;
   background-position: center bottom;
 }
-
 .fire-bg{
   background-image: url('../assets/images/fire.png');
 }
-
 .lightning-bg{
   background-image: url('../assets/images/lightning.png');
 }
-
 .earth-bg{
   background-image: url('../assets/images/earth.png');
 }
+
+@media (min-width: 768px) {
+  .placeholder {
+    margin-top: -30px;
+  }
+}
+
+@media (max-width: 576px) {
+  .trait {
+    height: 45px;
+  }
+
+  .circle-element {
+    width: 27px;
+    height: 27px;
+  }
+
+  .black-outline {
+    font-size: 16px;
+    font-weight: normal;
+  }
+
+  .placeholder {
+    height: 164px;
+    background-size: 70% 60%;
+  }
+
+  .market-bot .name {
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .market-bot .lv {
+    font-size: 12px;
+  }
+
+  .name {
+    margin-top: 10px;
+  }
+
+  .xp {
+    height: 12px;
+  }
+
+  .xp .bg-success {
+    height: 12px;
+  }
+
+  .xp .progress {
+    height: 12px;
+  }
+
+  .xp-text {
+    font-weight: 500;
+  }
+}
+
 </style>

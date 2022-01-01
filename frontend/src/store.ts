@@ -3172,7 +3172,7 @@ export function createStore(web3: Web3) {
         const { CareerMode, xBladeToken, Characters, Weapons } = state.contracts();
 
         if(!state.defaultAccount || !CareerMode?.options.address){
-          return;
+          return false;
         }
         const allowance = await xBladeToken.methods.allowance(state.defaultAccount, CareerMode?.options.address).call(defaultCallOptions(state));
         if(toBN(allowance).isEqualTo(toBN('0'))){
@@ -3193,20 +3193,40 @@ export function createStore(web3: Web3) {
         });
         return true;
       },
-      async getCareerRooms({ state, commit }){
+      async getCareerRooms({ state, commit }, {cursor}){
+        console.log('2222', cursor);
         const { CareerMode } = state.contracts();
-        // @ts-ignore
-        const result: any[] = await CareerMode?.methods.getRooms(0).call(defaultCallOptions(state));
-        commit('updateCareerRoom', { rooms: result.map(r=> ({
-          characterId: r.characterId,
-          claimed: r.claimed,
-          matchReward: r.matchReward,
-          owner: r.owner,
-          totalDeposit: r.totalDeposit,
-          weaponId: r.weaponId,
-          id: r.id,
-        })).filter(r => (r.owner as string)?.toLowerCase() !== state.defaultAccount?.toLowerCase())
-        });
+        if(cursor === 0) {
+          // @ts-ignore
+          const result: any[] = await CareerMode?.methods.getRooms(0).call(defaultCallOptions(state));
+          commit('updateCareerRoom', { rooms: result.map(r=> ({
+            characterId: r.characterId,
+            claimed: r.claimed,
+            matchReward: r.matchReward,
+            owner: r.owner,
+            totalDeposit: r.totalDeposit,
+            weaponId: r.weaponId,
+            id: r.id,
+          }))
+          });
+        }
+        else {
+          const oldResult = state.careerModeRooms;
+          // @ts-ignore
+          const result: any[] = await CareerMode?.methods.getRooms(cursor).call(defaultCallOptions(state));
+          const newArray = oldResult.concat(result);
+          console.log('hic', newArray);
+          commit('updateCareerRoom', { rooms: newArray.map(r=> ({
+            characterId: r.characterId,
+            claimed: r.claimed,
+            matchReward: r.matchReward,
+            owner: r.owner,
+            totalDeposit: r.totalDeposit,
+            weaponId: r.weaponId,
+            id: r.id,
+          }))
+          });
+        }
       },
       // @ts-ignore
       async requestFight({ state }, { roomId, weaponId, characterId }){
@@ -3300,6 +3320,12 @@ export function createStore(web3: Web3) {
         console.log('kkkkk', res);
         return res;
       },
+
+      async cancelRequestFight({ state }, {roomId, requestId}) {
+        const {CareerMode} = state.contracts();
+        await CareerMode?.methods.cancelRequestFight(roomId, requestId).call(defaultCallOptions(state));
+        return true;
+      }
     },
   });
 }

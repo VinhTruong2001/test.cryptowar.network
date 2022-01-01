@@ -1,11 +1,11 @@
 <template>
   <div class="character-item">
     <div class="art">
-      <CharacterRoomArt
+      <CharacterRoomArtPvp
         v-if="characters[this.characterId]"
         :character="characters[this.characterId]"
-        :matchReward="this.matchReward"
         :room="this.room"
+        :matchReward="this.matchReward"
         :selectedWeaponId="this.selectedWeaponId"
         :selectedCharacterId="this.selectedCharacterId"
       />
@@ -13,11 +13,22 @@
     <div v-if="this.isRequest == true" class="containerButton">
         <button
           type="button"
-          class="buttonFight"
-          @click="handleRequestFight()"
+          class="btn-request-fight"
+          @click="() => handleRequestFight()"
         >
         <span class="titleButtonFight">
           REQUEST FIGHT
+        </span>
+        </button>
+      </div>
+      <div v-if="this.isCancel == true" class="containerButton">
+        <button
+          type="button"
+          class="btn-request-fight"
+          @click="() => handleCancelFight()"
+        >
+        <span class="titleButtonFight">
+          CANCEL FIGHT
         </span>
         </button>
       </div>
@@ -26,25 +37,25 @@
 
 <script lang="ts">
 import Vue from "vue";
-import CharacterRoomArt from "../components/CharacterRoomArt.vue";
+import CharacterRoomArtPvp from "../components/CharacterRoomArtPvp.vue";
 import { mapActions, mapState } from "vuex";
 import Web3 from "web3";
 
 export default Vue.extend({
-  props: ["characterId", "room", "selectedWeaponId", "selectedCharacterId", "isRequest", "isPvp"],
+  props: ["characterId", "room", "selectedWeaponId", "selectedCharacterId", "isRequest", "handleRequestFight","handleCancelFight", "isCancel"],
   components: {
-    CharacterRoomArt,
+    CharacterRoomArtPvp,
   },
   methods: {
     ...mapActions(["fetchCharacters", "requestFight"]),
-    handleRequestFight() {
-      //@ts-ignore
-      this.requestFight({
-        roomId: this.room.id,
-        weaponId: this.selectedWeaponId,
-        characterId: this.selectedCharacterId,
-      });
-    },
+    // handleRequestFight() {
+    //   //@ts-ignore
+    //   this.requestFight({
+    //     roomId: this.room.id,
+    //     weaponId: this.selectedWeaponId,
+    //     characterId: this.selectedCharacterId,
+    //   });
+    // },
   },
   computed: {
     ...mapState(["characters"]),
@@ -63,12 +74,12 @@ export default Vue.extend({
 .character-item {
   width: 299px;
   max-width: 100%;
-  background-image: url("../assets/images/bg-item-top.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;;
   margin-top: 1rem;
   margin-bottom: 2.7rem;
-  /* margin-left: 2.5rem; */
+  margin-left: 1.25rem;
+  margin-right: 1.25rem;
   align-items: center;
   justify-items: center;
   max-height: 432px;
@@ -100,19 +111,25 @@ export default Vue.extend({
     justify-content: center;
     margin-bottom: 2rem;
   }
-  .buttonFight {
-    border: none;
-    height: 47px;
-    background-image: url('../assets/images/bg-fight-button.png');
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    background-color: transparent;
-  }
+  .btn-request-fight{
+  margin: 0 auto;
+  display: block;
+  background-color: transparent;
+  border: none;
+  background-image:  url(../assets/v2/btn-fight-big.svg);
+  width: 190px;
+  height: 42px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1em;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
 .titleButtonFight {
   color: var(--white);
   font-size: 20px;
-  padding-left: 23.5px;
-  padding-right: 23.5px;
   font-size: 19px;
   font-weight: bold;
   padding-top: 12px;

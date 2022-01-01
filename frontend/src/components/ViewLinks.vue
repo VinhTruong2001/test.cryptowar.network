@@ -21,9 +21,9 @@
 
     <div class="nav-link  mr-4 ml-4">
       <li class="nav-item nav-top-links ">
-        <a href="https://www.cryptowar.network/buy" target="_blank" class="gtag-link-others nav-icon-box" tagname="shop_screen">
+        <a href="https://bond.cryptowar.network/" target="_blank" class="gtag-link-others nav-icon-box" tagname="shop_screen">
           <img src="../assets/v2/ido_icon.svg" alt="" class="nav-icon">
-          <span class="gtag-link-others" tagname="plaza_screen">Buy IDO</span>
+          <span class="gtag-link-others" tagname="plaza_screen">xBlade BOND</span>
         </a>
       </li>
     </div>
@@ -48,7 +48,7 @@
       </li>
     </router-link> -->
 
-    <router-link :to="{ name: 'blacksmith' }" exact class="nav-link mr-3 ml-3"   v-if="!featureFlagStakeOnly">
+    <router-link :to="{ name: 'inventory' }" exact class="nav-link mr-3 ml-3"   v-if="!featureFlagStakeOnly">
       <li class="nav-item nav-top-links nav-img-item-box" >
         <span class="nav-img-item">
           <img src="../assets/v2/inventory.svg" alt="Inventory" class="nav-img">
@@ -221,6 +221,7 @@ a.router-link-active .lobby .gtag-link-others{
   justify-content: center;
   align-items: center;
   font-size: 0.8em;
+   z-index: 2;
 }
 .nav-img-item-box:hover .nav-item-hover{
   display: flex;
