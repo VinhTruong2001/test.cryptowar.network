@@ -761,10 +761,8 @@ export default {
       this.addClass = "background";
     }
     await this.getCareerRooms({cursor: 0});
-    console.log('awww', this.careerModeRooms);
     setTimeout(async () => {
       await this.getRequests();
-      console.log('2222', this.careerModeRequest);
     }, 500);
   },
 };

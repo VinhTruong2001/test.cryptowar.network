@@ -1198,7 +1198,6 @@ export function createStore(web3: Web3) {
       },
 
       async fetchCharacters({ dispatch }, characterIds: (string | number)[]) {
-        console.log('list list',characterIds);
         await Promise.all(
           characterIds.map(id => dispatch('fetchCharacter', id))
         );
@@ -3194,7 +3193,6 @@ export function createStore(web3: Web3) {
         return true;
       },
       async getCareerRooms({ state, commit }, {cursor}){
-        console.log('2222', cursor);
         const { CareerMode } = state.contracts();
         if(cursor === 0) {
           // @ts-ignore
