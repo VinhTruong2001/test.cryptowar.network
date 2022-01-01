@@ -5,7 +5,7 @@
       <div class="row">
         <div class="col-12">
           <div class="quantity-heroes">
-            <div><span>{{careerModeRooms.length}}</span> Heroes In Career Mode</div>
+            <div><span>{{this.filterCareerModeRooms(careerModeRooms).length}}</span> Heroes In Career Mode</div>
           </div>
         </div>
       </div>
@@ -17,12 +17,11 @@
         <button @click="$bvModal.hide('listHeroToCareerModal'), careerMode = true, changeMode = false, requestChallenge = false,
           checkSelect = false, addClass = ''" class="listHeroToCareerModal-btn confirm">GO TO CHECK</button>
       </b-modal>
-      <b-modal id="fightErrorModal" hide-footer>
-        <div class="icon-close-container"><div class="icon-close" @click="$bvModal.hide('listHeroToCareerModal')"></div></div>
-        <div class="listHeroToCareerModal-head">CryptoWar Message</div>
-        <div class="listHeroToCareerModal-body" v-if="errorMessage">{{errorMessage}}</div>
-        <button @click="$bvModal.hide('fightErrorModal'), careerMode = true, changeMode = false, requestChallenge = false,
-          checkSelect = false, addClass = ''" class="listHeroToCareerModal-btn confirm">GO TO CHECK</button>
+      <b-modal id="loadingModal" hide-footer centered hide-header-close>
+        <div class="icon-close-container"><div class="icon-close" @click="$bvModal.hide('loadingModal')"></div></div>
+        <div class="centerLoading">
+          <pulse-loader :loading="true"/>
+        </div>
       </b-modal>
       <b-modal id="listHeroToChallengeModal" hide-footer>
         <div class="icon-close-container"><div class="icon-close" @click="$bvModal.hide('listHeroToChallengeModal')"></div></div>
@@ -135,7 +134,7 @@
               $bvModal.hide('selectHeroOrWeaponModal'), addClass = 'background'" class="btn-request-fight">SELECT</button></div>
           </div>
         </div>
-        <div class="row list" v-if="selectWeapon">>
+        <div class="row list" v-if="selectWeapon">
           <div class="item" v-for="i in ownWeapons" :key="i.id">
             <WeaponSelect :weapon="i"/>
             <div class="button-container"><button @click="onSelectWeapon(i), checkCurrentMode(),
@@ -152,17 +151,6 @@
         <div class="col-xl-8 col-12 nav-option-box">
           <div class="nav-option">
             <b-nav pills>
-              <!-- <b-nav-item
-                class="nav-item"
-                @click="
-                  checkActive(),
-                  (changeMode = true),
-                    (careerMode = false),
-                    (requestChallenge = false)
-                "
-                :active="changeMode"
-                ><div>CHALLENGE MODE <div>123</div></div></b-nav-item
-              > -->
               <b-nav-item
                 class="nav-item"
                 @click="
@@ -172,7 +160,7 @@
                     (requestChallenge = false)
                 "
                 :active="careerMode"
-                ><div>CAREER MODE <div>{{careerModeRooms.length}}</div></div></b-nav-item
+                ><div>CAREER MODE <div>{{this.filterCareerModeRooms(careerModeRooms).length}}</div></div></b-nav-item
               >
               <b-nav-item
                 class="nav-item"
@@ -184,6 +172,17 @@
                 "
                 :active="requestChallenge"
                 ><div>REQUEST TO CHALLENGE <div>{{this.filterCareerModeRequest(careerModeRequest).length}}</div></div></b-nav-item
+              >
+              <b-nav-item
+                class="nav-item"
+                @click="
+                  checkActive(),
+                  (changeMode = true),
+                    (careerMode = false),
+                    (requestChallenge = false)
+                "
+                :active="changeMode"
+                ><div>MY CAREER MODE <div>{{this.filterMyCareerModeRooms(careerModeRooms).length}}</div></div></b-nav-item
               >
             </b-nav>
           </div>
@@ -201,26 +200,17 @@
       </b-modal>
       <div v-if="changeMode">
           <div class="row list-heroes" style="margin-left: 0;">
-        <div class="item" v-for="i in careerModeRooms.length" :key="i.id">
-            <div class="info">
-              <div class="info-head">
-                  <span class="property"></span>
-              </div>
-              <div class="item-id">
-                  <span>#123456</span>
-                  <div class="leve">Lv.1</div>
-              </div>
-              <div class="img-hero-around">
-                <div class="img-hero"></div>
-              </div>
-              <div class="info-footer">
-                <div class="hero-name">Amiria Angurvidel</div>
-                <div class="orner-hero">Owner: <span>0x4933...44644</span></div>
-                <div class="remain-hero">Remain: <span>345.9098</span></div>
-                <div class="cost"><div></div> 100</div>
-              </div>
-            </div>
-            <div class="button-container"><button @click="$bvModal.show('requestSelect')" class="btn-request-fight">REQUEST SELECT</button></div>
+          <div class="itemCareer" v-for="i in this.filterMyCareerModeRooms(careerModeRooms)" :key="i.id">
+            <CharacterRoom
+              :characterId="i.characterId"
+              :room="i"
+              :selectedCharacterId="i.characterId"
+              :selectedWeaponId="i.weaponId"
+              :isCancel="true"
+              :handleCancelFight="() => cancelCareerMode(i.id)"
+              />
+              <!-- <router-link :to="{ name: 'pvp-fight' }">
+              </router-link> -->
           </div>
         </div>
       </div>
@@ -239,13 +229,14 @@
       </b-modal>
       <div v-if="careerMode">
         <div class="row list-heroes" style="margin-left: 0;">
-          <div class="itemCareer" v-for="i in careerModeRooms" :key="i.id">
+          <div class="itemCareer" v-for="i in this.filterCareerModeRooms(careerModeRooms)" :key="i.id">
             <CharacterRoom
               :characterId="i.characterId"
               :room="i"
               :selectedCharacterId="i.characterId"
               :selectedWeaponId="i.weaponId"
               :isRequest="true"
+              :handleRequestFight="() => handleRequestFight(i.id)"
               />
               <!-- <router-link :to="{ name: 'pvp-fight' }">
               </router-link> -->
@@ -254,12 +245,13 @@
       </div>
       <div v-if="requestChallenge">
           <div class="row list-request" style="margin-left: 0;">
-            <div class="itemCareer" v-for="i in this.filterCareerModeRequest(careerModeRequest)" :key="i.roomId">
+            <div class="itemCareer" v-for="i in this.filterCareerModeRequest(careerModeRequest)" :key="i.id">
             <RoomRequest :request="i" :handleFight="handleFight" />
             </div>
         </div>
       </div>
     </div>
+    <div v-if="careerModeRooms.length>0" v-observe-visibility="handleScrollToEnd"></div>
 </div>
 </template>
 
@@ -287,6 +279,7 @@ import { getCharacterArt, getCharacterTrait } from "../character-arts-placeholde
 import CharacterRoom from "@/components/CharacterRoom.vue";
 import WeaponSelect from "@/components/WeaponSelect.vue";
 import RoomRequest from "@/components/RoomRequest.vue";
+import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
 // import Events from "../events";
 
 export default {
@@ -319,12 +312,13 @@ export default {
       selectedCharacter: null,
       matchReward: 0,
       totalDeposit: 0,
-      errorMessage: ''
+      errorMessage: '',
+      cursor: 0
     };
   },
 
   computed: {
-    ...mapState(["currentCharacterId", "careerModeRooms", "careerModeRequest","characters","ownedWeaponIds"]),
+    ...mapState(["currentCharacterId", "careerModeRooms", "careerModeRequest","characters","ownedWeaponIds", "defaultAccount"]),
     ...mapGetters([
       "getTargetsByCharacterIdAndWeaponId",
       "ownCharacters",
@@ -400,7 +394,9 @@ export default {
       "getRequests",
       "fight",
       "fetchWeapons",
-      "fetchCharacters"
+      "fetchCharacters",
+      "requestFight",
+      "cancelRequestFight"
     ]),
     ...mapMutations(["setIsInCombat"]),
     checkActive(){
@@ -669,6 +665,45 @@ export default {
       return this.careerModeRequest.filter((item) => !item.done);
     },
 
+    filterCareerModeRooms() {
+      return this.careerModeRooms.filter((item)=> item.owner!==this.defaultAccount);
+    },
+    filterMyCareerModeRooms() {
+      return this.careerModeRooms.filter((item)=> item.owner===this.defaultAccount);
+    },
+
+    async handleScrollToEnd(isVisible) {
+      if(!isVisible) { return; }
+      console.log('hihihihihii end');
+      this.cursor +=20;
+      console.log('awww', this.cursor);
+      if(this.careerModeRooms.length < this.cursor) {
+        return ;
+      }
+      await this.getCareerRooms({cursor:this.cursor});
+    },
+    async handleRequestFight(roomId) {
+      console.log('hello ne', this.defaultAccount);
+      this.$bvModal.show('loadingModal');
+      if(!this.selectedWeapon || !this.selectedCharacter) {
+        this.errorMessage='Please select weapon and hero';
+        console.log('hic');
+        setTimeout(() => {
+          this.$bvModal.hide('loadingModal');
+          this.$bvModal.show('listHeroToCareerModal');
+        }, 1000);
+        return ;
+      }
+      this.requestFight({
+        roomId,
+        weaponId: this.selectedWeapon.id,
+        characterId: this.selectedCharacter.id,
+      });
+    },
+    async cancelCareerMode(roomId, requestId) {
+      console.log('112123123', roomId, requestId);
+    }
+
     // setStaminaSelectorValues() {
     //   if(this.currentCharacterStamina < 40) {
     //     return [{ value: this.fightMultiplier, text: 'You need more stamina to fight!', disabled: true}];
@@ -716,22 +751,21 @@ export default {
     CombatPVPFight,
     CharacterRoom,
     WeaponSelect,
-    RoomRequest
+    RoomRequest,
+    PulseLoader
+  },
+  async beforeMount() {
   },
   async mounted(){
     if(this.checkSelectFromRPS){
       this.addClass = "background";
     }
-    this.fetchRoomInterval = setInterval(async () => {
-      // @ts-ignore
-      await this.getCareerRooms();
-    }, 3000);
-    // @ts-ignore
-    this.fetchRequestInterval = setInterval(async () => {
-      // @ts-ignore
+    await this.getCareerRooms({cursor: 0});
+    console.log('awww', this.careerModeRooms);
+    setTimeout(async () => {
       await this.getRequests();
-    }, 3000);
-
+      console.log('2222', this.careerModeRequest);
+    }, 500);
   },
 };
 </script>
@@ -766,6 +800,7 @@ export default {
   top: -15px;
 }
 
+#loadingModal .icon-close,
 #listHeroToCareerModal .icon-close,
 #listHeroToChallengeModal .icon-close{
   background-image: url(../assets/v2/icon-close.svg);
@@ -774,11 +809,19 @@ export default {
   margin-right: 10px;
 }
 
+#loadingModal .icon-close-container,
 #listHeroToChallengeModal .icon-close-container,
 #listHeroToCareerModal .icon-close-container,
 #selectHeroOrWeaponModal .icon-close-container{
   display: flex;
   justify-content: flex-end;
+}
+
+#loadingModal .centerLoading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 2rem;
 }
 
 .quantity-heroes {

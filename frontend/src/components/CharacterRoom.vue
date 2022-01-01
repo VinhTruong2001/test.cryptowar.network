@@ -1,7 +1,7 @@
 <template>
   <div class="character-item">
     <div class="art">
-      <CharacterRoomArt
+      <CharacterRoomArtPvp
         v-if="characters[this.characterId]"
         :character="characters[this.characterId]"
         :room="this.room"
@@ -14,10 +14,21 @@
         <button
           type="button"
           class="btn-request-fight"
-          @click="handleRequestFight()"
+          @click="() => handleRequestFight()"
         >
         <span class="titleButtonFight">
           REQUEST FIGHT
+        </span>
+        </button>
+      </div>
+      <div v-if="this.isCancel == true" class="containerButton">
+        <button
+          type="button"
+          class="btn-request-fight"
+          @click="() => handleCancelFight()"
+        >
+        <span class="titleButtonFight">
+          CANCEL FIGHT
         </span>
         </button>
       </div>
@@ -26,25 +37,25 @@
 
 <script lang="ts">
 import Vue from "vue";
-import CharacterRoomArt from "../components/CharacterRoomArt.vue";
+import CharacterRoomArtPvp from "../components/CharacterRoomArtPvp.vue";
 import { mapActions, mapState } from "vuex";
 import Web3 from "web3";
 
 export default Vue.extend({
-  props: ["characterId", "room", "selectedWeaponId", "selectedCharacterId", "isRequest"],
+  props: ["characterId", "room", "selectedWeaponId", "selectedCharacterId", "isRequest", "handleRequestFight","handleCancelFight", "isCancel"],
   components: {
-    CharacterRoomArt,
+    CharacterRoomArtPvp,
   },
   methods: {
     ...mapActions(["fetchCharacters", "requestFight"]),
-    handleRequestFight() {
-      //@ts-ignore
-      this.requestFight({
-        roomId: this.room.id,
-        weaponId: this.selectedWeaponId,
-        characterId: this.selectedCharacterId,
-      });
-    },
+    // handleRequestFight() {
+    //   //@ts-ignore
+    //   this.requestFight({
+    //     roomId: this.room.id,
+    //     weaponId: this.selectedWeaponId,
+    //     characterId: this.selectedCharacterId,
+    //   });
+    // },
   },
   computed: {
     ...mapState(["characters"]),
@@ -67,7 +78,8 @@ export default Vue.extend({
   background-size: 100% 100%;;
   margin-top: 1rem;
   margin-bottom: 2.7rem;
-  /* margin-left: 2.5rem; */
+  margin-left: 1.25rem;
+  margin-right: 1.25rem;
   align-items: center;
   justify-items: center;
   max-height: 432px;

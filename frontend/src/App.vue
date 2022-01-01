@@ -802,10 +802,16 @@ button.close {
   scroll-margin-left: 50px;
 }
 
-.modal-footer {
-  background: rgb(31, 31, 34);
-  border-color: rgba(24, 27, 30, 0.5) !important;
+.modal-body {
+  // display: flex;
+  // flex-direction: column;
+  // align-items: center;
 }
+
+// .modal-footer {
+//   background: rgb(31, 31, 34);
+//   border-color: rgba(24, 27, 30, 0.5) !important;
+// }
 
 .b-pagination > li > .page-link {
   color: #a50eb3;
@@ -960,15 +966,14 @@ div.bg-success {
 }
 
 .starter-panel-heading {
-  margin-left: 15px;
-  margin-top: 3rem;
+  margin-top: 1.2rem;
   font-size: 2.8rem;
   font-weight: bold;
   color: #F58B5B;
   display: block;
 }
 
-.starter-panel .button-div h1{
+.starter-panel .button-div h1 {
   font-size: 1.3rem;
 }
 
@@ -976,7 +981,6 @@ div.bg-success {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 2rem;
 }
 
 .starter-panel p{
@@ -996,7 +1000,7 @@ div.bg-success {
 }
 .instructions-list {
   text-align: center;
-  padding: 30px 20px 15px 10px;
+  padding: 30px 20px 15px 0;
   font-size: 1.3rem;
 }
 
@@ -1029,10 +1033,32 @@ div.bg-success {
   border: 1px solid #a50eb3;
 }
 
+@media (max-width: 767.98px) {
+  .hide-modal {
+    right: 0;
+    top: 5px;
+  }
+
+  .starter-panel {
+    padding-top: 0;
+  }
+
+  .starter-panel-heading {
+    font-size: 32px;
+  }
+
+  .instructions-list {
+    font-size: 16px;
+  }
+
+  .button-div {
+    margin-top: 0;
+  }
+}
 
 @media all and (max-width: 767.98px) {
   .content {
-    padding: 10px;
+    padding: 0px;
   }
   .dark-bg-text {
     width: 100%;

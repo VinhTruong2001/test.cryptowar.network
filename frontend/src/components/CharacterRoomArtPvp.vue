@@ -1,86 +1,83 @@
 <template>
   <div class="character-art" v-tooltip="tooltipHtml(character)" ref="el">
-    <div class="trait" v-if="!portrait">
+    <div class="containerTop">
       <span
         :class="characterTrait.toLowerCase() + '-icon circle-element'"
       ></span>
-      <div class="black-outline" v-if="!portrait">
-          ID <span class="white">{{ character.id }}</span>
-      </div>
-    </div>
-    <div class="placeholder d-flex align-items-start justify-content-center " :class="characterTrait.toLowerCase() + '-bg'">
-      <div
-        :style="{
-          'background-image': 'url(' + getCharacterArt(character) + ')',
-        }"
-        :class="{
-          'w-100': portrait,
-          'h-100': !isMarket,
-          'h-100': isMarket,
-        }"
-      ></div>
-      <!--<small-button class="button" :text="`Purchase`" v-if="isMarket"/>-->
-    </div>
-    <div class="loading-container" v-if="!allLoaded">
-      <i class="fas fa-spinner fa-spin"></i>
-    </div>
-    <div :class="{ 'market-bot': !portrait }">
-      <div class="name-lvl-container">
-        <div class="name black-outline" :title="getCleanCharacterName(character.id)" v-if="!portrait">
-          {{ getCleanCharacterName(character.id) }}
+    <div>
+       <div class="name-lvl-container">
+        <div
+          class="name black-outline"
+          :title="getCleanCharacterName(character.id)"
+          v-if="!portrait"
+        >
+          {{'#'+ character.id }}
         </div>
         <div class="lv" v-if="!portrait">
           Lv.<span class="">{{ character.level + 1 }}</span>
         </div>
       </div>
-
-      <!-- <div
-        v-if="!portrait && isMarket"
-        class="small-stamina-char"
-        :style="`--staminaReady: ${
-          (timestampToStamina(character.staminaTimestamp) / maxStamina) * 100
-        }%;`"
-        v-tooltip.bottom="
-          staminaToolTipHtml(timeUntilCharacterHasMaxStamina(character.id))
-        "
-      >
-        <div class="stamina-text black-outline">
-          STA {{ timestampToStamina(character.staminaTimestamp) }} / 200
-        </div>
-      </div> -->
-
-      <div class="xp-wrap">
-        <div class="xp" v-if="!portrait">
-          <b-progress
-            :max="RequiredXp(character.level)"
-            variant="success"
-            v-tooltip.bottom="
-              `Claimable XP ${this.getCharacterUnclaimedXp(character.id)}`
-            "
-          >
-            <strong class="xp-text"
-              >{{ character.xp || 0 }} /
-              {{ RequiredXp(character.level) }} XP</strong
-            >
-            <b-progress-bar :value="character.xp || 0"></b-progress-bar>
-          </b-progress>
+    </div>
+    </div>
+    <div class="placeholder d-flex align-items-start justify-content-center">
+      <div
+        :style="{
+          'background-image': 'url(' + getCharacterArt(character) + ')',
+          'z-index': 999
+        }"
+        :class="{
+          'w-100': portrait,
+          'h-100': !isMarket,
+          'h-75': isMarket,
+        }"
+      ></div>
+      <div class="traitOfCharacter" :style="{
+        'background-image': 'url(' + getCharacterTrait(character) + ')',
+        'height': '89px'
+        }">
+      </div>
+    </div>
+    <div class="loading-container" v-if="!allLoaded">
+      <i class="fas fa-spinner fa-spin"></i>
+    </div>
+    <div :class="{ 'market-bot': !portrait }">
+      <div class="score-id-container">
+        <div class="black-outline" v-if="!portrait">
+          <span class="white">{{ getCleanCharacterName(character.id) }}</span>
         </div>
       </div>
+
+      <div class="score-id-container">
+        <div class="black-outline" v-if="!portrait">
+          Owner: <span class="ownerText">{{ renderOwner(this.room.owner) }}</span>
+        </div>
+      </div>
+      <div class="cost"><div></div> {{this.matchReward}}</div>
     </div>
   </div>
 </template>
 
 <script>
-import { getCharacterArt } from "../character-arts-placeholder";
+import { getCharacterArt, getCharacterTrait } from "../character-arts-placeholder";
 import { CharacterTrait, RequiredXp } from "../interfaces";
-import { mapGetters, mapState } from "vuex";
+import { mapGetters, mapState, mapActions } from "vuex";
 import { getCleanName } from "../rename-censor";
+import Web3 from "web3";
 
 export default {
-  props: ["character", "portrait", "isMarket"],
+  props: [
+    "character",
+    "portrait",
+    "isMarket",
+    "matchReward",
+    "room",
+    "selectedWeaponId",
+    "selectedCharacterId",
+  ],
   components: {
     //SmallButton,
   },
+
   data() {
     return {
       allLoaded: false,
@@ -101,6 +98,7 @@ export default {
   },
 
   computed: {
+    console: () => console,
     ...mapState(["maxStamina"]),
     ...mapGetters([
       "getCharacterName",
@@ -118,9 +116,13 @@ export default {
         CharacterTrait[this.character.trait]
       );
     },
+    totalReward(){
+      return Web3.utils.fromWei(this.room.totalDeposit, "ether");
+    }
   },
 
   methods: {
+    ...mapActions(["requestFight, fetchCharacters"]),
     RequiredXp,
 
     tooltipHtml(character) {
@@ -160,12 +162,32 @@ export default {
     },
 
     getCharacterArt,
-    async fetchScore() {},
+    getCharacterTrait,
+    handleRequestFight() {
+      this.requestFight({
+        roomId: this.room.id,
+        weaponId: this.selectedWeaponId,
+        characterId: this.selectedCharacterId,
+      });
+    },
+
+    renderOwner(owner) {
+      if(!owner) {
+        return '';
+      }
+      else if(owner?.length<11) {
+        return owner;
+      }else {
+        const hiddenString = owner.slice(5, owner?.length-5);
+        const hiddenOwner = owner.split(hiddenString).join('...');
+        return hiddenOwner;
+      }
+    }
   },
   mounted() {
-    this.fetchScore();
     this.allLoaded = true;
     this.showPlaceholder = true;
+    console.log('111121212');
     return;
   },
 };
@@ -207,31 +229,26 @@ export default {
   background-position: 0 0;
 }
 
-.trait {
-  margin: 0 auto;
-  position: relative;
+.xp {
+  position: absolute;
+}
+
+.containerTop {
   display: flex;
-  height: 75px;
-  width: 100%;
+  flex-direction: row;
   justify-content: space-between;
-  padding: 0 1.5em 0 0.8em;
-  align-items: center;
+  padding-left: 1.5rem;
+  padding-right: 2rem;
+  margin-top: 2rem;
+}
+
+.trait {
 }
 
 .id {
   top: 5px;
   right: 5px;
   font-style: italic;
-}
-
-.black-outline {
-  color: #fff;
-  font-weight: bold;
-  font-size: 1.3em;
-  text-shadow: none;
-}
-.black-outline .white{
-  color: #fff;
 }
 
 .hero-score {
@@ -246,80 +263,82 @@ export default {
   max-height: 24px;
   max-width: 170px;
   white-space: nowrap;
-  text-align: center;
-}
-
-.xp-wrap {
-  padding: 0 10px;
 }
 
 .xp {
-  width: 100%;
-  background-image: url("../assets/v2/xp_bg.svg");
+  left: 40px;
+  width: 238px;
+  right: 0;
+
+  background-image: url("../assets/images/bg-process-box.png");
   background-repeat: no-repeat;
-  background-size: cover;
-  height: 19px;
+  background-position: 0 0;
+  height: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 0px;
-  margin: 7px 0;
-  border-radius: 16px;
+  padding: 0 14px;
 }
 
 .xp .bg-success {
   background-position: 0 0;
-  background-image: url("../assets/v2/xp_progress.svg");
+  background-image: url("../assets/images/chara-process.png");
   background-repeat: no-repeat;
-  background-size: cover;
-  width: 100%;
-  height: 19px;
+  width: 218px;
+  height: 27px;
   background-color: transparent !important;
 }
 
 .xp-text {
-  width: 87%;
+  width: 100%;
   text-align: center;
   position: absolute;
-  color: #000;
+  color: #fff;
 }
 
 .xp .progress {
   background-color: initial;
   width: 100%;
-  height: 19px;
+  height: 24px;
   align-items: center;
 }
 
-.xp .progress .progress-bar{
-  background-size: cover;
-  height: 19px;
-}
-
 .placeholder {
+  max-width: 100%;
   position: relative;
+  padding-top: 0;
   -o-object-fit: contain;
   object-fit: contain;
   height: 300px;
+  margin-top: -30px;
 }
 
 .market-bot {
-  height: 95px;
+  height: 160px;
   overflow: hidden;
   background-position: 0 0;
   background-repeat: no-repeat;
+  /* background-image: url("../assets/images/bg-item-bot.png"); */
+  /* border-top: 2px solid #f48757; */
+  margin-right: 17px;
 }
 
 .market-bot .name {
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   text-overflow: ellipsis;
 }
 
-.market-bot .lv {
-  font-size: 1.2rem;
-  color: #FEA829;
+.lv {
+  color:#dabf75;
   font-weight: bold;
-  line-height: 1;
+  font-size: 1rem;
+  font-family: 'Rubik';
+}
+
+.market-bot .lv {
+  font-size: 1.1rem;
+  color: #dabf75;
+  font-weight: bold;
 }
 
 .market-bot .score {
@@ -330,43 +349,46 @@ export default {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  width: 100%;
-  height: 100%;
+  width: 40%;
+  height: 20%;
 }
 
 .circle-element {
-  width: 43px;
-  height: 43px;
-  border: 0px solid #f48757;
+  width: 3rem;
+  height: 3rem;
+  border: 1px solid #f48757;
   border-radius: 50%;
+  padding: 0.5rem;
   background-color: #15052e;
 }
 
-.score-id-container {
+.name-lvl-container {
   display: flex;
   justify-content: space-between;
   position: relative;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.score-id-container {
+  display: flex;
+  justify-content: center;
+  position: relative;
   padding: 0 3rem;
+  align-items: center;
 }
 
-.name-lvl-container{
-  padding: 0 1rem;
-  text-align: center;
-}
-
-.name-lvl-container .name{
-  max-width: 100%;
-  max-height: inherit;
-  font-size: 1.2em;
+.market-bot .name-lvl-container {
+  margin-top: 1.5rem;
 }
 
 .market-bot .score-id-container {
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   font-weight: bold;
 }
 
 .white {
-  color: rgb(204, 204, 204);
+  color: var(--white);
+  font-weight: bold;
 }
 
 .small-stamina-char {
@@ -395,75 +417,39 @@ export default {
   color: #fff;
 }
 
-.water-bg, .fire-bg, .lightning-bg, .earth-bg {
-  background-image: url('../assets/images/water.png');
+.request-fight-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 4px 0;
+}
+
+.traitOfCharacter {
+  position: absolute;
+  top:5.5rem;
+  background-size: '100% 100%';
+  background-repeat: 'no-repeat';
+  transform: scale(2);
+}
+.ownerText {
+  color:#FEA829;
+  font-size: 18px;
+  font-weight: bold;
+}
+.cost{
+  color: #D858F7;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.3em;
+}
+.cost > div{
+  background-image: url(../assets/v2/icon-crypto.svg);
+  width: 20px;
+  height: 19px;
   background-repeat: no-repeat;
-  background-position: center bottom;
+  background-size: cover;
+  margin-right: 6px;
 }
-.fire-bg{
-  background-image: url('../assets/images/fire.png');
-}
-.lightning-bg{
-  background-image: url('../assets/images/lightning.png');
-}
-.earth-bg{
-  background-image: url('../assets/images/earth.png');
-}
-
-@media (min-width: 768px) {
-  .placeholder {
-    margin-top: -30px;
-  }
-}
-
-@media (max-width: 576px) {
-  .trait {
-    height: 45px;
-  }
-
-  .circle-element {
-    width: 27px;
-    height: 27px;
-  }
-
-  .black-outline {
-    font-size: 16px;
-    font-weight: normal;
-  }
-
-  .placeholder {
-    height: 164px;
-    background-size: 70% 60%;
-  }
-
-  .market-bot .name {
-    font-size: 12px;
-    font-weight: 600;
-  }
-
-  .market-bot .lv {
-    font-size: 12px;
-  }
-
-  .name {
-    margin-top: 10px;
-  }
-
-  .xp {
-    height: 12px;
-  }
-
-  .xp .bg-success {
-    height: 12px;
-  }
-
-  .xp .progress {
-    height: 12px;
-  }
-
-  .xp-text {
-    font-weight: 500;
-  }
-}
-
 </style>
