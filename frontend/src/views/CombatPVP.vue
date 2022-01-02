@@ -409,7 +409,8 @@ export default {
       "fetchWeapons",
       "fetchCharacters",
       "requestFight",
-      "cancelRequestFight"
+      "cancelRequestFight",
+      "endCareerMode"
     ]),
     ...mapMutations(["setIsInCombat"]),
     checkActive(){
@@ -722,9 +723,7 @@ export default {
 
     async handleScrollToEnd(isVisible) {
       if(!isVisible) { return; }
-      console.log('hihihihihii end');
       this.cursor +=20;
-      console.log('awww', this.cursor);
       if(this.careerModeRooms.length < this.cursor) {
         return ;
       }

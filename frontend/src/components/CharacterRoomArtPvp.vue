@@ -187,7 +187,6 @@ export default {
   mounted() {
     this.allLoaded = true;
     this.showPlaceholder = true;
-    console.log('111121212');
     return;
   },
 };

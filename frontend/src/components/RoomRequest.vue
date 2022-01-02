@@ -68,7 +68,6 @@ export default Vue.extend({
   },
 
   async mounted() {
-    console.log('lai ne', this.request);
     if (this.request.heroId) {
       await this.fetchCharacters([this.request.heroId]);
     }
