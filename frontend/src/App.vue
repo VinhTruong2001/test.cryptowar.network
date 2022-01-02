@@ -864,13 +864,8 @@ button.close {
 }
 
 .nav-tabs .nav-link:hover {
-  // border-bottom: 5px solid #F58B5B !important;
-  border-color: transparent transparent #F58B5B transparent !important ;
-}
-
-.containerRight .nav-tabs .nav-link:hover,
-.nav-justified.nav-tabs .nav-link:hover{
   border-bottom: 5px solid #F58B5B !important;
+  border-color: transparent transparent #F58B5B transparent !important ;
 }
 
 .outline {
