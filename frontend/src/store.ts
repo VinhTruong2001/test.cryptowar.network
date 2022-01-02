@@ -1080,6 +1080,8 @@ export function createStore(web3: Web3) {
             .call(defaultCallOptions(state))
         ]);
 
+        console.log('2222', ownedCharacterIds);
+
         commit('updateUserDetails', {
           ownedCharacterIds: Array.from(ownedCharacterIds),
           ownedWeaponIds: Array.from(ownedWeaponIds),
@@ -3167,7 +3169,7 @@ export function createStore(web3: Web3) {
 
         await Promise.all([dispatch('fetchCharacter', id)]);
       },
-      async createCareerRoom({state},{ character, weapon, matchReward, totalDeposit} ) {
+      async createCareerRoom({state, commit},{ character, weapon, matchReward, totalDeposit} ) {
         const { CareerMode, xBladeToken, Characters, Weapons } = state.contracts();
 
         if(!state.defaultAccount || !CareerMode?.options.address){
@@ -3190,6 +3192,15 @@ export function createStore(web3: Web3) {
           from: state.defaultAccount,
           gas: '800000'
         });
+
+        const res = await state
+          .contracts()
+          .CryptoWars!.methods.getMyCharacters()
+          .call(defaultCallOptions(state));
+        console.log('hello', res);
+        commit('updateUserDetails', {
+          ownedCharacterIds: Array.from(res),
+        });
         return true;
       },
       async getCareerRooms({ state, commit }, {cursor}){
@@ -3197,6 +3208,7 @@ export function createStore(web3: Web3) {
         if(cursor === 0) {
           // @ts-ignore
           const result: any[] = await CareerMode?.methods.getRooms(0).call(defaultCallOptions(state));
+          console.log('why', result);
           commit('updateCareerRoom', { rooms: result.map(r=> ({
             characterId: r.characterId,
             claimed: r.claimed,
@@ -3210,6 +3222,7 @@ export function createStore(web3: Web3) {
         }
         else {
           const oldResult = state.careerModeRooms;
+          console.log('old result ne', oldResult);
           // @ts-ignore
           const result: any[] = await CareerMode?.methods.getRooms(cursor).call(defaultCallOptions(state));
           const newArray = oldResult.concat(result);
@@ -3245,10 +3258,12 @@ export function createStore(web3: Web3) {
               .send(defaultCallOptions(state));
           }
 
-          await CareerMode?.methods.requestFight(roomId, weaponId, characterId).send({
+          const res = await CareerMode?.methods.requestFight(roomId, weaponId, characterId).send({
             from: state.defaultAccount,
             gas: '800000'
           });
+          console.log('a22', res?.events);
+          return res?.events?.RequestFightOutcome.returnValues;
         }
         catch(e){
           console.log(e);
@@ -3260,6 +3275,8 @@ export function createStore(web3: Web3) {
           from: state.defaultAccount,
           gas: '800000'
         });
+
+        console.log('res ne', res);
 
         return res?.events.FightOutCome.returnValues;
       },
@@ -3323,6 +3340,13 @@ export function createStore(web3: Web3) {
         const {CareerMode} = state.contracts();
         await CareerMode?.methods.cancelRequestFight(roomId, requestId).call(defaultCallOptions(state));
         return true;
+      },
+
+      async endCareerMode({state}, {roomId}) {
+        const {CareerMode} = state.contracts();
+        const res = await CareerMode?.methods.endCareer(roomId).send(defaultCallOptions(state));
+        console.log('resss ', res);
+        return res;
       }
     },
   });

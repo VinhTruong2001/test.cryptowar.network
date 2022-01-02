@@ -62,7 +62,7 @@ export default {
     },
     getIncome() {
       if(this.results[3]>= this.results[2]) {
-        return 123;
+        return this.convertWei(this.results.matchReward);
       }else {
         return `${toBN(fromWeiEther(this.results[4])).toFixed(2)} xBlade`;
       }

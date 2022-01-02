@@ -18,17 +18,28 @@
           checkSelect = false, addClass = ''" class="listHeroToCareerModal-btn confirm">GO TO CHECK</button>
       </b-modal>
       <b-modal id="loadingModal" hide-footer centered hide-header-close>
-        <div class="icon-close-container"><div class="icon-close" @click="$bvModal.hide('loadingModal')"></div></div>
         <div class="centerLoading">
           <pulse-loader :loading="true"/>
         </div>
       </b-modal>
-      <b-modal id="listHeroToChallengeModal" hide-footer>
+      <b-modal id="requestFightModal" hide-footer>
         <div class="icon-close-container"><div class="icon-close" @click="$bvModal.hide('listHeroToChallengeModal')"></div></div>
         <div class="listHeroToChallengeModal-head">CryptoWar Message</div>
-        <div class="listHeroToChallengeModal-body">Listing HERO to Challenge: <span>Done</span></div>
-        <button @click="$bvModal.hide('listHeroToChallengeModal'), careerMode = false, changeMode = true, requestChallenge = false,
+        <div class="listHeroToChallengeModal-body">Request Fight: <span>Done</span></div>
+        <button @click="$bvModal.hide('requestFightModal'), careerMode = true, changeMode = false, requestChallenge = false,
           checkSelect = false, addClass = ''" class="listHeroToChallengeModal-btn confirm">GO TO CHECK</button>
+      </b-modal>
+      <b-modal id="fightResult" hide-footer>
+        <div class="icon-close-container"><div class="icon-close" @click="$bvModal.hide('listHeroToChallengeModal')"></div></div>
+        <div class="listHeroToChallengeModal-head">CryptoWar Message</div>
+        <FightResult :results="fightResults"/>
+        <button @click="$bvModal.hide('fightResult')" class="listHeroToChallengeModal-btn confirm">GO TO CHECK</button>
+      </b-modal>
+      <b-modal id="cancelCareerModal" hide-footer>
+        <div class="icon-close-container"><div class="icon-close" @click="$bvModal.hide('listHeroToChallengeModal')"></div></div>
+        <div class="listHeroToChallengeModal-head">CryptoWar Message</div>
+        <div class="listHeroToChallengeModal-body">Cancel CareerMode: <span>Done</span></div>
+        <button @click="$bvModal.hide('cancelCareerModal')" class="listHeroToChallengeModal-btn confirm">GO TO CHECK</button>
       </b-modal>
       <div class="row">
         <div :class="addClass" class="col-12 info-box">
@@ -280,6 +291,7 @@ import CharacterRoom from "@/components/CharacterRoom.vue";
 import WeaponSelect from "@/components/WeaponSelect.vue";
 import RoomRequest from "@/components/RoomRequest.vue";
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
+import FightResult from "@/components/v2/FightResult.vue";
 // import Events from "../events";
 
 export default {
@@ -577,7 +589,6 @@ export default {
     },
 
     onSelectHero(heroId) {
-      console.log('kkk', heroId);
       this.selectedCharacter = heroId;
     },
 
@@ -591,27 +602,35 @@ export default {
     },
 
     async handleCreateRoom() {
+      this.$bvModal.show('loadingModal');
       // @ts-ignore
-      console.log('show me the answer', this.selectedWeapon.id, this.selectedCharacter.id, this.matchReward, this.totalDeposit);
       // @ts-ignore
       if(!this.selectedCharacter || !this.selectedWeapon) {
-        console.log('here');
         // @ts-ignore
         this.errorMessage = 'Please select weapon and hero!';
         // @ts-ignore
-        this.$bvModal.show('listHeroToCareerModal');
+        this.$bvModal.hide('loadingModal');
+        setTimeout(() => {
+          this.$bvModal.show('listHeroToCareerModal');
+        }, 500);
       }
       else if(!this.totalDeposit || !this.matchReward) {
         this.errorMessage = 'Please input total deposit and match reward!';
-        this.$bvModal.show('listHeroToCareerModal');
+        this.$bvModal.hide('loadingModal');
+        setTimeout(() => {
+          this.$bvModal.show('listHeroToCareerModal');
+        }, 500);
       }
       else if(this.totalDeposit< 2.1*this.matchReward) {
-        this.errorMessage = 'total deposit needs to bigger than 210% of match reward!';
-        this.$bvModal.show('listHeroToCareerModal');
+        this.errorMessage = 'The Total deposit needs to bigger than 210% of the Match reward!';
+        this.$bvModal.hide('loadingModal');
+        setTimeout(() => {
+          this.$bvModal.show('listHeroToCareerModal');
+        }, 500);
       }
       else {
         // @ts-ignore
-        await this.createCareerRoom({
+        const res = await this.createCareerRoom({
         // @ts-ignore
           character: this.selectedCharacter.id,
           // @ts-ignore
@@ -621,6 +640,12 @@ export default {
           // @ts-ignore
           totalDeposit: this.totalDeposit
         });
+        if(res) {
+          this.selectedCharacter= null;
+          this.selectedWeapon=null;
+          this.errorMessage='';
+          this.$bvModal.show('listHeroToCareerModal');
+        }
         // console.log('hiihi', result);
         // if(result) {
         //   this.errorMessage='';
@@ -630,11 +655,18 @@ export default {
     },
 
     async handleFight(roomId, requestId) {
+      this.$bvModal.show('loadingModal');
+      const room = this.careerModeRooms.filter(item => item.id ===roomId);
+      if(!room?.[0]) {
+        return;
+      }
       if(!this.selectedCharacter || !this.selectedWeapon) {
-        console.log('hic');
         this.errorMessage = 'Please select weapon and hero!';
         // @ts-ignore
-        this.$bvModal.show('fightErrorModal');
+        this.$bvModal.hide('loadingModal');
+        setTimeout(() => {
+          this.$bvModal.show('fightErrorModal');
+        }, 500);
         return;
       }else {
         this.waitingResults = true;
@@ -648,9 +680,16 @@ export default {
           const results = await this.fight({
             roomId, requestId
           });
-          console.log('gi v ta', results);
+          if(results) {
+            this.$bvModal.hide('loadingModal');
+            const fightResultsFull = {...results, matchReward: room?.[0]?.matchReward};
+            this.fightResults=fightResultsFull;
+            setTimeout(() => {
+              this.$bvModal.show('fightResult');
+            }, 500);
+            this.getRequests();
+          }
           // @ts-ignore
-          this.fightResults=results;
           // @ts-ignore
           this.error=null;
         } catch (e) {
@@ -662,14 +701,22 @@ export default {
       // @ts-ignore
     },
     filterCareerModeRequest () {
+      const newCareerModeRequest = [];
+      const object = {};
+      for(let i = 0 ;i< this.careerModeRequest.length; i++) {
+        object[this.careerModeRequest[i].id] = this.careerModeRequest[i];
+      }
+      for(const i in object) {
+        newCareerModeRequest.push(object[i]);
+      }
       return this.careerModeRequest.filter((item) => !item.done);
     },
 
     filterCareerModeRooms() {
-      return this.careerModeRooms.filter((item)=> item.owner!==this.defaultAccount);
+      return this.careerModeRooms.filter((item)=> item.owner!==this.defaultAccount && !item.claimed);
     },
     filterMyCareerModeRooms() {
-      return this.careerModeRooms.filter((item)=> item.owner===this.defaultAccount);
+      return this.careerModeRooms.filter((item)=> item.owner===this.defaultAccount && !item.claimed);
     },
 
     async handleScrollToEnd(isVisible) {
@@ -683,25 +730,39 @@ export default {
       await this.getCareerRooms({cursor:this.cursor});
     },
     async handleRequestFight(roomId) {
-      console.log('hello ne', this.defaultAccount);
       this.$bvModal.show('loadingModal');
       if(!this.selectedWeapon || !this.selectedCharacter) {
         this.errorMessage='Please select weapon and hero';
-        console.log('hic');
         setTimeout(() => {
           this.$bvModal.hide('loadingModal');
-          this.$bvModal.show('listHeroToCareerModal');
+          this.$bvModal.show('requestFightModal');
         }, 1000);
         return ;
       }
-      this.requestFight({
+      const res = await this.requestFight({
         roomId,
         weaponId: this.selectedWeapon.id,
         characterId: this.selectedCharacter.id,
       });
+      if(res) {
+        this.$bvModal.hide('loadingModal');
+        setTimeout(() => {
+          this.errorMessage = '';
+          this.$bvModal.show('requestFightModal');
+        }, 500);
+      }
     },
-    async cancelCareerMode(roomId, requestId) {
-      console.log('112123123', roomId, requestId);
+    async cancelCareerMode(roomId) {
+      this.$bvModal.show('loadingModal');
+      console.log('112123123', this.ownCharacters);
+      const res = await this.endCareerMode({roomId});
+      if(res) {
+        this.$bvModal.hide('loadingModal');
+        setTimeout(() => {
+          this.$bvModal.show('cancelCareerModal');
+        }, 500);
+        console.log('test',this.ownCharacters);
+      }
     }
 
     // setStaminaSelectorValues() {
@@ -752,7 +813,8 @@ export default {
     CharacterRoom,
     WeaponSelect,
     RoomRequest,
-    PulseLoader
+    PulseLoader,
+    FightResult
   },
   async beforeMount() {
   },
@@ -779,6 +841,7 @@ export default {
   flex-direction: column;
   max-width: 1550px;
 }
+
 
 
 #selectHeroOrWeaponModal .icon-close{
@@ -820,6 +883,7 @@ export default {
   justify-content: center;
   align-items: center;
   padding-bottom: 2rem;
+  padding-top: 2rem;
 }
 
 .quantity-heroes {
@@ -973,9 +1037,16 @@ export default {
 }
 
 .list{
-  display: flex;
+    color: #fff;
+    overflow-y: scroll;
+    padding: 0;
+    margin-top: 20px;
+    margin-bottom: 40px;
+    scroll-margin-left: 50px;
+    display: flex;
   justify-content: center;
   height: 700px;
+  width: 90%;
   margin: 0 auto;
 }
 
