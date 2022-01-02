@@ -876,7 +876,7 @@ div.encounter.text-center {
 
 .combat-enemy-container .weapon-icon-wrapper{
   height: 24rem;
-  width: 16.5rem;
+  width: 19.5rem;
 }
 
 .combat-enemy-container .small-durability-bar {
