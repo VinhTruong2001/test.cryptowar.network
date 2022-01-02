@@ -82,7 +82,7 @@
             <div class="info-user-title">Your Information</div>
             <div class="info-user-body">
               <span>HEROES available</span>
-              <div>{{ownCharacters.length}}</div>
+              <div>4</div>
             </div>
             <div class="info-user-btn">
               <button @click="$bvModal.show('selectHeroOrWeaponModal'), selectHero = true, selectWeapon = false">SELECT HERO</button>
@@ -281,7 +281,6 @@ import {
 // import Hint from '../components/Hint.vue';
 // import CombatResults from '../components/CombatResults.vue';
 import { toBN, fromWeiEther } from "../utils/common";
-import CharacterRoom from "../components/CharacterRoom.vue";
 // import WeaponIcon from '../components/WeaponIcon.vue';
 import { mapActions, mapGetters, mapState, mapMutations } from "vuex";
 // import CharacterBar from "../components/CharacterBar.vue";
