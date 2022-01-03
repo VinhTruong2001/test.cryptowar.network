@@ -9,6 +9,14 @@
           </div>
         </div>
       </div>
+      <div class="row">
+        <div class="col-12 d-flex justify-content-end">
+            <div class="info-user-btn">
+                <div class="cost"><div></div> {{rewardPvp}}</div>
+              <button @click="handleClaimTokenReward()">Claim Reward PvP</button>
+            </div>
+        </div>
+      </div>
       <b-modal id="listHeroToCareerModal" hide-footer>
         <div class="icon-close-container"><div class="icon-close" @click="$bvModal.hide('listHeroToCareerModal')"></div></div>
         <div class="listHeroToCareerModal-head">CryptoWar Message</div>
@@ -353,7 +361,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["currentCharacterId", "careerModeRooms", "careerModeRequest","characters","ownedWeaponIds", "defaultAccount"]),
+    ...mapState(["currentCharacterId", "careerModeRooms", "careerModeRequest","characters","ownedWeaponIds", "defaultAccount", "rewardPvp"]),
     ...mapGetters([
       "getTargetsByCharacterIdAndWeaponId",
       "ownCharacters",
@@ -442,7 +450,9 @@ export default {
       "fetchCharacters",
       "requestFight",
       "cancelRequestFight",
-      "endCareerMode"
+      "endCareerMode",
+      "getRewardPvp",
+      "claimTokenReward"
     ]),
     ...mapMutations(["setIsInCombat"]),
     checkActive(){
@@ -791,12 +801,23 @@ export default {
       }
     },
     async cancelCareerMode(roomId) {
+      this.$bvModal.show('loadingModal');
       const res = await this.endCareerMode({roomId});
       if(res) {
-        this.$bvModal.show('cancelCareerModal');
+        this.$bvModal.hide('loadingModal');
         setTimeout(() => {
-          this.$bvModal.hide('loadingModal');
+          this.$bvModal.show('cancelCareerModal');
         }, 500);
+      }
+    },
+    async handleClaimTokenReward() {
+      this.$bvModal.show('loadingModal');
+      const res = await this.claimTokenReward();
+      if(res) {
+        this.$bvModal.hide('loadingModal');
+        this.getRewardPvp();
+      }else {
+        this.$bvModal.hide('loadingModal');
       }
     }
 
@@ -861,6 +882,7 @@ export default {
     setTimeout(async () => {
       await this.getRequests();
     }, 500);
+    await this.getRewardPvp();
   },
 };
 </script>
@@ -1221,7 +1243,7 @@ export default {
   color: #f58b5b;
 }
 
-.info-footer .cost{
+.cost{
   color: #D858F7;
   display: flex;
   width: 100%;
@@ -1230,7 +1252,7 @@ export default {
   font-size: 1.3em;
 }
 
-.info-footer .cost > div{
+.cost > div{
   background-image: url(../assets/v2/icon-crypto.svg);
   width: 20px;
   height: 19px;

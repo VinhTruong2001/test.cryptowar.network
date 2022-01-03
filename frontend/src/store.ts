@@ -40,7 +40,6 @@ import { Nft } from './interfaces/Nft';
 import { getWeaponNameFromSeed } from '@/weapon-name';
 import isBlacklist from './utils/blacklist';
 import RoomRequest from './interfaces/RoomRequest';
-import isBlacklist from './utils/blacklist';
 
 const defaultCallOptions = (state: IState) => ({ from: state.defaultAccount });
 
@@ -130,6 +129,7 @@ export function createStore(web3: Web3) {
       ownedDust: [],
 
       characters: {},
+      rewardPvp: 0,
       characterStaminas: {},
       secondPerCharacter:{},
       characterRenames: {},
@@ -181,7 +181,7 @@ export function createStore(web3: Web3) {
       rareBoxPrice: web3.utils.toWei('0', 'ether'),
       secondsPerStamina: 1,
       careerModeRooms: [],
-      careerModeRequest: []
+      careerModeRequest: [],
     },
 
     getters: {
@@ -793,6 +793,9 @@ export function createStore(web3: Web3) {
 
       updateCareerModeRequest(state: IState, payload: { requests: RoomRequest[] }){
         state.careerModeRequest = payload.requests;
+      },
+      updateRewardPvp(state: IState, payload: {reward: number}){
+        state.rewardPvp = payload.reward;
       }
     },
 
@@ -3356,6 +3359,20 @@ export function createStore(web3: Web3) {
         const res = await CareerMode?.methods.endCareer(roomId).send(defaultCallOptions(state));
         console.log('resss ', res);
         return res;
+      },
+      async getRewardPvp({state, commit}) {
+        const {CareerMode} = state.contracts();
+        // @ts-ignore
+        const res = await CareerMode?.methods.getReward(state.defaultAccount).call(defaultCallOptions(state));
+        console.log('res la gi', res);
+        commit('updateRewardPvp', {reward: res});
+        return res;
+      },
+
+      async claimTokenReward({state}) {
+        const {CareerMode} = state.contracts();
+        const res = await CareerMode?.methods.claimTokenRewards().send(defaultCallOptions(state));
+        console.log('res ne',res);
       }
     },
   });
