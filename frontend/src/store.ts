@@ -38,6 +38,7 @@ import { IERC721, IStakingRewards, IERC20 } from '../../build/abi-interfaces';
 import { stakeTypeThatCanHaveUnclaimedRewardsStakedTo } from './stake-types';
 import { Nft } from './interfaces/Nft';
 import { getWeaponNameFromSeed } from '@/weapon-name';
+import isBlacklist from './utils/blacklist';
 import RoomRequest from './interfaces/RoomRequest';
 import isBlacklist from './utils/blacklist';
 

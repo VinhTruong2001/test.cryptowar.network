@@ -9,8 +9,7 @@
           </div>
         </div>
       </div>
-      <b-modal id="listHeroToCareerModal" hide-footer>
-        <div class="icon-close-container"><div class="icon-close" @click="$bvModal.hide('listHeroToCareerModal')"></div></div>
+      <b-modal id="listHeroToCareerModal" hide-footer centered>
         <div class="listHeroToCareerModal-head">CryptoWar Message</div>
         <div class="listHeroToCareerModal-body" v-if="errorMessage">{{errorMessage}}</div>
         <div class="listHeroToCareerModal-body" v-if="!errorMessage">Listing HERO to Career: <span>Done</span></div>
@@ -84,7 +83,7 @@
             <div class="info-user-title">Your Information</div>
             <div class="info-user-body">
               <span>HEROES available</span>
-              <div>4</div>
+              <div>{{ownCharacters.length}}</div>
             </div>
             <div class="info-user-btn">
               <button @click="$bvModal.show('selectHeroOrWeaponModal'), selectHero = true, selectWeapon = false">SELECT HERO</button>
@@ -111,8 +110,7 @@
           </div>
         </div>
       </div>
-      <b-modal id="selectHeroOrWeaponModal" class="modal-box" hide-footer>
-        <div class="icon-close-container"><div class="icon-close" @click="$bvModal.hide('selectHeroOrWeaponModal')"></div></div>
+      <b-modal id="selectHeroOrWeaponModal" class="modal-box" hide-footer centered>
         <!-- <div class="title-results">{{titleResults}}</div>
         <CombatResults v-if="resultsAvailable" :results="fightResults" /> -->
         <div class="row list" v-if="selectHero">
@@ -219,8 +217,7 @@
           </div>
         </div>
       </div>
-      <b-modal id="requestSelect" class="modal-box" hide-footer>
-        <div class="icon-close" @click="$bvModal.hide('requestSelect')"></div>
+      <b-modal id="requestSelect" class="modal-box" hide-footer centered>
         <div class="requestSelect-head">Request battle to HERO #123</div>
         <div class="requestSelect-body">
           <div>Amount request
@@ -245,8 +242,7 @@
           </div>
         </div>
       </div>
-      <b-modal id="fightModal" class="modal-box" hide-footer>
-        <div class="icon-close" @click="$bvModal.hide('fightModal')"></div>
+      <b-modal id="fightModal" class="modal-box" hide-footer centered>
         <div class="requestSelect-head">You got request battle from Hero #123</div>
         <div class="requestSelect-body">
           <div>Amount request
@@ -301,6 +297,7 @@ import {
 // import Hint from '../components/Hint.vue';
 // import CombatResults from '../components/CombatResults.vue';
 import { toBN, fromWeiEther } from "../utils/common";
+import CharacterRoom from "../components/CharacterRoom.vue";
 // import WeaponIcon from '../components/WeaponIcon.vue';
 import { mapActions, mapGetters, mapState, mapMutations } from "vuex";
 // import CharacterBar from "../components/CharacterBar.vue";
@@ -1667,15 +1664,11 @@ export default {
 }
 
 @media (max-width: 376px) {
-  #selectHeroOrWeaponModal .icon-close{
-    margin-right: 10px;
-  }
+
 }
 
 @media (max-width: 767px) {
-  #selectHeroOrWeaponModal .icon-close{
-    margin-right: 10px;
-  }
+
 }
 
 @media (min-width: 768px) {
