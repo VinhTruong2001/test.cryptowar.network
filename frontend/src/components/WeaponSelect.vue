@@ -251,7 +251,7 @@ export default {
 <style scoped>
 .small-durability-bar {
   position: relative;
-  top: 0px;
+  top: 20px;
   height: 12px;
   width: 80%;
   margin: 0 auto;
@@ -365,7 +365,7 @@ export default {
 }
 
 .idWeapon {
-    font-size: 21px;
+    font-size: 18px;
     height: 25px;
     font-weight: 600;
 }
@@ -378,7 +378,7 @@ export default {
 
 
 .confirmReforge .small-durability-bar, .modal-body .small-durability-bar{
-  top: 0px;
+  top:20px
 }
 
 .confirmReforge .name, .modal-body .name{
@@ -445,6 +445,8 @@ export default {
     width: 100%;
     padding-left: 1rem;
     padding-right: 1rem;
+    max-height: 100px;
+    padding-top: 0.5rem;
 }
 
 .containerColumn {

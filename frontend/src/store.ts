@@ -3196,27 +3196,31 @@ export function createStore(web3: Web3) {
         await Weapons?.methods.approve(CareerMode?.options.address, weapon).send({
           from: state.defaultAccount
         });
-        await CareerMode?.methods.createRoom(character, weapon, Web3.utils.toWei(`${matchReward}`),  Web3.utils.toWei(`${totalDeposit}`)).send({
+        const resCreateRoom = await CareerMode?.methods.createRoom(character, weapon, Web3.utils.toWei(`${matchReward}`),  Web3.utils.toWei(`${totalDeposit}`)).send({
           from: state.defaultAccount,
           gas: '800000'
         });
 
-        const res = await state
-          .contracts()
-          .CryptoWars!.methods.getMyCharacters()
-          .call(defaultCallOptions(state));
-        console.log('hello', res);
-        commit('updateUserDetails', {
-          ownedCharacterIds: Array.from(res),
-        });
-        return true;
+        if(resCreateRoom) {
+          const res = await state
+            .contracts()
+            .CryptoWars!.methods.getMyCharacters()
+            .call(defaultCallOptions(state));
+          console.log('hello', res);
+          commit('updateUserDetails', {
+            ownedCharacterIds: Array.from(res),
+          });
+          return true;
+        }
+        else {
+          return false;
+        }
       },
       async getCareerRooms({ state, commit }, {cursor}){
         const { CareerMode } = state.contracts();
         if(cursor === 0) {
           // @ts-ignore
           const result: any[] = await CareerMode?.methods.getRooms(0).call(defaultCallOptions(state));
-          console.log('why', result);
           commit('updateCareerRoom', { rooms: result.map(r=> ({
             characterId: r.characterId,
             claimed: r.claimed,
@@ -3230,11 +3234,9 @@ export function createStore(web3: Web3) {
         }
         else {
           const oldResult = state.careerModeRooms;
-          console.log('old result ne', oldResult);
           // @ts-ignore
           const result: any[] = await CareerMode?.methods.getRooms(cursor).call(defaultCallOptions(state));
           const newArray = oldResult.concat(result);
-          console.log('hic', newArray);
           commit('updateCareerRoom', { rooms: newArray.map(r=> ({
             characterId: r.characterId,
             claimed: r.claimed,
@@ -3283,8 +3285,6 @@ export function createStore(web3: Web3) {
           from: state.defaultAccount,
           gas: '800000'
         });
-
-        console.log('res ne', res);
 
         return res?.events.FightOutCome.returnValues;
       },

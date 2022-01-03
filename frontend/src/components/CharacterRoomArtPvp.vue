@@ -372,7 +372,6 @@ export default {
   display: flex;
   justify-content: center;
   position: relative;
-  padding: 0 3rem;
   align-items: center;
 }
 

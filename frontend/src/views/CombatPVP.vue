@@ -47,7 +47,9 @@
             <div class="item">
               <div class="info">
                 <div class="info-head">
-                    <span class="property"></span>
+                    <div
+                    :class="selectedCharacter.traitName.toLowerCase() + '-icon'">
+                    </div>
                 </div>
                 <div class="item-id">
                     <span>#{{selectedCharacter.id}}</span>
@@ -117,7 +119,9 @@
           <div class="item" v-for="i in ownCharacters" :key="i.id">
             <div class="info">
               <div class="info-head">
-                  <span class="property"></span>
+                  <div
+                    :class="i.traitName.toLowerCase() + '-icon'">
+                    </div>
               </div>
               <div class="item-id">
                   <span>#{{i.id}}</span>
@@ -154,12 +158,12 @@
         </div>
       </b-modal>
       <div class="row">
-        <div class="col-xl-4 col-12">
+        <div class="col-xl-3 col-12">
           <div class="search-hero">
             <input type="text" placeholder="Search Hero's ID" />
           </div>
         </div>
-        <div class="col-xl-8 col-12 nav-option-box">
+        <div class="col-xl-9 col-12 nav-option-box">
           <div class="nav-option">
             <b-nav pills>
               <b-nav-item
@@ -168,7 +172,8 @@
                   checkActive(),
                   (changeMode = false),
                     (careerMode = true),
-                    (requestChallenge = false)
+                    (requestChallenge = false),
+                    (myRequestMode= false)
                 "
                 :active="careerMode"
                 ><div>CAREER MODE <div>{{this.filterCareerModeRooms(careerModeRooms).length}}</div></div></b-nav-item
@@ -179,7 +184,8 @@
                   checkActive(),
                   (changeMode = false),
                     (careerMode = false),
-                    (requestChallenge = true)
+                    (requestChallenge = true),
+                    (myRequestMode= false)
                 "
                 :active="requestChallenge"
                 ><div>REQUEST TO CHALLENGE <div>{{this.filterCareerModeRequest(careerModeRequest).length}}</div></div></b-nav-item
@@ -190,10 +196,24 @@
                   checkActive(),
                   (changeMode = true),
                     (careerMode = false),
-                    (requestChallenge = false)
+                    (requestChallenge = false),
+                    (myRequestMode= false)
                 "
                 :active="changeMode"
                 ><div>MY CAREER MODE <div>{{this.filterMyCareerModeRooms(careerModeRooms).length}}</div></div></b-nav-item
+              >
+              <b-nav-item
+              v-if="false"
+                class="nav-item"
+                @click="
+                  checkActive(),
+                  (changeMode = false),
+                    (careerMode = false),
+                    (requestChallenge = false),
+                    (myRequestMode= true)
+                "
+                :active="myRequestMode"
+                ><div>MY REQUEST<div>{{this.filterMyCareerModeRooms(careerModeRooms).length}}</div></div></b-nav-item
               >
             </b-nav>
           </div>
@@ -292,6 +312,7 @@ import WeaponSelect from "@/components/WeaponSelect.vue";
 import RoomRequest from "@/components/RoomRequest.vue";
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
 import FightResult from "@/components/v2/FightResult.vue";
+import { CharacterTrait } from "../interfaces";
 // import Events from "../events";
 
 export default {
@@ -310,6 +331,7 @@ export default {
       changeMode: false,
       careerMode: true,
       requestChallenge: false,
+      myRequestMode: false,
       fightXpGain: 16,
       selectedWeapon: null,
       fightMultiplier: Number(localStorage.getItem("fightMultiplier")),
@@ -325,7 +347,8 @@ export default {
       matchReward: 0,
       totalDeposit: 0,
       errorMessage: '',
-      cursor: 0
+      cursor: 0,
+      trait: this.characterTrait,
     };
   },
 
@@ -341,7 +364,8 @@ export default {
       "fightGasOffset",
       "fightBaseline",
       "getCharacterName",
-      "getWeaponName"
+      "getWeaponName",
+      "charactersWithIds",
     ]),
 
     targets() {
@@ -356,6 +380,15 @@ export default {
         this.targets.length === 0 &&
         this.currentCharacterId &&
         this.selectedWeaponId
+      );
+    },
+
+    characterTrait() {
+      const characterWithId =
+        this.charactersWithIds && this.charactersWithIds([this.character.id]);
+      return (
+        (characterWithId && CharacterTrait[characterWithId[0].trait]) ||
+        CharacterTrait[this.character.trait]
       );
     },
 
@@ -609,24 +642,25 @@ export default {
       if(!this.selectedCharacter || !this.selectedWeapon) {
         // @ts-ignore
         this.errorMessage = 'Please select weapon and hero!';
+        this.$bvModal.show('listHeroToCareerModal');
         // @ts-ignore
-        this.$bvModal.hide('loadingModal');
         setTimeout(() => {
-          this.$bvModal.show('listHeroToCareerModal');
+          this.$bvModal.hide('loadingModal');
         }, 500);
       }
       else if(!this.totalDeposit || !this.matchReward) {
         this.errorMessage = 'Please input total deposit and match reward!';
+        this.$bvModal.show('listHeroToCareerModal');
         this.$bvModal.hide('loadingModal');
         setTimeout(() => {
-          this.$bvModal.show('listHeroToCareerModal');
+          this.$bvModal.hide('loadingModal');
         }, 500);
       }
       else if(this.totalDeposit< 2.1*this.matchReward) {
         this.errorMessage = 'The Total deposit needs to bigger than 210% of the Match reward!';
-        this.$bvModal.hide('loadingModal');
+        this.$bvModal.show('listHeroToCareerModal');
         setTimeout(() => {
-          this.$bvModal.show('listHeroToCareerModal');
+          this.$bvModal.hide('loadingModal');
         }, 500);
       }
       else {
@@ -645,7 +679,11 @@ export default {
           this.selectedCharacter= null;
           this.selectedWeapon=null;
           this.errorMessage='';
-          this.$bvModal.show('listHeroToCareerModal');
+          this.$bvModal.hide('loadingModal');
+          this.getCareerRooms({cursor:0});
+          setTimeout(() => {
+            this.$bvModal.show('listHeroToCareerModal');
+          }, 500);
         }
         // console.log('hiihi', result);
         // if(result) {
@@ -664,9 +702,9 @@ export default {
       if(!this.selectedCharacter || !this.selectedWeapon) {
         this.errorMessage = 'Please select weapon and hero!';
         // @ts-ignore
-        this.$bvModal.hide('loadingModal');
+        this.$bvModal.show('fightErrorModal');
         setTimeout(() => {
-          this.$bvModal.show('fightErrorModal');
+          this.$bvModal.hide('loadingModal');
         }, 500);
         return;
       }else {
@@ -682,11 +720,11 @@ export default {
             roomId, requestId
           });
           if(results) {
-            this.$bvModal.hide('loadingModal');
+            this.$bvModal.show('fightResult');
             const fightResultsFull = {...results, matchReward: room?.[0]?.matchReward};
             this.fightResults=fightResultsFull;
             setTimeout(() => {
-              this.$bvModal.show('fightResult');
+              this.$bvModal.hide('loadingModal');
             }, 500);
             this.getRequests();
           }
@@ -732,6 +770,7 @@ export default {
       this.$bvModal.show('loadingModal');
       if(!this.selectedWeapon || !this.selectedCharacter) {
         this.errorMessage='Please select weapon and hero';
+        this.$bvModal.show('requestFightModal');
         setTimeout(() => {
           this.$bvModal.hide('loadingModal');
           this.$bvModal.show('requestFightModal');
@@ -752,15 +791,12 @@ export default {
       }
     },
     async cancelCareerMode(roomId) {
-      this.$bvModal.show('loadingModal');
-      console.log('112123123', this.ownCharacters);
       const res = await this.endCareerMode({roomId});
       if(res) {
-        this.$bvModal.hide('loadingModal');
+        this.$bvModal.show('cancelCareerModal');
         setTimeout(() => {
-          this.$bvModal.show('cancelCareerModal');
+          this.$bvModal.hide('loadingModal');
         }, 500);
-        console.log('test',this.ownCharacters);
       }
     }
 
@@ -1076,7 +1112,7 @@ export default {
 }
 
 .info .property{
-  content: url(../assets/elements/earth.png);
+  /* content: url(../assets/elements/earth.png); */
   width: 30px;
   height: 30px;
   display: block;
