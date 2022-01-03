@@ -2,7 +2,6 @@
   <div
     class="weapon-icon"
     v-bind:class="[getWeaponDurability(weapon.id) === 0 ? 'no-durability' : '']"
-    v-tooltip="{ content: tooltipHtml , trigger: (isMobile() ? 'click' : 'hover') }"
     @mouseover="hover = !isMobile() || true"
     @mouseleave="hover = !isMobile()"
   >
@@ -12,7 +11,7 @@
     </div>
 
     <div class="weapon-header">
-      <div>
+      <div class="left">
         <div class="trait">
           <span :class="weapon.element.toLowerCase() + '-icon'"></span>
           <span class="weapon-star" v-for="n in this.weapon.stars + 1" :key="n">
@@ -39,8 +38,7 @@
           <!-- <br><b-icon v-if="favorite" class="favorite-star" icon="star-fill" variant="warning" /> -->
         </div>
       </div>
-
-      <div class="left">
+      <div class="right">
         <div class="id" v-if="!isBlacksmith">
           ID {{ weapon.id }}
           <!-- <br><b-icon v-if="favorite" class="favorite-star" icon="star-fill" variant="warning" /> -->
@@ -54,8 +52,7 @@
         </div>
       </div>
     </div>
-
-    <div class="glow-img-box">
+    <div v-tooltip="{ content: tooltipHtml , trigger: (isMobile() ? 'click' : 'hover') }" class="glow-img-box">
       <img v-if="showPlaceholder" class="placeholder" :src="getWeaponArt(weapon)" />
     </div>
 
@@ -73,8 +70,8 @@
         ></div>
       </div>
     </div>
-    <div class="weapon-bt-box default-contrast" v-if="isSell">
-      <b-button @click="sellClick()">
+    <div class="weapon-bt-box" v-if="isSell">
+      <b-button class="weapon-bt-box" @click="sellClick()">
         Sell
       </b-button>
     </div>
@@ -415,10 +412,12 @@ export default {
 
 .weapon-bt-box{
   position: absolute;
-  bottom: -48px;
+  bottom: -40px;
   display: flex;
   width: 90%;
   justify-content: center;
+  z-index: 100;
+  cursor: pointer;
 }
 
 .weapon-bt-box button{
