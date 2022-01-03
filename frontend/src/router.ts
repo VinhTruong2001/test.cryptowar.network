@@ -11,7 +11,7 @@ import Leaderboard from './views/Leaderboard.vue';
 import Options from './views/Options.vue';
 import Shop from './views/Shop.vue';
 import Referral from './views/Referral.vue';
-import P2PLayout from './views/CombatPVP.vue';
+import P2PLayout from './views/P2PLayout.vue';
 import Lobby from './views/Lobby.vue';
 import Inventory from './views/Inventory.vue';
 
