@@ -925,10 +925,16 @@ export default {
     if(this.checkSelectFromRPS){
       this.addClass = "background";
     }
-    this.getCareerRooms({cursor: 0});
-    this.getRewardPvp();
-    this.getRequests();
-    this.getListParticipatedRoom();
+    setTimeout(async () => {
+      await this.getCareerRooms({cursor: 0});
+      console.log('1', this.careerModeRooms);
+      await this.getRewardPvp();
+      console.log('2', this.rewardPvp);
+      await this.getRequests();
+      console.log('3', this.careerModeRequest);
+      await this.getListParticipatedRoom();
+      console.log('4', this.myCareerModeRequest);
+    }, 500);
   },
 };
 </script>
