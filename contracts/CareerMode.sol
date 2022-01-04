@@ -270,16 +270,16 @@ contract CareerMode is
         Room storage r = careerModeRooms[_roomId];
 
         uint256 tokensWin = r.matchReward;
-        r.totalDeposit = r.totalDeposit.sub(r.matchReward);
 
         if (opponentRoll <= playerRoll) {
-            tokensWin = 0;
-            r.totalDeposit = r.totalDeposit.add(r.matchReward.mul(2));
+            // Owner win
+            tokenRewards[r.owner] = tokenRewards[r.owner].add(tokensWin);
+        } else {
+            r.totalDeposit = r.totalDeposit.sub(tokensWin);
+            tokenRewards[_requestFight.requester] = tokenRewards[
+                _requestFight.requester
+            ].add(tokensWin);
         }
-
-        tokenRewards[_requestFight.requester] = tokenRewards[
-            _requestFight.requester
-        ].add(tokensWin);
 
         emit FightOutCome(
             _requestFight.requester,
