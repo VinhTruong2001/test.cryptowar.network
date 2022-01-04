@@ -124,4 +124,5 @@ export interface IState {
   careerModeRooms: CareerModeRoom[];
   careerModeRequest:  RoomRequest[];
   rewardPvp: number;
+  myCareerModeRequest: RoomRequest[];
 }

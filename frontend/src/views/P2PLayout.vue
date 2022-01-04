@@ -12,7 +12,7 @@
       <div class="row">
         <div class="col-12 d-flex justify-content-end">
             <div class="info-user-btn">
-                <div class="cost"><div></div> {{rewardPvp}}</div>
+                <div class="cost"><div></div> {{this.convertReward(rewardPvp)}}</div>
               <button @click="handleClaimTokenReward()">Claim Reward PvP</button>
             </div>
         </div>
@@ -25,6 +25,14 @@
         <button @click="$bvModal.hide('listHeroToCareerModal'), careerMode = true, changeMode = false, requestChallenge = false,
           checkSelect = false, addClass = ''" class="listHeroToCareerModal-btn confirm">GO TO CHECK</button>
       </b-modal>
+      <b-modal id="claimModal" hide-footer>
+        <div class="icon-close-container"><div class="icon-close" @click="$bvModal.hide('claimModal')"></div></div>
+        <div class="listHeroToCareerModal-head">CryptoWar Message</div>
+        <div class="listHeroToCareerModal-body" v-if="errorMessage">{{errorMessage}}</div>
+        <div class="listHeroToCareerModal-body" v-if="!errorMessage">Claim xBlade<span>Done</span></div>
+        <button @click="$bvModal.hide('claimModal'), careerMode = true, changeMode = false, requestChallenge = false,
+          checkSelect = false, addClass = ''" class="listHeroToCareerModal-btn confirm">GO TO CHECK</button>
+      </b-modal>
       <b-modal id="loadingModal" hide-footer centered hide-header-close>
         <div class="centerLoading">
           <pulse-loader :loading="true"/>
@@ -33,7 +41,8 @@
       <b-modal id="requestFightModal" hide-footer>
         <div class="icon-close-container"><div class="icon-close" @click="$bvModal.hide('listHeroToChallengeModal')"></div></div>
         <div class="listHeroToChallengeModal-head">CryptoWar Message</div>
-        <div class="listHeroToChallengeModal-body">Request Fight: <span>Done</span></div>
+        <div class="listHeroToCareerModal-body" v-if="errorMessage">{{errorMessage}}</div>
+        <div class="listHeroToCareerModal-body" v-if="!errorMessage">Request Fight: <span>Done</span></div>
         <button @click="$bvModal.hide('requestFightModal'), careerMode = true, changeMode = false, requestChallenge = false,
           checkSelect = false, addClass = ''" class="listHeroToChallengeModal-btn confirm">GO TO CHECK</button>
       </b-modal>
@@ -46,7 +55,7 @@
       <b-modal id="cancelCareerModal" hide-footer>
         <div class="icon-close-container"><div class="icon-close" @click="$bvModal.hide('listHeroToChallengeModal')"></div></div>
         <div class="listHeroToChallengeModal-head">CryptoWar Message</div>
-        <div class="listHeroToChallengeModal-body">Cancel CareerMode: <span>Done</span></div>
+        <div class="listHeroToChallengeModal-body">Cancel Career Mode: <span>Done</span></div>
         <button @click="$bvModal.hide('cancelCareerModal')" class="listHeroToChallengeModal-btn confirm">GO TO CHECK</button>
       </b-modal>
       <div class="row">
@@ -211,7 +220,6 @@
                 ><div>MY CAREER MODE <div>{{this.filterMyCareerModeRooms(careerModeRooms).length}}</div></div></b-nav-item
               >
               <b-nav-item
-              v-if="false"
                 class="nav-item"
                 @click="
                   checkActive(),
@@ -221,7 +229,7 @@
                     (myRequestMode= true)
                 "
                 :active="myRequestMode"
-                ><div>MY REQUEST<div>{{this.filterMyCareerModeRooms(careerModeRooms).length}}</div></div></b-nav-item
+                ><div>MY REQUEST<div>{{this.filterMyRequestRoom(this.myCareerModeRequest).length}}</div></div></b-nav-item
               >
             </b-nav>
           </div>
@@ -285,7 +293,14 @@
       <div v-if="requestChallenge">
           <div class="row list-request" style="margin-left: 0;">
             <div class="itemCareer" v-for="i in this.filterCareerModeRequest(careerModeRequest)" :key="i.id">
-            <RoomRequest :request="i" :handleFight="handleFight" />
+            <RoomRequest :request="i" :handleFight="handleFight" :isMine="false" :isDone="false"/>
+            </div>
+        </div>
+      </div>
+      <div v-if="myRequestMode">
+          <div class="row list-request" style="margin-left: 0;">
+            <div class="itemCareer" v-for="i in this.filterMyRequestRoom(this.myCareerModeRequest)" :key="i.id">
+            <RoomRequest :request="i" :handleFight="handleFight" :isMine="true" :isDone="i.done" :cancelRequestFight="handleCancelRequestFight" :isWin="i.win" />
             </div>
         </div>
       </div>
@@ -357,11 +372,12 @@ export default {
       errorMessage: '',
       cursor: 0,
       trait: this.characterTrait,
+      listMyRequest: [],
     };
   },
 
   computed: {
-    ...mapState(["currentCharacterId", "careerModeRooms", "careerModeRequest","characters","ownedWeaponIds", "defaultAccount", "rewardPvp"]),
+    ...mapState(["currentCharacterId", "careerModeRooms", "careerModeRequest","characters","ownedWeaponIds", "defaultAccount", "rewardPvp", "myCareerModeRequest"]),
     ...mapGetters([
       "getTargetsByCharacterIdAndWeaponId",
       "ownCharacters",
@@ -452,7 +468,9 @@ export default {
       "cancelRequestFight",
       "endCareerMode",
       "getRewardPvp",
-      "claimTokenReward"
+      "claimTokenReward",
+      "getListParticipatedRoom",
+      "cancelRequestFight"
     ]),
     ...mapMutations(["setIsInCombat"]),
     checkActive(){
@@ -736,7 +754,8 @@ export default {
             setTimeout(() => {
               this.$bvModal.hide('loadingModal');
             }, 500);
-            this.getRequests();
+            await this.getRequests();
+            await this.getRewardPvp();
           }
           // @ts-ignore
           // @ts-ignore
@@ -748,6 +767,14 @@ export default {
         }
       }
       // @ts-ignore
+    },
+    async handleCancelRequestFight (roomId, requestId) {
+      this.$bvModal.show('loadingModal');
+      const response = await this.cancelRequestFight({roomId, requestId});
+      if(response) {
+        this.$bvModal.hide('loadingModal');
+        await this.getListParticipatedRoom();
+      }
     },
     filterCareerModeRequest () {
       const newCareerModeRequest = [];
@@ -767,7 +794,17 @@ export default {
     filterMyCareerModeRooms() {
       return this.careerModeRooms.filter((item)=> item.owner===this.defaultAccount && !item.claimed);
     },
-
+    filterMyRequestRoom() {
+      const newCareerModeRequest = [];
+      const object = {};
+      for(let i = 0 ;i< this.myCareerModeRequest.length; i++) {
+        object[this.myCareerModeRequest[i].id] = this.myCareerModeRequest[i];
+      }
+      for(const i in object) {
+        newCareerModeRequest.push(object[i]);
+      }
+      return newCareerModeRequest;
+    },
     async handleScrollToEnd(isVisible) {
       if(!isVisible) { return; }
       this.cursor +=20;
@@ -777,27 +814,26 @@ export default {
       await this.getCareerRooms({cursor:this.cursor});
     },
     async handleRequestFight(roomId) {
-      this.$bvModal.show('loadingModal');
+
       if(!this.selectedWeapon || !this.selectedCharacter) {
         this.errorMessage='Please select weapon and hero';
         this.$bvModal.show('requestFightModal');
-        setTimeout(() => {
-          this.$bvModal.hide('loadingModal');
-          this.$bvModal.show('requestFightModal');
-        }, 1000);
-        return ;
       }
-      const res = await this.requestFight({
-        roomId,
-        weaponId: this.selectedWeapon.id,
-        characterId: this.selectedCharacter.id,
-      });
-      if(res) {
-        this.$bvModal.hide('loadingModal');
-        setTimeout(() => {
-          this.errorMessage = '';
-          this.$bvModal.show('requestFightModal');
-        }, 500);
+      else {
+        this.$bvModal.show('loadingModal');
+        const res = await this.requestFight({
+          roomId,
+          weaponId: this.selectedWeapon.id,
+          characterId: this.selectedCharacter.id,
+        });
+        if(res) {
+          this.$bvModal.hide('loadingModal');
+          await this.getListParticipatedRoom();
+          setTimeout(() => {
+            this.errorMessage = '';
+            this.$bvModal.show('requestFightModal');
+          }, 500);
+        }
       }
     },
     async cancelCareerMode(roomId) {
@@ -811,13 +847,22 @@ export default {
       }
     },
     async handleClaimTokenReward() {
-      this.$bvModal.show('loadingModal');
-      const res = await this.claimTokenReward();
-      if(res) {
-        this.$bvModal.hide('loadingModal');
-        this.getRewardPvp();
-      }else {
-        this.$bvModal.hide('loadingModal');
+      if(this.rewardPvp > 0) {
+        this.$$bvModal.show('loadingModal');
+        const res = await this.claimTokenReward();
+        if(res) {
+          this.errorMessage = '';
+          this.$bvModal.hide('loadingModal');
+          this.$$bvModal.show('claimModal');
+          await this.getRewardPvp();
+        }else {
+          this.$bvModal.hide('loadingModal');
+        }
+      }
+      else {
+        this.errorMessage = 'You have 0 xBlade!';
+        this.$bvModal.show('claimModal');
+        return ;
       }
     }
 
@@ -880,9 +925,14 @@ export default {
     }
     await this.getCareerRooms({cursor: 0});
     setTimeout(async () => {
+      await this.getRewardPvp();
+    }, 1);
+    setTimeout(async () => {
       await this.getRequests();
-    }, 500);
-    await this.getRewardPvp();
+    }, 2);
+    setTimeout(async () => {
+      await this.getListParticipatedRoom();
+    }, 3);
   },
 };
 </script>

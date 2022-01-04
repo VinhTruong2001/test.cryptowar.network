@@ -182,6 +182,7 @@ export function createStore(web3: Web3) {
       secondsPerStamina: 1,
       careerModeRooms: [],
       careerModeRequest: [],
+      myCareerModeRequest: []
     },
 
     getters: {
@@ -796,6 +797,9 @@ export function createStore(web3: Web3) {
       },
       updateRewardPvp(state: IState, payload: {reward: number}){
         state.rewardPvp = payload.reward;
+      },
+      updateMyCareerModeRequest(state: IState, payload: {request: RoomRequest[]}) {
+        state.myCareerModeRequest = payload.request;
       }
     },
 
@@ -1084,8 +1088,6 @@ export function createStore(web3: Web3) {
             .Weapons!.methods.maxDurability()
             .call(defaultCallOptions(state))
         ]);
-
-        console.log('2222', ownedCharacterIds);
 
         commit('updateUserDetails', {
           ownedCharacterIds: Array.from(ownedCharacterIds),
@@ -3210,7 +3212,6 @@ export function createStore(web3: Web3) {
             .contracts()
             .CryptoWars!.methods.getMyCharacters()
             .call(defaultCallOptions(state));
-          console.log('hello', res);
           commit('updateUserDetails', {
             ownedCharacterIds: Array.from(res),
           });
@@ -3276,7 +3277,6 @@ export function createStore(web3: Web3) {
             from: state.defaultAccount,
             gas: '800000'
           });
-          console.log('a22', res?.events);
           return res?.events?.RequestFightOutcome.returnValues;
         }
         catch(e){
@@ -3344,27 +3344,24 @@ export function createStore(web3: Web3) {
       async getRoom({ state }, { roomId }) {
         const { CareerMode } = state.contracts();
         const res = await CareerMode?.methods.getRoom(roomId).call(defaultCallOptions(state));
-        console.log('kkkkk', res);
         return res;
       },
 
       async cancelRequestFight({ state }, {roomId, requestId}) {
         const {CareerMode} = state.contracts();
-        await CareerMode?.methods.cancelRequestFight(roomId, requestId).call(defaultCallOptions(state));
-        return true;
+        const res = await CareerMode?.methods.cancelRequestFight(roomId, requestId).send(defaultCallOptions(state));
+        return res;
       },
 
       async endCareerMode({state}, {roomId}) {
         const {CareerMode} = state.contracts();
         const res = await CareerMode?.methods.endCareer(roomId).send(defaultCallOptions(state));
-        console.log('resss ', res);
         return res;
       },
       async getRewardPvp({state, commit}) {
         const {CareerMode} = state.contracts();
         // @ts-ignore
         const res = await CareerMode?.methods.getReward(state.defaultAccount).call(defaultCallOptions(state));
-        console.log('res la gi', res);
         commit('updateRewardPvp', {reward: res});
         return res;
       },
@@ -3372,7 +3369,56 @@ export function createStore(web3: Web3) {
       async claimTokenReward({state}) {
         const {CareerMode} = state.contracts();
         const res = await CareerMode?.methods.claimTokenRewards().send(defaultCallOptions(state));
-        console.log('res ne',res);
+        return res;
+      },
+      async getListParticipatedRoom({state, commit}) {
+        const {CareerMode} = state.contracts();
+        //@ts-ignore
+        const listRoomRequest: number[] = await CareerMode?.methods.getPartipatedRequests(state.defaultAccount).call(defaultCallOptions(state));
+        // @ts-ignore
+        // const listMyRoomRequest = [];
+        // for(let i=0;i<listRoomRequest.length; i++) {
+        //   //@ts-ignore
+        //   const room: any[] = await CareerMode?.methods.getRoom(listRoomRequest[i]).call(defaultCallOptions(state));
+        //   console.log('room hehe', room);
+        //   listMyRoomRequest.push(room);
+        // }
+        // console.log('1111', listMyRoomRequest);
+        // return listMyRoomRequest;
+        const promises = [];
+        for (let i = 0; i < listRoomRequest.length; i++) {
+          promises.push(
+            new Promise(resolve => {
+              CareerMode?.methods
+                .getRequests(0, listRoomRequest[i])
+                .call(defaultCallOptions(state))
+                .then((requestList) =>{
+                  if (!requestList){
+                    resolve([]);
+                    return;
+                  }
+                  // @ts-ignore
+                  resolve(requestList.map(r => ({...r, roomId: listRoomRequest[i]})));
+                });
+            })
+          );
+        }
+        const result: any[] = await Promise.all(promises);
+        if(!result){
+          return;
+        }
+
+        commit('updateMyCareerModeRequest', {
+          request : ([] as any[]).concat(...result).map(v=>({
+            weaponId: v.wep,
+            heroId: v.char,
+            requester: v.requester,
+            done: v.done,
+            id: v.id,
+            roomId: v.roomId,
+            win: v.win
+          })).filter(item => item.requester === state.defaultAccount)
+        });
       }
     },
   });

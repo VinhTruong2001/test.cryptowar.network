@@ -1,8 +1,8 @@
 <template>
   <div class="row">
     <div
-      class="filters pl-2 col-12 col-xl-3"
-      :class="isBlacksmith && 'filters-blacksmith'"
+      class="filters market-active pl-2 col-12 "
+      :class="isBlacksmith ? 'filters-blacksmith col-xl-4' : 'col-xl-3'"
       @change="saveFilters()"
       v-if="showFilters"
     >
@@ -83,11 +83,11 @@
     </div>
 
     <ul
-      class="weapon-grid row" :class="showFilters && 'col-12 col-xl-9'"
+      class="weapon-grid row" :class="showFilters && 'col-12 col-lg-8 col-xl-9'"
       v-if="!isBlacksmith && !isBurnWeapon"
     >
       <li
-        class="col-6 col-lg-4 col-xl-3"
+        class="col-12 col-md-12 col-lg-6 col-xl-3"
         v-for="weapon in nonIgnoredWeapons"
         :key="weapon.id"
         @click="(!checkForDurability || getWeaponDurability(weapon.id) > 0) && onWeaponClick(weapon.id)"
@@ -110,7 +110,7 @@
 
     <ul class="row col-12" v-if="isBurnWeapon">
       <li
-        class="col-6 col-lg-4 d-flex justify-content-center"
+        class="col-6 col-lg-6 d-flex justify-content-center"
         v-for="(weapon, index) in nonIgnoredWeapons"
         :key="index"
         @click="(!checkForDurability || getWeaponDurability(weapon.id) > 0) && onWeaponClick(weapon.id)"
@@ -593,10 +593,13 @@ input::-webkit-inner-spin-button{
 
 .character-item.weapon {
   cursor: pointer;
+  font-size: 18px;
   position: relative;
   display: flex;
+  text-align: right;
   flex-direction: column;
   padding: 15px 15px;
+  padding-right: 20px;
 }
 
 .sold {
@@ -655,6 +658,7 @@ input::-webkit-inner-spin-button{
 
 .character-item.weapon.no-corner {
   padding: 10px;
+  margin: 0;
 }
 
 .weapon-pagination-btn {
@@ -682,6 +686,10 @@ input::-webkit-inner-spin-button{
   background-image: url("../../assets/v2/weapon-pagination-next.svg");
 }
 
+.filters.market-active.active{
+  height: 970px;
+}
+
 @media (width: 1024px) {
   .character-item.weapon {
     padding: 18px;
@@ -692,10 +700,10 @@ input::-webkit-inner-spin-button{
   }
 }
 
-@media (min-width: 1025px) {
+@media (min-width: 1201px) {
   .filters.filters-blacksmith {
     max-height: 867px;
-    height: 867px;
+    height: 867px !important;
     border: 0.5px solid #3CDE9B;
   }
 }

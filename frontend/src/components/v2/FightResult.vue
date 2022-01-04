@@ -2,21 +2,23 @@
   <div class="results-panel">
       <span class="outcome">{{ getHeaderText() }}</span>
       <div class="containerText">
-          <img class="iconFight" src="../../assets/images/iconWin.png"/>
+          <div :class="getImageSource()"></div>
         <span class="successText">{{ getSuccessText() }}</span>
     </div>
     <div class="containerText">
         <span class="roll">{{ "Your Opponent went:" }}</span>
         <span class="opponentScore">{{results[2]}}</span>
     </div>
+    <div class="containerText" v-if="this.results[3]>= this.results[2]">
+        <span class="roll">{{ "Fight Tax:" }}</span>
+        <span class="opponentScore">5%</span>
+    </div>
     <div class="rowView">
-    <span v-if="results[0]" class="reward">
-        {{this.results[3]>= this.results[2]? 'Win: ': 'Lost: '}}
-    </span>
-     <div class="rowView">
-            <img class="iconCW" src="../../assets/images/iconCW.png"/>
-            <span class="incomeCW">{{getIncome()}}</span>
-        </div>
+      <span v-if="results[0]" class="reward">
+          {{this.results[3]>= this.results[2]? 'Win:': 'Lost:'}}
+      </span>
+      <img class="iconCW" src="../../assets/images/iconCW.png"/>
+      <span class="incomeCW">{{getIncome()}}</span>
     </div>
   </div>
 </template>
@@ -52,9 +54,9 @@ export default {
 
     getImageSource() {
       if(this.results[3]>= this.results[2]) {
-        return "../../assets/images/iconWin.png";
+        return 'iconFightWin';
       }else {
-        return "../../assets/images/iconLost.png";
+        return "iconFightLost";
       }
     },
     convertWei(wei) {
@@ -62,9 +64,9 @@ export default {
     },
     getIncome() {
       if(this.results[3]>= this.results[2]) {
-        return this.convertWei(this.results.matchReward);
+        return this.convertWei(this.results.matchReward *0.95);
       }else {
-        return `${toBN(fromWeiEther(this.results[4])).toFixed(2)} xBlade`;
+        return `${toBN(fromWeiEther(this.results[4])).toFixed(2)}`;
       }
     }
   },
@@ -102,6 +104,7 @@ export default {
   font-size: 46px;
   font-weight: bold;
   color: #F58B5B;
+  margin-left: 0.5rem;
 }
 .opponentScore {
   font-size: 1.5em;
@@ -121,30 +124,44 @@ export default {
 .reward {
   font-size: 1.5em;
   color: #fff;
+  flex: 0.4;
 }
 .containerText {
     display: flex;
     align-items: center;
-    padding-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
 }
-.iconFight {
-    /* background-image: url(); */
+.iconFightWin {
+    background-image: url('../../assets/images/iconWin.png');
+    width: 73px;
+    height: 73px;
+}
+.iconFightLost {
+    background-image: url('../../assets/images/iconLost.png');
     width: 73px;
     height: 73px;
 }
 .rowView {
     display: flex;
     align-items: center;
+    justify-content: center;
+    width: 100%;
+    flex: 1;
 }
 .iconCW {
     width: 30px;
     height: 30px;
-    margin-left: 1rem;
     margin-right: 0.1rem;
 }
 .incomeCW {
     font-size: 1.5rem;
     color: #D858F7;
     font-weight: bold;
+    margin-left: 0.2rem;
+}
+.rowText {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>
