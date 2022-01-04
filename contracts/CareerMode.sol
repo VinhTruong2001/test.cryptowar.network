@@ -49,7 +49,7 @@ contract CareerMode is
         address requester;
         uint256 char;
         uint256 wep;
-        bool done;
+        uint16 done; // 0 - not done, 1 - done, 2 - cancel
         bool win;
     }
 
@@ -234,7 +234,7 @@ contract CareerMode is
 
         uint256 requestId = requestFightList[_roomId].length;
         requestFightList[_roomId].push(
-            RequestFight(requestId, msg.sender, _char, _wep, false, false)
+            RequestFight(requestId, msg.sender, _char, _wep, 0, false)
         );
         participatedRoomsByAddress[msg.sender].push(_roomId);
         requestFightByAddress[msg.sender][_roomId].push(requestId);
@@ -265,7 +265,7 @@ contract CareerMode is
         RequestFight storage _requestFight = requestFightList[_roomId][
             _requestId
         ];
-        _requestFight.done = true;
+        _requestFight.done = 1;
         uint256 seed = randoms.getRandomSeed(_requestFight.requester);
 
         uint24 playerRoll = getPlayerPowerRoll(_playerPower, seed); // owner roll
@@ -309,7 +309,7 @@ contract CareerMode is
             "Not room owner nor requester"
         );
         // Mark as this request is done
-        _requestFight.done = true;
+        _requestFight.done = 2;
         // Get back match reward deposit by request
         xBlade.transfer(_requestFight.requester, r.matchReward);
     }
@@ -469,7 +469,7 @@ contract CareerMode is
             !r.claimed &&
             weapons.ownerOf(rf.wep) == rf.requester &&
             characters.ownerOf(rf.char) == rf.requester &&
-            !rf.done;
+            rf.done == 0;
     }
 
     function totalRooms() public view returns (uint256) {
