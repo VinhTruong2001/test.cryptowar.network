@@ -177,7 +177,6 @@ a:hover {
   justify-content: center;
   align-items: center;
   text-transform: uppercase;
-  margin: 0;
 }
 
 .lobby:hover{

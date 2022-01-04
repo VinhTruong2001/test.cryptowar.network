@@ -61,18 +61,13 @@
       <i class="fas fa-spinner fa-spin"></i>
     </div>
     <div :class="{ 'market-bot': !portrait }">
-      <div class="score-id-container">
-        <div class="black-outline" v-if="!portrait">
-          <span class="white">{{ getCleanCharacterName(character.id) }}</span>
-        </div>
+      <div class="name black-outline" v-if="!portrait">
+        {{ getCleanCharacterName(character.id) }}
       </div>
 
-      <div class="score-id-container">
-        <div class="black-outline" v-if="!portrait">
-          Owner: <span class="ownerText">{{ renderOwner(this.room.owner) }}</span>
-        </div>
+      <div class="owner black-outline" v-if="!portrait">
+        Owner: <span class="ownerText">{{ renderOwner(this.room.owner) }}</span>
       </div>
-      <div class="cost"><div></div> {{this.matchReward}}</div>
     </div>
   </div>
 </template>

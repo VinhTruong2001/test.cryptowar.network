@@ -117,7 +117,7 @@
                 <div>
                   <span>
                     Toal deposit
-                    <span>Min = value * 150%</span>
+                    <span>Min = value * 210%</span>
                   </span>
                   <input class="inputAmountBox" type="text" v-model="totalDeposit">
                 </div>
@@ -129,7 +129,6 @@
         </div>
       </div>
       <b-modal id="selectHeroOrWeaponModal" class="modal-box" hide-footer>
-        <div class="icon-close-container"><div class="icon-close" @click="$bvModal.hide('selectHeroOrWeaponModal')"></div></div>
         <!-- <div class="title-results">{{titleResults}}</div>
         <CombatResults v-if="resultsAvailable" :results="fightResults" /> -->
         <div class="row list" v-if="selectHero">
@@ -847,13 +846,16 @@ export default {
       }
     },
     async handleClaimTokenReward() {
+      console.log('hihi', this.rewardPvp);
       if(this.rewardPvp > 0) {
-        this.$$bvModal.show('loadingModal');
+        console.log('1111');
+        this.$bvModal.show('loadingModal');
         const res = await this.claimTokenReward();
+        console.log('resss', res);
         if(res) {
           this.errorMessage = '';
           this.$bvModal.hide('loadingModal');
-          this.$$bvModal.show('claimModal');
+          this.$bvModal.show('claimModal');
           await this.getRewardPvp();
         }else {
           this.$bvModal.hide('loadingModal');

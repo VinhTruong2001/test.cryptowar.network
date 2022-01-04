@@ -1,6 +1,7 @@
 <template>
   <div class="app app-v2">
-    <div class="container-box">
+    <router-view v-if="isMaintenance"/>
+    <div v-if="!isMaintenance" class="container-box">
       <nav-bar />
       <div class="content dark-bg-text">
         <router-view v-if="canShowApp" />
@@ -148,6 +149,7 @@ export default {
     hideWalletWarning: false,
     isConnecting: false,
     recruitCost: "",
+    isMaintenance: false,
   }),
 
   computed: {
@@ -433,6 +435,10 @@ export default {
   },
 
   async created() {
+    // this.isMaintenance = process.env.VUE_APP_MAINTAINANCE;
+    // if(this.isMaintenance && window.location.pathname !== '/maintenance'){
+    //   window.location.href = 'maintenance';
+    // }
     try {
       await this.initializeStore();
     } catch (e) {
@@ -739,6 +745,7 @@ button.close {
   color: #a50eb3 !important;
 }
 
+#loadingModal .modal-content
 #fightResultsModal .modal-content,
 #listHeroToCareerModal .modal-content,
 #listHeroToChallengeModal .modal-content{
@@ -803,20 +810,18 @@ button.close {
 }
 
 .modal-header {
-  padding: 0;
 }
 
-::-webkit-scrollbar-thumb {
-  background: #fff;
-  border-radius: 10px;
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-#selectHeroOrWeaponModal ::-webkit-scrollbar{
-  width: 10px;
-  background: #707070;
-  border-radius: 10px;
-  right: 10px;
-}
+// .modal-footer {
+//   background: rgb(31, 31, 34);
+//   border-color: rgba(24, 27, 30, 0.5) !important;
+// }
 
 #selectHeroOrWeaponModal .list {
   color: #fff;

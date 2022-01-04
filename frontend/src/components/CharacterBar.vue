@@ -32,6 +32,7 @@ export default {
   background-color: #000;
   position: absolute;
   left: 0;
+  top: -33px;
   z-index: 1;
   padding: 0;
 }
