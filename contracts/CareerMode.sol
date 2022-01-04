@@ -352,6 +352,10 @@ contract CareerMode is
         emit EndCareerRoom(id, r.owner, reward);
     }
 
+    function setFeeRate(uint256 _rate) public restricted {
+        feeRate = _rate;
+    }
+
     /** GETTERS */
 
     function unpackFightData(uint96 playerData)
