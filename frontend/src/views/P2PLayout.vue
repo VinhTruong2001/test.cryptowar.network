@@ -753,8 +753,8 @@ export default {
             setTimeout(() => {
               this.$bvModal.hide('loadingModal');
             }, 500);
-            await this.getRequests();
-            await this.getRewardPvp();
+            this.getRequests();
+            this.getRewardPvp();
           }
           // @ts-ignore
           // @ts-ignore
@@ -772,7 +772,7 @@ export default {
       const response = await this.cancelRequestFight({roomId, requestId});
       if(response) {
         this.$bvModal.hide('loadingModal');
-        await this.getListParticipatedRoom();
+        this.getListParticipatedRoom();
       }
     },
     filterCareerModeRequest () {
@@ -810,7 +810,7 @@ export default {
       if(this.careerModeRooms.length < this.cursor) {
         return ;
       }
-      await this.getCareerRooms({cursor:this.cursor});
+      this.getCareerRooms({cursor:this.cursor});
     },
     async handleRequestFight(roomId) {
 
@@ -827,7 +827,7 @@ export default {
         });
         if(res) {
           this.$bvModal.hide('loadingModal');
-          await this.getListParticipatedRoom();
+          this.getListParticipatedRoom();
           setTimeout(() => {
             this.errorMessage = '';
             this.$bvModal.show('requestFightModal');
@@ -856,7 +856,7 @@ export default {
           this.errorMessage = '';
           this.$bvModal.hide('loadingModal');
           this.$bvModal.show('claimModal');
-          await this.getRewardPvp();
+          this.getRewardPvp();
         }else {
           this.$bvModal.hide('loadingModal');
         }
@@ -925,16 +925,10 @@ export default {
     if(this.checkSelectFromRPS){
       this.addClass = "background";
     }
-    await this.getCareerRooms({cursor: 0});
-    setTimeout(async () => {
-      await this.getRewardPvp();
-    }, 1);
-    setTimeout(async () => {
-      await this.getRequests();
-    }, 2);
-    setTimeout(async () => {
-      await this.getListParticipatedRoom();
-    }, 3);
+    this.getCareerRooms({cursor: 0});
+    this.getRewardPvp();
+    this.getRequests();
+    this.getListParticipatedRoom();
   },
 };
 </script>
