@@ -66,6 +66,7 @@ contract CareerMode is
     uint256 minimumRoundDuration;
     mapping(address => uint256[]) roomsByAddress;
     mapping(address => uint256[]) participatedRoomsByAddress;
+    uint256 public feeRate;
 
     /** EVENTS */
 
@@ -116,6 +117,7 @@ contract CareerMode is
         staminaCostFight = 40;
         durabilityCostFight = 3;
         minimumRoundDuration = 2 days;
+        feeRate = 5; //5%
     }
 
     /** MODIFIERS */
@@ -270,19 +272,22 @@ contract CareerMode is
         uint24 opponentRoll = getPlayerPowerRoll(_opponentPower, seed); // requester roll
         Room storage r = careerModeRooms[_roomId];
 
-        uint256 tokensWin = r.matchReward;
-        r.totalDeposit = r.totalDeposit.sub(r.matchReward);
+        uint256 tokensWin = r.matchReward.sub(
+            r.matchReward.mul(feeRate).div(100)
+        );
 
         _requestFight.win = opponentRoll >= playerRoll;
 
         if (opponentRoll <= playerRoll) {
-            tokensWin = 0;
-            r.totalDeposit = r.totalDeposit.add(r.matchReward.mul(2));
-        }
+            // Owner win
+            tokenRewards[r.owner] = tokenRewards[r.owner].add(tokensWin);
+        } else {
+            r.totalDeposit = r.totalDeposit.sub(r.matchReward);
 
-        tokenRewards[_requestFight.requester] = tokenRewards[
-            _requestFight.requester
-        ].add(tokensWin);
+            tokenRewards[_requestFight.requester] = tokenRewards[
+                _requestFight.requester
+            ].add(tokensWin);
+        }
 
         emit FightOutCome(
             _requestFight.requester,
@@ -315,12 +320,8 @@ contract CareerMode is
         uint256 _tokenRewards = tokenRewards[msg.sender];
         tokenRewards[msg.sender] = 0;
 
-        uint256 _tokenRewardsToPayOut = _tokenRewards.sub(
-            _tokenRewards.mul(rewardClaimTax).div(100)
-        );
-
-        xBlade.transfer(msg.sender, _tokenRewardsToPayOut);
-        emit ClaimReward(_tokenRewardsToPayOut);
+        xBlade.transfer(msg.sender, _tokenRewards);
+        emit ClaimReward(_tokenRewards);
     }
 
     function endCareer(uint256 id) public {
@@ -352,6 +353,10 @@ contract CareerMode is
             r.weaponId
         );
         emit EndCareerRoom(id, r.owner, reward);
+    }
+
+    function setFeeRate(uint256 _rate) public restricted {
+        feeRate = _rate;
     }
 
     /** GETTERS */
