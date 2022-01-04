@@ -65,6 +65,7 @@ contract CareerMode is
     uint256 minimumRoundDuration;
     mapping(address => uint256[]) roomsByAddress;
     mapping(address => uint256[]) participatedRoomsByAddress;
+    uint256 public feeRate;
 
     /** EVENTS */
 
@@ -115,6 +116,7 @@ contract CareerMode is
         staminaCostFight = 40;
         durabilityCostFight = 3;
         minimumRoundDuration = 2 days;
+        feeRate = 5; //5%
     }
 
     /** MODIFIERS */
@@ -269,13 +271,16 @@ contract CareerMode is
         uint24 opponentRoll = getPlayerPowerRoll(_opponentPower, seed);
         Room storage r = careerModeRooms[_roomId];
 
-        uint256 tokensWin = r.matchReward;
+        uint256 tokensWin = r.matchReward.sub(
+            r.matchReward.mul(feeRate).div(100)
+        );
 
         if (opponentRoll <= playerRoll) {
             // Owner win
             tokenRewards[r.owner] = tokenRewards[r.owner].add(tokensWin);
         } else {
-            r.totalDeposit = r.totalDeposit.sub(tokensWin);
+            r.totalDeposit = r.totalDeposit.sub(r.matchReward);
+
             tokenRewards[_requestFight.requester] = tokenRewards[
                 _requestFight.requester
             ].add(tokensWin);
@@ -312,12 +317,8 @@ contract CareerMode is
         uint256 _tokenRewards = tokenRewards[msg.sender];
         tokenRewards[msg.sender] = 0;
 
-        uint256 _tokenRewardsToPayOut = _tokenRewards.sub(
-            _tokenRewards.mul(rewardClaimTax).div(100)
-        );
-
-        xBlade.transfer(msg.sender, _tokenRewardsToPayOut);
-        emit ClaimReward(_tokenRewardsToPayOut);
+        xBlade.transfer(msg.sender, _tokenRewards);
+        emit ClaimReward(_tokenRewards);
     }
 
     function endCareer(uint256 id) public {
