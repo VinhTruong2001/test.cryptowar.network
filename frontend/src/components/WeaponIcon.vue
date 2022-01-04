@@ -2,7 +2,6 @@
   <div
     class="weapon-icon"
     v-bind:class="[getWeaponDurability(weapon.id) === 0 ? 'no-durability' : '']"
-    v-tooltip="{ content: tooltipHtml , trigger: (isMobile() ? 'click' : 'hover') }"
     @mouseover="hover = !isMobile() || true"
     @mouseleave="hover = !isMobile()"
   >
@@ -11,57 +10,70 @@
       <i class="fas fa-spinner fa-spin"></i>
     </div>
 
-    <div class="glow-container" ref="el" :class="['glow-' + (weapon.stars || 0)]">
-      <div class="glow-img-box">
-      <img v-if="showPlaceholder" class="placeholder" :src="getWeaponArt(weapon)" />
-      </div>
-      <div class="trait">
-        <span :class="weapon.element.toLowerCase() + '-icon'"></span>
-        {{Array(this.weapon.stars + 1).fill('★').join('')}}
-      </div>
+    <div class="weapon-header">
+      <div class="left">
+        <div class="trait">
+          <span :class="weapon.element.toLowerCase() + '-icon'"></span>
+          <span class="weapon-star" v-for="n in this.weapon.stars + 1" :key="n">
+            <i class="fas fa-star"></i>
+          </span>
+        </div>
 
+        <div class="stats" v-if="!isBlacksmith">
+          <div v-if="weapon.stat1Value">
+            <span :class="weapon.stat1.toLowerCase() + '-icon'" class="mr-2 icon"></span>
+            <span :class="weapon.stat1.toLowerCase()">{{ weapon.stat1 }} +{{ weapon.stat1Value }}</span>
+          </div>
+          <div v-if="weapon.stat2Value">
+            <span :class="weapon.stat2.toLowerCase() + '-icon'" class="mr-2 icon"></span>
+            <span :class="weapon.stat2.toLowerCase()">{{ weapon.stat2 }} +{{ weapon.stat2Value }}</span>
+          </div>
+          <div v-if="weapon.stat3Value">
+            <span :class="weapon.stat3.toLowerCase() + '-icon'" class="mr-2 icon"></span>
+            <span :class="weapon.stat3.toLowerCase()">{{ weapon.stat3 }} +{{ weapon.stat3Value }}</span>
+          </div>
+        </div>
+         <div class="id" v-if="isBlacksmith">
+          ID {{ weapon.id }}
+          <!-- <br><b-icon v-if="favorite" class="favorite-star" icon="star-fill" variant="warning" /> -->
+        </div>
+      </div>
+      <div class="right">
+        <div class="id" v-if="!isBlacksmith">
+          ID {{ weapon.id }}
+          <!-- <br><b-icon v-if="favorite" class="favorite-star" icon="star-fill" variant="warning" /> -->
+        </div>
+
+
+        <div class="bonus-power">
+          <div v-if="weapon.lowStarBurnPoints > 0"><span>{{ weapon.lowStarBurnPoints }} LB</span></div>
+          <div v-if="weapon.fourStarBurnPoints > 0"><span>{{ weapon.fourStarBurnPoints }} 4B</span></div>
+          <div v-if="weapon.fiveStarBurnPoints > 0"><span>{{ weapon.fiveStarBurnPoints }} 5B</span></div>
+        </div>
+      </div>
+    </div>
+    <div v-tooltip="{ content: tooltipHtml , trigger: (isMobile() ? 'click' : 'hover') }" class="glow-img-box">
+      <img v-if="showPlaceholder" class="placeholder" :src="getWeaponArt(weapon)" />
+    </div>
+
+    <div class="weapon-footer">
       <div class="name">
         {{ getCleanWeaponName(weapon.id, weapon.stars) }}
       </div>
 
-      <div class="bonus-power">
-        <div v-if="weapon.lowStarBurnPoints > 0"><span>{{ weapon.lowStarBurnPoints }} LB</span></div>
-        <div v-if="weapon.fourStarBurnPoints > 0"><span>{{ weapon.fourStarBurnPoints }} 4B</span></div>
-        <div v-if="weapon.fiveStarBurnPoints > 0"><span>{{ weapon.fiveStarBurnPoints }} 5B</span></div>
-      </div>
-
-      <div>
-        <div class="small-durability-bar"
-        :style="`--durabilityReady: ${(getWeaponDurability(weapon.id)/maxDurability)*100}%;`"
-        v-tooltip.bottom="`Durability: ${getWeaponDurability(weapon.id)}/${maxDurability}<br>
-          Repairs 1 point every 50 minutes, durability will be full at: ${timeUntilWeaponHasMaxDurability(weapon.id)}`"></div>
-      </div>
-
-      <div class="weapon-bt-box default-contrast" v-if="isSell">
-        <b-button @click="sellClick()">
-          Sell
-        </b-button>
+      <div class="small-durability-bar-wrap" v-if="!isBlacksmith">
+        <div
+          class="small-durability-bar"
+          :style="`--durabilityReady: ${(getWeaponDurability(weapon.id)/maxDurability)*100}%;`"
+          v-tooltip.bottom="`Durability: ${getWeaponDurability(weapon.id)}/${maxDurability}<br>
+          Repairs 1 point every 50 minutes, durability will be full at: ${timeUntilWeaponHasMaxDurability(weapon.id)}`"
+        ></div>
       </div>
     </div>
-
-    <div class="id">
-      ID {{ weapon.id }}<br>
-      <b-icon v-if="favorite" class="favorite-star" icon="star-fill" variant="warning" />
-    </div>
-
-    <div class="stats">
-      <div v-if="weapon.stat1Value">
-        <span :class="weapon.stat1.toLowerCase() + '-icon'" class="mr-1 icon"></span>
-        <span :class="weapon.stat1.toLowerCase()">{{ weapon.stat1 }} +{{ weapon.stat1Value }}</span>
-      </div>
-      <div v-if="weapon.stat2Value">
-        <span :class="weapon.stat2.toLowerCase() + '-icon'" class="mr-1 icon"></span>
-        <span :class="weapon.stat2.toLowerCase()">{{ weapon.stat2 }} +{{ weapon.stat2Value }}</span>
-      </div>
-      <div v-if="weapon.stat3Value">
-        <span :class="weapon.stat3.toLowerCase() + '-icon'" class="mr-1 icon"></span>
-        <span :class="weapon.stat3.toLowerCase()">{{ weapon.stat3 }} +{{ weapon.stat3Value }}</span>
-      </div>
+    <div class="weapon-bt-box" v-if="isSell">
+      <b-button class="weapon-bt-box" @click="sellClick()">
+        SELL
+      </b-button>
     </div>
   </div>
 </template>
@@ -79,7 +91,7 @@ import { getCleanName } from '../rename-censor';
 
 
 export default {
-  props: ['weapon', 'favorite', 'isSell', 'sellClick'],
+  props: ['weapon', 'favorite', 'isSell', 'sellClick', 'isBlacksmith'],
 
   computed: {
     ...mapState(['maxDurability']),
@@ -93,7 +105,7 @@ export default {
       if(!this.weapon) return '';
 
       const wrapInSpan = (spanClass, text) => {
-        return `<span class="${spanClass.toLowerCase()}">${text}</span><span class="${spanClass.toLowerCase()+'-icon'}"></span>`;
+        return `<span class="${spanClass.toLowerCase()}">${text}</span><span class="${spanClass.toLowerCase()+'-icon'} tooltil-icon-element"></span>`;
       };
 
       const wrapInSpanTextOnly = (spanClass, text) => {
@@ -110,36 +122,37 @@ export default {
       }
 
       if(this.weapon.element) {
-        ttHtml += `<br>Element: ${wrapInSpan(this.weapon.element, this.weapon.element)}`;
+        ttHtml += `<br>Element: <span>${wrapInSpan(this.weapon.element, this.weapon.element)}</span>`;
       }
 
       if(this.weapon.stat1Value) {
-        ttHtml += `<br>${wrapInSpan(this.weapon.stat1, this.weapon.stat1)}: +${this.weapon.stat1Value}`;
+        ttHtml += `<br>${wrapInSpan(this.weapon.stat1, this.weapon.stat1)}<span>
+        : +${this.weapon.stat1Value}</span>`;
         if(this.currentCharacter) {
-          ttHtml += ` (${wrapInSpanTextOnly(
+          ttHtml += ` <span>(${wrapInSpanTextOnly(
             this.currentCharacter.traitName,
             '+'+Stat1PercentForChar(this.weapon, +this.currentCharacter.trait)+'%')
-          })`;
+          })</span>`;
         }
       }
 
       if(this.weapon.stat2Value) {
-        ttHtml += `<br>${wrapInSpan(this.weapon.stat2, this.weapon.stat2)}: +${this.weapon.stat2Value}`;
+        ttHtml += `<br>${wrapInSpan(this.weapon.stat2, this.weapon.stat2)}<span>: +${this.weapon.stat2Value}</span>`;
         if(this.currentCharacter) {
-          ttHtml += ` (${wrapInSpanTextOnly(
+          ttHtml += ` <span>(${wrapInSpanTextOnly(
             this.currentCharacter.traitName,
             '+'+Stat2PercentForChar(this.weapon, +this.currentCharacter.trait)+'%')
-          })`;
+          })</span>`;
         }
       }
 
       if(this.weapon.stat3Value) {
-        ttHtml += `<br>${wrapInSpan(this.weapon.stat3, this.weapon.stat3)}: +${this.weapon.stat3Value}`;
+        ttHtml += `<br>${wrapInSpan(this.weapon.stat3, this.weapon.stat3)}<span>: +${this.weapon.stat3Value}</span>`;
         if(this.currentCharacter) {
-          ttHtml += ` (${wrapInSpanTextOnly(
+          ttHtml += ` <span>(${wrapInSpanTextOnly(
             this.currentCharacter.traitName,
             '+'+Stat3PercentForChar(this.weapon, +this.currentCharacter.trait)+'%')
-          })`;
+          })</span>`;
         }
       }
 
@@ -209,24 +222,259 @@ export default {
 </script>
 
 <style scoped>
-.small-durability-bar {
-  position: relative;
-  top: 0px;
-  height: 12px;
-  width: 80%;
-  margin: 0 auto;
-  border-radius: 4px;
-  border: 2px solid rgb(252, 252, 252);
-  background : linear-gradient(to right, rgb(142, 30, 165) var(--durabilityReady), rgba(255, 255, 255, 0.1) 0);
+.loading-container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  z-index: 541;
+  padding: 0;
 }
 
 .weapon-icon {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   height: 100%;
-  width: 100%;
-  position: relative;
 }
 
-.glow-container {
+.weapon-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.weapon-header .left {
+  font-size: 21px;
+  text-align: right;
+}
+
+.weapon-header .trait,
+.weapon-header .stats div {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.weapon-header .stats {
+  margin-top: 8px;
+  font-size: 18px;
+}
+
+.weapon-header .trait span:first-child {
+  margin-right: 4.5px;
+  width: 25px;
+  height: 25px;
+}
+
+.weapon-star {
+  font-size: 20px;
+  line-height: 20px;
+  color: #FBD231;
+  margin: 0 2.2px;
+}
+
+.weapon-icon .icon {
+  width: 25px;
+  height: 25px;
+}
+
+.glow-img-box{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.weapon-icon .placeholder {
+  max-width: 208px;
+  max-height: 208px;
+  transform: scale(0.8);
+}
+
+.weapon-icon.isBlacksmith .placeholder {
+  max-width: 287px;
+  max-height: 287px;
+  margin-top: -80px;
+}
+
+.character-item.weapon.no-corner .placeholder {
+  max-width: 90px;
+  max-height: 90px;
+}
+
+.weapon-icon .name {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 15px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.weapon-icon.isBlacksmith .name {
+  font-size: 32px;
+}
+
+.character-item.weapon.no-corner .bonus-power {
+  font-size: 14px;
+}
+
+.small-durability-bar-wrap {
+  margin-top: 35px;
+}
+
+.weapon-icon.isBlacksmith .small-durability-bar-wrap {
+  padding: 0 165px;
+}
+
+.small-durability-bar {
+  height: 13.44px;
+  width: 100%;
+  border-radius: 16px;
+  background : linear-gradient(to right, #DDB73C var(--durabilityReady), rgba(255, 255, 255, 0.1) 0);
+}
+
+.no-corner .id {
+  font-size: 18px;
+  text-align: left;
+}
+
+.no-corner .right {
+  justify-content: flex-end !important;
+}
+
+@media (max-width: 576px) {
+  .weapon-header {
+    position: relative;
+    padding-top: 23px !important;
+  }
+
+  .character-item.weapon.no-corner .weapon-header {
+    padding-top: 0 !important;
+  }
+
+  .weapon-icon .placeholder {
+    max-width: 160px;
+    max-height: 160px;
+  }
+
+  .weapon-icon.isBlacksmith .placeholder {
+    max-width: 195px;
+    max-height: 195px;
+    margin-top: -40px;
+  }
+
+  .weapon-header .trait span:first-child,
+  .weapon-icon .icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .weapon-star,
+  .weapon-header .stats div {
+    font-size: 14px;
+  }
+
+  .weapon-header .right {
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .no-corner .weapon-header .left {
+    left: auto;
+    right: 10px;
+    top: 10px;
+  }
+
+  .no-corner .id {
+    font-size: 14px;
+  }
+
+  .placeholder {
+    max-width: 131px;
+    max-height: 131px;
+  }
+
+  .weapon-icon .name {
+    font-size: 14px;
+    margin-top: 8px;
+    margin-bottom: 40px;
+  }
+
+  .small-durability-bar-wrap {
+    margin-top: 5.7px;
+  }
+
+  .small-durability-bar {
+    height: 8.52px;
+  }
+}
+
+.weapon-bt-box{
+  position: absolute;
+  bottom: -30px;
+  display: flex;
+  width: 86%;
+  justify-content: center;
+  z-index: 100;
+  cursor: pointer;
+}
+
+.weapon-bt-box button{
+  background: url("../assets/v2/shop_nft_btn.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 170px;
+  height: 40px;
+  border: none;
+  border-radius: 0;
+  margin: 0;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+/* .sell-grid .glow-img-box{
+  margin-top: 90px;
+} */
+
+.confirmReforge .glow-img-box img, .modal-body .glow-img-box img {
+  max-width: 7rem;
+  margin-top: 1.5rem;
+  padding-bottom: 0.5rem;
+}
+
+
+.confirmReforge .small-durability-bar, .modal-body .small-durability-bar{
+  top: -10px
+}
+
+.confirmReforge .name, .modal-body .name{
+  bottom: 5px;
+}
+.weapon-footer{
+  margin-top: 10px;
+}
+
+@media (max-width: 576px) {
+  .no-corner .weapon-footer{
+    margin-top: 70px;
+  }
+}
+
+/* .glow-container {
   height: 100%;
   width: 100%;
   border-radius: 5px;
@@ -234,8 +482,8 @@ export default {
 }
 
 .weapon.selected .glow-container{
-  /* border: 1px solid rgb(255 255 255 / 41%); */
-  /* background-color: rgb(255 255 255 / 7%); */
+  border: 1px solid rgb(255 255 255 / 41%);
+  background-color: rgb(255 255 255 / 7%);
   background-color: rgb(255 255 255 / 30%);
   border: 1px solid rgb(255, 165, 0);
   filter: contrast(200%);
@@ -249,111 +497,15 @@ export default {
   box-shadow: inset 0 0 10px rgb(255, 165, 0);
 }
 
-.loading-container {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-  z-index: 541;
-  padding: 0;
-}
-
-.id, .trait, .stats {
-  position: absolute;
-}
-
-.trait {
-  top: 10px;
-  left: 10px;
-}
-
-.favorite-star {
-  position: absolute;
-  right: 4px;
-  font-size: 0.8rem;
-}
-
-.id {
-  top: 8px;
-  right: 10px;
-  font-style: italic;
-}
-
-.stats {
-  top: 35px;
-  left: 10px;
-}
-
-.icon {
-  display: inline-block;
-  min-width: 18px;
-}
-
-.placeholder {
-  max-width: 180px;
-  max-height: 180px;
-  margin-left: 16px;
-  margin-top: 0px;
-  transform: scale(0.8);
-}
-
-.name {
-  position: absolute;
-  bottom: 2rem;
-  left: 12%;
-  right: 12%;
-  font-size: 0.9em;
-  text-align: center;
-}
-
-.weapon-market .name{
-  bottom: 4rem;
-}
-
-.weapon-bt-box{
-  position: absolute;
-  bottom: 15px;
-  display: flex;
-  width: 100%;
-  justify-content: center;
-}
-
-.sell-grid .glow-img-box, .weapon-grid .glow-img-box{
-  padding-top: 1rem;
-}
-
-.glow-img-box{
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-}
-
 .glow-img-box img{
   margin: 0;
 }
 
-.confirmReforge .glow-img-box img, .modal-body .glow-img-box img {
-    max-width: 7rem;
-    margin-top: 1.5rem;
-    padding-bottom: 0.5rem;
-}
-
-
-.confirmReforge .small-durability-bar, .modal-body .small-durability-bar{
-  top: -10px
-}
-
-.confirmReforge .name, .modal-body .name{
-  bottom: 5px;
-}
-
 .glow-0 {
   animation: none;
-   /* display: flex; */
+  display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.411);;
 }
 
 .glow-1 {
@@ -370,21 +522,13 @@ export default {
 
 .glow-4 {
   animation: glow-4 2000ms ease-out infinite alternate;
-}
+} */
 
 .no-durability {
   opacity: 0.6;
 }
 
-.bonus-power {
-  position: absolute;
-  top: 45px;
-  right: 5%;
-  font-size: 0.6em;
-  text-align: right;
-}
-
-@keyframes glow-1 {
+/* @keyframes glow-1 {
   0% {
     box-shadow: inset 0 0 10px rgba(9, 163, 252, 1);
   }
@@ -417,6 +561,5 @@ export default {
   }
   100% {
     box-shadow: inset 0 0 30px rgba(197, 77, 233, 1);
-  }
-}
+  } */
 </style>

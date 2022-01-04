@@ -1,19 +1,91 @@
 <template>
-  <div>
-    <div class="filters row mt-2 pl-2" v-if="showFilters" @change="saveFilters()">
-      <div class="col-sm-6 col-md-6 col-lg-2 mb-3">
+  <div :class="showFilters && 'row'">
+    <div
+      class="filters"
+      :class="showFilters && 'col-12 col-xl-3'"
+      v-if="showFilters"
+      @change="saveFilters()"
+    >
+      <div
+        class="search-wrap"
+        @click="setFilterOnMobileState(true)"
+      >
+        <input
+          class="form-control search"
+          type="search"
+          placeholder="  Seller Address, NFT ID"
+        />
+      </div>
+
+      <div class="star-filter">
+        <span class="filter-title">Stars</span>
+        <ul class="stars-list">
+          <li
+            class="star-item"
+            v-for="star in 5"
+            v-bind:key="star"
+            @click="starFilterTemp = star === starFilterTemp ? 0 : star"
+            :class="star === starFilterTemp && 'selected'"
+          >
+              <span>{{ star }}</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="element-filter">
+        <span class="filter-title">Elements</span>
+        <ul class="element-list">
+          <li
+            class="element-item"
+            v-for="element in ['Earth', 'Fire', 'Lightning', 'Water']"
+            v-bind:key="element"
+            @click="elementFilterTemp = (element === elementFilterTemp ? '' : element)"
+            :class="element === elementFilterTemp && 'selected'"
+          >
+              <span
+                :class="element.toLowerCase() + '-icon'"
+              ></span>
+              <span class="element-text">{{ element }}</span>
+          </li>
+        </ul>
+      </div>
+
+      <template v-if="isMarket">
+          <div>
+            <strong>MIN PRICE</strong>
+            <input class="form-control" type="number" v-model.trim="minPriceFilter" :min="0" placeholder="Min" />
+          </div>
+          <div>
+            <strong>MAX PRICE</strong>
+            <input class="form-control" type="number" v-model.trim="maxPriceFilter" :min="0" placeholder="Max" />
+          </div>
+          <div>
+            <strong>SORT</strong>
+            <select class="form-control" v-model="priceSort">
+              <option v-for="x in sorts" :value="x.dir" :key="x.dir">{{ x.name || 'Any' }}</option>
+            </select>
+          </div>
+        </template>
+
+      <div class="search-btn">
+        <b-button
+          class="gtag-link-others btn-blue-bg"
+          v-html="`Search`"
+          @click="filterAll"
+        ></b-button>
+      </div>
+
+      <div class="filters-close" @click="setFilterOnMobileState(false)">
+        <i class="fas fa-times"></i>
+      </div>
+
+
+      <!-- <div class="col-sm-6 col-md-6 col-lg-2 mb-3">
         <strong>Level</strong>
         <select class="form-control" v-model="levelFilter">
           <option v-for="x in ['', 1, 11, 21, 31, 41, 51, 61, 71, 81, 91]" :value="x" :key="x">
             {{ x ? `${x} - ${x + 9}` : 'Any' }}
           </option>
-        </select>
-      </div>
-
-      <div class="col-sm-6 col-md-6 col-lg-2 mb-3">
-        <strong>Element</strong>
-        <select class="form-control" v-model="elementFilter">
-          <option v-for="x in ['', 'Earth', 'Fire', 'Lightning', 'Water']" :value="x" :key="x">{{ x || 'Any' }}</option>
         </select>
       </div>
 
@@ -25,41 +97,92 @@
         <div class="col-sm-6 col-md-6 col-lg-2 mb-3">
           <strong>Max Price</strong>
           <input class="form-control" type="number" v-model.trim="maxPriceFilter" :min="0" placeholder="Max" />
+        </div> -->
+
+        <!-- <div class="start">
+          <strong>STARS</strong>
+          <div>
+            <div v-for="x in ['1', '2', '3', '4', '5']"
+            :style="starFilter>=x?'background: url('+require('../../assets/v2/market-star-click.svg')+'); background-repeat: no-repeat; background-size: contain; color: black':''"
+            :key="x"
+            @click="starFilter = x"
+            >{{x}}</div>
+          </div>
         </div>
-        <div class="col-sm-6 col-md-6 col-lg-2 mb-3">
-          <strong>Sort</strong>
-          <select class="form-control" v-model="priceSort">
-            <option v-for="x in sorts" :value="x.dir" :key="x.dir">{{ x.name || 'Any' }}</option>
+
+        <div>
+          <strong>LEVEL</strong>
+          <select class="form-control" v-model="levelFilter">
+            <option v-for="x in ['', 1, 11, 21, 31, 41, 51, 61, 71, 81, 91]" :value="x" :key="x">
+              {{ x ? `${x} - ${x + 9}` : 'Any' }}
+            </option>
           </select>
         </div>
-      </template>
-
-      <b-button class="clear-filters-button mb-3" @click="clearFilters" >
-          <span>
-            Clear Filters
-          </span>
-        </b-button>
+      </template> -->
     </div>
 
-    <ul class="character-list d-flex">
+    <ul class="character-list row" :class="showFilters && 'col-12 col-xl-9'">
       <li
-        class="character-item"
-        :class="[{ selected: value === c.id }, {isMarket: isSell}]"
+        class="col-12 col-sm-6 col-md-4 col-xl-3"
         v-for="c in filteredCharacters"
         :key="c.id"
-        @click="$emit('input', c.id)"
       >
-        <div class="above-wrapper" v-if="$slots.above || $scopedSlots.above">
-          <slot name="above" :character="c"></slot>
+        <div class="character-item-wrap">
+          <div
+            class="character-item"
+            @click="$emit('input', c.id)"
+            :class="[{ selected: value === c.id }, {isMarket: isSell}]"
+          >
+            <div class="above-wrapper" v-if="$slots.above || $scopedSlots.above">
+              <slot name="above" :character="c"></slot>
+            </div>
+            <slot name="sold" :character="c"></slot>
+            <div class="art">
+              <CharacterArt :character="c" :isMarket="isMarket"/>
+            </div>
+            <div class="sell-box" v-if="isSell">
+              <b-button @click="sellClick()">
+                SELL
+              </b-button>
+            </div>
+          </div>
         </div>
-        <slot name="sold" :character="c"></slot>
-        <div class="art">
-          <CharacterArt :character="c" :isMarket="isMarket"/>
-        </div>
-        <div class="sell-box" v-if="isSell">
-          <b-button @click="sellClick()">
-            Sell
-          </b-button>
+      </li>
+
+      <li
+        class="col-12 col-sm-6 col-md-4 col-xl-3"
+        v-if="!isMarket && showFilters"
+      >
+        <div class="character-item-wrap">
+          <div class="character-item addnew" @click="onMintCharacter">
+            <b-button
+              class="recruit"
+              v-tooltip="'Recruit new character'"
+              tagname="recruit_character"
+            >
+              <i class="fas fa-plus"></i>
+              <br>
+              Recruit
+              <br>
+              <span
+                    :class="`${referralAddress == '0x0000000000000000000000000000000000000000' ? 'price' : ''}`"
+                    v-if="referralAddress == '0x0000000000000000000000000000000000000000'"
+                    >({{ recruitCost }} xBlade)</span
+                  >
+                  <span v-if="referralAddress != '0x0000000000000000000000000000000000000000'" class="price">
+                    {{ (recruitCost * 0.93).toFixed(2) }}xBlade)</span
+                  >
+            </b-button>
+            <div class="small-hero-left">
+              Only
+              <strong
+                class="upper-text promotion-number"
+                style="margin: 0 4px"
+                >{{ heroAmount }}</strong
+              >
+              heroes left!
+            </div>
+          </div>
         </div>
       </li>
     </ul>
@@ -67,8 +190,10 @@
 </template>
 
 <script>
+import BN from "bignumber.js";
 import { mapActions, mapGetters, mapState } from 'vuex';
 import { getCharacterArt } from '../../character-arts-placeholder';
+// import BackgroundItem from '../BackgroundItem.vue';
 import CharacterArt from '../CharacterArt.vue';
 
 const sorts = [
@@ -107,11 +232,38 @@ export default {
     isMarket: {
       type: Boolean,
       default: false
+    },
+    checklist: {
+      type: Boolean,
+      default: true
     }
+  },
+
+  async created() {
+    const recruitCost = await this.contracts.CWController.methods
+      .getMintPriceByToken()
+      .call({ from: this.defaultAccount });
+    this.recruitCost = new BN(recruitCost).div(new BN(10).pow(18)).toFixed(2);
+    this.loadConsumablesCount();
+    setInterval(async () => {
+      this.loadConsumablesCount();
+    }, 3000);
+
+    const heroAmount = await this.contracts.Characters.methods
+      .availableAmount()
+      .call({ from: this.defaultAccount });
+
+    this.heroAmount = Number(heroAmount);
   },
 
   data() {
     return {
+      recruitCost: "0",
+      heroAmount: 0,
+      starFilterTemp: 0,
+      elementFilterTemp: '',
+      searchValue: '',
+      starFilter: 0,
       levelFilter: '',
       elementFilter: '',
       minPriceFilter:'',
@@ -122,8 +274,9 @@ export default {
   },
 
   computed: {
-    ...mapState(['maxStamina', 'ownedCharacterIds']),
-    ...mapGetters(['getCharacterName', 'allStaminas', 'charactersWithIds']),
+    ...mapState(['maxStamina', 'ownedCharacterIds',  'defaultAccount']),
+    ...mapGetters(["contracts", 'getCharacterName', 'allStaminas', 'charactersWithIds']),
+
 
     characterIdsToDisplay() {
       if(this.showGivenCharacterIds) {
@@ -141,7 +294,12 @@ export default {
       let items = this.displayCharacters;
 
       if(this.showFilters) {
+        if(this.searchValue !== '') {
+          items = items.filter(x => x.id === parseInt(this.searchValue, 10));
+        }
+
         if(this.elementFilter) {
+          console.log(items);
           items = items.filter(x => x.traitName.includes(this.elementFilter));
         }
 
@@ -155,7 +313,16 @@ export default {
       }
 
       return items;
-    }
+    },
+
+    referralAddress() {
+      // @ts-ignore
+      const referralAddress = this.$route.query.r;
+      if (referralAddress && referralAddress !== this.defaultAccount) {
+        return referralAddress;
+      }
+      return '0x0000000000000000000000000000000000000000';
+    },
   },
 
   watch: {
@@ -165,9 +332,30 @@ export default {
   },
 
   methods: {
-    ...mapActions(['fetchCharacters']),
+    ...mapActions(['fetchCharacters', 'mintCharacter']),
 
     getCharacterArt,
+
+    async onMintCharacter() {
+      // await this.mintCharacter(this.referralAddress ? this.referralAddress : '0x0000000000000000000000000000000000000000');
+      try {
+        await this.mintCharacter(this.referralAddress ? this. referralAddress : '0x0000000000000000000000000000000000000000');
+      } catch (e) {
+        this.$dialog.notify.error(
+          "Could not mint character: insufficient funds or transaction denied."
+        );
+      }
+    },
+
+    setFilterOnMobileState(filterState) {
+      document.querySelector('.filters').classList.toggle('active', filterState);
+    },
+
+    filterAll() {
+      this.searchValue = this.$el.querySelector(".search").value;
+      this.elementFilter = this.elementFilterTemp;
+      this.starFilter = this.starFilterTemp;
+    },
 
     saveFilters() {
       sessionStorage.setItem('character-levelfilter', this.levelFilter);
@@ -198,10 +386,23 @@ export default {
 
       this.$emit('character-filters-changed');
     },
+
+    async loadConsumablesCount() {
+      this.haveRename = await this.fetchTotalRenameTags(); // the other type of call returned 0 on testnet but not on local
+      this.haveChangeTraitFire =
+        await this.fetchTotalCharacterFireTraitChanges();
+      this.haveChangeTraitEarth =
+        await this.fetchTotalCharacterEarthTraitChanges();
+      this.haveChangeTraitWater =
+        await this.fetchTotalCharacterWaterTraitChanges();
+      this.haveChangeTraitLightning =
+        await this.fetchTotalCharacterLightningTraitChanges();
+    },
   },
 
   components: {
     CharacterArt,
+    // BackgroundItem,
   },
 
   mounted() {
@@ -217,123 +418,99 @@ export default {
 </script>
 
 <style scoped>
-
-.filters {
-   justify-content: center;
-   width: 100%;
-   max-width: 900px;
-   margin: 0 auto;
-   align-content: center;
-   border-bottom: 0.2px solid rgba(102, 80, 80, 0.1);
-   margin-bottom: 20px;
+.home .character-list {
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.character-item{
-  width: 340px;
-  max-width: 100%;
-  background-image: url('../../assets/images/bg-item-top.png');
-  background-position: 50% 50%;
-  background-repeat: no-repeat;
-  margin-top: 50px;
-  background-size: cover;
-  position: relative;
+.character-item-wrap {
+  margin: 0 auto;
+  min-width: 270px;
+  max-width: 294px;
 }
 
-.character-item .art {
+.character-item {
   width: 100%;
-  min-height: 0;
-  height: 100%;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
+  margin: 0;
+  margin-top: 50px;
 }
 
-.valign-middle {
-  vertical-align: middle;
+/* .character-item.addnew {
+  min-width: 294px;
+} */
+
+.title{
+  font-size: 20px;
+  margin-top: 50px;
 }
 
-.character-item img {
-  object-fit: contain;
+.clear-filters-button{
+  align-self: center;
 }
 
-.character-item.selected {
-
-    background-image: url('../../assets/images/bg-item-top-select.png');
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
 }
 
-.above-wrapper {
-  position: absolute;
-  top: 270px;
-  left: 0;
-  right: 0;
-  z-index: 100;
-  text-shadow: 0 0 5px #333, 0 0 10px #333, 0 0 15px #333, 0 0 10px #333;
+.form-control{
+  background-color: transparent;
+  color: white;
+  border: 1px solid rgb(17,65,105);
+  border-radius: 10px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding: 0.5rem 1rem;
+  font-size: 18px;
+  font-weight: 100;
+  padding: 15px;
+  margin-top: 10px;
 }
 
-.clear-filters-button {
-  height: fit-content;
-  display: flex;
-  flex-direction: row;
-  align-self: flex-end;
-  margin:0 15px;
+.form-control:focus{
+  background-color: transparent;
+  color: white;
 }
 
-.character-list{
-  list-style: none;
-  flex-wrap: wrap;
-  justify-content: center;
-  padding-left: 0px;
-}
-
-@media (max-width: 576px) {
-  .character-list {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  .clear-filters-button {
-    width: 100%;
-    text-align: center;
-    justify-content: center;
-  }
-}
-
-.sold {
-  height: 40px;
-  width: 300px;
-  background-color: rgb(187, 33, 0);
-  transform: rotate(30deg);
-  left: -40px;
-  position: absolute;
-  top: 150px;
-  z-index: 100;
-}
-
-.sold span {
-    text-align: center;
-    width: auto;
-    color: white;
-    display: block;
-    font-size: 30px;
-    font-weight: bold;
-    line-height: 40px;
-    text-shadow: 0 0 5px #333, 0 0 10px #333, 0 0 15px #333, 0 0 10px #333;
-    text-transform: uppercase;
-}
-
-.fix-h24 {
-  height: 24px;
+.form-control::placeholder{
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .sell-box{
-  position: absolute;
-  width: 100%;
-  display: flex;
-  justify-content: center;
+  margin-top: 20px;
 }
 
-.isMarket{
-  margin-bottom: 3rem;
+.sell-box button{
+  background: url("../../assets/v2/shop_nft_btn.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 170px;
+  height: 40px;
+  border: none;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  border-radius: 0;
 }
+
+.price {
+  font-size: 14px;
+}
+
+.small-hero-left {
+  position: absolute;
+  bottom: 10px;
+}
+
+.promotion-number {
+  color: #f58b5b;
+}
+
+@media (max-width: 576px) {
+  .price {
+    font-size: 10px;
+  }
+}
+
 </style>

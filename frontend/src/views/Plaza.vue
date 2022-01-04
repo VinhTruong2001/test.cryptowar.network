@@ -1,5 +1,5 @@
 <template>
-  <div class="body main-font">
+  <div class="body main-font home">
     <!-- <div v-if="referralAddress">
       Mint hero discount 7% with referral address {{ referralAddress }}
     </div> -->
@@ -73,7 +73,7 @@
               Rename Character
             </b-button> -->
             <div>
-              <b-button
+              <!-- <b-button
                 v-if="ownCharacters.length < 8"
                 :disabled="!canRecruit() || heroAmount < 1"
                 variant="primary"
@@ -91,8 +91,8 @@
                 >
                 xBlade)&nbsp;
                 <i class="fas fa-plus"></i>
-              </b-button>
-              <div class="small-hero-left">
+              </b-button> -->
+              <!-- <div class="small-hero-left">
                 Only
                 <strong
                   class="upper-text promotion-number"
@@ -100,7 +100,7 @@
                   >{{ heroAmount }}</strong
                 >
                 heroes left!
-              </div>
+              </div> -->
             </div>
 
             <!-- <b-button
@@ -435,6 +435,7 @@ export default Vue.extend({
   mounted() {},
 });
 </script>
+
 
 <style scoped>
 .chara-head-box {

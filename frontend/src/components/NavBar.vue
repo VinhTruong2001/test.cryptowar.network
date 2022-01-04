@@ -4,32 +4,60 @@
     <div v-if="referralAddress" style="color:#7F327C; text-align:center; background: white; padding:10px">
      ✨ Congratulations! You get 7% discount when mint new heroes ⚔️ only valid in 24 hours ⏰  </div>
     <b-navbar class="main-nav" toggleable="sm">
-      <b-navbar-brand href="#" class="nav-logo">
-        <img
-          src="../assets/xBlade-logo-02.png"
-          class="logo d-inline-block align-top"
-          alt="Logo"
-        />
-      </b-navbar-brand>
+      <router-link :to="{name: 'plaza'}" exact>
+        <b-navbar-brand class="nav-logo">
+          <img
+            src="../assets/logo250.png"
+            class="logo d-inline-block align-top"
+            alt="Logo"
+          />
+        </b-navbar-brand>
+      </router-link>
 
-      <view-links class="view-links"></view-links>
+      <view-links class="view-links desktop"></view-links>
 
-      <skill-balance-display class="ml-auto d-none d-sm-flex" />
+      <skill-balance-display class="ml-auto d-none d-sm-flex skill-balance-display" />
 
-      <claim-rewards v-if="!canShowRewardsBar" />
+      <claim-rewards class="claim-rewards" v-if="!canShowRewardsBar" />
 
-      <options class="d-none d-sm-flex" />
+      <options class="d-none d-sm-flex option-desktop" />
 
       <!-- Render only on mobile view -->
-      <div class="d-flex d-sm-none">
-        <skill-balance-display class="skill-display-mobile" />
-        <options class="options-display-mobile" />
+      <div class="d-flex justify-content-between align-items-center option-mobile">
+        <!-- <skill-balance-display class="skill-display-mobile" /> -->
+        <b-navbar-brand href="/" class="nav-logo-mobile">
+          <img
+            src="../assets/logo250.png"
+            class="logo d-inline-block align-top"
+            alt="Logo"
+          />
+        </b-navbar-brand>
+        <div class="option-container-mobile">
+          <label for="input__modal__id">
+            <i class="fa fa-bars"></i>
+          </label>
+          <input
+            type="checkbox"
+            class="input__modal"
+            id="input__modal__id"
+            :checked="checkCloseOption"
+          />
+          <div class="modal">
+            <label
+              for="input__modal__id"
+              class="modal__overlay"
+            ></label>
+          </div>
+          <div class="modal__body">
+            <options class="options-display-mobile" />
+          </div>
+        </div>
       </div>
     </b-navbar>
-    <claim-rewards-bar v-if="canShowRewardsBar" />
+    <div class="nav-bottom-line"></div>
     <div class="container_row">
       <!-- <img src="../assets/divider4.png" class="expander-divider" /> -->
-      <b-button
+      <!-- <b-button
         class="expander-button"
         @click="toggleCharacterView"
         v-if="ownCharacters.length > 0"
@@ -43,7 +71,7 @@
           v-if="getIsCharacterViewExpanded"
           aria-hidden="true"
         />
-      </b-button>
+      </b-button> -->
     </div>
   </div>
 </template>
@@ -55,7 +83,7 @@ import ViewLinks from "./ViewLinks.vue";
 import Options from "./Options.vue";
 import SkillBalanceDisplay from "./smart/SkillBalanceDisplay.vue";
 import ClaimRewards from "./smart/ClaimRewards.vue";
-import ClaimRewardsBar from "./smart/ClaimRewardsBar.vue";
+// import OptionsMobile from "./OptionsMobile.vue";
 
 import Events from "../events";
 import { mapGetters, mapMutations } from "vuex";
@@ -65,13 +93,14 @@ export default Vue.extend({
     ViewLinks,
     SkillBalanceDisplay,
     ClaimRewards,
-    ClaimRewardsBar,
     Options,
+    // OptionsMobile,
   },
 
   data() {
     return {
-      canShowRewardsBar: true,
+      checkCloseOption: "",
+      // canShowRewardsBar: true,
     };
   },
 
@@ -89,9 +118,9 @@ export default Vue.extend({
 
   methods: {
     ...mapMutations(["setIsCharacterViewExpanded"]),
-    checkStorage(): void {
-      this.canShowRewardsBar = localStorage.getItem("hideRewards") === "false";
-    },
+    // checkStorage(): void {
+    //   this.canShowRewardsBar = localStorage.getItem("hideRewards") === "false";
+    // },
     toggleCharacterView(): void {
       this.setIsCharacterViewExpanded(!this.getIsCharacterViewExpanded);
       localStorage.setItem(
@@ -101,9 +130,16 @@ export default Vue.extend({
     },
   },
 
+  updated(){
+    this.checkCloseOption = "";
+  },
+
   mounted() {
-    this.checkStorage();
-    Events.$on("setting:hideRewards", () => this.checkStorage());
+    Events.$on('hide-option', (i: any) =>{
+      this.checkCloseOption = i;
+    });
+    // this.checkStorage();
+    // Events.$on("setting:hideRewards", () => this.checkStorage());
   },
 });
 </script>
@@ -157,8 +193,7 @@ a {
 
 <style scoped>
 .logo {
-  max-width: 80px;
-  padding-top: 7px;
+  max-width: 86px;
 }
 
 
@@ -205,6 +240,102 @@ a {
 .expander-button {
   grid-column: 1;
   grid-row: 1;
+}
+
+.nav-bottom-line{
+  border-top: 3px solid;
+  border-image-slice: 1;
+  border-top-width: 3px;
+  border-image-source: linear-gradient(to left, #3ADD9A, #121154, #A54476);
+  background-image: radial-gradient(ellipse at top, #CBA938 -10%, transparent 35%), radial-gradient(ellipse at bottom, transparent, transparent);
+}
+
+  .option-container-mobile input,
+  .option-container-mobile label i,
+  .nav-logo-mobile,
+  .options-display-mobile{
+    display: none;
+  }
+
+@media (max-width: 767.98px){
+  .main-nav{
+    display: flex;
+    padding: 20px 10px;
+    justify-content: space-between;
+  }
+
+  .nav-logo-mobile,
+  .options-display-mobile{
+    display: block;
+  }
+
+  .nav-logo,
+  .view-links.desktop,
+  .claim-rewards,
+  .option-container-mobile input{
+    display: none;
+  }
+
+  .skill-balance-display,
+  .option-desktop{
+    display: none !important;
+  }
+
+  .option-container-mobile{
+    width: 30px;
+  }
+
+  .option-container-mobile label i{
+    font-size: 2em;
+    color: #CD894C;
+    display: block;
+  }
+
+  .modal {
+    /* position: fixed; */
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: none;
+    animation: fadein linear 0.3s;
+    z-index: 100;
+  }
+  .modal__overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+  @keyframes fadein {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .input__modal:checked ~ .modal {
+    display: flex;
+  }
+  .input__modal:checked ~ .modal__body {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  .modal__body {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 100%;
+    background-color: #000;
+    transform: translateX(100%);
+    transition: all linear 0.4s;
+    opacity: 0;
+    z-index: 1000;
+    overflow: scroll;
+  }
 }
 </style>
 

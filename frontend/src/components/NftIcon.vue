@@ -18,7 +18,7 @@
           <b-icon v-if="favorite" class="favorite-star" icon="star-fill" variant="warning" />
         </div>
 
-        <span v-if="isShop" class="nft-supply">Supply left: {{totalShieldSupply}}</span>
+        <span v-if="isShop" class="nft-supply">Quantity: <span>{{totalShieldSupply}}</span></span>
         <div v-if="!isShop" class="id">ID {{ nft.id }}</div>
 
         <div v-if="!isShop" class="stats">
@@ -40,8 +40,13 @@
 
       <div v-if="nft.type === 'SecretBox'" class="nft-details glow-container" ref="el" :class="['glow-' + (nft.stars || 0)]">
         <img class="placeholder-box" :src="imgPath(nft.image)" v-if="isShop" />
-        <span v-if="isShop" class="nft-name">{{ nft.name }}</span>
-        <span v-if="isShop" class="nft-supply">Supply left: {{ isLoading ? "Loading" : nft.supply }}</span>
+        <h2 v-if="isShop" class="nft-name">{{ nft.name }}</h2>
+        <div class="box-quantity-wrap">
+          <div class="box-quantity">
+            Supply left:
+            <span v-if="isShop" class="nft-supply">{{ isLoading ? "Loading" : nft.supply }}</span>
+          </div>
+        </div>
       </div>
 
       <div v-if="nft.type !== 'shield' && nft.type !== 'SecretBox'" class="nft-details">
@@ -166,15 +171,14 @@ export default {
 
 <style scoped>
 .nft-icon {
-  height: 100%;
+  height: 80%;
   width: 100%;
-  position: relative;
   /* background: rgba(255, 255, 255, 0.1); */
 }
-.nft-icon-wrapper {
+/* .nft-icon-wrapper {
   width: 12em;
   height: 12em;
-}
+} */
 .default-icon-wrapper {
   width: 8em;
   height: 8em;
@@ -202,9 +206,8 @@ export default {
 }
 
 .placeholder-box {
-  max-width: 140px;
-  max-height: 140px;
-  margin-top: -40px;
+  width: 269px;
+  height: 269px;
 }
 
 .placeholder-consumable {
@@ -212,25 +215,43 @@ export default {
   transform: scale(0.7);
 }
 
-.nft-supply {
+@media (max-width: 1024px) {
+  .placeholder-box {
+    max-width: 200px;
+    max-height: 200px;
+  }
+}
+
+/* .nft-supply {
   position: absolute;
-  bottom: 0;
+  bottom: -25px;
   left: 0;
   right: 0;
+  font-weight: 800;
+  font-size: 18px;
+}
+
+.nft-supply span{
+  color: #EA8659;
 }
 
 .nft-name {
   position: absolute;
-  bottom: 20px;
+  bottom: 5px;
   left: 0;
   right: 0;
   font-weight: 800;
   margin: 4px 0;
-}
+} */
 
 .nft-details {
   text-align: center;
   height: 100%;
+  position: relative;
+  align-items :center;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 30px 0;
 }
 
 .trait, .id, .stats {

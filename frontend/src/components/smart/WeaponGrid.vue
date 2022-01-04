@@ -1,78 +1,181 @@
 <template>
-  <div>
-    <div class="filters row mt-2 pl-2" v-if="!newWeapon" @change="saveFilters()">
-      <div class="col-sm-6 col-md-6 mb-3" :class="showGivenWeaponIds && !isMarket? 'col-lg-6':'col-lg-2'">
-        <strong>Stars</strong>
-        <select class="form-control" v-model="starFilter" >
-          <option v-for="x in ['', 1, 2, 3, 4, 5]" :value="x" :key="x">{{ x || 'Any' }}</option>
-        </select>
+  <div class="row">
+    <div
+      class="filters market-active pl-2 col-12 "
+      :class="isBlacksmith ? 'filters-blacksmith col-xl-4' : 'col-xl-3'"
+      @change="saveFilters()"
+      v-if="showFilters"
+    >
+      <div
+        class="search-wrap"
+        @click="setFilterOnMobileState(true)"
+      >
+        <input
+          class="form-control search"
+          type="search"
+          placeholder="  Seller Address, NFT ID"
+          v-model="searchValueTemp"
+        />
       </div>
 
-      <div class="col-sm-6 col-md-6 mb-3" :class="showGivenWeaponIds && !isMarket? 'col-lg-6':'col-lg-2'">
-        <strong>Element</strong>
-        <select class="form-control" v-model="elementFilter" >
-          <option v-for="x in ['', 'Earth', 'Fire', 'Lightning', 'Water']" :value="x" :key="x">{{ x || 'Any' }}</option>
-        </select>
+      <div class="star-filter">
+        <span class="filter-title">Stars</span>
+        <ul class="stars-list">
+          <li
+            class="star-item"
+            v-for="star in 5"
+            v-bind:key="star"
+            @click="starFilterTemp = star.toString() === starFilterTemp ? '' : star.toString()"
+            :class="star.toString() === starFilterTemp && 'selected'"
+          >
+              <span>{{ star }}</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="element-filter">
+        <span class="filter-title">Elements</span>
+        <ul class="element-list">
+          <li
+            class="element-item"
+            v-for="element in ['Earth', 'Fire', 'Lightning', 'Water']"
+            v-bind:key="element"
+            @click="elementFilterTemp = (element === elementFilterTemp ? '' : element)"
+            :class="element === elementFilterTemp && 'selected'"
+          >
+              <span
+                :class="element.toLowerCase() + '-icon'"
+              ></span>
+              <span class="element-text">{{ element }}</span>
+          </li>
+        </ul>
       </div>
 
       <template v-if="isMarket">
-        <div class="col-sm-6 col-md-6 col-lg-2 mb-3">
-          <strong>Min Price</strong>
+        <div>
+          <strong>MIN PRICE</strong>
           <input class="form-control" type="number" v-model.trim="minPriceFilter" :min="0" placeholder="Min" />
         </div>
-        <div class="col-sm-6 col-md-6 col-lg-2 mb-3">
-          <strong>Max Price</strong>
+        <div>
+          <strong>MAX PRICE</strong>
           <input class="form-control" type="number" v-model.trim="maxPriceFilter" :min="0" placeholder="Max" />
         </div>
 
-        <div class="col-sm-6 col-md-6 col-lg-2 mb-3">
-          <strong>Sort</strong>
+        <div>
+          <strong>SORT</strong>
           <select class="form-control" v-model="priceSort" >
             <option v-for="x in sorts" :value="x.dir" :key="x.dir">{{ x.name || 'Any' }}</option>
           </select>
         </div>
       </template>
 
-      <div v-if="showReforgedToggle" class="show-reforged">
-        <b-check class="show-reforged-checkbox" v-model="showReforgedWeapons" />
-        <strong>Show reforged</strong>
+      <div class="search-btn">
+        <b-button
+          class="gtag-link-others btn-blue-bg"
+          v-html="`Search`"
+          @click="filterAll"
+        ></b-button>
       </div>
 
-      <div v-if="showFavoriteToggle" class="show-reforged show-favorite">
-        <b-check class="show-reforged-checkbox" v-model="showFavoriteWeapons" />
-        <strong>Show Favorite</strong>
+      <div class="filters-close" @click="setFilterOnMobileState(false)">
+        <i class="fas fa-times"></i>
       </div>
-
-      <b-button
-        v-if="!newWeapon"
-        class="clear-filters-button mb-3 mt-3"
-        @click="clearFilters"
-      >
-        <span>
-          Clear Filters
-        </span>
-      </b-button>
     </div>
 
-    <ul class="weapon-grid">
+    <ul
+      class="weapon-grid row" :class="showFilters && 'col-12 col-xl-9'"
+      v-if="!isBlacksmith && !isBurnWeapon"
+    >
       <li
-        class="weapon"
-        :class="[{ selected: highlight !== null && weapon.id === highlight },isSell?'weapon-market':'']"
+        class="col-12 col-sm-6 col-md-4 col-xl-3"
         v-for="weapon in nonIgnoredWeapons"
         :key="weapon.id"
-        @click=
-        "(!checkForDurability || getWeaponDurability(weapon.id) > 0) && onWeaponClick(weapon.id)"
+        @click="(!checkForDurability || getWeaponDurability(weapon.id) > 0) && onWeaponClick(weapon.id)"
         @contextmenu="canFavorite && toggleFavorite($event, weapon.id)"
       >
-        <div class="weapon-icon-wrapper">
-          <weapon-icon class="weapon-icon" :weapon="weapon" :favorite="isFavorite(weapon.id)" :isSell="isSell" :sellClick="sellClick"/>
-        </div>
-        <div class="above-wrapper" v-if="$slots.above || $scopedSlots.above">
-          <slot name="above" :weapon="weapon"></slot>
-        </div>
-        <slot name="sold" :weapon="weapon"></slot>
+        <div
+          class="character-item weapon"
+          :class="[{ selected: highlight !== null && weapon.id === highlight },isSell?'weapon-market':'']"
+        >
+          <div class="weapon-icon-wrapper">
+            <weapon-icon class="weapon-icon" :weapon="weapon" :favorite="isFavorite(weapon.id)" :isSell="isSell" :sellClick="sellClick"/>
+          </div>
+          <div class="above-wrapper" v-if="$slots.above || $scopedSlots.above">
+            <slot name="above" :weapon="weapon"></slot>
+          </div>
+          <slot name="sold" :weapon="weapon"></slot>
+          </div>
       </li>
     </ul>
+
+    <ul class="row col-12" v-if="isBurnWeapon">
+      <li
+        class="col-6 col-lg-6 d-flex justify-content-center"
+        v-for="(weapon, index) in nonIgnoredWeapons"
+        :key="index"
+        @click="(!checkForDurability || getWeaponDurability(weapon.id) > 0) && onWeaponClick(weapon.id)"
+        @contextmenu="canFavorite && toggleFavorite($event, weapon.id)"
+      >
+        <div
+          class="character-item weapon no-corner"
+          :class="[{ selected: highlight !== null && weapon.id === highlight },isSell?'weapon-market':'']"
+        >
+          <div class="weapon-icon-wrapper">
+            <weapon-icon class="weapon-icon" :weapon="weapon" :favorite="isFavorite(weapon.id)" :isSell="isSell" :sellClick="sellClick" :isBlacksmith="true"/>
+          </div>
+          <div class="above-wrapper" v-if="$slots.above || $scopedSlots.above">
+            <slot name="above" :weapon="weapon"></slot>
+          </div>
+          <slot name="sold" :weapon="weapon"></slot>
+          </div>
+      </li>
+    </ul>
+
+    <div
+      class="weapon-grid blacksmith row col-12 col-xl-8"
+      v-if="isBlacksmith && !isBurnWeapon"
+    >
+      <div class="weapon-list col-xl-12">
+        <h2>Weapon list ({{nonIgnoredWeapons.length}})</h2>
+        <div
+          class="weapon-pagination-btn weapon-pagination-prev disabled"
+          @click="prevWeaponList"
+        ></div>
+        <ul class="row">
+          <li
+            class="col-6 col-lg-4 d-flex justify-content-center"
+            v-for="(weapon, index) in nonIgnoredWeapons"
+            :key="index"
+            @click="(!checkForDurability || getWeaponDurability(weapon.id) > 0) && onWeaponClick(weapon.id)"
+            @contextmenu="canFavorite && toggleFavorite($event, weapon.id)"
+          >
+            <div
+              class="character-item weapon"
+              :class="[{ selected: highlight !== null && weapon.id === highlight },isSell?'weapon-market':'',isBlacksmith?'no-corner':'']"
+              v-if="index > weaponPaginationPrev && index < weaponPaginationNext"
+            >
+              <div class="weapon-icon-wrapper">
+                <weapon-icon class="weapon-icon" :weapon="weapon" :favorite="isFavorite(weapon.id)" :isSell="isSell" :sellClick="sellClick" :isBlacksmith="isBlacksmith"/>
+              </div>
+              <div class="above-wrapper" v-if="$slots.above || $scopedSlots.above">
+                <slot name="above" :weapon="weapon"></slot>
+              </div>
+              <slot name="sold" :weapon="weapon"></slot>
+              </div>
+          </li>
+        </ul>
+        <div
+          class="weapon-pagination-btn weapon-pagination-next"
+          :class="nonIgnoredWeapons.length < weaponPaginationNext && 'disabled'"
+          @click="nextWeaponList"
+        ></div>
+      </div>
+
+      <div class="dust-wrap col-xl-12">
+        <h2>Dust list</h2>
+        <dust-balance-display class="dust-list-wrap" :isBlacksmith="isBlacksmith"/>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -83,6 +186,7 @@ import { Accessors, PropType } from 'vue/types/options';
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
 import { IState, IWeapon } from '../../interfaces';
 import WeaponIcon from '../WeaponIcon.vue';
+import DustBalanceDisplay from '../smart/DustBalanceDisplay.vue';
 
 type StoreMappedState = Pick<IState, 'ownedWeaponIds'>;
 
@@ -95,6 +199,10 @@ interface StoreMappedActions {
 }
 
 interface Data {
+  searchValueTemp: string;
+  starFilterTemp: string;
+  elementFilterTemp: string;
+  searchValue: string;
   starFilter: string;
   elementFilter: string;
   minPriceFilter: string;
@@ -103,6 +211,9 @@ interface Data {
   priceSort: string;
   showReforgedWeapons: boolean;
   showFavoriteWeapons: boolean;
+  weaponPaginationPrev: number;
+  weaponPaginationNext: number;
+  numberWeaponsShow: number;
 }
 
 const sorts = [
@@ -171,6 +282,14 @@ export default Vue.extend({
       type: Boolean,
       default: true,
     },
+    isBlacksmith: {
+      type: Boolean,
+      default: false
+    },
+    isBurnWeapon: {
+      type: Boolean,
+      default: false
+    },
     isMarket: {
       type: Boolean,
       default: false
@@ -190,11 +309,19 @@ export default Vue.extend({
     sellClick:{
       type: ()=>{},
       default: null
+    },
+    showFilters: {
+      type: Boolean,
+      default: false
     }
   },
 
   data() {
     return {
+      searchValueTemp: '',
+      starFilterTemp: '',
+      elementFilterTemp: '',
+      searchValue: '',
       starFilter: '',
       elementFilter: '',
       minPriceFilter:'',
@@ -204,11 +331,15 @@ export default Vue.extend({
       sorts,
       showReforgedWeapons: this.showReforgedWeaponsDefVal,
       showFavoriteWeapons: this.showFavoriteWeaponsDefVal,
+      weaponPaginationPrev: -1,
+      weaponPaginationNext: 6,
+      numberWeaponsShow: 6,
     } as Data;
   },
 
   components: {
-    WeaponIcon
+    WeaponIcon,
+    DustBalanceDisplay,
   },
 
   computed: {
@@ -246,6 +377,10 @@ export default Vue.extend({
       }
       items = items.filter((x) => allIgnore.findIndex((y) => y === x.id.toString()) < 0);
 
+
+      if (this.searchValue !== '') {
+        items = items.filter((x) => x.id === parseInt(this.searchValue, 10));
+      }
 
       if (this.starFilter) {
         items = items.filter((x) => x.stars === +this.starFilter - 1);
@@ -285,6 +420,16 @@ export default Vue.extend({
   methods: {
     ...(mapActions(['fetchWeapons']) as StoreMappedActions),
     ...(mapMutations(['setCurrentWeapon'])),
+
+    setFilterOnMobileState(filterState: boolean) {
+      this.$el.getElementsByClassName('filters')[0].classList.toggle('active', filterState);
+    },
+
+    filterAll() {
+      this.searchValue = this.searchValueTemp;
+      this.elementFilter = this.elementFilterTemp;
+      this.starFilter = this.starFilterTemp;
+    },
 
     saveFilters() {
       if(this.isMarket) {
@@ -362,6 +507,24 @@ export default Vue.extend({
       if (favoritesFromStorage) {
         this.favorites = JSON.parse(favoritesFromStorage);
       }
+    },
+
+    prevWeaponList() {
+      if (this.weaponPaginationPrev !== -1) {
+        this.weaponPaginationPrev -= this.numberWeaponsShow;
+        this.weaponPaginationNext -= this.numberWeaponsShow;
+        this.$el.querySelector(".weapon-pagination-next")?.classList.remove("disabled");
+      }
+      this.$el.querySelector(".weapon-pagination-prev")?.classList.toggle("disabled", this.weaponPaginationPrev === -1);
+    },
+
+    nextWeaponList() {
+      if (this.weaponPaginationNext <= this.nonIgnoredWeapons.length) {
+        this.weaponPaginationPrev += this.numberWeaponsShow;
+        this.weaponPaginationNext += this.numberWeaponsShow;
+        this.$el.querySelector(".weapon-pagination-prev")?.classList.remove("disabled");
+      }
+      this.$el.querySelector(".weapon-pagination-next")?.classList.toggle("disabled", this.weaponPaginationNext > this.nonIgnoredWeapons.length);
     }
   },
 
@@ -370,6 +533,14 @@ export default Vue.extend({
     this.checkStorageFavorite();
 
     Events.$on('weapon:newFavorite', () => this.checkStorageFavorite());
+
+    if (screen.width < 1024) {
+      this.weaponPaginationNext = 4;
+      this.numberWeaponsShow = 4;
+    } else {
+      this.weaponPaginationNext = 6;
+      this.numberWeaponsShow = 6;
+    }
 
     if(this.isMarket) {
       this.starFilter = sessionStorage.getItem('market-weapon-starfilter') || '';
@@ -386,133 +557,58 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-
-.filters {
-   justify-content: center;
-   width: 100%;
-   max-width: 900px;
-   margin: 0 auto;
-   align-content: center;
-   border-bottom: 0.2px solid rgba(102, 80, 80, 0.1);
-   margin-bottom: 20px;
-}
-.weapon-grid {
-  list-style-type: none;
-  justify-content: center;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  padding: 0.5em;
-  grid-template-columns: repeat(auto-fit, 14em);
-  gap: 2em;
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button{
+  -webkit-appearance: none;
 }
 
-.weapon {
-  width: 14em;
-  /* background: rgba(255, 255, 255, 0.05); */
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
+.form-control{
+  background-color: transparent;
+  color: white;
+  border: 1px solid rgb(17,65,105);
+  border-radius: 10px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding: 0.5rem 1rem;
+  font-size: 18px;
+  font-weight: 100;
+  padding: 15px;
+  margin-top: 10px;
+}
+
+.form-control:focus{
+  background-color: transparent;
+  color: white;
+}
+
+.form-control::placeholder{
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .weapon-icon-wrapper {
-  width: 14em;
-  height: 18em;
+  height: 100%;
 }
 
-.weapon-market .weapon-icon-wrapper{
-  height: 20em;
-}
-
-.above-wrapper {
-  padding: 0.1rem 0.1rem 1rem;
-}
-
-.above-wrapper .fix-h24 {
-  margin: 0.5rem 0;
-}
-
-.toggle-button {
-  align-self: stretch;
-}
-
-.show-reforged {
+.character-item.weapon {
+  cursor: pointer;
+  font-size: 18px;
+  position: relative;
   display: flex;
-  flex-direction: row;
-  align-self: center;
+  text-align: right;
+  flex-direction: column;
+  padding: 15px 15px;
+  padding-right: 20px;
+  margin: 0 auto 50px;
 }
 
-.show-favorite {
-    margin-left: 15px;
-  }
-
-.show-reforged-checkbox {
-  margin-left: 5px;
+.weapon-market {
+  margin-top: 50px !important;
 }
 
-.clear-filters-button {
-  height: fit-content;
-  display: flex;
-  flex-direction: row;
-  align-self: flex-end;
-  margin:0 15px;
-}
-
-.weapon-container .clear-filters-button{
-  margin-bottom: 0rem !important;
-}
-
-@media (max-width: 576px) {
-  .weapon-grid {
-    justify-content: center;
-    margin-top: 10px;
-  }
-
-  .show-reforged {
-    width: 100%;
-    justify-content: start;
-    margin-bottom: 15px;
-    padding-left: 1rem;
-  }
-  .show-favorite{
-    margin-left: 0;
-  }
-  .clear-filters-button {
-    width: 100%;
-    text-align: center;
-    justify-content: center;
-  }
-
-  .ml-3 {
-    margin-left: 0 !important;
-  }
-  h1{
-    font-size: 2rem;
-  }
-  .main-font .nav-tabs a.nav-link{
-    padding-left: 0.2rem;
-    padding-right: 0.2rem;
-  }
-}
-
-/* Needed to adjust weapon list */
-@media all and (max-width: 767.98px) {
-  .weapon-grid {
-    padding-left: 2em;
-    justify-content: center;
-  }
-  .stars-elem {
-    margin-bottom: 20px;
-    max-width: 500px;
-    width: 100%;
-  }
-  li.weapon {
-    display: inline-block;
-    margin: auto;
-  }
+.character-item.weapon:not(.no-corner) {
+  max-width: 288px;
+  min-width: 230px;
 }
 
 .sold {
@@ -542,5 +638,185 @@ export default Vue.extend({
   height: 24px;
 }
 
+/* Blacksmith */
+.weapon-grid.blacksmith {
+  padding: 0 10px;
+}
+
+.blacksmith h2 {
+  font-size: 24px;
+}
+
+.weapon-grid.blacksmith .weapon-list,
+.weapon-grid.blacksmith .dust-wrap {
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 10px 32px 0;
+  position: relative;
+  max-height: 504px;
+}
+
+.weapon-grid.blacksmith .dust-wrap {
+  margin-top: 15px;
+  max-height: 352px;
+}
+
+.weapon-grid.blacksmith ul {
+  list-style: none;
+  padding: 0 28px;
+}
+
+.character-item.weapon.no-corner {
+  padding: 10px;
+  margin: 0;
+}
+
+.weapon-pagination-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 34px;
+  height: 67px;
+  cursor: pointer;
+}
+
+.weapon-pagination-btn.disabled {
+  filter: brightness(50%);
+}
+
+.weapon-pagination-btn.weapon-pagination-prev {
+  left: 28px;
+  background-image: url("../../assets/v2/weapon-pagination-prev.svg");
+}
+
+.weapon-pagination-btn.weapon-pagination-next {
+  right: 28px;
+  background-image: url("../../assets/v2/weapon-pagination-next.svg");
+}
+
+.filters.market-active.active{
+  height: 970px;
+}
+
+@media (width: 1024px) {
+  .character-item.weapon {
+    padding: 18px;
+  }
+
+  .weapon-grid.blacksmith .weapon-list {
+    height: 504px;
+  }
+}
+
+@media (min-width: 1201px) {
+  .filters.filters-blacksmith {
+    max-height: 867px;
+    height: 867px !important;
+    border: 0.5px solid #3CDE9B;
+  }
+}
+
+@media (min-width: 768px) {
+  .weapon-grid.blacksmith .dust-wrap {
+    max-height: none;
+  }
+}
+
+@media (min-width: 576px) {
+  .weapon-grid.blacksmith .weapon-list {
+    min-height: 504px;
+    border: 0.5px solid #3CDE9B;
+  }
+
+  .weapon-grid.blacksmith .dust-wrap {
+    border: 0.5px solid #3CDE9B;
+  }
+}
+
+@media (max-width: 576px) {
+  .weapon-grid {
+    margin-top: 10px;
+  }
+
+  .ml-3 {
+    margin-left: 0 !important;
+  }
+  h1{
+    font-size: 2rem;
+  }
+  .main-font .nav-tabs a.nav-link{
+    padding-left: 0.2rem;
+    padding-right: 0.2rem;
+  }
+
+  .character-item.weapon {
+    padding: 12px;
+    height: 292px;
+  }
+
+  .weapon-grid.blacksmith {
+    padding: 0;
+  }
+
+  .weapon-grid.blacksmith .weapon-list,
+  .weapon-grid.blacksmith .dust-wrap {
+    padding: 10px 0 0;
+    background-color: transparent;
+  }
+
+  .weapon-grid.blacksmith ul {
+    padding: 0;
+  }
+
+  .weapon-pagination-btn {
+    width: 20px;
+    height: 30px;
+    top: 10px;
+    transform: translateY(0);
+  }
+
+  .weapon-pagination-btn.weapon-pagination-prev {
+    left: auto;
+    right: 40px;
+  }
+
+  .weapon-pagination-btn.weapon-pagination-next {
+    right: 10px;
+  }
+
+  .weapon-grid.blacksmith .dust-wrap {
+    max-height: none;
+  }
+
+  .character-item.weapon.no-corner {
+    margin-top: 20px !important;
+  }
+}
+
+/* Needed to adjust weapon list */
+@media all and (max-width: 767.98px) {
+  .weapon-grid {
+    padding-left: 2em;
+  }
+  .stars-elem {
+    margin-bottom: 20px;
+    max-width: 500px;
+    width: 100%;
+  }
+  li.weapon {
+    display: inline-block;
+    margin: auto;
+  }
+  .weapon{
+    padding: 40px 0 60px 0;
+  }
+}
+
+@media (max-width: 1024px) {
+  .weapon-grid.blacksmith .dust-wrap {
+    padding-bottom: 10px;
+  }
+}
 
 </style>

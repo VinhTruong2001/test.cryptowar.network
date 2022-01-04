@@ -11,6 +11,15 @@ import Leaderboard from './views/Leaderboard.vue';
 import Options from './views/Options.vue';
 import Shop from './views/Shop.vue';
 import Referral from './views/Referral.vue';
+import P2PLayout from './views/P2PLayout.vue';
+import Lobby from './views/Lobby.vue';
+import Inventory from './views/Inventory.vue';
+
+import CombatPVP from './views/CombatPVP.vue';
+import Arena from './views/Arena.vue';
+import CombatPVPFight from './views/CombatPVPFight.vue';
+import RPS from './views/RPS.vue';
+import Maintenance from './views/Maintenance.vue';
 
 import {
   raid as featureFlagRaid,
@@ -41,14 +50,22 @@ function createRouter() {
     routes: [
       { path: '/', name: 'plaza', component: Plaza },
       { path: '/blacksmith', name: 'blacksmith', component: Blacksmith },
+      { path: '/inventory', name: 'inventory', component: Inventory },
       { path: '/combat', name: 'combat', component: Combat },
+      { path: '/combat-pvp', name: 'pvp', component: CombatPVP },
+      { path: '/combat-pvp-fight', name: 'pvp-fight', component: CombatPVPFight },
+      { path: '/arena', name: 'arena', component: Arena },
+      { path: '/rps', name: 'rps', component: RPS },
       { path: '/leaderboard', name: 'leaderboard', component: Leaderboard },
       ...marketRoutes,
       // { path: '/stake', name: 'select-stake-type', component: SelectStakeType },
       // { path: '/stake/:stakeType', name: 'stake', component: Stake, props: true },
       { path: '/options', name: 'options', component: Options },
       { path: '/shop', name: 'shop', component: Shop },
-      { path: '/referral', name: 'referral', component: Referral}
+      { path: '/referral', name: 'referral', component: Referral},
+      { path: '/p2playout', name: 'P2P', component: P2PLayout },
+      { path: '/lobby', name: 'lobby', component: Lobby },
+      { path: '/maintenance', name: 'maintenance', component: Maintenance },
     ]
   });
 

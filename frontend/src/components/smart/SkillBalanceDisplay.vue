@@ -2,7 +2,7 @@
   <div class="skill-balance-display">
     <div
       size="sm"
-      class="my-2 my-sm-0 mr-3"
+      class="my-2 my-sm-0"
       variant="primary"
       v-tooltip="'Buy xBlade'"
       @click="onBuySkill"
@@ -199,5 +199,32 @@ export default Vue.extend({
 .balance-text {
   color: #c755f8;
   font-size: 12px;
+}
+.btn-buy.gtag-link-others{
+  background: linear-gradient(to bottom, #F58B5B, #F58B5B);
+}
+.navbar-light .navbar-nav .nav-link{
+  color: #fff;
+}
+
+@media (max-width: 767.98px){
+.balance-container{
+  margin: 0 1.3rem;
+}
+
+.balance-container span{
+  font-size: 1.2em;
+}
+
+.btn-buy.gtag-link-others{
+  margin-right: 0;
+  margin-left: 5px;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2em;
+}
 }
 </style>

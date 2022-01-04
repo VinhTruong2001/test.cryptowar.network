@@ -4,9 +4,16 @@
       <span
         :class="characterTrait.toLowerCase() + '-icon circle-element'"
       ></span>
+      <div class="black-outline" v-if="!portrait">
+          <div>
+            ID <span class="white">{{ character.id }}</span>
+          </div>
+          <div v-if="isMarket">
+            Lv.<span class="">{{ character.level + 1 }}</span>
+          </div>
+      </div>
     </div>
-
-    <div class="placeholder d-flex align-items-start justify-content-center">
+    <div class="placeholder d-flex align-items-start justify-content-center " :class="characterTrait.toLowerCase() + '-bg'">
       <div
         :style="{
           'background-image': 'url(' + getCharacterArt(character) + ')',
@@ -14,7 +21,7 @@
         :class="{
           'w-100': portrait,
           'h-100': !isMarket,
-          'h-75': isMarket,
+          'h-100': isMarket,
         }"
       ></div>
       <!--<small-button class="button" :text="`Purchase`" v-if="isMarket"/>-->
@@ -27,25 +34,9 @@
         <div class="name black-outline" :title="getCleanCharacterName(character.id)" v-if="!portrait">
           {{ getCleanCharacterName(character.id) }}
         </div>
-        <div class="lv" v-if="!portrait">
+        <div class="lv" v-if="!portrait && !isMarket">
           Lv.<span class="">{{ character.level + 1 }}</span>
         </div>
-      </div>
-      <div class="score-id-container">
-        <div class="black-outline" v-if="!portrait">
-          ID <span class="white">{{ character.id }}</span>
-        </div>
-        <!-- <div class="black-outline score" v-if="!portrait">
-          <span class="">{{ heroScore.toLocaleString() }}</span>
-           <b-icon-question-circle
-          class="centered-icon"
-          scale="0.8"
-          v-tooltip.bottom="
-            `Hero score is a measure of your hero's combat prowess so far.
-        It goes up when you win and down when you lose. It is also temporarily disabled!`
-          "
-        />
-        </div> -->
       </div>
 
       <!-- <div
@@ -63,20 +54,22 @@
         </div>
       </div> -->
 
-      <div class="xp" v-if="!portrait">
-        <b-progress
-          :max="RequiredXp(character.level)"
-          variant="success"
-          v-tooltip.bottom="
-            `Claimable XP ${this.getCharacterUnclaimedXp(character.id)}`
-          "
-        >
-          <strong class="xp-text"
-            >{{ character.xp || 0 }} /
-            {{ RequiredXp(character.level) }} XP</strong
+      <div class="xp-wrap" :style="isMarket&&'margin-top: 25px'">
+        <div class="xp" v-if="!portrait">
+          <b-progress
+            :max="RequiredXp(character.level)"
+            variant="success"
+            v-tooltip.bottom="
+              `Claimable XP ${this.getCharacterUnclaimedXp(character.id)}`
+            "
           >
-          <b-progress-bar :value="character.xp || 0"></b-progress-bar>
-        </b-progress>
+            <strong class="xp-text"
+              >{{ character.xp || 0 }} /
+              {{ RequiredXp(character.level) }} XP</strong
+            >
+            <b-progress-bar :value="character.xp || 0"></b-progress-bar>
+          </b-progress>
+        </div>
       </div>
     </div>
   </div>
@@ -93,12 +86,6 @@ export default {
   components: {
     //SmallButton,
   },
-  watch: {
-    character() {
-      this.clearScene();
-    },
-  },
-
   data() {
     return {
       allLoaded: false,
@@ -225,22 +212,32 @@ export default {
   background-position: 0 0;
 }
 
-.xp {
-  position: absolute;
-}
-
 .trait {
-  top: -8px;
-  justify-self: center;
   margin: 0 auto;
   position: relative;
   display: flex;
+  height: 75px;
+  width: 100%;
+  justify-content: space-between;
+  padding: 0 1.5em 0 0.8em;
+  align-items: center;
 }
 
 .id {
   top: 5px;
   right: 5px;
   font-style: italic;
+}
+
+.black-outline {
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.2em;
+  text-shadow: none;
+  text-align: end;
+}
+.black-outline .white{
+  color: #fff;
 }
 
 .hero-score {
@@ -255,64 +252,68 @@ export default {
   max-height: 24px;
   max-width: 170px;
   white-space: nowrap;
+  text-align: center;
+}
+
+.xp-wrap {
+  padding: 0 10px;
 }
 
 .xp {
-  left: 40px;
-  width: 238px;
-  right: 0;
-
-  background-image: url("../assets/images/bg-process-box.png");
+  width: 100%;
+  background-image: url("../assets/v2/xp_bg.svg");
   background-repeat: no-repeat;
-  background-position: 0 0;
-  height: 50px;
+  background-size: cover;
+  height: 19px;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 14px;
+  padding: 0 0px;
+  margin: 7px 0;
+  border-radius: 16px;
 }
 
 .xp .bg-success {
   background-position: 0 0;
-  background-image: url("../assets/images/chara-process.png");
+  background-image: url("../assets/v2/xp_progress.svg");
   background-repeat: no-repeat;
-  width: 218px;
-  height: 27px;
+  background-size: cover;
+  width: 100%;
+  height: 19px;
   background-color: transparent !important;
 }
 
 .xp-text {
-  width: 100%;
+  width: 87%;
   text-align: center;
   position: absolute;
-  color: #fff;
+  color: #000;
 }
 
-.xp .progress{
+.xp .progress {
   background-color: initial;
   width: 100%;
-  height: 24px;
+  height: 19px;
   align-items: center;
 }
 
+.xp .progress .progress-bar{
+  background-size: cover;
+  height: 19px;
+}
+
 .placeholder {
-  max-width: 100%;
   position: relative;
-  padding-top: 0;
   -o-object-fit: contain;
   object-fit: contain;
   height: 300px;
-  margin-top: -30px;
 }
 
 .market-bot {
-  height: 160px;
+  height: 95px;
   overflow: hidden;
   background-position: 0 0;
   background-repeat: no-repeat;
-  /* background-image: url("../assets/images/bg-item-bot.png"); */
-  /* border-top: 2px solid #f48757; */
-  margin-right: 17px;
 }
 
 .market-bot .name {
@@ -321,9 +322,13 @@ export default {
 }
 
 .market-bot .lv {
-  font-size: 1.3rem;
-  color: #dabf75;
+  font-size: 1.2rem;
+  color: #FEA829;
   font-weight: bold;
+  line-height: 1;
+}
+
+.market-bot .lv-market{
 }
 
 .market-bot .score {
@@ -339,15 +344,13 @@ export default {
 }
 
 .circle-element {
-  width: 4.5rem;
-  height: 4.5rem;
-  border: 1px solid #f48757;
+  width: 43px;
+  height: 43px;
+  border: 0px solid #f48757;
   border-radius: 50%;
-  padding: 0.5rem;
   background-color: #15052e;
 }
 
-.name-lvl-container,
 .score-id-container {
   display: flex;
   justify-content: space-between;
@@ -355,8 +358,15 @@ export default {
   padding: 0 3rem;
 }
 
-.market-bot .name-lvl-container {
-  margin-top: 1.5rem;
+.name-lvl-container{
+  padding: 0 1rem;
+  text-align: center;
+}
+
+.name-lvl-container .name{
+  max-width: 100%;
+  max-height: inherit;
+  font-size: 1.2em;
 }
 
 .market-bot .score-id-container {
@@ -393,4 +403,76 @@ export default {
   text-align: center;
   color: #fff;
 }
+
+.water-bg, .fire-bg, .lightning-bg, .earth-bg {
+  background-image: url('../assets/images/water.png');
+  background-repeat: no-repeat;
+  background-position: center bottom;
+}
+.fire-bg{
+  background-image: url('../assets/images/fire.png');
+}
+.lightning-bg{
+  background-image: url('../assets/images/lightning.png');
+}
+.earth-bg{
+  background-image: url('../assets/images/earth.png');
+}
+
+@media (min-width: 768px) {
+  .placeholder {
+    margin-top: -30px;
+  }
+}
+
+@media (max-width: 576px) {
+  .trait {
+    height: 45px;
+  }
+
+  .circle-element {
+    width: 27px;
+    height: 27px;
+  }
+
+  .black-outline {
+    font-size: 16px;
+    font-weight: normal;
+  }
+
+  .placeholder {
+    height: 164px;
+    background-size: 70% 60%;
+  }
+
+  .market-bot .name {
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .market-bot .lv {
+    font-size: 12px;
+  }
+
+  .name {
+    margin-top: 10px;
+  }
+
+  .xp {
+    height: 12px;
+  }
+
+  .xp .bg-success {
+    height: 12px;
+  }
+
+  .xp .progress {
+    height: 12px;
+  }
+
+  .xp-text {
+    font-weight: 500;
+  }
+}
+
 </style>
