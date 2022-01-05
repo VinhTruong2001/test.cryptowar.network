@@ -123,4 +123,6 @@ export interface IState {
   secondsPerStamina: number;
   careerModeRooms: CareerModeRoom[];
   careerModeRequest:  RoomRequest[];
+  rewardPvp: number;
+  myCareerModeRequest: RoomRequest[];
 }

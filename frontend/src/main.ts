@@ -5,6 +5,7 @@ import VTooltip from 'v-tooltip';
 import BootstrapVue from 'bootstrap-vue';
 import { BootstrapVueIcons } from 'bootstrap-vue';
 import BootstrapVueDialog from 'bootstrap-vue-dialog';
+import VueObserveVisibility from 'vue-observe-visibility';
 
 import Web3 from 'web3';
 
@@ -41,6 +42,7 @@ Vue.use(VueRouter);
 Vue.use(VTooltip);
 Vue.use(BootstrapVue);
 Vue.use(BootstrapVueDialog);
+Vue.use(VueObserveVisibility);
 
 Vue.use(BootstrapVueIcons);
 

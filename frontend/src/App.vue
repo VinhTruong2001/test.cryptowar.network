@@ -627,32 +627,32 @@ button,
 .str-icon {
   color: red;
   content: url("assets/elements/fire.png");
-  width: 2.3rem;
-  height: 2.3rem;
+  width: 2rem;
+  height: 2rem;
 }
 
 .earth-icon,
 .dex-icon {
   color: green;
   content: url("assets/elements/earth.png");
-  width: 2.3rem;
-  height: 2.3rem;
+  width: 2rem;
+  height: 2rem;
 }
 
 .water-icon,
 .int-icon {
   color: cyan;
   content: url("assets/elements/water.png");
-  width: 2.3rem;
-  height: 2.3rem;
+  width: 2rem;
+  height: 2rem;
 }
 
 .lightning-icon,
 .cha-icon {
   color: yellow;
   content: url("assets/elements/lightning.png");
-  width: 2.3rem;
-  height: 2.3rem;
+  width: 2rem;
+  height: 2rem;
 }
 
 .loading-container {
@@ -745,6 +745,7 @@ button.close {
   color: #a50eb3 !important;
 }
 
+#loadingModal .modal-content
 #fightResultsModal .modal-content,
 #listHeroToCareerModal .modal-content,
 #listHeroToChallengeModal .modal-content{
@@ -816,6 +817,26 @@ button.close {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+// .modal-footer {
+//   background: rgb(31, 31, 34);
+//   border-color: rgba(24, 27, 30, 0.5) !important;
+// }
+
+#selectHeroOrWeaponModal .list {
+  color: #fff;
+  overflow-y: scroll;
+  padding: 0;
+  margin-top: 20px;
+  margin-bottom: 40px;
+  scroll-margin-left: 50px;
+}
+
+.modal-body {
+  // display: flex;
+  // flex-direction: column;
+  // align-items: center;
 }
 
 // .modal-footer {

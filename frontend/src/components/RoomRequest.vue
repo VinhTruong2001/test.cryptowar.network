@@ -3,7 +3,7 @@
    <BackgroundItem
    v-if="this.request.heroId"
    :character="characters[this.request.heroId]" :selectedCharacterId="this.request.heroId" :selectedWeaponId="this.request.weaponId" :noMargin="false" />
-   <div class="containerButton">
+   <div class="containerButton" v-if="!isMine">
         <button
           type="button"
           class="buttonFight"
@@ -13,6 +13,23 @@
           FIGHT
         </span>
         </button>
+      </div>
+      <div class="containerButton" v-if="isDone ==='0' && isMine">
+        <button
+          type="button"
+          class="buttonFight"
+          @click="() =>this.cancelRequestFight(this.request.roomId, this.request.id)"
+        >
+        <span class="titleButtonFight">
+          CANCEL FIGHT
+        </span>
+        </button>
+      </div>
+      <div v-if="isDone === '1'">
+        <div class="cost"><div></div> {{this.getResult()}}</div>
+      </div>
+       <div v-if="isDone === '2'">
+        <div class="cost"><div></div> You canceled this match</div>
       </div>
 
 
@@ -50,10 +67,11 @@ export default Vue.extend({
       fightResults: null,
       error: null,
       room: null,
+      dataRoom: null,
     };
   },
   components: { BackgroundItem },
-  props: ["request", "handleFight"],
+  props: ["request", "handleFight", "isMine", "isDone", "cancelRequestFight", "isWin"],
   computed: {
     ...mapState(["characters", "careerModeRooms"]),
     ...mapGetters(["getCharacterName"]),
@@ -65,13 +83,21 @@ export default Vue.extend({
     getCleanCharacterName(id: number) {
       return getCleanName(this.getCharacterName(id));
     },
+    getResult() {
+      if(this.isWin) {
+        return 'You win this match!';
+      }else {
+        return 'You lose this match!';
+      }
+    }
   },
 
   async mounted() {
-    console.log('lai ne', this.request);
     if (this.request.heroId) {
       await this.fetchCharacters([this.request.heroId]);
     }
+    const res = await this.getRoom(this.request.roomId);
+    console.log('data room', res);
   },
 });
 </script>
@@ -130,6 +156,22 @@ export default Vue.extend({
   font-weight: bold;
   padding-top: 12px;
   padding-bottom: 12px;
+}
+.cost{
+  color: #D858F7;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.3em;
+}
+.cost > div{
+  /* background-image: url(../assets/v2/icon-crypto.svg); */
+  width: 20px;
+  height: 19px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin-right: 6px;
 }
 
 @media (max-width: 576px) {

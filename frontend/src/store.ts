@@ -129,6 +129,7 @@ export function createStore(web3: Web3) {
       ownedDust: [],
 
       characters: {},
+      rewardPvp: 0,
       characterStaminas: {},
       secondPerCharacter:{},
       characterRenames: {},
@@ -180,7 +181,8 @@ export function createStore(web3: Web3) {
       rareBoxPrice: web3.utils.toWei('0', 'ether'),
       secondsPerStamina: 1,
       careerModeRooms: [],
-      careerModeRequest: []
+      careerModeRequest: [],
+      myCareerModeRequest: []
     },
 
     getters: {
@@ -792,6 +794,12 @@ export function createStore(web3: Web3) {
 
       updateCareerModeRequest(state: IState, payload: { requests: RoomRequest[] }){
         state.careerModeRequest = payload.requests;
+      },
+      updateRewardPvp(state: IState, payload: {reward: number}){
+        state.rewardPvp = payload.reward;
+      },
+      updateMyCareerModeRequest(state: IState, payload: {request: RoomRequest[]}) {
+        state.myCareerModeRequest = payload.request;
       }
     },
 
@@ -3175,11 +3183,11 @@ export function createStore(web3: Web3) {
 
         await Promise.all([dispatch('fetchCharacter', id)]);
       },
-      async createCareerRoom({state},{ character, weapon, matchReward, totalDeposit} ) {
+      async createCareerRoom({state, commit},{ character, weapon, matchReward, totalDeposit} ) {
         const { CareerMode, xBladeToken, Characters, Weapons } = state.contracts();
 
         if(!state.defaultAccount || !CareerMode?.options.address){
-          return;
+          return false;
         }
         const allowance = await xBladeToken.methods.allowance(state.defaultAccount, CareerMode?.options.address).call(defaultCallOptions(state));
         if(toBN(allowance).isEqualTo(toBN('0'))){
@@ -3194,25 +3202,57 @@ export function createStore(web3: Web3) {
         await Weapons?.methods.approve(CareerMode?.options.address, weapon).send({
           from: state.defaultAccount
         });
-        await CareerMode?.methods.createRoom(character, weapon, Web3.utils.toWei(`${matchReward}`),  Web3.utils.toWei(`${totalDeposit}`)).send({
+        const resCreateRoom = await CareerMode?.methods.createRoom(character, weapon, Web3.utils.toWei(`${matchReward}`),  Web3.utils.toWei(`${totalDeposit}`)).send({
           from: state.defaultAccount,
           gas: '800000'
         });
+
+        if(resCreateRoom) {
+          const res = await state
+            .contracts()
+            .CryptoWars!.methods.getMyCharacters()
+            .call(defaultCallOptions(state));
+          commit('updateUserDetails', {
+            ownedCharacterIds: Array.from(res),
+          });
+          return true;
+        }
+        else {
+          return false;
+        }
       },
-      async getCareerRooms({ state, commit }){
+      async getCareerRooms({ state, commit }, {cursor}){
         const { CareerMode } = state.contracts();
-        // @ts-ignore
-        const result: any[] = await CareerMode?.methods.getRooms(0).call(defaultCallOptions(state));
-        commit('updateCareerRoom', { rooms: result.map(r=> ({
-          characterId: r.characterId,
-          claimed: r.claimed,
-          matchReward: r.matchReward,
-          owner: r.owner,
-          totalDeposit: r.totalDeposit,
-          weaponId: r.weaponId,
-          id: r.id,
-        })).filter(r => (r.owner as string)?.toLowerCase() !== state.defaultAccount?.toLowerCase())
-        });
+        if(cursor === 0) {
+          // @ts-ignore
+          const result: any[] = await CareerMode?.methods.getRooms(0).call(defaultCallOptions(state));
+          commit('updateCareerRoom', { rooms: result.map(r=> ({
+            characterId: r.characterId,
+            claimed: r.claimed,
+            matchReward: r.matchReward,
+            owner: r.owner,
+            totalDeposit: r.totalDeposit,
+            weaponId: r.weaponId,
+            id: r.id,
+          }))
+          });
+        }
+        else {
+          const oldResult = state.careerModeRooms;
+          // @ts-ignore
+          const result: any[] = await CareerMode?.methods.getRooms(cursor).call(defaultCallOptions(state));
+          const newArray = oldResult.concat(result);
+          commit('updateCareerRoom', { rooms: newArray.map(r=> ({
+            characterId: r.characterId,
+            claimed: r.claimed,
+            matchReward: r.matchReward,
+            owner: r.owner,
+            totalDeposit: r.totalDeposit,
+            weaponId: r.weaponId,
+            id: r.id,
+          }))
+          });
+        }
       },
       // @ts-ignore
       async requestFight({ state }, { roomId, weaponId, characterId }){
@@ -3233,10 +3273,11 @@ export function createStore(web3: Web3) {
               .send(defaultCallOptions(state));
           }
 
-          await CareerMode?.methods.requestFight(roomId, weaponId, characterId).send({
+          const res = await CareerMode?.methods.requestFight(roomId, weaponId, characterId).send({
             from: state.defaultAccount,
             gas: '800000'
           });
+          return res?.events?.RequestFightOutcome.returnValues;
         }
         catch(e){
           console.log(e);
@@ -3303,9 +3344,82 @@ export function createStore(web3: Web3) {
       async getRoom({ state }, { roomId }) {
         const { CareerMode } = state.contracts();
         const res = await CareerMode?.methods.getRoom(roomId).call(defaultCallOptions(state));
-        console.log('kkkkk', res);
         return res;
       },
+
+      async cancelRequestFight({ state }, {roomId, requestId}) {
+        const {CareerMode} = state.contracts();
+        const res = await CareerMode?.methods.cancelRequestFight(roomId, requestId).send(defaultCallOptions(state));
+        return res;
+      },
+
+      async endCareerMode({state}, {roomId}) {
+        const {CareerMode} = state.contracts();
+        const res = await CareerMode?.methods.endCareer(roomId).send(defaultCallOptions(state));
+        return res;
+      },
+      async getRewardPvp({state, commit}) {
+        const {CareerMode} = state.contracts();
+        // @ts-ignore
+        const res = await CareerMode?.methods.getReward(state.defaultAccount).call(defaultCallOptions(state));
+        commit('updateRewardPvp', {reward: res});
+        return res;
+      },
+
+      async claimTokenReward({state}) {
+        const {CareerMode} = state.contracts();
+        const res = await CareerMode?.methods.claimTokenRewards().send(defaultCallOptions(state));
+        return res;
+      },
+      async getListParticipatedRoom({state, commit}) {
+        const {CareerMode} = state.contracts();
+        //@ts-ignore
+        const listRoomRequest: number[] = await CareerMode?.methods.getPartipatedRequests(state.defaultAccount).call(defaultCallOptions(state));
+        // @ts-ignore
+        // const listMyRoomRequest = [];
+        // for(let i=0;i<listRoomRequest.length; i++) {
+        //   //@ts-ignore
+        //   const room: any[] = await CareerMode?.methods.getRoom(listRoomRequest[i]).call(defaultCallOptions(state));
+        //   console.log('room hehe', room);
+        //   listMyRoomRequest.push(room);
+        // }
+        // console.log('1111', listMyRoomRequest);
+        // return listMyRoomRequest;
+        const promises = [];
+        for (let i = 0; i < listRoomRequest.length; i++) {
+          promises.push(
+            new Promise(resolve => {
+              CareerMode?.methods
+                .getRequests(0, listRoomRequest[i])
+                .call(defaultCallOptions(state))
+                .then((requestList) =>{
+                  if (!requestList){
+                    resolve([]);
+                    return;
+                  }
+                  // @ts-ignore
+                  resolve(requestList.map(r => ({...r, roomId: listRoomRequest[i]})));
+                });
+            })
+          );
+        }
+        const result: any[] = await Promise.all(promises);
+        if(!result){
+          return;
+        }
+
+        commit('updateMyCareerModeRequest', {
+          request : ([] as any[]).concat(...result).map(v=>({
+            weaponId: v.wep,
+            heroId: v.char,
+            requester: v.requester,
+            done: v.done,
+            id: v.id,
+            roomId: v.roomId,
+            win: v.win
+          })).filter(item => item.requester === state.defaultAccount)
+        });
+      }
     },
   });
 }

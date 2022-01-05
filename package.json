@@ -14,7 +14,9 @@
     "abdk-libraries-solidity": "2.4.0",
     "censor-sensor": "^1.0.6",
     "dotenv": "^8.2.0",
-    "solc": "^0.8.9"
+    "solc": "^0.8.9",
+    "vue-observe-visibility": "^1.0.0",
+    "vue-spinner": "^1.0.4"
   },
   "devDependencies": {
     "@openzeppelin/test-helpers": "^0.5.11",
