@@ -25,6 +25,13 @@
         <button @click="$bvModal.hide('listHeroToCareerModal'), careerMode = true, changeMode = false, requestChallenge = false,
           checkSelect = false, addClass = ''" class="listHeroToCareerModal-btn confirm">GO TO CHECK</button>
       </b-modal>
+      <b-modal id="fightErrorModal" hide-footer>
+        <div class="icon-close-container"><div class="icon-close" @click="$bvModal.hide('listHeroToCareerModal')"></div></div>
+        <div class="listHeroToCareerModal-head">CryptoWar Message</div>
+        <div class="listHeroToCareerModal-body" v-if="errorMessage">{{errorMessage}}</div>
+        <button @click="$bvModal.hide('fightErrorModal'), careerMode = true, changeMode = false, requestChallenge = false,
+          checkSelect = false, addClass = ''" class="listHeroToCareerModal-btn confirm">GO TO CHECK</button>
+      </b-modal>
       <b-modal id="claimModal" hide-footer>
         <div class="icon-close-container"><div class="icon-close" @click="$bvModal.hide('claimModal')"></div></div>
         <div class="listHeroToCareerModal-head">CryptoWar Message</div>
@@ -721,7 +728,6 @@ export default {
     },
 
     async handleFight(roomId, requestId) {
-      this.$bvModal.show('loadingModal');
       const room = this.careerModeRooms.filter(item => item.id ===roomId);
       if(!room?.[0]) {
         return;
@@ -730,11 +736,8 @@ export default {
         this.errorMessage = 'Please select weapon and hero!';
         // @ts-ignore
         this.$bvModal.show('fightErrorModal');
-        setTimeout(() => {
-          this.$bvModal.hide('loadingModal');
-        }, 500);
-        return;
       }else {
+        this.$bvModal.show('loadingModal');
         this.waitingResults = true;
         // @ts-ignore
         this.fightResults = null;
@@ -846,9 +849,7 @@ export default {
       }
     },
     async handleClaimTokenReward() {
-      console.log('hihi', this.rewardPvp);
       if(this.rewardPvp > 0) {
-        console.log('1111');
         this.$bvModal.show('loadingModal');
         const res = await this.claimTokenReward();
         console.log('resss', res);
