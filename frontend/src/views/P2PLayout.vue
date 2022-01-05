@@ -784,7 +784,7 @@ export default {
       for(const i in object) {
         newCareerModeRequest.push(object[i]);
       }
-      return this.careerModeRequest.filter((item) => !item.done);
+      return this.careerModeRequest.filter((item) => item.done ==='0');
     },
 
     filterCareerModeRooms() {

@@ -14,7 +14,7 @@
         </span>
         </button>
       </div>
-      <div class="containerButton" v-if="!isDone && isMine">
+      <div class="containerButton" v-if="isDone ==='0' && isMine">
         <button
           type="button"
           class="buttonFight"
@@ -25,8 +25,11 @@
         </span>
         </button>
       </div>
-      <div v-if="isDone">
+      <div v-if="isDone === '1'">
         <div class="cost"><div></div> {{this.getResult()}}</div>
+      </div>
+       <div v-if="isDone === '2'">
+        <div class="cost"><div></div> You canceled this match</div>
       </div>
 
 
