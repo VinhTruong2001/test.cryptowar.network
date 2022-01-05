@@ -66,10 +66,10 @@
         <FightResult :results="fightResults"/>
         <button @click="$bvModal.hide('fightResult')" class="listHeroToChallengeModal-btn confirm">GO TO CHECK</button>
       </b-modal>
-      <b-modal id="cancelCareerModal" hide-footer>
-        <div class="icon-close-container"><div class="icon-close" @click="$bvModal.hide('listHeroToChallengeModal')"></div></div>
+      <b-modal id="cancelCareerModal" hide-footer hide-header-close>
         <div class="listHeroToChallengeModal-head">CryptoWar Message</div>
-        <div class="listHeroToChallengeModal-body">Cancel Career Mode: <span>Done</span></div>
+        <div class="listHeroToCareerModal-body" v-if="errorMessage">{{errorMessage}}</div>
+        <div class="listHeroToChallengeModal-body" v-if="!errorMessage">Cancel Career Mode: <span>Done</span></div>
         <button @click="$bvModal.hide('cancelCareerModal')" class="listHeroToChallengeModal-btn confirm">GO TO CHECK</button>
       </b-modal>
       <div class="row">
@@ -267,7 +267,7 @@
               :selectedCharacterId="i.characterId"
               :selectedWeaponId="i.weaponId"
               :isCancel="true"
-              :handleCancelFight="() => cancelCareerMode(i.id)"
+              :handleCancelFight="cancelCareerMode"
               :handleShowWeapon="handleShowWeapon"
               />
               <!-- <router-link :to="{ name: 'pvp-fight' }">
@@ -804,7 +804,11 @@ export default {
     },
 
     filterCareerModeRooms() {
-      return this.careerModeRooms.filter((item)=> item.owner!==this.defaultAccount && !item.claimed && item.matchReward < item.totalDeposit);
+      return this.careerModeRooms.filter((item)=> {
+        const _matchReward = fromWeiEther(item.matchReward);
+        const _totalDeposit = fromWeiEther(item.totalDeposit);
+        return item.owner!==this.defaultAccount && !item.claimed && Number(_matchReward) < Number(_totalDeposit);
+      });
     },
     filterMyCareerModeRooms() {
       return this.careerModeRooms.filter((item)=> item.owner===this.defaultAccount && !item.claimed);
@@ -851,14 +855,20 @@ export default {
         }
       }
     },
-    async cancelCareerMode(roomId) {
-      this.$bvModal.show('loadingModal');
-      const res = await this.endCareerMode({roomId});
-      if(res) {
-        this.$bvModal.hide('loadingModal');
-        setTimeout(() => {
-          this.$bvModal.show('cancelCareerModal');
-        }, 500);
+    async cancelCareerMode(roomId, isAvailable) {
+      if(isAvailable) {
+        this.$bvModal.show('loadingModal');
+        const res = await this.endCareerMode({roomId});
+        if(res) {
+          this.$bvModal.hide('loadingModal');
+          setTimeout(() => {
+            this.$bvModal.show('cancelCareerModal');
+          }, 500);
+        }
+      }
+      else {
+        this.errorMessage= `You only can "Cancel Career" after 1 hour`;
+        this.$bvModal.show('cancelCareerModal');
       }
     },
     async handleClaimTokenReward() {
@@ -941,15 +951,11 @@ export default {
     }
     setTimeout(async () => {
       await this.getCareerRooms({cursor: 0});
-      console.log('1', this.careerModeRooms);
       await this.getRewardPvp();
-      console.log('2', this.rewardPvp);
       this.fetchRequestInterval = setInterval(async () => {
         await this.getRequests();
       }, 5000);
-      console.log('3', this.careerModeRequest);
       await this.getListParticipatedRoom();
-      console.log('4', this.myCareerModeRequest);
     }, 500);
   },
 };
@@ -1001,6 +1007,25 @@ export default {
 #selectHeroOrWeaponModal .icon-close-container{
   display: flex;
   justify-content: flex-end;
+}
+#requestFightModal .modalContent,
+#cancelCareerModal .modalContent,
+#fightErrorModal .modalContent {
+    max-width: 50rem;
+    margin: auto;
+    padding: 20px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 0.3rem;
+    outline: 0;
+    background-image: url('../assets/v2/shop-select-item.svg');
+    background-position: 50% 0;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
 }
 
 #loadingModal .centerLoading {

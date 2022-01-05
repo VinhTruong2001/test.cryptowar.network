@@ -34,7 +34,7 @@
         <button
           type="button"
           class="btn-request-fight"
-          @click="() => handleCancelFight()"
+          @click="() => handleCancelFight(this.room.id,this.checkTimeAvailable())"
         >
         <span class="titleButtonFight">
           CANCEL CAREER
@@ -45,18 +45,17 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
 import CharacterRoomArtPvp from "../components/CharacterRoomArtPvp.vue";
 import { mapActions, mapState } from "vuex";
 import Web3 from "web3";
 
-export default Vue.extend({
+export default {
   props: ["characterId", "room", "selectedWeaponId", "selectedCharacterId", "isRequest", "handleRequestFight","handleCancelFight", "isCancel", "handleShowWeapon"],
   components: {
     CharacterRoomArtPvp,
   },
   methods: {
-    ...mapActions(["fetchCharacters", "requestFight"]),
+    ...mapActions(["fetchCharacters", "requestFight", "getStartTimeRoom"]),
     // handleRequestFight() {
     //   //@ts-ignore
     //   this.requestFight({
@@ -65,19 +64,49 @@ export default Vue.extend({
     //     characterId: this.selectedCharacterId,
     //   });
     // },
+    checkTimeAvailable() {
+      if(!this.isCancel) {
+        return false;
+      }
+      const now = new Date();
+      //@ts-ignore
+      const timeStart = new Date(this.timeRoomStart);
+      if(now.getFullYear() > timeStart.getFullYear()){
+        return true;
+      }else if(now.getMonth() > timeStart.getMonth()) {
+        return true;
+      }else if(now.getDate()> timeStart.getDate()) {
+        return true;
+      }else if(now.getHours() > timeStart.getHours()) {
+        return true;
+      }
+      else {
+        return false;
+      }
+    }
   },
   computed: {
     ...mapState(["characters"]),
+    //@ts-ignore
     matchReward() {
+      //@ts-ignore
       return Web3.utils.fromWei(this.room.matchReward, "ether");
     },
-
+  },
+  data() {
+    return{
+      timeRoomStart: 0
+    };
   },
   async mounted() {
     //@ts-ignore
     await this.fetchCharacters([this.characterId]);
+    //@ts-ignore
+    this.timeRoomStart = await this.getStartTimeRoom({roomId: this.room.id});
+    //@ts-ignore
+    console.log('test', this.checkTimeAvailable());
   },
-});
+};
 </script>
 
 <style scoped>

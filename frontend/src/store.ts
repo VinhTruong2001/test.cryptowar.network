@@ -3438,10 +3438,13 @@ export function createStore(web3: Web3) {
             .call(defaultCallOptions(state))
         );
 
-        // commit('updateWeapon', { weaponId, weapon });
-        console.log('11111',weapon);
         return weapon;
       },
+      async getStartTimeRoom({state}, {roomId}) {
+        const {CareerMode} = state.contracts();
+        const res = await CareerMode?.methods.getStartTime(roomId).call(defaultCallOptions(state));
+        return res;
+      }
     },
   });
 }
