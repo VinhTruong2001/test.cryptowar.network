@@ -65,6 +65,7 @@ export default {
     //   });
     // },
     checkTimeAvailable() {
+      //@ts-ignore
       if(!this.isCancel) {
         return false;
       }
