@@ -363,6 +363,10 @@ contract CareerMode is
         minimumRoundDuration = _minimumRoundDuration;
     }
 
+    function setStaminaCostFight(uint8 _staminaCost) public restricted {
+        staminaCostFight = _staminaCost;
+    }
+
     /** GETTERS */
 
     function unpackFightData(uint96 playerData)
