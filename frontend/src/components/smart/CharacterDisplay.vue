@@ -58,7 +58,7 @@
       </div> -->
     </transition>
 
-    <div class="character-full-list" :class="[getIsCharacterViewExpanded? '': 'hidden']" v-if="!isMobile()">
+    <div class="character-full-list" :class="[getIsCharacterViewExpanded? '': 'hidden']">
       <ul
         class="character-list"
         v-bind:class="[
@@ -104,7 +104,7 @@
       </ul>
     </div>
 
-    <div class="character-list-mobile" v-if="isMobile()">
+    <!-- <div class="character-list-mobile" v-if="isMobile()">
       <ul>
         <li
           class="{selectedCharactersLiClass}"
@@ -123,14 +123,14 @@
           </div>
         </li>
       </ul>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script lang="ts">
 import { mapGetters, mapState, mapMutations } from "vuex";
 import { getCharacterArt } from "../../character-arts-placeholder";
-import SmallBar from "../SmallBar.vue";
+// import SmallBar from "../SmallBar.vue";
 // import CharacterArt from "../CharacterArt.vue";
 import { CharacterPower, CharacterTrait } from "../../interfaces";
 import { RequiredXp } from "../../interfaces";
@@ -142,7 +142,7 @@ import { getCleanName } from "../../rename-censor";
 export default Vue.extend({
   components: {
     // CharacterArt,
-    SmallBar,
+    // SmallBar,
     // Hint,
   },
 
@@ -307,7 +307,7 @@ li.character-highlight .element-icon{
 }
 
 .character-list-mobile {
-  border-top: 3px solid #9e8a57;
+  /* border-top: 3px solid #9e8a57; */
   margin-top: 15px;
   padding-top: 15px;
   display: flex;
