@@ -382,15 +382,15 @@ export default {
     },
 
     async loadConsumablesCount() {
-      this.haveRename = await this.fetchTotalRenameTags(); // the other type of call returned 0 on testnet but not on local
-      this.haveChangeTraitFire =
-        await this.fetchTotalCharacterFireTraitChanges();
-      this.haveChangeTraitEarth =
-        await this.fetchTotalCharacterEarthTraitChanges();
-      this.haveChangeTraitWater =
-        await this.fetchTotalCharacterWaterTraitChanges();
-      this.haveChangeTraitLightning =
-        await this.fetchTotalCharacterLightningTraitChanges();
+      // this.haveRename = await this.fetchTotalRenameTags(); // the other type of call returned 0 on testnet but not on local
+      // this.haveChangeTraitFire =
+      //   await this.fetchTotalCharacterFireTraitChanges();
+      // this.haveChangeTraitEarth =
+      //   await this.fetchTotalCharacterEarthTraitChanges();
+      // this.haveChangeTraitWater =
+      //   await this.fetchTotalCharacterWaterTraitChanges();
+      // this.haveChangeTraitLightning =
+      //   await this.fetchTotalCharacterLightningTraitChanges();
     },
   },
 

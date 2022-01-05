@@ -66,7 +66,8 @@ export default {
       if(this.results[3]>= this.results[2]) {
         return this.convertWei(this.results.matchReward *0.95);
       }else {
-        return `${toBN(fromWeiEther(this.results[4])).toFixed(2)}`;
+        const lostNumber = toBN(fromWeiEther(this.results[4])).toFixed(2);
+        return Number(lostNumber)/0.95;
       }
     }
   },
