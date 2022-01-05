@@ -1,5 +1,5 @@
 <template>
-  <div class="body main-font">
+  <div class="body main-font market">
     <div class="market-hero-weapon" style="max-width: 1769px; margin-left: auto; margin-right: auto;">
       <button @click="activeType = 'character'; searchAllCharacterListings(currentPage - 1)" :class="activeType === 'character' && 'selected'">HERO</button>
       <button @click="activeType = 'weapon'; searchAllWeaponListings(currentPage - 1)" :class="activeType === 'weapon' && 'selected'">WEAPON</button>
@@ -153,7 +153,7 @@
                   {{calculatedBuyerCost(listingSellPrice)}} xBlade</i></span>
                 </b-modal>
               </div>
-              <div class="mb-2">
+              <!-- <div class="mb-2">
                 <b-button
                   class="gtag-link-others search-btn" tagname="show_weapons_sold"
                   @click="showWeaponsSoldModal()"> Weapons Sold
@@ -200,7 +200,7 @@
                   <b-button class="mt-3 btn-buy" block @click="resetTransactionHistoryValues('characters-sold-modal')">Ok</b-button>
                   </template>
                 </b-modal>
-              </div>
+              </div> -->
             </div>
           </div>
           <div class="col-12 col-xl-9 col-md-12 col-sm-12 sell-grid" v-if="activeType === 'weapon'">
@@ -1439,7 +1439,6 @@ export default Vue.extend({
 <style scoped>
 .body {
   margin-top: 3px;
-  padding: 0 126px;
 }
 
 .button + .button {
