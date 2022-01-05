@@ -925,7 +925,9 @@ export default {
       console.log('1', this.careerModeRooms);
       await this.getRewardPvp();
       console.log('2', this.rewardPvp);
-      await this.getRequests();
+      this.fetchRequestInterval = setInterval(async () => {
+        await this.getRequests();
+      }, 5000);
       console.log('3', this.careerModeRequest);
       await this.getListParticipatedRoom();
       console.log('4', this.myCareerModeRequest);
