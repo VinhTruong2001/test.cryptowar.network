@@ -63,7 +63,7 @@ function createRouter() {
       { path: '/options', name: 'options', component: Options },
       { path: '/shop', name: 'shop', component: Shop },
       { path: '/referral', name: 'referral', component: Referral},
-      { path: '/p2playout', name: 'P2P', component: P2PLayout },
+      { path: '/p2p', name: 'P2P', component: P2PLayout },
       { path: '/lobby', name: 'lobby', component: Lobby },
       { path: '/maintenance', name: 'maintenance', component: Maintenance },
     ]

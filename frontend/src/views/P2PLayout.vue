@@ -26,7 +26,7 @@
           checkSelect = false, addClass = ''" class="listHeroToCareerModal-btn confirm">GO TO CHECK</button>
       </b-modal>
       <b-modal id="fightErrorModal" hide-footer>
-        <div class="icon-close-container"><div class="icon-close" @click="$bvModal.hide('listHeroToCareerModal')"></div></div>
+        <div class="icon-close-container"><div class="icon-close" @click="$bvModal.hide('fightErrorModal')"></div></div>
         <div class="listHeroToCareerModal-head">CryptoWar Message</div>
         <div class="listHeroToCareerModal-body" v-if="errorMessage">{{errorMessage}}</div>
         <button @click="$bvModal.hide('fightErrorModal'), careerMode = true, changeMode = false, requestChallenge = false,
@@ -732,41 +732,35 @@ export default {
       if(!room?.[0]) {
         return;
       }
-      if(!this.selectedCharacter || !this.selectedWeapon) {
-        this.errorMessage = 'Please select weapon and hero!';
+      this.$bvModal.show('loadingModal');
+      this.waitingResults = true;
+      // @ts-ignore
+      this.fightResults = null;
+      // @ts-ignore
+      this.error = null;
+      // this.setIsInCombat(this.waitingResults);
+      try{
         // @ts-ignore
-        this.$bvModal.show('fightErrorModal');
-      }else {
-        this.$bvModal.show('loadingModal');
-        this.waitingResults = true;
-        // @ts-ignore
-        this.fightResults = null;
-        // @ts-ignore
-        this.error = null;
-        // this.setIsInCombat(this.waitingResults);
-        try{
-          // @ts-ignore
-          const results = await this.fight({
-            roomId, requestId
-          });
-          if(results) {
-            this.$bvModal.show('fightResult');
-            const fightResultsFull = {...results, matchReward: room?.[0]?.matchReward};
-            this.fightResults=fightResultsFull;
-            setTimeout(() => {
-              this.$bvModal.hide('loadingModal');
-            }, 500);
-            this.getRequests();
-            this.getRewardPvp();
-          }
-          // @ts-ignore
-          // @ts-ignore
-          this.error=null;
-        } catch (e) {
-          console.error(e);
-          // @ts-ignore
-          this.error = e.message;
+        const results = await this.fight({
+          roomId, requestId
+        });
+        if(results) {
+          this.$bvModal.show('fightResult');
+          const fightResultsFull = {...results, matchReward: room?.[0]?.matchReward};
+          this.fightResults=fightResultsFull;
+          setTimeout(() => {
+            this.$bvModal.hide('loadingModal');
+          }, 500);
+          this.getRequests();
+          this.getRewardPvp();
         }
+        // @ts-ignore
+        // @ts-ignore
+        this.error=null;
+      } catch (e) {
+        console.error(e);
+        // @ts-ignore
+        this.error = e.message;
       }
       // @ts-ignore
     },
