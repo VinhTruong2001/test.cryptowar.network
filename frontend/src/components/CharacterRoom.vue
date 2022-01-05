@@ -92,6 +92,7 @@ export default {
       //@ts-ignore
       return Web3.utils.fromWei(this.room.matchReward, "ether");
     },
+
   },
   data() {
     return{
