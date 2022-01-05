@@ -2,16 +2,26 @@
  <div style="containerListRequest">
    <BackgroundItem
    v-if="this.request.heroId"
-   :character="characters[this.request.heroId]" :selectedCharacterId="this.request.heroId" :selectedWeaponId="this.request.weaponId" :noMargin="false" />
+   :character="characters[this.request.heroId]" :selectedCharacterId="this.request.heroId" :selectedWeaponId="this.request.weaponId" :noMargin="false"
+   :playerPower="this.playerPower" />
    <div class="containerButton" v-if="!isMine">
+         <button
+          type="button"
+          class="buttonShowWeapon"
+          @click="() =>this.handleShowWeapon(this.request.weaponId)"
+        >
+          <span class="titleButtonShowWeapon">
+            Show Weapon
+          </span>
+        </button>
         <button
           type="button"
           class="buttonFight"
           @click="() =>this.handleFight(this.request.roomId, this.request.id)"
         >
-        <span class="titleButtonFight">
-          FIGHT
-        </span>
+          <span class="titleButtonFight">
+            FIGHT
+          </span>
         </button>
       </div>
       <div class="containerButton" v-if="isDone ==='0' && isMine">
@@ -68,17 +78,15 @@ export default Vue.extend({
       error: null,
       room: null,
       dataRoom: null,
+      playerPower: 0,
+      weapon: null
     };
   },
   components: { BackgroundItem },
-  props: ["request", "handleFight", "isMine", "isDone", "cancelRequestFight", "isWin"],
-  computed: {
-    ...mapState(["characters", "careerModeRooms"]),
-    ...mapGetters(["getCharacterName"]),
-  },
+  props: ["request", "handleFight", "isMine", "isDone", "cancelRequestFight", "isWin", "handleShowWeapon"],
 
   methods: {
-    ...mapActions(["fetchCharacters", "fight", "getRoom"]),
+    ...mapActions(["fetchCharacters", "fight", "getRoom", "checkPlayerPower","fetchWeaponId"]),
     ...mapMutations(['setIsInCombat']),
     getCleanCharacterName(id: number) {
       return getCleanName(this.getCharacterName(id));
@@ -91,13 +99,18 @@ export default Vue.extend({
       }
     }
   },
+  computed: {
+    ...mapState(["characters", "careerModeRooms"]),
+    ...mapGetters(["getCharacterName"]),
+  },
 
   async mounted() {
     if (this.request.heroId) {
       await this.fetchCharacters([this.request.heroId]);
     }
-    const res = await this.getRoom(this.request.roomId);
-    console.log('data room', res);
+    //@ts-ignore
+    const res: number = await this.checkPlayerPower({heroId: this.request.heroId, weaponId: this.request.weaponId});
+    this.playerPower =res;
   },
 });
 </script>
@@ -136,7 +149,7 @@ export default Vue.extend({
 .containerButton {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content:center;
     margin-bottom: 2rem;
   }
   .buttonFight {
@@ -146,6 +159,22 @@ export default Vue.extend({
     background-size: 100% 100%;
     background-repeat: no-repeat;
     background-color: transparent;
+    margin-left: 0.8rem;
+  }
+  .buttonShowWeapon {
+  border: none;
+    height: 47px;
+    background-image: url('../assets/images/bg-fight-button.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    margin-left: 0.8rem;
+  }
+  .titleButtonShowWeapon {
+    font-size: 12px;
+    color: var(--white);
+    padding-left: 6px;
+    padding-right: 6px;
   }
 .titleButtonFight {
   color: var(--white);

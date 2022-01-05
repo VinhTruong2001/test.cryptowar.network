@@ -5,10 +5,12 @@
   <div class="container">
       <div class="containerTop">
           <div class="containerColumn">
-            <span :class="weapon.element.toLowerCase() + '-icon'"></span>
-            <!-- <div :v-for="r in Array(this.weapon.stars + 1).fill('*')">
-                <span>{{r}}</span>
-                </div> -->
+            <div class="containerWeaponStar">
+              <span :class="weapon.element.toLowerCase() + '-icon'"></span>
+              <span class="weapon-star" v-for="n in this.weapon.stars + 1" :key="n">
+                <i class="fas fa-star"></i>
+              </span>
+            </div>
             <div class="stats">
                 <div v-if="weapon.stat1Value" class="wrapStat">
                     <span :class="weapon.stat1.toLowerCase() + '-icon'" class="mr-1 icon"></span>
@@ -257,6 +259,11 @@ export default {
   margin: 0 auto;
   border-radius: 4px;
   background-color : #ddb73c;
+}
+
+.containerWeaponStar {
+  display: flex;
+  align-items: center;
 }
 
 .weapon-icon {

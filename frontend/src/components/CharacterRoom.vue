@@ -11,13 +11,22 @@
       />
     </div>
     <div v-if="this.isRequest == true" class="containerButton">
+      <button
+          type="button"
+          class="buttonShowWeapon"
+          @click="() =>this.handleShowWeapon(this.room.weaponId)"
+        >
+          <span class="titleButtonShowWeapon">
+            Show Weapon
+          </span>
+        </button>
         <button
           type="button"
-          class="btn-request-fight"
+          class="buttonFight"
           @click="() => handleRequestFight()"
         >
         <span class="titleButtonFight">
-          REQUEST FIGHT
+          REQUEST
         </span>
         </button>
       </div>
@@ -28,7 +37,7 @@
           @click="() => handleCancelFight()"
         >
         <span class="titleButtonFight">
-          CANCEL FIGHT
+          CANCEL CAREER
         </span>
         </button>
       </div>
@@ -42,7 +51,7 @@ import { mapActions, mapState } from "vuex";
 import Web3 from "web3";
 
 export default Vue.extend({
-  props: ["characterId", "room", "selectedWeaponId", "selectedCharacterId", "isRequest", "handleRequestFight","handleCancelFight", "isCancel"],
+  props: ["characterId", "room", "selectedWeaponId", "selectedCharacterId", "isRequest", "handleRequestFight","handleCancelFight", "isCancel", "handleShowWeapon"],
   components: {
     CharacterRoomArtPvp,
   },
@@ -62,6 +71,7 @@ export default Vue.extend({
     matchReward() {
       return Web3.utils.fromWei(this.room.matchReward, "ether");
     },
+
   },
   async mounted() {
     //@ts-ignore
@@ -104,12 +114,38 @@ export default Vue.extend({
   justify-content: center;
   padding-left: 0px;
 }
+.buttonShowWeapon {
+  border: none;
+    height: 47px;
+    background-image: url('../assets/images/bg-fight-button.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    margin-left: 0.8rem;
+  }
+  .titleButtonShowWeapon {
+    font-size: 12px;
+    color: var(--white);
+    padding-left: 6px;
+    padding-right: 6px;
+  }
 
   .containerButton {
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 2rem;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  .buttonFight {
+    border: none;
+    height: 47px;
+    background-image: url('../assets/images/bg-fight-button.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    margin-left: 0.8rem;;
   }
   .btn-request-fight{
   margin: 0 auto;
@@ -117,9 +153,9 @@ export default Vue.extend({
   background-color: transparent;
   border: none;
   background-image:  url(../assets/v2/btn-fight-big.svg);
-  width: 190px;
-  height: 42px;
-  background-size: cover;
+  min-width: 140px;
+  height: 47px;
+  background-size: contain;
   background-repeat: no-repeat;
   color: #fff;
   font-weight: 600;

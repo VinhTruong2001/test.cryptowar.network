@@ -3419,7 +3419,29 @@ export function createStore(web3: Web3) {
             win: v.win
           })).filter(item => item.requester === state.defaultAccount)
         });
-      }
+      },
+      async checkPlayerPower({state}, {heroId, weaponId}) {
+        const {CareerMode} = state.contracts();
+        const res = await CareerMode?.methods.getPlayerPower(heroId, weaponId).call(defaultCallOptions(state));
+        return res;
+      },
+      async fetchWeaponId(
+        { state },
+        weaponId: string | number
+      ) {
+        const { Weapons } = state.contracts();
+        if (!Weapons) return;
+        const weapon = weaponFromContract(
+          weaponId,
+          await Weapons.methods
+            .get('' + weaponId)
+            .call(defaultCallOptions(state))
+        );
+
+        // commit('updateWeapon', { weaponId, weapon });
+        console.log('11111',weapon);
+        return weapon;
+      },
     },
   });
 }

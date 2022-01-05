@@ -25,6 +25,13 @@
         <button @click="$bvModal.hide('listHeroToCareerModal'), careerMode = true, changeMode = false, requestChallenge = false,
           checkSelect = false, addClass = ''" class="listHeroToCareerModal-btn confirm">GO TO CHECK</button>
       </b-modal>
+      <b-modal id="showWeaponModal" hide-footer hide-header-close>
+        <div class="listHeroToCareerModal-body" v-if="errorMessage">{{errorMessage}}</div>
+        <div class="itemWeapon" >
+            <WeaponSelect :weapon="this.weaponToShow"/>
+          </div>
+        <button @click="$bvModal.hide('showWeaponModal'), addClass = ''" class="listHeroToCareerModal-btn confirm">CLOSE</button>
+      </b-modal>
       <b-modal id="fightErrorModal" hide-footer>
         <div class="icon-close-container"><div class="icon-close" @click="$bvModal.hide('fightErrorModal')"></div></div>
         <div class="listHeroToCareerModal-head">CryptoWar Message</div>
@@ -261,6 +268,7 @@
               :selectedWeaponId="i.weaponId"
               :isCancel="true"
               :handleCancelFight="() => cancelCareerMode(i.id)"
+              :handleShowWeapon="handleShowWeapon"
               />
               <!-- <router-link :to="{ name: 'pvp-fight' }">
               </router-link> -->
@@ -290,6 +298,7 @@
               :selectedWeaponId="i.weaponId"
               :isRequest="true"
               :handleRequestFight="() => handleRequestFight(i.id)"
+              :handleShowWeapon="handleShowWeapon"
               />
               <!-- <router-link :to="{ name: 'pvp-fight' }">
               </router-link> -->
@@ -299,14 +308,16 @@
       <div v-if="requestChallenge">
           <div class="row list-request" style="margin-left: 0;">
             <div class="itemCareer" v-for="i in this.filterCareerModeRequest(careerModeRequest)" :key="i.id">
-            <RoomRequest :request="i" :handleFight="handleFight" :isMine="false" :isDone="false"/>
+            <RoomRequest :request="i" :handleFight="handleFight" :isMine="false" :isDone="false" :handleShowWeapon="handleShowWeapon"/>
             </div>
         </div>
       </div>
       <div v-if="myRequestMode">
           <div class="row list-request" style="margin-left: 0;">
             <div class="itemCareer" v-for="i in this.filterMyRequestRoom(this.myCareerModeRequest)" :key="i.id">
-            <RoomRequest :request="i" :handleFight="handleFight" :isMine="true" :isDone="i.done" :cancelRequestFight="handleCancelRequestFight" :isWin="i.win" />
+            <RoomRequest
+              :request="i"
+              :handleFight="handleFight" :isMine="true" :isDone="i.done" :cancelRequestFight="handleCancelRequestFight" :isWin="i.win" :handleShowWeapon="handleShowWeapon"/>
             </div>
         </div>
       </div>
@@ -379,6 +390,7 @@ export default {
       cursor: 0,
       trait: this.characterTrait,
       listMyRequest: [],
+      weaponToShow: null
     };
   },
 
@@ -476,7 +488,8 @@ export default {
       "getRewardPvp",
       "claimTokenReward",
       "getListParticipatedRoom",
-      "cancelRequestFight"
+      "cancelRequestFight",
+      "fetchWeaponId"
     ]),
     ...mapMutations(["setIsInCombat"]),
     checkActive(){
@@ -751,8 +764,9 @@ export default {
           setTimeout(() => {
             this.$bvModal.hide('loadingModal');
           }, 500);
-          this.getRequests();
-          this.getRewardPvp();
+          await this.getRequests();
+          await this.getRewardPvp();
+          await this.getCareerRooms({cursor: 0});
         }
         // @ts-ignore
         // @ts-ignore
@@ -772,6 +786,11 @@ export default {
         this.getListParticipatedRoom();
       }
     },
+    async handleShowWeapon(weaponId) {
+      const weapon = await this.fetchWeaponId(weaponId);
+      this.weaponToShow = weapon;
+      this.$bvModal.show('showWeaponModal');
+    },
     filterCareerModeRequest () {
       const newCareerModeRequest = [];
       const object = {};
@@ -785,7 +804,7 @@ export default {
     },
 
     filterCareerModeRooms() {
-      return this.careerModeRooms.filter((item)=> item.owner!==this.defaultAccount && !item.claimed);
+      return this.careerModeRooms.filter((item)=> item.owner!==this.defaultAccount && !item.claimed && item.matchReward < item.totalDeposit);
     },
     filterMyCareerModeRooms() {
       return this.careerModeRooms.filter((item)=> item.owner===this.defaultAccount && !item.claimed);
@@ -1164,6 +1183,17 @@ export default {
   background-size: contain;
   background-image: url(../assets/images/bg-item-top.png);
   margin: 1.6em 0 4em 0;
+  position: relative;
+}
+
+.itemWeapon {
+  min-width: 19em;
+  height: 26.5em;
+  background-position: left;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-image: url(../assets/images/bg-item-top.png);
+  padding: 1.6em 0 4em 0;
   position: relative;
 }
 
