@@ -46,6 +46,11 @@
           <span class="white">{{ getCleanCharacterName(character.id) }}</span>
         </div>
       </div>
+      <div class="score-id-container">
+        <div class="black-outline" v-if="!portrait">
+          Player power: <span class="ownerText">{{ renderOwner(this.playerPower) }}</span>
+        </div>
+      </div>
        <div class="score-id-container">
         <div class="black-outline" v-if="!portrait">
           Owner: <span class="ownerText">{{ renderOwner(this.character.owner) }}</span>
@@ -70,6 +75,7 @@ export default {
     "room",
     "selectedWeaponId",
     "selectedCharacterId",
+    "playerPower"
   ],
   components: {
     //SmallButton,

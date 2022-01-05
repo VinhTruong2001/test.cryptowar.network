@@ -52,6 +52,11 @@
           Owner: <span class="ownerText">{{ renderOwner(this.room.owner) }}</span>
         </div>
       </div>
+      <div class="score-id-container">
+        <div class="black-outline" v-if="!portrait">
+          Remain: <span class="ownerText">{{ this.totalReward }}</span>
+        </div>
+      </div>
       <div class="cost"><div></div> {{this.matchReward}}</div>
     </div>
   </div>
