@@ -274,7 +274,7 @@ contract CareerMode is
 
         uint256 tokensWin = r.matchReward.sub(
             r.matchReward.mul(feeRate).div(100)
-        ).add(r.matchReward);
+        );
 
         _requestFight.win = opponentRoll >= playerRoll;
 
@@ -282,6 +282,8 @@ contract CareerMode is
             // Owner win
             tokenRewards[r.owner] = tokenRewards[r.owner].add(tokensWin);
         } else {
+            // Opponent win
+            tokensWin = tokensWin.add(r.matchReward);
             r.totalDeposit = r.totalDeposit.sub(r.matchReward);
 
             tokenRewards[_requestFight.requester] = tokenRewards[
