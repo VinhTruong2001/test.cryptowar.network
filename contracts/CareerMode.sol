@@ -274,7 +274,7 @@ contract CareerMode is
 
         uint256 tokensWin = r.matchReward.sub(
             r.matchReward.mul(feeRate).div(100)
-        );
+        ).add(r.matchReward);
 
         _requestFight.win = opponentRoll >= playerRoll;
 
