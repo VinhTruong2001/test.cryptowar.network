@@ -82,8 +82,6 @@ contract ChallengeMode is
         uint256 opponentIncome
     );
 
-    event ClaimReward(address account, uint256 reward);
-
     event EndCareerRoom(uint256 id, address owner, uint256 withdrawAmount);
 
     function initialize(

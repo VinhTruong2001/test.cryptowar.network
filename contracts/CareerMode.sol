@@ -67,7 +67,7 @@ contract CareerMode is
     mapping(address => uint256[]) roomsByAddress;
     mapping(address => uint256[]) participatedRoomsByAddress;
     uint256 public feeRate;
-    bytes32 public REWARD_OPERATOR = keccak256("REWARD_OPERATOR");
+    bytes32 public constant REWARD_OPERATOR = keccak256("REWARD_OPERATOR");
 
     /** EVENTS */
 
