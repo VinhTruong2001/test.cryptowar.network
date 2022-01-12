@@ -601,9 +601,9 @@ export default Vue.extend({
   margin-bottom: 50px;
 }
 
-.weapon-grid.row{
+/* .weapon-grid.row{
   flex: 1;
-}
+} */
 
 .weapon-bt-box{
   margin-top: 15px;
@@ -893,6 +893,13 @@ input::-webkit-inner-spin-button{
 @media (max-width: 1024px) {
   .weapon-grid.blacksmith .dust-wrap {
     padding-bottom: 10px;
+  }
+}
+
+
+@media (max-width: 1400px) {
+  .weapon-grid.blacksmith .dust-wrap {
+    padding: 20px 15px;
   }
 }
 

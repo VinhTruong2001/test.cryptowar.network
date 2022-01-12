@@ -7,21 +7,15 @@
       <div
         :disabled="!canClaimTokens"
         @click="claimSkill(ClaimStage.Claim)"
-        ><!-- moved gtag-link below b-nav-item -->
-        <span
-          class="gtag-link-others claim-reward-text"
-          tagname="claim_skill"
-          v-tooltip.bottom="
-            'Tax is being reduced by 1% per day.' + getTaxTimerNextTick
-          "
-        >
-          Claim rewards {{ formattedXBladeReward }} xBlade Early Withdraw Tax
-          {{ formattedRewardsClaimTax }}
-          <!-- <b-icon-question-circle class="centered-icon" scale="0.8"/> -->
-        </span>
+      >
+        <b-button
+          class="gtag-link-others btn-pink-bg btn-claim-reward"
+          v-html="`Claim Rewards`"
+          v-tooltip.bottom="'Tax is being reduced by 1% per day.' + getTaxTimerNextTick + '<br> Rewards: ' + formattedXBladeRewardNoTax + ' xBlade'"
+        ></b-button>
       </div>
 
-      <div :disabled="!canClaimXp" @click="onClaimXp">
+      <div @click="onClaimXp" :disabled="!canClaimXp">
         <b-button
           class="gtag-link-others btn-blue-bg btn-claim-xp"
           v-html="`Claim Heroes XP`"
@@ -55,35 +49,51 @@
       ref="claim-confirmation-modal"
       title="Claim xBlade Rewards"
       size="lg"
-      :ok-title="`OK, I'll claim and miss out ${this.formattedTaxAmount} xBlade tax`"
+      :ok-title="`OK, I'll claim`"
       @ok="onClaimTokens()"
     >
-      You are about to
-      {{
-        this.rewardsClaimTaxAsFactorBN > 0
-          ? "pay " +
-            formattedRewardsClaimTax +
-            " tax for early withdrawal, costing you " +
-            this.formattedTaxAmount
-          : ""
-      }}
-      . Are you sure you wish to continue? <b>This action cannot be undone.</b>
       <div>
-        <hr class="hr-divider" />
-        Hold Reminder:<br />
-        A percentage of your earning goes back to the community,<br />
+       <div class="claim-xblade-reward-info">
+        <div class="text-center" style="font-weight: bold">Hold Reminder</div>
+        A percentage of your earning goes back to the community,
         <u>if you withdraw early</u>
-        <div class="row col-12">
+        <div>
+          Your early withdraw tax
+          <span class="text-danger font-weight-bold"
+            >{{ formattedRewardsClaimTax }}
+          </span>
+          . Reduces 1% per day. Reset to 15% after withdraw
+        </div>
+        <div>
           <div>
-            Your early withdraw tax
-            <span class="text-danger font-weight-bold"
-              >{{ formattedRewardsClaimTax }}
+            Number of xBlade miss out:
+            <span class="text-danger font-weight-bold">
+              {{formattedTaxAmount}}
             </span>
+            xBlade tax
           </div>
-          <div class="text-left" style="margin-left: 4px">
-            . Reduces 1% per day. Reset to 15% after withdraw
+          <div>
+            Number of xBlade claim:
+            <span class="text-danger font-weight-bold">
+              {{formattedXBladeRewardWithTax}}
+            </span>
+            xBlade
           </div>
         </div>
+        <hr class="hr-divider" />
+        <div class="claim-xblade-reward-reminder">
+          {{
+            this.rewardsClaimTaxAsFactorBN > 0
+              ? "You are about to pay " +
+                formattedRewardsClaimTax +
+                " tax for early withdrawal, costing you " +
+                this.formattedTaxAmount + " xBlade"
+              : ""
+          }}
+          <br>
+          Are you sure you wish to continue?<br> <b>This action cannot be undone.</b>
+        </div>
+       </div>
       </div>
     </b-modal>
   </div>
@@ -148,8 +158,19 @@ export default Vue.extend({
       "getCharacterName",
     ]) as Accessors<StoreMappedGetters>),
 
-    formattedXBladeReward(): string {
+    formattedXBladeRewardNoTax(): string {
       const skillRewards = fromWeiEther(this.skillRewards);
+      return `${toBN(skillRewards).toFixed(2)}`;
+    },
+
+    formattedXBladeRewardWithTax(): string {
+      const skillRewards = fromWeiEther(
+        (
+          parseFloat(this.skillRewards) -
+          parseFloat(this.skillRewards) *
+          parseFloat(String(this.rewardsClaimTaxAsFactorBN))
+        ).toString()
+      );
       return `${toBN(skillRewards).toFixed(2)}`;
     },
 
@@ -331,8 +352,18 @@ export default Vue.extend({
   color: #fff;
 }
 
-.btn-claim-xp {
+.btn-claim-xp,
+.btn-claim-reward {
   font-size: 0.8rem;
+}
+
+.claim-xblade-reward-info {
+  margin: 0 auto;
+  width: 80%;
+}
+
+.claim-xblade-reward-reminder {
+  text-align: center;
 }
 
 @media (max-width: 576px) {
@@ -341,13 +372,22 @@ export default Vue.extend({
     text-align: center;
     padding: 0 8px;
   }
-    .navbar-expand {
-      justify-content: center;
-      text-align: center
-    }
+  .navbar-expand {
+    justify-content: center;
+    text-align: center
+  }
 
-    .btn-claim-xp {
-      margin-top: 8px;
-    }
+  .btn-claim-xp,
+  .btn-claim-reward {
+    margin-top: 8px;
+  }
+
+  .btn-claim-reward {
+    background-size: 210px 50px;
+  }
+
+  .claim-xblade-reward-info {
+    width: 100%;
+  }
 }
 </style>
