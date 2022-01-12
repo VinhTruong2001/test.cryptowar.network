@@ -761,7 +761,7 @@ export default Vue.extend({
 
   #modal-buyitem .modal-body{
     position: relative;
-    top: -40%;
+    top: -38%;
   }
 
   .weapon-grid {
