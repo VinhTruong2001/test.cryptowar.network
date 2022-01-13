@@ -116,6 +116,44 @@ module.exports = {
       gasPrice: 225000000000,
       skipDryRun: true,
     },
+    thundercore: {
+      provider: () =>
+        new HDWalletProvider(
+          hdWalletProviderOptions(
+            process.env.BINANCE_MAINNET_WALLET_PRIVATE_KEY,
+            process.env.BINANCE_MAINNET_WALLET_MNEMONIC,
+            {
+              providerOrUrl: "https://mainnet-rpc.thundercore.com",
+            }
+          )
+        ),
+      network_id: "*",
+      confirmations: 10,
+      timeoutBlocks: 200,
+      gas: 300000000,
+      gasPrice: 2100000000,
+      // gasPrice: 100000000,
+
+      // skipDryRun: true,
+    },
+    thundercore_test: {
+      provider: () =>
+        new HDWalletProvider(
+          hdWalletProviderOptions(
+            process.env.BINANCE_MAINNET_WALLET_PRIVATE_KEY,
+            process.env.BINANCE_MAINNET_WALLET_MNEMONIC,
+            {
+              providerOrUrl: "https://testnet-rpc.thundercore.com",
+            }
+          )
+        ),
+      network_id: "*",
+      confirmations: 10,
+      timeoutBlocks: 200,
+      gas: 3000000,
+      gasPrice: 2100000000,
+      // skipDryRun: true,
+    },
     polygon: {
       provider: () =>
         new HDWalletProvider(

@@ -60,6 +60,7 @@
     "backup-networks": "node scripts/manage-networks.js backup",
     "verify-contracts": "node scripts/verify-contracts.js",
     "deploy:xblade": "truffle compile --all && truffle migrate -f 1 --to 1 --network polygon",
+    "deploy:xblade:tt_test": "truffle compile --all && truffle migrate -f 1 --to 1 --network thundercore",
     "deploy:CWController": "truffle compile --all && truffle migrate -f 46 --to 46 --network bscmainnet",
     "deploy:testnet:CWController": "truffle compile --all && truffle migrate -f 46 --to 46 --network bsctestnet",
     "deploy:randomness": "truffle migrate -f 6 --to 6 --network bscmainnet",
