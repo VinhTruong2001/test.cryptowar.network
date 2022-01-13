@@ -67,10 +67,10 @@ contract BlindBox is
         rareQty = 100;
         epicQty = 100;
 
-        commonPrice = 1 ether;
-        rarePrice = 2 ether;
-        epicPrice = 2 ether;
-        fragmentPerBox = 1;
+        commonPrice = 50 ether;
+        rarePrice = 150 ether;
+        epicPrice = 140 ether;
+        fragmentPerBox = 1000;
 
         require(_weapon != address(0));
         weapons = Weapons(_weapon);
