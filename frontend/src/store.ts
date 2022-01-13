@@ -35,7 +35,7 @@ import {
   reforging as featureFlagReforging
 } from './feature-flags';
 import { IERC721, IStakingRewards, IERC20 } from '../../build/abi-interfaces';
-import { stakeTypeThatCanHaveUnclaimedRewardsStakedTo } from './stake-types';
+// import { stakeTypeThatCanHaveUnclaimedRewardsStakedTo } from './stake-types';
 import { Nft } from './interfaces/Nft';
 import { getWeaponNameFromSeed } from '@/weapon-name';
 import isBlacklist from './utils/blacklist';
@@ -121,6 +121,7 @@ export function createStore(web3: Web3) {
       xpRewards: {},
       inGameOnlyFunds: '0',
       directStakeBonusPercent: 10,
+      ownedCommonBoxIds: [],
       ownedCharacterIds: [],
       ownedWeaponIds: [],
       ownedShieldIds: [],
@@ -179,6 +180,7 @@ export function createStore(web3: Web3) {
       waxBridgeTimeUntilLimitExpires: 0,
       commonBoxPrice: web3.utils.toWei('0', 'ether'),
       rareBoxPrice: web3.utils.toWei('0', 'ether'),
+      epicBoxPrice: web3.utils.toWei('0', 'ether'),
       secondsPerStamina: 1,
       careerModeRooms: [],
       careerModeRequest: [],
@@ -309,7 +311,8 @@ export function createStore(web3: Web3) {
       getBoxPrice(state) {
         return () => ({
           common: state.commonBoxPrice,
-          rare: state.rareBoxPrice
+          rare: state.rareBoxPrice,
+          epic: state.epicBoxPrice
         });
       },
 
@@ -779,9 +782,10 @@ export function createStore(web3: Web3) {
         state.currentNftId = payload.id;
       },
 
-      updateBoxPrice(state: IState, payload: {commonPrice: string, rarePrice: string}) {
+      updateBoxPrice(state: IState, payload: {commonPrice: string, rarePrice: string, epicPrice: string}) {
         state.commonBoxPrice = payload.commonPrice;
         state.rareBoxPrice = payload.rarePrice;
+        state.epicBoxPrice = payload.epicPrice;
       },
 
       updateSecondsPerStamina(state: IState, payload: {secondsPerStamina: number}){
@@ -1057,15 +1061,43 @@ export function createStore(web3: Web3) {
         await Promise.all([promises]);
       },
 
+      async getMyBoxes({ state }) {
+        const { BlindBox } = state.contracts();
+        if (!BlindBox || !state.defaultAccount) return;
+        const tokens = await BlindBox.methods.balanceOf(state.defaultAccount).call(defaultCallOptions(state));
+        const promises = [];
+        for (let i = 0; i < Number(tokens); i++) {
+          promises.push(
+            new Promise(resolve => {
+              // @ts-ignore
+              BlindBox.methods.tokenOfOwnerByIndex(state.defaultAccount, i).call(defaultCallOptions(state))
+                .then(async (res) => {
+                  if(!res) {
+                    resolve([]);
+                    return ;
+                  }
+                  const type = await BlindBox.methods.getBox(res).call(defaultCallOptions(state));
+                  resolve({id: res, type});
+                });
+            })
+          );
+        }
+        const result: any[] = await Promise.all(promises);
+        // commit()
+        return result;
+      },
+
       async fetchUserGameDetails({ state, dispatch, commit }) {
         if (featureFlagStakeOnly) return;
+
+        const ownedCommonBoxIds = await dispatch('getMyBoxes');
 
         const [
           ownedCharacterIds,
           ownedWeaponIds,
           ownedShieldIds,
           maxStamina,
-          maxDurability
+          maxDurability,
         ] = await Promise.all([
           state
             .contracts()
@@ -1094,10 +1126,12 @@ export function createStore(web3: Web3) {
           ownedWeaponIds: Array.from(ownedWeaponIds),
           ownedShieldIds: Array.from(ownedShieldIds),
           maxStamina: parseInt(maxStamina, 10),
-          maxDurability: parseInt(maxDurability, 10)
+          maxDurability: parseInt(maxDurability, 10),
+          ownedCommonBoxIds: Array.from(ownedCommonBoxIds),
         });
 
         await Promise.all([
+          dispatch('getMyBoxes'),
           dispatch('fetchCharacters', ownedCharacterIds),
           dispatch('fetchWeapons', ownedWeaponIds),
           dispatch('fetchShields', ownedShieldIds),
@@ -1452,6 +1486,33 @@ export function createStore(web3: Web3) {
           commit('updateCharacterRename', { characterId, renameString });
         }
       },
+
+
+      // async fetchBox(
+      //   { state, commit, dispatch },
+      //   boxId: string | number
+      // ) {
+      //   const { BlindBox } = state.contracts();
+      //   if (!BlindBox) return;
+
+      //   await Promise.all([
+      //     (async () => {
+
+      //       const owner = await BlindBox.methods.ownerOf(boxId).call(defaultCallOptions(state));
+      //       const blindBox = characterFromContract(
+      //         boxId,
+      //         await BlindBox.methods
+      //           .get('' + boxId)
+      //           .call(defaultCallOptions(state))
+      //       );
+      //       const _blindBox = {...blindBox, owner};
+
+      //       commit('updateCharacter', { boxId, character: _blindBox });
+      //     })(),
+      //     dispatch('fetchCharacterTransferCooldown', boxId)
+      //   ]);
+      // },
+
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       async mintCharacter({ state, dispatch }, referralAddress) {
         if (featureFlagStakeOnly || !state.defaultAccount) return;
@@ -1790,6 +1851,7 @@ export function createStore(web3: Web3) {
           fightMultiplier
         )
           .send({value: fightTax, from: state.defaultAccount, gas: '800000' });
+        const fragmentOutcome = res.events.FragmentReceived.returnValues.fragmentAmount;
 
         await dispatch('fetchTargets', { characterId, weaponId });
 
@@ -1816,7 +1878,8 @@ export function createStore(web3: Web3) {
           enemyRoll,
           xpGain,
           xBladeGain,
-          bnbGasUsed
+          bnbGasUsed,
+          fragmentOutcome
         ];
       },
 
@@ -1969,25 +2032,25 @@ export function createStore(web3: Web3) {
         await dispatch('fetchStakeDetails', { stakeType });
       },
 
-      async stakeUnclaimedRewards(
-        { state, dispatch },
-        { stakeType }: { stakeType: StakeType }
-      ) {
-        if (stakeType !== stakeTypeThatCanHaveUnclaimedRewardsStakedTo) return;
+      // async stakeUnclaimedRewards(
+      //   { state, dispatch },
+      //   { stakeType }: { stakeType: StakeType }
+      // ) {
+      //   if (stakeType !== stakeTypeThatCanHaveUnclaimedRewardsStakedTo) return;
 
-        const { CryptoWars: CryptoBlades } = state.contracts();
-        if (!CryptoBlades) return;
+      //   const { CryptoWars: CryptoBlades } = state.contracts();
+      //   if (!CryptoBlades) return;
 
-        await CryptoBlades.methods
-          .stakeUnclaimedRewards()
-          .send(defaultCallOptions(state));
+      //   await CryptoBlades.methods
+      //     .stakeUnclaimedRewards()
+      //     .send(defaultCallOptions(state));
 
-        await Promise.all([
-          dispatch('fetchSkillBalance'),
-          dispatch('fetchStakeDetails', { stakeType }),
-          dispatch('fetchFightRewardSkill')
-        ]);
-      },
+      //   await Promise.all([
+      //     dispatch('fetchSkillBalance'),
+      //     dispatch('fetchStakeDetails', { stakeType }),
+      //     dispatch('fetchFightRewardSkill')
+      //   ]);
+      // },
 
       async claimReward(
         { state, dispatch },
@@ -2491,20 +2554,20 @@ export function createStore(web3: Web3) {
       },
 
       async purchaseCommonSecretBox({ state, dispatch }) {
-        const { xBladeToken, SecretBox, CryptoWars } = state.contracts();
-        if (!xBladeToken || !SecretBox || !state.defaultAccount || !CryptoWars) return;
+        const { xBladeToken, BlindBox, CryptoWars } = state.contracts();
+        if (!xBladeToken || !BlindBox || !state.defaultAccount || !CryptoWars) return;
 
         const allowance = await xBladeToken.methods
-          .allowance(state.defaultAccount, SecretBox.options.address)
+          .allowance(state.defaultAccount, BlindBox.options.address)
           .call(defaultCallOptions(state));
 
         if(toBN(allowance).lt( web3.utils.toWei('1000000', 'ether'))) {
           await xBladeToken.methods
-            .approve(SecretBox.options.address, web3.utils.toWei('100000000', 'ether'))
+            .approve(BlindBox.options.address, web3.utils.toWei('100000000', 'ether'))
             .send(defaultCallOptions(state));
         }
 
-        await SecretBox.methods.openCommonBox().send({
+        await BlindBox.methods.buy(0).send({
           from: state.defaultAccount,
           gas: '500000'
         });
@@ -2513,22 +2576,37 @@ export function createStore(web3: Web3) {
           dispatch('fetchTotalCommonBoxSupply')
         ]);
       },
+      async openCommonBox({state, dispatch}, {boxId}) {
+        try{
+          //error cho nay
+          const {BlindBox} = state.contracts();
+          await BlindBox?.methods.open(boxId).send({
+            from: state.defaultAccount,
+            gas:'800000'
+          });
+          await Promise.all([
+            dispatch('fetchTotalCommonBoxSupply')
+          ]);
+        }catch(error) {
+          console.log('???', error);
+        }
+      },
 
       async purchaseRareSecretBox({ state, dispatch }) {
-        const { xBladeToken, SecretBox } = state.contracts();
-        if (!xBladeToken || !SecretBox || !state.defaultAccount) return;
+        const { xBladeToken, BlindBox } = state.contracts();
+        if (!xBladeToken || !BlindBox || !state.defaultAccount) return;
 
         const allowance = await xBladeToken.methods
-          .allowance(state.defaultAccount, SecretBox.options.address)
+          .allowance(state.defaultAccount, BlindBox.options.address)
           .call(defaultCallOptions(state));
 
         if(!toBN(allowance).gt(0)) {
           await xBladeToken.methods
-            .approve(SecretBox.options.address, web3.utils.toWei('100000000', 'ether'))
+            .approve(BlindBox.options.address, web3.utils.toWei('100000000', 'ether'))
             .send(defaultCallOptions(state));
         }
 
-        await SecretBox.methods.openRareBox().send({
+        await BlindBox.methods.buy(1).send({
           from: state.defaultAccount,
           gas: '500000'
         });
@@ -2537,6 +2615,55 @@ export function createStore(web3: Web3) {
           dispatch('fetchTotalCommonBoxSupply')
         ]);
       },
+
+      async purchaseEpicSecretBox({ state, dispatch }) {
+        const { xBladeToken, BlindBox } = state.contracts();
+        if (!xBladeToken || !BlindBox || !state.defaultAccount) return;
+
+        const allowance = await xBladeToken.methods
+          .allowance(state.defaultAccount, BlindBox.options.address)
+          .call(defaultCallOptions(state));
+
+        if(!toBN(allowance).gt(0)) {
+          await xBladeToken.methods
+            .approve(BlindBox.options.address, web3.utils.toWei('100000000', 'ether'))
+            .send(defaultCallOptions(state));
+        }
+
+        await BlindBox.methods.buy(2).send({
+          from: state.defaultAccount,
+          gas: '500000'
+        });
+
+        await Promise.all([
+          dispatch('fetchTotalEpicBoxSupply')
+        ]);
+      },
+
+      async openCommonSecretBox({ state, dispatch }) {
+        const { xBladeToken, BlindBox, CryptoWars } = state.contracts();
+        if (!xBladeToken || !BlindBox || !state.defaultAccount || !CryptoWars) return;
+
+        const allowance = await xBladeToken.methods
+          .allowance(state.defaultAccount, BlindBox.options.address)
+          .call(defaultCallOptions(state));
+
+        if(toBN(allowance).lt( web3.utils.toWei('1000000', 'ether'))) {
+          await xBladeToken.methods
+            .approve(BlindBox.options.address, web3.utils.toWei('100000000', 'ether'))
+            .send(defaultCallOptions(state));
+        }
+
+        await BlindBox.methods.open(state.ownedCommonBoxIds[0]).send({
+          from: state.defaultAccount,
+          gas: '500000'
+        });
+
+        await Promise.all([
+          dispatch('fetchTotalCommonBoxSupply')
+        ]);
+      },
+
 
       async purchaseShield({ state, dispatch }) {
         const { CryptoWars, xBladeToken, Blacksmith } = state.contracts();
@@ -2639,32 +2766,43 @@ export function createStore(web3: Web3) {
       },
 
       async fetchTotalCommonBoxSupply({state}) {
-        const { SecretBox } = state.contracts();
-        if (!SecretBox || !state.defaultAccount) return;
+        const { BlindBox } = state.contracts();
+        if (!BlindBox || !state.defaultAccount) return;
 
-        return await SecretBox.methods
-          .commonBoxAmount()
+        return await BlindBox.methods
+          .commonQty()
           .call(defaultCallOptions(state));
       },
 
       async fetchTotalRareBoxSupply({state}) {
-        const { SecretBox } = state.contracts();
-        if (!SecretBox || !state.defaultAccount) return;
+        const { BlindBox } = state.contracts();
+        if (!BlindBox || !state.defaultAccount) return;
 
-        return await SecretBox.methods
-          .rareBoxAmount()
+        return await BlindBox.methods
+          .rareQty()
+          .call(defaultCallOptions(state));
+      },
+
+      async fetchTotalEpicBoxSupply({state}) {
+        const { BlindBox } = state.contracts();
+        if (!BlindBox || !state.defaultAccount) return;
+
+        return await BlindBox.methods
+          .epicQty()
           .call(defaultCallOptions(state));
       },
 
       async fetchBoxPrice({state, commit}) {
-        const { SecretBox } = state.contracts();
-        if (!SecretBox || !state.defaultAccount) return;
+        const { BlindBox } = state.contracts();
+        if (!BlindBox || !state.defaultAccount) return;
 
-        const commonPrice = await SecretBox.methods.getCommonPrice().call(defaultCallOptions(state));
-        const rarePrice = await SecretBox.methods.getRarePrice().call(defaultCallOptions(state));
+        const commonPrice = await BlindBox.methods.commonPriceInXBlade().call(defaultCallOptions(state));
+        const rarePrice = await BlindBox.methods.rarePriceInXBlade().call(defaultCallOptions(state));
+        const epicPrice = await BlindBox.methods.epicPriceInXBlade().call(defaultCallOptions(state));
         commit('updateBoxPrice', {
           commonPrice,
-          rarePrice
+          rarePrice,
+          epicPrice
         });
       },
 
@@ -3461,6 +3599,33 @@ export function createStore(web3: Web3) {
       async getStartTimeRoom({state}, {roomId}) {
         const {CareerMode} = state.contracts();
         const res = await CareerMode?.methods.getStartTime(roomId).call(defaultCallOptions(state));
+        return res;
+      },
+      async getFragmentAmount({state}) {
+        const {BlindBox} = state.contracts();
+        //@ts-ignore
+        const fragmentAmount = await BlindBox?.methods.getFragmentAmount(state.defaultAccount).call(defaultCallOptions(state));
+        const fragmentPerBox = await BlindBox?.methods.fragmentPerBox().call(defaultCallOptions(state));
+        if(fragmentAmount) {
+          return {
+            fragmentAmount,
+            fragmentPerBox
+          };
+        }else {
+          return 0;
+        }
+      },
+      async convertFragmentToBox({state}) {
+        const {BlindBox} = state.contracts();
+        //@ts-ignore
+        const res = await BlindBox?.methods.convertFragmentToBox().send(defaultCallOptions(state));
+        return res?.events.NewBlindBox.returnValues;
+      },
+      async getBoxDetail({state}, {boxId}) {
+        const {BlindBox} = state.contracts();
+        //@ts-ignore
+        const res = await BlindBox?.methods.getBox(boxId).call(defaultCallOptions(state));
+        console.log(res);
         return res;
       }
     },

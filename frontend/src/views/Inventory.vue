@@ -16,12 +16,16 @@
             <dust-balance-display />
           </div>
         </b-tab>
-        <!-- <b-tab title="Box">
+        <b-tab title="Box">
           <div class="tab-content">
             <box-balance-display />
-            <nft-list :isShop="true" :nftIdTypes="itemRender" :isLoading="isLoading" />
           </div>
-        </b-tab> -->
+        </b-tab>
+        <b-tab title="Fragment">
+          <div class="tab-content">
+            <FragmentBox />
+          </div>
+        </b-tab>
       </b-tabs>
     </div>
 </template>
@@ -31,8 +35,7 @@ import Vue from 'vue';
 import CharaterList from '../components/smart/CharacterList.vue';
 import WeaponGrid from '../components/smart/WeaponGrid.vue';
 import DustBalanceDisplay from '../components/smart/DustBalanceDisplay.vue';
-// import BoxBalanceDisplay from '../components/smart/BoxBalanceDisplay.vue';
-// import NftList from '../components/smart/NftList.vue';
+import BoxBalanceDisplay from '../components/smart/BoxBalanceDisplay.vue';
 import Web3 from "web3";
 import { mapActions, mapGetters, mapState } from "vuex";
 import { Accessors } from "vue/types/options";
@@ -40,6 +43,7 @@ import { Contracts, IState } from "../interfaces";
 import { SkillShopListing } from "../interfaces/SkillShopListing";
 import BigNumber from "bignumber.js";
 import { fromWeiEther, toBN } from "../utils/common";
+import FragmentBox from '../components/smart/FragmentBox.vue';
 
 type StoreMappedState = Pick<
 IState,
@@ -90,7 +94,8 @@ export default Vue.extend({
     CharaterList,
     WeaponGrid,
     DustBalanceDisplay,
-    // NftList
+    BoxBalanceDisplay,
+    FragmentBox,
   },
   data() {
     return {

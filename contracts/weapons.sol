@@ -36,16 +36,16 @@ contract Weapons is Initializable, ERC721Upgradeable, AccessControlUpgradeable {
     }
 
 
-    function migrateTo_951a020() public {
-        require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "Not admin");
+    // function migrateTo_951a020() public {
+    //     require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "Not admin");
 
-        // Apparently ERC165 interfaces cannot be removed in this version of the OpenZeppelin library.
-        // But if we remove the registration, then while local deployments would not register the interface ID,
-        // existing deployments on both testnet and mainnet would still be registered to handle it.
-        // That sort of inconsistency is a good way to attract bugs that only happens on some environments.
-        // Hence, we keep registering the interface despite not actually implementing the interface.
-        _registerInterface(0xe62e6974); // TransferCooldownableInterfaceId.interfaceId()
-    }
+    //     // Apparently ERC165 interfaces cannot be removed in this version of the OpenZeppelin library.
+    //     // But if we remove the registration, then while local deployments would not register the interface ID,
+    //     // existing deployments on both testnet and mainnet would still be registered to handle it.
+    //     // That sort of inconsistency is a good way to attract bugs that only happens on some environments.
+    //     // Hence, we keep registering the interface despite not actually implementing the interface.
+    //     _registerInterface(0xe62e6974); // TransferCooldownableInterfaceId.interfaceId()
+    // }
 
     function migrateTo_surprise(Promos _promos) public {
         require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "Not admin");
@@ -112,6 +112,8 @@ contract Weapons is Initializable, ERC721Upgradeable, AccessControlUpgradeable {
 
     Promos public promos;
 
+    bytes32 public constant BLIND_BOX = keccak256("BLIND_BOX");
+
     event Burned(address indexed owner, uint256 indexed burned);
     event NewWeapon(uint256 indexed weapon, address indexed minter);
     event Reforged(address indexed owner, uint256 indexed reforged, uint256 indexed burned, uint8 lowPoints, uint8 fourPoints, uint8 fivePoints);
@@ -127,13 +129,17 @@ contract Weapons is Initializable, ERC721Upgradeable, AccessControlUpgradeable {
     }
 
     modifier canMintWeapon() {
-        require(hasRole(GAME_ADMIN, msg.sender) || hasRole(BOX_OPENER, msg.sender), "Can not mint");
+        require(hasRole(GAME_ADMIN, msg.sender) || hasRole(BOX_OPENER, msg.sender) || hasRole(BLIND_BOX, msg.sender), "Can not mint");
         _;
     }
 
     modifier noFreshLookup(uint256 id) {
         _noFreshLookup(id);
         _;
+    }
+
+    function migrate_blindBox(address _blindBox) public restricted {
+        _setupRole(BLIND_BOX, _blindBox);
     }
 
     function _noFreshLookup(uint256 id) internal view {
