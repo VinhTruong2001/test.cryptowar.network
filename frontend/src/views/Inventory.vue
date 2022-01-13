@@ -35,6 +35,7 @@ import Vue from 'vue';
 import CharaterList from '../components/smart/CharacterList.vue';
 import WeaponGrid from '../components/smart/WeaponGrid.vue';
 import DustBalanceDisplay from '../components/smart/DustBalanceDisplay.vue';
+//??
 import BoxBalanceDisplay from '../components/smart/BoxBalanceDisplay.vue';
 import Web3 from "web3";
 import { mapActions, mapGetters, mapState } from "vuex";
