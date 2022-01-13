@@ -468,6 +468,7 @@ export default Vue.extend({
         if (item.id === 3) { // Epic Box
           await this.purchaseEpicSecretBox();
         }
+        //@ts-ignore
         this.$bvModal.show('modal-buyitem');
       }
 
@@ -785,7 +786,7 @@ export default Vue.extend({
 
   #modal-buyitem .modal-body{
     position: relative;
-    top: -40%;
+    top: -38%;
   }
 
   .weapon-grid {
