@@ -81,6 +81,10 @@
       </div>
     </div>
 
+    <div class="col-12 col-xl-9 no-data" v-if="isPage && weaponIds.length === 0">
+      <div>No results found</div>
+    </div>
+
     <ul
       class="weapon-grid row" :class="showFilters && 'col-12 col-xl-9'"
       v-if="!isBlacksmith && !isBurnWeapon"
@@ -89,10 +93,12 @@
         class="col-12 col-sm-6 col-md-4"
         v-for="weapon in nonIgnoredWeapons"
         :key="weapon.id"
-        @click="(!checkForDurability || getWeaponDurability(weapon.id) > 0) && onWeaponClick(weapon.id)"
-        @contextmenu="canFavorite && toggleFavorite($event, weapon.id)"
       >
-        <div class="character-item-wrap">
+        <div
+          class="character-item-wrap"
+          @click="(!checkForDurability || getWeaponDurability(weapon.id) > 0) && onWeaponClick(weapon.id)"
+          @contextmenu="canFavorite && toggleFavorite($event, weapon.id)"
+        >
           <div
             class="character-item weapon"
             :class="[{ selected: highlight !== null && weapon.id === highlight },isSell?'weapon-market':'']"
@@ -335,6 +341,10 @@ export default Vue.extend({
       type: ()=>{},
       default: null
     },
+    isPage: {
+      type: Boolean,
+      default: false
+    }
   },
 
   data() {
@@ -597,13 +607,23 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-.character-item-wrap {
-  margin-bottom: 50px;
+
+.no-data{
+  display: flex;
+  justify-content: center;
+  margin-top: 200px;
+  font-size: 30px;
 }
 
-/* .weapon-grid.row{
+.character-item-wrap {
+  margin: 0 auto;
+  margin-bottom: 50px;
+  width: fit-content;
+}
+
+.weapon-grid.row{
   flex: 1;
-} */
+}
 
 .weapon-bt-box{
   margin-top: 15px;

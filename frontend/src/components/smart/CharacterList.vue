@@ -116,14 +116,17 @@
       </template> -->
     </div>
 
+    <div class="col-12 col-xl-9 no-data" v-if="isPage && characterIds.length === 0">
+      <div>No results found</div>
+    </div>
+
     <ul class="character-list row" :class="showFilters && 'col-12 col-xl-9'">
       <li
         class="col-12 col-sm-6 col-md-4"
         v-for="c in filteredCharacters"
         :key="c.id"
-        @click="$emit('input', c.id)"
       >
-        <div class="character-item-wrap">
+        <div @click="$emit('input', c.id)" class="character-item-wrap">
           <div
             class="character-item"
             :class="[{ selected: value === c.id }, {isMarket: isSell}]"
@@ -254,6 +257,10 @@ export default {
       type: ()=>{},
       default: null
     },
+    isPage: {
+      type: Boolean,
+      default: false
+    }
   },
 
   async created() {
@@ -427,6 +434,12 @@ export default {
 </script>
 
 <style scoped>
+.no-data{
+  display: flex;
+  justify-content: center;
+  margin-top: 200px;
+  font-size: 30px;
+}
 
 .weapon-bt-box{
   margin-top: 15px;
