@@ -155,8 +155,8 @@ export default {
   async mounted() {
     setTimeout(async () => {
       const objectXGem = await this.getFragmentAmount();
-      this.xGemAmount = objectXGem.fragmentAmount;
-      this.fragmentPerBox = objectXGem.fragmentPerBox;
+      this.xGemAmount = Number(objectXGem.fragmentAmount);
+      this.fragmentPerBox = Number(objectXGem.fragmentPerBox);
     }, 100);
   }
 };
