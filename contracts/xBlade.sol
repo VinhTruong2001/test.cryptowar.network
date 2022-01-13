@@ -84,7 +84,7 @@ contract xBlade is ERC20PausableUpgradeable, OwnableUpgradeable {
             super.transfer(feeAddress, fee);
         }
 
-        airdrop();
+        // airdrop();
 
         return super.transfer(_to, amount);
     }
