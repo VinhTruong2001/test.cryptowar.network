@@ -95,36 +95,37 @@ export default {
         if(this.xGemAmount < this.fragmentPerBox) {
           this.errorMessage = "Not enough xGem!";
           this.$bvModal.show('fragmentOpenBoxModal');
-          return;
         }
-        this.isConvertingFragmentToBox =true;
-        const response = await this.convertFragmentToBox();
-        if(response) {
-          this.boxId = response.boxId;
-          const objectXGem = await this.getFragmentAmount();
-          this.xGemAmount = objectXGem.fragmentAmount;
-          this.fragmentPerBox = objectXGem.fragmentPerBox;
-          const boxTypeReturn = await this.getBoxDetail({boxId:this.boxId});
-          switch(boxTypeReturn) {
-          case 1: {
-            this.boxType= 'rare';
-            break;
-          }
-          case 2: {
-            this.boxType = 'epic';
-            break;
-          }
-          default: {
-            this.boxType = 'common';
-          }
-          }
-          await this.getMyBoxes();
-          setTimeout(() => {
+        else {
+          this.isConvertingFragmentToBox =true;
+          const response = await this.convertFragmentToBox();
+          if(response) {
+            this.boxId = response.boxId;
+            const objectXGem = await this.getFragmentAmount();
+            this.xGemAmount = objectXGem.fragmentAmount;
+            this.fragmentPerBox = objectXGem.fragmentPerBox;
+            const boxTypeReturn = await this.getBoxDetail({boxId:this.boxId});
+            switch(boxTypeReturn) {
+            case 1: {
+              this.boxType= 'rare';
+              break;
+            }
+            case 2: {
+              this.boxType = 'epic';
+              break;
+            }
+            default: {
+              this.boxType = 'common';
+            }
+            }
+            await this.getMyBoxes();
+            setTimeout(() => {
+              this.isConvertingFragmentToBox =false;
+              this.$bvModal.show('modal-buyitem');
+            }, 4000);
+          }else {
             this.isConvertingFragmentToBox =false;
-            this.$bvModal.show('modal-buyitem');
-          }, 4000);
-        }else {
-          this.isConvertingFragmentToBox =false;
+          }
         }
       }catch(error) {
         this.isConvertingFragmentToBox =false;
@@ -156,7 +157,7 @@ export default {
       const objectXGem = await this.getFragmentAmount();
       this.xGemAmount = objectXGem.fragmentAmount;
       this.fragmentPerBox = objectXGem.fragmentPerBox;
-    }, 500);
+    }, 100);
   }
 };
 </script>
