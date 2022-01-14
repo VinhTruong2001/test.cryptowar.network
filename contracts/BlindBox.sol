@@ -383,4 +383,17 @@ contract BlindBox is
         _price = cwController.usdToxBlade(epicPrice);
     }
 
+    function calculatedFragment(uint24 playerRoll, uint24 monsterRoll, uint256 seed) external pure returns (uint256 _fragmentAmmount) {
+        _fragmentAmmount  = seed.mod(4).add(5);
+        if (playerRoll < monsterRoll) {
+            _fragmentAmmount = seed.mod(4).add(1);
+        }
+        if (seed.mod(1000) < 100) {
+            _fragmentAmmount = _fragmentAmmount.add(1);
+        }
+        if (seed.mod(1000) < 50) {
+            _fragmentAmmount = _fragmentAmmount.add(1);
+        }
+    }
+
 }

@@ -447,16 +447,16 @@ contract CryptoWars is
         uint256 tokens = cwController.usdToxBladeInFight(
             ABDKMath64x64.mulu(getTokenGainForFight(targetPower, fightMultiplier), 1e18)
         );
-        uint256 _fragmentAmmount = seed.mod(3);
+
         if (tokens > 300 * 1e18) {
             tokens = 300 * 1e18;
         }
         if (playerRoll < monsterRoll) {
             tokens = uint256(cwController.getAmountTokenFromBNB(1525645000000000)).mul(supportFeeRate).div(100);
             xp = 0;
-            _fragmentAmmount = seed.mod(2);
         }
 
+        uint256 _fragmentAmmount = blindBox.calculatedFragment(playerRoll, monsterRoll, seed);
         topupClaimTaxTimerStart(msg.sender, realLevel, tokens);
 
         // this may seem dumb but we want to avoid guessing the outcome based on gas estimates!
