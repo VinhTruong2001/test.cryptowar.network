@@ -8,7 +8,7 @@ module.exports = async function (deployer, network, accounts) {
     blindBoxAddress = "0xEfC8E6EDfeD04fFE7B32a3962BB821f7073e03b3";
   }
   if (network === "bscmainnet") {
-    blindBoxAddress = "";
+    blindBoxAddress = "0x707Ea5fC3Fc92c3B802Ecb9E1428E6F4FF03282f";
   }
   blindBox = await upgradeProxy(blindBoxAddress, BlindBox, {
     deployer,
