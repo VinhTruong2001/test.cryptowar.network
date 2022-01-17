@@ -397,6 +397,7 @@ export default Vue.extend({
 
       const allIgnore: string[] = [];
       if (this.ignore) {
+        //@ts-ignore
         allIgnore.push((this.ignore || '').toString());
       }
       if (!this.showFavoriteWeapons) {
