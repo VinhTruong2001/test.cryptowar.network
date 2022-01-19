@@ -3611,7 +3611,6 @@ export function createStore(web3: Web3) {
         const fragmentPerBox = await BlindBox?.methods.fragmentPerBox().call(defaultCallOptions(state));
         const fragmentPerCommonBox = await BlindBox?.methods.commonPriceByXGem().call(defaultCallOptions(state));
         const fragmentPerHero = await BlindBox?.methods.mintHeroPriceByXGem().call(defaultCallOptions(state));
-        console.log('ne ku',fragmentAmount,fragmentPerBox, fragmentPerCommonBox, fragmentPerHero);
         if(fragmentAmount) {
           return {
             fragmentAmount,
