@@ -286,7 +286,7 @@ li.character {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  /* border: 2px solid #5D5A62; */
+  border: 3px solid #F58B5B;
 }
 
 li.character .element-icon{
@@ -295,9 +295,9 @@ li.character .element-icon{
 }
 
 li.character-highlight {
-  border: solid #9e8a57 3px;
-  /* font-weight: 800; */
-  /* padding: 5px; */
+  /* border: solid #9e8a57 3px;
+  font-weight: 800;
+  padding: 5px;
   padding: 0.5rem 0.5rem 0.5rem;
   border-radius: 10px;
   margin: 10x;
@@ -305,7 +305,18 @@ li.character-highlight {
   cursor: pointer;
   display: flex;
   justify-content: space-evenly;
+  align-items: center; */
+
+  /* background: transparent; */
+  padding: 0.5rem 0.5rem 0.5rem;
+  margin: 5px;
+  vertical-align: middle;
+  cursor: pointer;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-evenly;
   align-items: center;
+  border: 3px solid #9e8a57;
 }
 
 li.character-highlight .element-icon{
@@ -357,7 +368,6 @@ li.character-highlight .element-icon{
   width: 80%;
   margin: 0 auto;
 }
-
 
 .centered-list {
   justify-content: center;
@@ -464,5 +474,102 @@ li.character-highlight .element-icon{
 }
 .hidden {
   display: none;
+}
+
+@media (max-width: 1220px) {
+  .character-full-list {
+    width: 100%;
+  }
+}
+@media (max-width: 992px) {
+  .character-full-list .character, .character-full-list .character-highlight{
+    margin: 8px;
+  }
+  .character-display-container{
+    padding: 0;
+  }
+  .character-lis{
+    padding: 0;
+  }
+}
+@media (max-width: 930px) {
+  .character-full-list .character, .character-full-list .character-highlight{
+    width: auto;
+  }
+  /* li.character .element-icon{
+    display: none;
+  } */
+}
+@media (max-width: 767.98px) {
+  .character-bar{
+    padding: 0;
+  }
+  .character-list{
+    padding: 0.5rem 0;
+  }
+}
+@media (max-width: 660px) {
+  .character-full-list .character, .character-full-list .character-highlight{
+    padding: 5px;
+  }
+  .name-list{
+    width: auto;
+    justify-content: space-between;
+    font-size: .9em;
+  }
+  .name-list div{
+    width: auto;
+  }
+  .character-full-list .character .element-icon, .character-full-list .character-highlight .element-icon{
+    width: 45px;
+    height: 45px;
+  }
+  .character-full-list .character > div:not(.element-icon), .character-full-list .character-highlight > div:not(.element-icon){
+    width: 180px;
+  }
+}
+@media (max-width: 576px) {
+  .character-full-list .character, .character-full-list .character-highlight{
+    margin: 6px;
+  }
+  .name-list{
+    font-size: .75em;
+  }
+  .character-full-list .character .element-icon, .character-full-list .character-highlight .element-icon{
+    width: 1rem;
+    height: 2.5rem;
+    margin-right: 2px;
+  }
+  .character-full-list .character > div:not(.element-icon), .character-full-list .character-highlight > div:not(.element-icon){
+    width: 120px;
+  }
+  .fire-icon{
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .earth-icon{
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .water-icon{
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .lightning-icon{
+    width: 1rem;
+    height: 1rem;
+  }
+  .trait-icon{
+    position: static;
+  }
+  .small-stamina-char{
+    height: 15px;
+  }
+  .character-full-list .character, .character-full-list .character-highlight{
+    padding: 2px;
+  }
 }
 </style>

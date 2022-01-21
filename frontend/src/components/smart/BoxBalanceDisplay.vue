@@ -265,7 +265,7 @@ export default {
 }
 
 .btn-open-box {
-  height: 48px !important;
+  height: 42px !important;
   background-image: url("../../assets/v2/btn-bg-pink.png") !important;
   background-size: cover;
   margin-right: 0 !important;
@@ -278,6 +278,15 @@ export default {
 
   .box-quantity {
     font-size: 18px;
+  }
+  .btn-open-box {
+    height: 42px !important;
+  }
+  .character-item.addnew.box-container{
+    margin-top: 0 !important;
+  }
+  .btn-open-wrap{
+    margin-bottom: 5rem;
   }
 }
 
