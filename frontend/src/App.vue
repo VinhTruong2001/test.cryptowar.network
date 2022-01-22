@@ -516,7 +516,17 @@ export default {
 #cancelRequestModal .modal-header .close{
   font-size: 0;
 }
+html {
+  overscroll-behavior: auto;
+  overflow: hidden;
+  height: 100%;
+}
 
+body {
+  overscroll-behavior: auto;
+  overflow: auto;
+  height: 100%;
+}
 button.btn.button.main-font.dark-bg-text.encounter-button.btn-styled.btn-primary
   > h1 {
   font-weight: 600;
@@ -577,6 +587,7 @@ button,
 
   // font-size: 2rem;
   text-align: center;
+  margin: auto;
 }
 
 .error {
