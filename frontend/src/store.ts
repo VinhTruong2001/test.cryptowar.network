@@ -38,7 +38,7 @@ import { IERC721, IStakingRewards, IERC20 } from '../../build/abi-interfaces';
 // import { stakeTypeThatCanHaveUnclaimedRewardsStakedTo } from './stake-types';
 import { Nft } from './interfaces/Nft';
 import { getWeaponNameFromSeed } from '@/weapon-name';
-import isBlacklist from './utils/blacklist';
+import isBlacklist, { calculateFightTax } from './utils/blacklist';
 import RoomRequest from './interfaces/RoomRequest';
 
 const defaultCallOptions = (state: IState) => ({ from: state.defaultAccount });
@@ -1830,17 +1830,9 @@ export function createStore(web3: Web3) {
         let fightTax = '0';
         try {
           fightTax = await state.contracts().CryptoWars!.methods.getTaxByHeroLevel(characterId).call(defaultCallOptions(state));
-          fightTax = toBN(fightTax).multipliedBy(toBN("1.5")).toString();
+          fightTax = calculateFightTax(fightTax, isBlacklist(state.defaultAccount));
         } catch (e){
           fightTax = web3.utils.toWei('0.0005', 'ether');
-        }
-
-        try {
-          if (isBlacklist(state.defaultAccount)) {
-            fightTax = toBN(fightTax).multipliedBy(toBN("1.8")).toString();
-          }
-        } catch (e){
-          fightTax = web3.utils.toWei('0.0012', 'ether');
         }
 
         const res = await state
