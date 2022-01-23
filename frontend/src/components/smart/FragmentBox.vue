@@ -101,10 +101,9 @@ export default {
           const response = await this.convertFragmentToBox();
           if(response) {
             this.boxId = response.boxId;
-            const objectXGem = await this.getFragmentAmount();
-            this.xGemAmount = objectXGem.fragmentAmount;
-            this.fragmentPerBox = objectXGem.fragmentPerBox;
+            this.xGemAmount -= this.fragmentPerBox;
             const boxTypeReturn = await this.getBoxDetail({boxId:this.boxId});
+            console.log('23', boxTypeReturn);
             switch(boxTypeReturn) {
             case 1: {
               this.boxType= 'rare';
@@ -157,7 +156,7 @@ export default {
       const objectXGem = await this.getFragmentAmount();
       this.xGemAmount = Number(objectXGem.fragmentAmount);
       this.fragmentPerBox = Number(objectXGem.fragmentPerBox);
-    }, 100);
+    }, 500);
   }
 };
 </script>
