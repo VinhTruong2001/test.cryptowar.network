@@ -41,7 +41,7 @@
             </div>
         </div>
         <div class="dust-list row">
-            <div
+            <!-- <div
             class="col-lg-4 d-flex flex-column align-items-center"
             :class="isBlacksmith ? 'col-6' : 'col-12'"
             >
@@ -52,11 +52,9 @@
                 <div class="commBox"></div>
             </div>
             <div class="buttonFightFragment" @click="purchaseItem">
-                <!-- <div class="dust-quantity text-center"> -->
                 <span>{{'OPEN ('+fragmentPerCommonBox+'💎)'}}</span>
-                <!-- </div> -->
             </div>
-            </div>
+            </div> -->
             <div
             class="col-lg-4 d-flex flex-column align-items-center"
             :class="isBlacksmith ? 'col-6' : 'col-12'"
@@ -73,31 +71,25 @@
                 <!-- </div> -->
             </div>
             </div>
-            <div
+            <!-- <div
             class="col-lg-4 d-flex flex-column align-items-center"
             :class="isBlacksmith ? 'col-6' : 'col-12'"
-            >
+            > -->
             <div v-if="isConvertingFragmentToBox" id="fight-overlay">
             <div class="waiting animation" v-if="isConvertingFragmentToBox" margin="auto">
                   <div class="fighting-img"></div>
-                  <!-- <div class="waiting-text">
-                    <i class="fas fa-spinner fa-spin"></i>
-                    Waiting for fight results...
-                  </div> -->
                 </div>
             </div>
-            <div
+            <!-- <div
                 class="character-item addnew dust-container"
                 :class="isBlacksmith && 'no-corner'"
             >
                 <div class="mintHero"/>
             </div>
             <div class="buttonFightFragment" @click="handleMintHero">
-                <!-- <div class="dust-quantity text-center"> -->
                 <span>{{'RECRUIT ('+fragmentPerHero+'💎)'}}</span>
-                <!-- </div> -->
             </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>

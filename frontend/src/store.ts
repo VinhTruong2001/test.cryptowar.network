@@ -810,6 +810,7 @@ export function createStore(web3: Web3) {
         state.myCareerModeRequest = payload.request;
       },
       updateMyXgem(state: IState, payload: {myXgem: number | string}) {
+        console.log('payload ne', payload);
         state.myXgem = payload.myXgem;
       },
       updateBoxPriceXgem(state: IState, payload: {commonBoxPriceXgem: string, rareBoxPriceXgem: string, epicBoxPriceXgem: string}) {
@@ -2605,6 +2606,7 @@ export function createStore(web3: Web3) {
         return res.events.NewBlindBox.returnValues.boxId;
       },
       async openCommonBox({state, dispatch}, {boxId}) {
+        console.log('1111', boxId);
         try{
           //error cho nay
           const {BlindBox} = state.contracts();
@@ -3662,10 +3664,12 @@ export function createStore(web3: Web3) {
         const res = await BlindBox?.methods.getBox(boxId).call(defaultCallOptions(state));
         return res;
       },
-      async buyCommonBoxWithXGem({state}) {
+      async buyCommonBoxWithXGem({state, commit}) {
         const {BlindBox} = state.contracts();
         const res = await BlindBox?.methods.buyCommonBoxWithXGem().send(defaultCallOptions(state));
         if(res) {
+          const xGem: number = Number(state.myXgem)- Number(state.commonBoxPriceXgem);
+          commit('updateMyXgem', {myXgem: xGem});
           return res.events.NewBlindBox.returnValues;
         }else {
           return false;
@@ -3677,19 +3681,23 @@ export function createStore(web3: Web3) {
       //   await Promise.all([dispatch('fetchCharacter',res?.events.Transfer.returnValues.tokenId)]);
       //   return res?.events.Transfer;
       // }
-      async buyRareBoxWithXGem({state}) {
+      async buyRareBoxWithXGem({state, commit}) {
         const {BlindBox} = state.contracts();
         const res = await BlindBox?.methods.buyRareBoxWithXGem().send(defaultCallOptions(state));
         if(res) {
+          const xGem: number = Number(state.myXgem)- Number(state.rareBoxPriceXgem);
+          commit('updateMyXgem', {myXgem: xGem});
           return res.events.NewBlindBox.returnValues;
         }else {
           return false;
         }
       },
-      async buyEpicBoxWithXGem({state}) {
+      async buyEpicBoxWithXGem({state, commit}) {
         const {BlindBox} = state.contracts();
         const res = await BlindBox?.methods.buyEpicBoxWithXGem().send(defaultCallOptions(state));
         if(res) {
+          const xGem: number = Number(state.myXgem)- Number(state.epicBoxPriceXgem);
+          commit('updateMyXgem', {myXgem: xGem});
           return res.events.NewBlindBox.returnValues;
         }else {
           return false;

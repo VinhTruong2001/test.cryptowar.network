@@ -24,7 +24,6 @@
         <li
           class="col-md-12 col-lg-3"
           :disabled="nft.isSoldOut || nft.isDisable"
-          @click="checkBuy = nft; nft.isSoldOut || nft.isDisable? () => {}: buyItem(checkBuy);"
            v-for="nft in nftIdTypes" :key="`${nft.type}.${nft.id}`"
         >
           <div class="nft-item-content">
@@ -39,6 +38,7 @@
                 <b-button
                   :disabled="nft.isSoldOut || nft.isDisable"
                   class="buttonBuy"
+                  @click="checkBuy = nft; nft.isSoldOut || nft.isDisable? () => {}: buyItem(checkBuy);"
                 >
                   <span v-if="!nft.isSoldOut">
                     ({{ Math.round(nft.nftPrice) }} xBlade)
@@ -55,6 +55,7 @@
                 <b-button
                   :disabled="nft.isSoldOut || nft.isDisableXgem"
                   class="buttonBuy"
+                  @click="checkBuy = nft; nft.isSoldOut || nft.isDisableXgem? () => {}: buyItemWithXgem(checkBuy);"
                 >
                   <span v-if="!nft.isSoldOut">
                     ({{ Math.round(nft.nftPriceXgem) }} 💎 )
@@ -221,24 +222,27 @@ interface StoreMappedGetters {
   shieldsWithIds(ids: string[]): Nft[];
 }
 
-interface StoreMappedActions {
-  purchaseShield(): Promise<void>;
-  fetchShields(shieldIds: (string | number)[]): Promise<void>;
-  purchaseRenameTag(): Promise<void>;
-  purchaseRenameTagDeal(): Promise<void>;
-  purchaseWeaponRenameTag(): Promise<void>;
-  purchaseWeaponRenameTagDeal(): Promise<void>;
-  purchaseCharacterFireTraitChange(): Promise<void>;
-  purchaseCharacterEarthTraitChange(): Promise<void>;
-  purchaseCharacterWaterTraitChange(): Promise<void>;
-  purchaseCharacterLightningTraitChange(): Promise<void>;
-  purchaseCommonSecretBox(): Promise<void>;
-  purchaseRareSecretBox(): Promise<void>;
-  purchaseEpicSecretBox(): Promise<void>;
-  openCommonSecretBox(): Promise<void>;
-  openCommonBox(): Promise<void>;
-  fetchWeaponId(weaponId: (string | number)): Promise<any>;
-}
+// interface StoreMappedActions {
+//   purchaseShield(): Promise<void>;
+//   fetchShields(shieldIds: (string | number)[]): Promise<void>;
+//   purchaseRenameTag(): Promise<void>;
+//   purchaseRenameTagDeal(): Promise<void>;
+//   purchaseWeaponRenameTag(): Promise<void>;
+//   purchaseWeaponRenameTagDeal(): Promise<void>;
+//   purchaseCharacterFireTraitChange(): Promise<void>;
+//   purchaseCharacterEarthTraitChange(): Promise<void>;
+//   purchaseCharacterWaterTraitChange(): Promise<void>;
+//   purchaseCharacterLightningTraitChange(): Promise<void>;
+//   purchaseCommonSecretBox(): Promise<void>;
+//   purchaseRareSecretBox(): Promise<void>;
+//   purchaseEpicSecretBox(): Promise<void>;
+//   openCommonSecretBox(): Promise<void>;
+//   openCommonBox(): Promise<void>;
+//   fetchWeaponId(weaponId: (string | number)): Promise<any>;
+//   buyCommonBoxWithXgem(): Promise<void>;
+//   buyRareBoxWithXgem(): Promise<void>;
+//   buyEpicBoxWithXgem(): Promise<void>;
+// }
 
 export default Vue.extend({
   model: {
@@ -328,7 +332,7 @@ export default Vue.extend({
   },
 
   computed: {
-    ...(mapState(['ownedShieldIds', 'skillBalance','inGameOnlyFunds', 'skillRewards']) as Accessors<StoreMappedState>),
+    ...(mapState(['ownedShieldIds', 'skillBalance','inGameOnlyFunds', 'skillRewards', 'myXgem']) as Accessors<StoreMappedState>),
     ...(mapGetters(['shieldsWithIds','nftsWithIdType']) as Accessors<StoreMappedGetters>),
 
     // nftsToDisplay(): NftIdType[] {
@@ -423,8 +427,8 @@ export default Vue.extend({
       'purchaseCharacterFireTraitChange', 'purchaseCharacterEarthTraitChange',
       'purchaseCharacterWaterTraitChange', 'purchaseCharacterLightningTraitChange',
       'purchaseCommonSecretBox', 'purchaseRareSecretBox', 'purchaseEpicSecretBox', 'openCommonSecretBox', 'openCommonBox','fetchWeaponId',
-      'buyRareBoxWithXGem', 'buyEpicBoxWithXGem', 'buyCommonBoxWithXGem'
-    ]) as StoreMappedActions),
+      'buyRareBoxWithXGem', 'buyEpicBoxWithXGem', 'buyCommonBoxWithXGem', 'updateMyXgem'
+    ])),
     ...mapMutations(['setCurrentNft']),
 
     async onShieldBuy() {
@@ -558,16 +562,31 @@ export default Vue.extend({
       return this.favorites && this.favorites[type] && this.favorites[type][id];
     },
 
-    // async buyItemWithXgem(item: nftItem) {
-    //   try {
-    //     this.isLoadingBox = true;
-    //     if(item.id ===0) {
-
-    //     }
-    //   }catch(error) {
-    //     this.isLoadingBox =false;
-    //   }
-    // },
+    async buyItemWithXgem(item: nftItem) {
+      try {
+        this.isLoadingBox = true;
+        if(item.id ===0) {
+          const response = await this.buyCommonBoxWithXGem();
+          //@ts-ignore
+          this.lastBoxId = response.boxId;
+          this.isLoadingBox = false;
+        }else if(item.id ===1) {
+          const response = await this.buyRareBoxWithXGem();
+          //@ts-ignore
+          this.lastBoxId = response.boxId;
+          this.isLoadingBox = false;
+        }else {
+          const response = await this.buyEpicBoxWithXGem();
+          //@ts-ignore
+          this.lastBoxId = response.boxId;
+          this.isLoadingBox = false;
+        }
+        //@ts-ignore
+        this.$bvModal.show('modal-buyitem');
+      }catch(error) {
+        this.isLoadingBox =false;
+      }
+    },
     async buyItem(item: nftItem) {
       try{
         this.isLoadingBox = true;
@@ -800,12 +819,12 @@ export default Vue.extend({
     border-radius: 0;
     min-width: 90px;
     min-height: 42px;
-    /* text-transform: uppercase; */
     font-weight: bold;
     position: relative;
     text-align: center;
     background-repeat: no-repeat !important;
-    background-image: url("../../assets/v2/btn-bg-blue.png");
+    background-image: url('../../assets/images/bg-fight-button.png');
+    background-size: 100% 100%;
 }
 .show-favorite-checkbox {
   margin-left: 5px;
