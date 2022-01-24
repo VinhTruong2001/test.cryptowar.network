@@ -1,6 +1,6 @@
 <template>
   <div class="body main-font">
-    <character-bar :setCountTargetToFight="setCountTargetToFight"/>
+    <character-bar v-if="ownCharacters.length > 0" :setCountTargetToFight="setCountTargetToFight"/>
     <div class="nav-bottom-line"></div>
     <div v-if="ownWeapons.length > 0 && ownCharacters.length > 0">
       <div class="row" v-if="error !== null">
@@ -189,7 +189,7 @@
 
       <div v-if="ownCharacters.length === 0">
         You do not currently have any characters. You can recruit one at the
-        Plaza.
+        Inventory.
       </div>
     </div>
   </div>
@@ -206,7 +206,7 @@ import { CharacterPower, CharacterTrait, GetTotalMultiplierForTrait, WeaponEleme
 import CombatResults from '../components/CombatResults.vue';
 import { toBN, fromWeiEther } from '../utils/common';
 import WeaponIcon from '../components/WeaponIcon.vue';
-import { mapActions, mapGetters, mapState, mapMutations } from 'vuex';
+import { mapGetters, mapState, mapMutations, mapActions } from 'vuex';
 import CharacterBar from "../components/CharacterBar.vue";
 
 export default {
@@ -319,13 +319,7 @@ export default {
 
 
   methods: {
-    ...mapActions([
-      "fetchTargets",
-      "doEncounter",
-      "fetchFightRewardSkill",
-      "fetchFightRewardXp",
-      "getXPRewardsIfWin",
-    ]),
+    ...mapActions(["doEncounter", "getXPRewardsIfWin", "fetchTargets", "fetchFightRewardSkill", "fetchFightRewardXp"]),
     ...mapMutations(["setIsInCombat"]),
     getEnemyArt,
     getEnemyArtAround,
