@@ -128,4 +128,7 @@ export interface IState {
   rewardPvp: number;
   myCareerModeRequest: RoomRequest[];
   myXgem: number | string;
+  commonBoxPriceXgem: number | string;
+  rareBoxPriceXgem: number | string;
+  epicBoxPriceXgem: number | string;
 }

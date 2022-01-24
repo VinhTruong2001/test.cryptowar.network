@@ -16,6 +16,7 @@ import { SkillShopListing } from "../interfaces/SkillShopListing";
 import BigNumber from "bignumber.js";
 import { fromWeiEther, toBN } from "../utils/common";
 import NftList from "@/components/smart/NftList.vue";
+import Bignumber from 'bignumber.js';
 
 type StoreMappedState = Pick<
 IState,
@@ -26,6 +27,10 @@ IState,
 | "ownedCharacterIds"
 | "ownedWeaponIds"
 | "ownedShieldIds"
+| "commonBoxPriceXgem"
+| "rareBoxPriceXgem"
+| "epicBoxPriceXgem"
+| "myXgem"
 >;
 
 interface StoreMappedGetters {
@@ -85,6 +90,13 @@ export default Vue.extend({
       "ownedCharacterIds",
       "ownedWeaponIds",
       "ownedShieldIds",
+      "commonBoxPriceXgem",
+      "rareBoxPriceXgem",
+      "epicBoxPriceXgem",
+      'skillBalance',
+      'inGameOnlyFunds',
+      'skillRewards',
+      'myXgem'
     ]) as Accessors<StoreMappedState>),
     ...(mapGetters([
       "contracts",
@@ -114,6 +126,17 @@ export default Vue.extend({
     shopOffersNftList(): SkillShopListing[] {
       const { common, rare, epic } = this.getBoxPrice();
 
+      const xBladeBalance = fromWeiEther(
+        Bignumber.sum(
+          //@ts-ignore
+          toBN(this.skillBalance),
+          //@ts-ignore
+          toBN(this.inGameOnlyFunds),
+          //@ts-ignore
+          toBN(this.skillRewards)
+        )
+      );
+
       const nftList = [
         {
           id: 0,
@@ -125,7 +148,9 @@ export default Vue.extend({
           image: "common-box.png",
           isSoldOut: Number(this.commonBoxSupply) === 0,
           supply: this.commonBoxSupply,
-          isDisable: false
+          isDisable: Number(xBladeBalance) < toBN(fromWeiEther(common)).toNumber() ,
+          nftPriceXgem: this.commonBoxPriceXgem,
+          isDisableXgem: Number(this.myXgem) < this.commonBoxPriceXgem
         },
         {
           id: 1,
@@ -137,7 +162,9 @@ export default Vue.extend({
           image: "rare-box.png",
           isSoldOut: Number(this.rareBoxSupply) === 0,
           supply: this.rareBoxSupply,
-          isDisable: false
+          isDisable:  Number(xBladeBalance) < toBN(fromWeiEther(rare)).toNumber(),
+          nftPriceXgem: this.rareBoxPriceXgem,
+          isDisableXgem: Number(this.myXgem) < this.rareBoxPriceXgem
         },
         {
           id: 2,
@@ -151,7 +178,9 @@ export default Vue.extend({
           image: "epic-box.png",
           isSoldOut: Number(this.epicBoxSupply) === 0,
           supply: this.epicBoxSupply,
-          isDisable: false
+          isDisable:  Number(xBladeBalance) < toBN(fromWeiEther(epic)).toNumber(),
+          nftPriceXgem: this.epicBoxPriceXgem,
+          isDisableXgem: Number(this.myXgem) < this.epicBoxPriceXgem
         },
       ] as SkillShopListing[];
 

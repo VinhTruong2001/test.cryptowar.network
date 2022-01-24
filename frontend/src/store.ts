@@ -185,7 +185,10 @@ export function createStore(web3: Web3) {
       careerModeRooms: [],
       careerModeRequest: [],
       myCareerModeRequest: [],
-      myXgem: 0
+      myXgem: 0,
+      commonBoxPriceXgem: 0,
+      rareBoxPriceXgem: 0,
+      epicBoxPriceXgem: 0
     },
 
     getters: {
@@ -808,6 +811,11 @@ export function createStore(web3: Web3) {
       },
       updateMyXgem(state: IState, payload: {myXgem: number | string}) {
         state.myXgem = payload.myXgem;
+      },
+      updateBoxPriceXgem(state: IState, payload: {commonBoxPriceXgem: string, rareBoxPriceXgem: string, epicBoxPriceXgem: string}) {
+        state.commonBoxPriceXgem = payload.commonBoxPriceXgem;
+        state.rareBoxPriceXgem = payload.rareBoxPriceXgem;
+        state.epicBoxPriceXgem = payload.epicBoxPriceXgem;
       }
     },
 
@@ -1107,6 +1115,9 @@ export function createStore(web3: Web3) {
           ownedShieldIds,
           maxStamina,
           maxDurability,
+          commonBoxPriceXgem,
+          rareBoxPriceXgem,
+          epicBoxPriceXgem
         ] = await Promise.all([
           state
             .contracts()
@@ -1128,6 +1139,9 @@ export function createStore(web3: Web3) {
             .contracts()
             .Weapons!.methods.maxDurability()
             .call(defaultCallOptions(state)),
+          state.contracts().BlindBox?.methods.commonPriceByXGem().call(defaultCallOptions(state)),
+          state.contracts().BlindBox?.methods.rarePriceByXGem().call(defaultCallOptions(state)),
+          state.contracts().BlindBox?.methods.epicPriceByXGem().call(defaultCallOptions(state))
         ]);
 
         commit('updateUserDetails', {
@@ -1137,6 +1151,11 @@ export function createStore(web3: Web3) {
           maxStamina: parseInt(maxStamina, 10),
           maxDurability: parseInt(maxDurability, 10),
           ownedCommonBoxIds: Array.from(ownedCommonBoxIds),
+        });
+        commit('updateBoxPriceXgem', {
+          commonBoxPriceXgem,
+          rareBoxPriceXgem,
+          epicBoxPriceXgem
         });
 
         await Promise.all([
@@ -3676,6 +3695,12 @@ export function createStore(web3: Web3) {
           return false;
         }
       },
+      // async getPriceBoxByXgem({state, commit}) {
+      //   const {BlindBox} = state.contracts();
+      //   const fragmentPerCommonBox = await BlindBox?.methods.commonPriceByXGem().call(defaultCallOptions(state));
+      //   const fragmentPerRareBox = await BlindBox?.methods.rarePriceByXGem().call(defaultCallOptions(state));
+      //   const fragmentPerEpicBox = await BlindBox?.methods.epicPriceByXGem().call(defaultCallOptions(state));
+      // }
     },
   });
 }
