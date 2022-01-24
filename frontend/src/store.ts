@@ -3652,12 +3652,30 @@ export function createStore(web3: Web3) {
           return false;
         }
       },
-      async mintHeroWithXGem({state, dispatch}) {
+      // async mintHeroWithXGem({state, dispatch}) {
+      //   const {BlindBox} = state.contracts();
+      //   const res = await BlindBox?.methods.mintHeroWithXGem().send(defaultCallOptions(state));
+      //   await Promise.all([dispatch('fetchCharacter',res?.events.Transfer.returnValues.tokenId)]);
+      //   return res?.events.Transfer;
+      // }
+      async buyRareBoxWithXGem({state}) {
         const {BlindBox} = state.contracts();
-        const res = await BlindBox?.methods.mintHeroWithXGem().send(defaultCallOptions(state));
-        await Promise.all([dispatch('fetchCharacter',res?.events.Transfer.returnValues.tokenId)]);
-        return res?.events.Transfer;
-      }
+        const res = await BlindBox?.methods.buyRareBoxWithXGem().send(defaultCallOptions(state));
+        if(res) {
+          return res.events.NewBlindBox.returnValues;
+        }else {
+          return false;
+        }
+      },
+      async buyEpicBoxWithXGem({state}) {
+        const {BlindBox} = state.contracts();
+        const res = await BlindBox?.methods.buyEpicBoxWithXGem().send(defaultCallOptions(state));
+        if(res) {
+          return res.events.NewBlindBox.returnValues;
+        }else {
+          return false;
+        }
+      },
     },
   });
 }
