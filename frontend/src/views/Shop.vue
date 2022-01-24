@@ -134,6 +134,7 @@ export default Vue.extend({
           toBN(this.inGameOnlyFunds),
           //@ts-ignore
           toBN(this.skillRewards)
+          //commit
         )
       );
 
