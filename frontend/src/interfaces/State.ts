@@ -127,4 +127,5 @@ export interface IState {
   careerModeRequest:  RoomRequest[];
   rewardPvp: number;
   myCareerModeRequest: RoomRequest[];
+  myXgem: number | string;
 }

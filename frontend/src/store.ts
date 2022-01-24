@@ -184,7 +184,8 @@ export function createStore(web3: Web3) {
       secondsPerStamina: 1,
       careerModeRooms: [],
       careerModeRequest: [],
-      myCareerModeRequest: []
+      myCareerModeRequest: [],
+      myXgem: 0
     },
 
     getters: {
@@ -619,7 +620,7 @@ export function createStore(web3: Web3) {
           'ownedWeaponIds',
           'maxStamina',
           'maxDurability',
-          'ownedShieldIds'
+          'ownedShieldIds',
         ];
         for (const key of keysToAllow) {
           if (Object.hasOwnProperty.call(payload, key)) {
@@ -804,6 +805,9 @@ export function createStore(web3: Web3) {
       },
       updateMyCareerModeRequest(state: IState, payload: {request: RoomRequest[]}) {
         state.myCareerModeRequest = payload.request;
+      },
+      updateMyXgem(state: IState, payload: {myXgem: number | string}) {
+        state.myXgem = payload.myXgem;
       }
     },
 
@@ -1062,6 +1066,7 @@ export function createStore(web3: Web3) {
       },
 
       async getMyBoxes({ state }) {
+        console.log('call bao nhieu lan');
         const { BlindBox } = state.contracts();
         if (!BlindBox || !state.defaultAccount) return;
         const tokens = await BlindBox.methods.balanceOf(state.defaultAccount).call(defaultCallOptions(state));
@@ -1091,6 +1096,10 @@ export function createStore(web3: Web3) {
         if (featureFlagStakeOnly) return;
 
         const ownedCommonBoxIds = await dispatch('getMyBoxes');
+        const myXgem = await dispatch('getFragmentAmount');
+        commit('updateMyXgem', {
+          myXgem: Number(myXgem.fragmentAmount)
+        });
 
         const [
           ownedCharacterIds,
@@ -1118,7 +1127,7 @@ export function createStore(web3: Web3) {
           state
             .contracts()
             .Weapons!.methods.maxDurability()
-            .call(defaultCallOptions(state))
+            .call(defaultCallOptions(state)),
         ]);
 
         commit('updateUserDetails', {
@@ -1131,7 +1140,7 @@ export function createStore(web3: Web3) {
         });
 
         await Promise.all([
-          dispatch('getMyBoxes'),
+          // dispatch('getMyBoxes'),
           dispatch('fetchCharacters', ownedCharacterIds),
           dispatch('fetchWeapons', ownedWeaponIds),
           dispatch('fetchShields', ownedShieldIds),

@@ -24,8 +24,8 @@
       <ul class="row nft-grid nft-list">
         <li
           class="col-md-12 col-lg-3"
-          :disabled="nft.isSoldOut"
-          @click="checkBuy = nft; buyItem(checkBuy);"
+          :disabled="nft.isSoldOut || nft.isDisable"
+          @click="checkBuy = nft; nft.isSoldOut || nft.isDisable? () => {}: buyItem(checkBuy);"
            v-for="nft in nftIdTypes" :key="`${nft.type}.${nft.id}`"
         >
           <div class="nft-item-content">
@@ -37,14 +37,11 @@
             </div>
             <div class="btn-open-wrap">
               <b-button
-                :disabled="nft.isSoldOut"
+                :disabled="nft.isSoldOut || nft.isDisable"
                 class="shop-button btn-blue-bg btn-open-box"
               >
-                <span v-if="!nft.isSoldOut && nft.id !== 2">
+                <span v-if="!nft.isSoldOut">
                   Buy ({{ Math.round(nft.nftPrice) }} xBlade)
-                </span>
-                <span v-if="!nft.isSoldOut && nft.id === 2">
-                  Buy ({{ Math.round(nft.nftPrice) }} 💎)
                 </span>
                 <span  v-if="nft.isSoldOut && !isLoading">
                   SOLD OUT
@@ -167,6 +164,8 @@ import Vue from 'vue';
 import { Accessors, PropType } from 'vue/types/options';
 import { IState } from '@/interfaces';
 import WeaponSelect from "@/components/WeaponSelect.vue";
+import { fromWeiEther, toBN } from '@/utils/common';
+import Bignumber from 'bignumber.js';
 
 const sorts = [
   { name: 'Any', dir: '' },
@@ -190,6 +189,12 @@ interface Data {
 export interface NftIdType {
   id: number | string;
   type: string;
+  image: string;
+  isSoldOut: boolean;
+  name: string;
+  nftPrice: number | string;
+  supply: number | string;
+  isDisable: boolean;
 }
 
 type StoreMappedState = Pick<IState, 'ownedShieldIds'>;
@@ -306,77 +311,77 @@ export default Vue.extend({
   },
 
   computed: {
-    ...(mapState(['ownedShieldIds']) as Accessors<StoreMappedState>),
+    ...(mapState(['ownedShieldIds', 'skillBalance','inGameOnlyFunds', 'skillRewards']) as Accessors<StoreMappedState>),
     ...(mapGetters(['shieldsWithIds','nftsWithIdType']) as Accessors<StoreMappedGetters>),
 
-    nftsToDisplay(): NftIdType[] {
-      if (this.showGivenNftIdTypes) {
-        return this.nftIdTypes;
-      }
+    // nftsToDisplay(): NftIdType[] {
+    //   if (this.showGivenNftIdTypes) {
+    //     return this.nftIdTypes;
+    //   }
 
-      const nfts: NftIdType[] = [];
-      // push different kinds of nfts to nfts array here
-      this.ownedShieldIds?.forEach(id => { nfts.push({ id, type: 'shield' }); });
+    //   const nfts: NftIdType[] = [];
+    //   // push different kinds of nfts to nfts array here
+    //   this.ownedShieldIds?.forEach(id => { nfts.push({ id, type: 'shield' }); });
 
-      return nfts;
-    },
+    //   return nfts;
+    // },
 
-    displayNfts(): Nft[] {
-      if(this.isMarket && this.showGivenNftIdTypes) {
-        const type = this.nftIdTypes && this.nftIdTypes[0]?.type;
-        switch(type) {
-        case('shield'):
-          return this.shieldsWithIds(this.nftsToDisplay.map(x => x.id.toString())).filter(Boolean);
-        default:
-          return [];
-        }
-      }
+    // displayNfts(): Nft[] {
+    //   if(this.isMarket && this.showGivenNftIdTypes) {
+    //     const type = this.nftIdTypes && this.nftIdTypes[0]?.type;
+    //     switch(type) {
+    //     case('shield'):
+    //       return this.shieldsWithIds(this.nftsToDisplay.map(x => x.id.toString())).filter(Boolean);
+    //     default:
+    //       return [];
+    //     }
+    //   }
 
-      return this.nftsWithIdType(this.nftsToDisplay).filter(Boolean);
-    },
+    //   return this.nftsWithIdType(this.nftsToDisplay).filter(Boolean);
+    // },
 
-    nonIgnoredNfts(): Nft[] {
-      let items: Nft[] = [];
-      this.displayNfts.forEach((x) => items.push(x));
+    // nonIgnoredNfts(): Nft[] {
+    //   let items: Nft[] = [];
+    //   this.displayNfts.forEach((x) => items.push(x));
 
-      const allIgnore: NftIdType[] = [];
-      if (!this.showFavoriteNfts) {
-        for (const type in Object.keys(this.favorites)) {
-          //@ts-ignore
-          for(const id in Object.keys(this.favorites[type])) {
-            allIgnore.push({ type, id });
-          }
-        }
-      }
-      items = items.filter((x) => allIgnore.findIndex((y) => y.id === x.id && y.type === x.type) < 0);
+    //   const allIgnore: NftIdType[] = [];
+    //   if (!this.showFavoriteNfts) {
+    //     for (const type in Object.keys(this.favorites)) {
+    //       //@ts-ignore
+    //       for(const id in Object.keys(this.favorites[type])) {
+    //         allIgnore.push({ type, id });
+    //       }
+    //     }
+    //   }
+    //   items = items.filter((x) => allIgnore.findIndex((y) => y.id === x.id && y.type === x.type) < 0);
 
-      if(this.typeFilter) {
-        items = items.filter((x) => x.type?.localeCompare(this.typeFilter, undefined, { sensitivity: 'base' } ) === 0);
-      }
+    //   if(this.typeFilter) {
+    //     items = items.filter((x) => x.type?.localeCompare(this.typeFilter, undefined, { sensitivity: 'base' } ) === 0);
+    //   }
 
-      if (this.starFilter) {
-        items = items.filter((x) => x.stars === +this.starFilter - 1);
-      }
+    //   if (this.starFilter) {
+    //     items = items.filter((x) => x.stars === +this.starFilter - 1);
+    //   }
 
-      if (this.elementFilter) {
-        items = items.filter((x) => x.element?.includes(this.elementFilter));
-      }
+    //   if (this.elementFilter) {
+    //     items = items.filter((x) => x.element?.includes(this.elementFilter));
+    //   }
 
-      if (this.showLimit > 0 && items.length > this.showLimit) {
-        items = items.slice(0, this.showLimit);
-      }
+    //   if (this.showLimit > 0 && items.length > this.showLimit) {
+    //     items = items.slice(0, this.showLimit);
+    //   }
 
-      const favoriteNfts: Nft[] = [];
-      for (const key in this.favorites) {
-        const i = items.findIndex((y) => y?.id === +key);
-        if (i !== -1) {
-          favoriteNfts.push(items[i]);
-          items.splice(i, 1);
-        }
-      }
+    //   const favoriteNfts: Nft[] = [];
+    //   for (const key in this.favorites) {
+    //     const i = items.findIndex((y) => y?.id === +key);
+    //     if (i !== -1) {
+    //       favoriteNfts.push(items[i]);
+    //       items.splice(i, 1);
+    //     }
+    //   }
 
-      return favoriteNfts.concat(items);
-    }
+    //   return favoriteNfts.concat(items);
+    // }
   },
 
   watch: {
@@ -406,6 +411,49 @@ export default Vue.extend({
 
     async onShieldBuy() {
       await this.purchaseShield();
+    },
+
+    checkDisableButtonBuy() {
+      const xBladeBalance = fromWeiEther(
+        Bignumber.sum(
+          //@ts-ignore
+          toBN(this.skillBalance),
+          //@ts-ignore
+          toBN(this.inGameOnlyFunds),
+          //@ts-ignore
+          toBN(this.skillRewards)
+        )
+      );
+      const commonBoxInfo = this.nftIdTypes.find(item => item.id ===0);
+      const rareBoxInfo = this.nftIdTypes.find(item => item.id===1);
+      const epicBoxInfo = this.nftIdTypes.find(item => item.id ===2);
+      //@ts-ignore
+      if(xBladeBalance < commonBoxInfo?.nftPrice) {
+        this.nftIdTypes.map(item => {
+          if(item.id === 0) {
+            item.isDisable = true;
+          }
+          return item;
+        });
+      }
+      //@ts-ignore
+      if(xBladeBalance < rareBoxInfo?.nftPrice) {
+        this.nftIdTypes.map(item => {
+          if(item.id === 1) {
+            item.isDisable = true;
+          }
+          return item;
+        });
+      }
+      //@ts-ignore
+      if(xBladeBalance < epicBoxInfo?.nftPrice) {
+        this.nftIdTypes.map(item => {
+          if(item.id === 2) {
+            item.isDisable = true;
+          }
+          return item;
+        });
+      }
     },
 
     saveFilters() {
@@ -561,8 +609,6 @@ export default Vue.extend({
         const res = await this.openCommonBox({boxId: this.lastBoxId});
         //@ts-ignore
         const weapon = await this.fetchWeaponId(res?.[0]?.returnValues?.tokenId);
-        console.log('weapon Receive', weapon);
-        console.log('res nhan dc', res);
         this.weaponReceive = weapon;
         this.isLoadingBox = false;
         setTimeout(() => {
@@ -580,6 +626,7 @@ export default Vue.extend({
   },
 
   mounted() {
+    this.checkDisableButtonBuy();
     this.checkStorageFavorite();
 
     if(!this.showGivenNftIdTypes) {
