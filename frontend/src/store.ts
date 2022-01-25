@@ -1852,7 +1852,7 @@ export function createStore(web3: Web3) {
       },
 
       async doEncounter(
-        { state, dispatch },
+        { state, dispatch, commit },
         { characterId, weaponId, targetString, fightMultiplier }
       ) {
         if(!state.defaultAccount) return;
@@ -1881,7 +1881,7 @@ export function createStore(web3: Web3) {
         )
           .send({value: fightTax, from: state.defaultAccount, gas: '800000' });
         const fragmentOutcome = res.events.FragmentReceived.returnValues.fragmentAmount;
-
+        commit('updateMyXgem', {myXgem: Number(state.myXgem)+  Number(fragmentOutcome)});
         await dispatch('fetchTargets', { characterId, weaponId });
 
         const {
