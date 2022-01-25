@@ -59,7 +59,7 @@
             >
                 <div class="dust-image dust-image2"></div>
             </div>
-            <div class="buttonFightFragment" @click="handleConvertBox">
+            <div :class="checkDisableButton() ? 'buttonFightFragmentDisable' : 'buttonFightFragment'" @click="checkDisableButton() ?() => {}: handleConvertBox()">
                 <!-- <div class="dust-quantity text-center"> -->
                 <span>{{'BUY ('+fragmentPerBox+'💎)'}}</span>
                 <!-- </div> -->
@@ -195,6 +195,12 @@ export default {
         break;
       }
       }
+    },
+    checkDisableButton() {
+      if(this.myXgem < this.fragmentPerBox) {
+        return true;
+      }
+      return false;
     },
     async purchaseItem() {
       if(this.xGemAmount > this.fragmentPerCommonBox) {
@@ -376,7 +382,7 @@ export default {
   transition: opacity 0.3s ease;
 }
 .buttonFightFragment {
-  border: none;
+    border: none;
     height: 47px;
     background-image: url('../../assets/images/bg-fight-button.png');
     background-size: 100% 100%;
@@ -389,6 +395,21 @@ export default {
     display: flex;
     margin-top: 2rem;
     cursor: pointer;
+}
+.buttonFightFragmentDisable {
+    border: none;
+    height: 47px;
+    background-image: url('../../assets/images/bg-fight-button.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    margin-left: 0.8rem;;
+    min-width: 190px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    margin-top: 2rem;
+    opacity: 0.7;
 }
 
 .notEnoughImage {
