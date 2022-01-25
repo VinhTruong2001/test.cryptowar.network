@@ -124,14 +124,12 @@ export default {
           setTimeout(async () => {
             const weapon = await this.fetchWeaponId(res?.[0]?.returnValues?.tokenId);
             this.weaponReceive = weapon;
-            setTimeout(() => {
-              this.$bvModal.show('successOpenBoxInventory');
-              this.isOpeningBox = false;
-            }, 1000);
-          }, 1000);
+            this.$bvModal.show('successOpenBoxInventory');
+            this.isOpeningBox = false;
+          }, 4000);
           setTimeout(async () => {
             this.listBoxInventory = await this.getMyBoxes();
-          }, 4000);
+          }, 5000);
           break;
         }
         case 'rare': {
@@ -144,14 +142,12 @@ export default {
           setTimeout(async () => {
             const weapon = await this.fetchWeaponId(res?.[0]?.returnValues?.tokenId);
             this.weaponReceive = weapon;
-            setTimeout(() => {
-              this.$bvModal.show('successOpenBoxInventory');
-              this.isOpeningBox = false;
-            }, 1000);
-          }, 1000);
+            this.$bvModal.show('successOpenBoxInventory');
+            this.isOpeningBox = false;
+          }, 4000);
           setTimeout(async () => {
             this.listBoxInventory = await this.getMyBoxes();
-          }, 4000);
+          }, 5000);
           break;
         }
         default:{
@@ -164,14 +160,12 @@ export default {
           setTimeout(async () => {
             const weapon = await this.fetchWeaponId(res?.[0]?.returnValues?.tokenId);
             this.weaponReceive = weapon;
-            setTimeout(() => {
-              this.$bvModal.show('successOpenBoxInventory');
-              this.isOpeningBox = false;
-            }, 1000);
-          }, 1000);
+            this.$bvModal.show('successOpenBoxInventory');
+            this.isOpeningBox = false;
+          }, 4000);
           setTimeout(async () => {
             this.listBoxInventory = await this.getMyBoxes();
-          }, 4000);
+          }, 5000);
           break;
         }
         }
