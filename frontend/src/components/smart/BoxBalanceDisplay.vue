@@ -1,10 +1,10 @@
 <template>
   <div class="box-list row">
-       <b-modal id="successOpenBox" hide-footer hide-header hide-header-close>
+       <b-modal id="successOpenBoxInventory" hide-footer hide-header hide-header-close>
          <div class="itemWeapon" >
           <WeaponSelect :weapon="this.weaponReceive"/>
          </div>
-        <div class="buttonFightFragment" @click="$bvModal.hide('successOpenBox')"><span>GO TO CHECK</span></div>
+        <div class="buttonFightFragment" @click="$bvModal.hide('successOpenBoxInventory')"><span>GO TO CHECK</span></div>
       </b-modal>
      <div v-if="isOpeningBox" id="fight-overlay">
             <div class="waiting animation" v-if="isOpeningBox" margin="auto">
@@ -121,15 +121,17 @@ export default {
           }
           this.isOpeningBox = true;
           const res = await this.openCommonBox({boxId:listCommon[0].id});
-          const weapon = await this.fetchWeaponId(res?.[0]?.returnValues?.tokenId);
-          this.weaponReceive = weapon;
-          this.isOpeningBox=false;
-          setTimeout(() => {
-            this.$bvModal.show('successOpenBox');
+          setTimeout(async () => {
+            const weapon = await this.fetchWeaponId(res?.[0]?.returnValues?.tokenId);
+            this.weaponReceive = weapon;
+            setTimeout(() => {
+              this.$bvModal.show('successOpenBoxInventory');
+              this.isOpeningBox = false;
+            }, 1000);
           }, 1000);
           setTimeout(async () => {
             this.listBoxInventory = await this.getMyBoxes();
-          }, 2000);
+          }, 4000);
           break;
         }
         case 'rare': {
@@ -138,16 +140,18 @@ export default {
             break;
           }
           this.isOpeningBox = true;
-          const res =await this.openCommonBox({boxId: listRare[0].id});
-          const weapon = await this.fetchWeaponId(res?.[0]?.returnValues?.tokenId);
-          this.weaponReceive = weapon;
-          this.isOpeningBox = false;
-          setTimeout(() => {
-            this.$bvModal.show('successOpenBox');
+          const res = await this.openCommonBox({boxId: listRare[0].id});
+          setTimeout(async () => {
+            const weapon = await this.fetchWeaponId(res?.[0]?.returnValues?.tokenId);
+            this.weaponReceive = weapon;
+            setTimeout(() => {
+              this.$bvModal.show('successOpenBoxInventory');
+              this.isOpeningBox = false;
+            }, 1000);
           }, 1000);
           setTimeout(async () => {
             this.listBoxInventory = await this.getMyBoxes();
-          }, 2000);
+          }, 4000);
           break;
         }
         default:{
@@ -157,19 +161,22 @@ export default {
           }
           this.isOpeningBox = true;
           const res=await this.openCommonBox({boxId: listEpic[0].id});
-          const weapon = await this.fetchWeaponId(res?.[0]?.returnValues?.tokenId);
-          this.weaponReceive = weapon;
-          this.isOpeningBox = false;
-          setTimeout(() => {
-            this.$bvModal.show('successOpenBox');
+          setTimeout(async () => {
+            const weapon = await this.fetchWeaponId(res?.[0]?.returnValues?.tokenId);
+            this.weaponReceive = weapon;
+            setTimeout(() => {
+              this.$bvModal.show('successOpenBoxInventory');
+              this.isOpeningBox = false;
+            }, 1000);
           }, 1000);
           setTimeout(async () => {
             this.listBoxInventory = await this.getMyBoxes();
-          }, 2000);
+          }, 4000);
           break;
         }
         }
       }catch(error) {
+        console.log('error o day', error);
         this.isOpeningBox=false;
       }
     }

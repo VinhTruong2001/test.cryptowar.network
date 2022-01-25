@@ -3652,11 +3652,16 @@ export function createStore(web3: Web3) {
           return 0;
         }
       },
-      async convertFragmentToBox({state}) {
+      async convertFragmentToBox({state, commit}) {
         const {BlindBox} = state.contracts();
         //@ts-ignore
         const res = await BlindBox?.methods.convertFragmentToBox().send(defaultCallOptions(state));
-        return res?.events.NewBlindBox.returnValues;
+        if(res) {
+          const fragmentPerBox = await BlindBox?.methods.fragmentPerBox().call(defaultCallOptions(state));
+          const xGem: number = Number(state.myXgem)- Number(fragmentPerBox);
+          commit('updateMyXgem', {myXgem: xGem});
+          return res?.events.NewBlindBox.returnValues;
+        }
       },
       async getBoxDetail({state}, {boxId}) {
         const {BlindBox} = state.contracts();

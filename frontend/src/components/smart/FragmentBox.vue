@@ -34,12 +34,6 @@
             </div>
           </div>
         </b-modal>
-        <div class="col-lg-12 d-flex justify-content-end align-items-end">
-            <div class="d-flex flex-column">
-                <span class="fragmentAmountText">Your xGem</span>
-                <span class="fragmentAmountNumber">{{xGemAmount}} 💎</span>
-            </div>
-        </div>
         <div class="dust-list row">
             <!-- <div
             class="col-lg-4 d-flex flex-column align-items-center"
@@ -67,7 +61,7 @@
             </div>
             <div class="buttonFightFragment" @click="handleConvertBox">
                 <!-- <div class="dust-quantity text-center"> -->
-                <span>{{'OPEN ('+fragmentPerBox+'💎)'}}</span>
+                <span>{{'BUY ('+fragmentPerBox+'💎)'}}</span>
                 <!-- </div> -->
             </div>
             </div>
@@ -124,7 +118,7 @@ export default {
 
   computed: {
     ...mapGetters(['getPowerfulDust', 'getGreaterDust', 'getLesserDust', 'ownCharacters']),
-    ...mapState(["characters"]),
+    ...mapState(["characters","myXgem"]),
 
   },
 
@@ -144,7 +138,7 @@ export default {
     ]),
     async handleConvertBox() {
       try{
-        if(this.xGemAmount < this.fragmentPerBox) {
+        if(this.myXgem < this.fragmentPerBox) {
           this.errorMessage = "Not enough xGem!";
           this.$bvModal.show('fragmentOpenBoxModal');
         }
@@ -153,7 +147,6 @@ export default {
           const response = await this.convertFragmentToBox();
           if(response) {
             this.boxId = response.boxId;
-            this.xGemAmount -= this.fragmentPerBox;
             const boxTypeReturn = await this.getBoxDetail({boxId:response.boxId});
             switch(boxTypeReturn) {
             case 1: {
@@ -204,7 +197,7 @@ export default {
       }
     },
     async purchaseItem() {
-      if(this.xGemAmount < this.fragmentPerCommonBox) {
+      if(this.xGemAmount > this.fragmentPerCommonBox) {
         this.errorMessage = "Not enough xGem!";
         this.$bvModal.show('fragmentOpenBoxModal');
         return;
@@ -272,10 +265,7 @@ export default {
   async mounted() {
     setTimeout(async () => {
       const objectXGem = await this.getFragmentAmount();
-      this.xGemAmount = Number(objectXGem.fragmentAmount);
       this.fragmentPerBox = Number(objectXGem.fragmentPerBox);
-      this.fragmentPerCommonBox = Number(objectXGem.fragmentPerCommonBox);
-      this.fragmentPerHero = Number(objectXGem.fragmentPerHero);
     }, 500);
   }
 };
