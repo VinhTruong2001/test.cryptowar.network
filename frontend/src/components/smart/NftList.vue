@@ -1,15 +1,29 @@
 <template>
   <div>
+    <div v-if="isLoadingBox" id="fight-overlay2">
+            <div class="waiting animation" v-if="isLoadingBox" margin="auto">
+                  <div class="fighting-img"></div>
+                  <!-- <div class="waiting-text">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    Waiting for fight results...
+                  </div> -->
+                </div>
+            </div>
     <div v-if="isShop">
       <div class="centered-text-div" v-if="(!nftIdTypes || nftIdTypes.length === 0)">
         <span>Nothing to buy at this time</span>
       </div>
-
+      <b-modal id="successOpenBox" hide-footer hide-header hide-header-close>
+         <!-- <div class="congratsText">Check your new item at Weapon Store</div> -->
+         <div class="itemWeapon" >
+          <WeaponSelect :weapon="this.weaponReceive"/>
+         </div>
+        <div class="buttonFightFragment" @click="$bvModal.hide('successOpenBox')"><span>GO TO CHECK</span></div>
+      </b-modal>
       <ul class="row nft-grid nft-list">
         <li
           class="col-md-12 col-lg-3"
-          :disabled="nft.isSoldOut"
-          @click="checkBuy = nft; buyItem(checkBuy);"
+          :disabled="nft.isSoldOut || nft.isDisable"
            v-for="nft in nftIdTypes" :key="`${nft.type}.${nft.id}`"
         >
           <div class="nft-item-content">
@@ -19,24 +33,41 @@
               @mouseover="hover = !isMobile() || true"
               @mouseleave="hover = !isMobile()" />
             </div>
-            <div class="btn-open-wrap">
-              <b-button
-                :disabled="nft.isSoldOut"
-                class="shop-button btn-blue-bg btn-open-box"
-              >
-                <span v-if="!nft.isSoldOut && nft.id !== 2">
-                  Buy ({{ Math.round(nft.nftPrice) }} xBlade)
-                </span>
-                <span v-if="!nft.isSoldOut && nft.id === 2">
-                  Buy ({{ Math.round(nft.nftPrice) }} 💎)
-                </span>
-                <span  v-if="nft.isSoldOut && !isLoading">
-                  SOLD OUT
-                </span>
-                <span  v-if="isLoading">
-                  LOADING
-                </span>
-              </b-button>
+            <div class="buttonContainer">
+              <div class="btn-open-wrap">
+                <b-button
+                  :disabled="nft.isSoldOut || nft.isDisable"
+                  class="buttonBuy"
+                  @click="checkBuy = nft; nft.isSoldOut || nft.isDisable? () => {}: buyItem(checkBuy);"
+                >
+                  <span v-if="!nft.isSoldOut">
+                    ({{ Math.round(nft.nftPrice) }} xBlade)
+                  </span>
+                  <span  v-if="nft.isSoldOut && !isLoading">
+                    SOLD OUT
+                  </span>
+                  <span  v-if="isLoading">
+                    LOADING
+                  </span>
+                </b-button>
+              </div>
+              <div class="btn-open-wrap">
+                <b-button
+                  :disabled="nft.isSoldOut || nft.isDisableXgem"
+                  class="buttonBuy"
+                  @click="checkBuy = nft; nft.isSoldOut || nft.isDisableXgem? () => {}: buyItemWithXgem(checkBuy);"
+                >
+                  <span v-if="!nft.isSoldOut">
+                    ({{ Math.round(nft.nftPriceXgem) }} 💎 )
+                  </span>
+                  <span  v-if="nft.isSoldOut && !isLoading">
+                    SOLD OUT
+                  </span>
+                  <span  v-if="isLoading">
+                    LOADING
+                  </span>
+                </b-button>
+              </div>
             </div>
           </div>
         </li>
@@ -150,6 +181,9 @@ import { Nft } from '@/interfaces/Nft';
 import Vue from 'vue';
 import { Accessors, PropType } from 'vue/types/options';
 import { IState } from '@/interfaces';
+import WeaponSelect from "@/components/WeaponSelect.vue";
+import { fromWeiEther, toBN } from '@/utils/common';
+import Bignumber from 'bignumber.js';
 
 const sorts = [
   { name: 'Any', dir: '' },
@@ -165,11 +199,20 @@ interface Data {
   priceSort: string;
   showFavoriteNfts: boolean;
   checkBuy: string;
+  lastBoxId: string | number;
+  isLoadingBox: boolean;
+  weaponReceive: any;
 }
 
 export interface NftIdType {
   id: number | string;
   type: string;
+  image: string;
+  isSoldOut: boolean;
+  name: string;
+  nftPrice: number | string;
+  supply: number | string;
+  isDisable: boolean;
 }
 
 type StoreMappedState = Pick<IState, 'ownedShieldIds'>;
@@ -179,22 +222,27 @@ interface StoreMappedGetters {
   shieldsWithIds(ids: string[]): Nft[];
 }
 
-interface StoreMappedActions {
-  purchaseShield(): Promise<void>;
-  fetchShields(shieldIds: (string | number)[]): Promise<void>;
-  purchaseRenameTag(): Promise<void>;
-  purchaseRenameTagDeal(): Promise<void>;
-  purchaseWeaponRenameTag(): Promise<void>;
-  purchaseWeaponRenameTagDeal(): Promise<void>;
-  purchaseCharacterFireTraitChange(): Promise<void>;
-  purchaseCharacterEarthTraitChange(): Promise<void>;
-  purchaseCharacterWaterTraitChange(): Promise<void>;
-  purchaseCharacterLightningTraitChange(): Promise<void>;
-  purchaseCommonSecretBox(): Promise<void>;
-  purchaseRareSecretBox(): Promise<void>;
-  purchaseEpicSecretBox(): Promise<void>;
-  openCommonSecretBox(): Promise<void>;
-}
+// interface StoreMappedActions {
+//   purchaseShield(): Promise<void>;
+//   fetchShields(shieldIds: (string | number)[]): Promise<void>;
+//   purchaseRenameTag(): Promise<void>;
+//   purchaseRenameTagDeal(): Promise<void>;
+//   purchaseWeaponRenameTag(): Promise<void>;
+//   purchaseWeaponRenameTagDeal(): Promise<void>;
+//   purchaseCharacterFireTraitChange(): Promise<void>;
+//   purchaseCharacterEarthTraitChange(): Promise<void>;
+//   purchaseCharacterWaterTraitChange(): Promise<void>;
+//   purchaseCharacterLightningTraitChange(): Promise<void>;
+//   purchaseCommonSecretBox(): Promise<void>;
+//   purchaseRareSecretBox(): Promise<void>;
+//   purchaseEpicSecretBox(): Promise<void>;
+//   openCommonSecretBox(): Promise<void>;
+//   openCommonBox(): Promise<void>;
+//   fetchWeaponId(weaponId: (string | number)): Promise<any>;
+//   buyCommonBoxWithXgem(): Promise<void>;
+//   buyRareBoxWithXgem(): Promise<void>;
+//   buyEpicBoxWithXgem(): Promise<void>;
+// }
 
 export default Vue.extend({
   model: {
@@ -272,84 +320,89 @@ export default Vue.extend({
       sorts,
       showFavoriteNfts: true,
       checkBuy: "",
+      lastBoxId: '',
+      weaponReceive: null,
+      isLoadingBox: false
     } as Data;
   },
 
   components: {
-    NftIcon
+    NftIcon,
+    WeaponSelect
   },
 
   computed: {
-    ...(mapState(['ownedShieldIds']) as Accessors<StoreMappedState>),
+    ...(mapState(['ownedShieldIds', 'skillBalance','inGameOnlyFunds', 'skillRewards', 'myXgem']) as Accessors<StoreMappedState>),
     ...(mapGetters(['shieldsWithIds','nftsWithIdType']) as Accessors<StoreMappedGetters>),
 
-    nftsToDisplay(): NftIdType[] {
-      if (this.showGivenNftIdTypes) {
-        return this.nftIdTypes;
-      }
+    // nftsToDisplay(): NftIdType[] {
+    //   if (this.showGivenNftIdTypes) {
+    //     return this.nftIdTypes;
+    //   }
 
-      const nfts: NftIdType[] = [];
-      // push different kinds of nfts to nfts array here
-      this.ownedShieldIds?.forEach(id => { nfts.push({ id, type: 'shield' }); });
+    //   const nfts: NftIdType[] = [];
+    //   // push different kinds of nfts to nfts array here
+    //   this.ownedShieldIds?.forEach(id => { nfts.push({ id, type: 'shield' }); });
 
-      return nfts;
-    },
+    //   return nfts;
+    // },
 
-    displayNfts(): Nft[] {
-      if(this.isMarket && this.showGivenNftIdTypes) {
-        const type = this.nftIdTypes && this.nftIdTypes[0]?.type;
-        switch(type) {
-        case('shield'):
-          return this.shieldsWithIds(this.nftsToDisplay.map(x => x.id.toString())).filter(Boolean);
-        default:
-          return [];
-        }
-      }
+    // displayNfts(): Nft[] {
+    //   if(this.isMarket && this.showGivenNftIdTypes) {
+    //     const type = this.nftIdTypes && this.nftIdTypes[0]?.type;
+    //     switch(type) {
+    //     case('shield'):
+    //       return this.shieldsWithIds(this.nftsToDisplay.map(x => x.id.toString())).filter(Boolean);
+    //     default:
+    //       return [];
+    //     }
+    //   }
 
-      return this.nftsWithIdType(this.nftsToDisplay).filter(Boolean);
-    },
+    //   return this.nftsWithIdType(this.nftsToDisplay).filter(Boolean);
+    // },
 
-    nonIgnoredNfts(): Nft[] {
-      let items: Nft[] = [];
-      this.displayNfts.forEach((x) => items.push(x));
+    // nonIgnoredNfts(): Nft[] {
+    //   let items: Nft[] = [];
+    //   this.displayNfts.forEach((x) => items.push(x));
 
-      const allIgnore: NftIdType[] = [];
-      if (!this.showFavoriteNfts) {
-        for (const type in Object.keys(this.favorites)) {
-          for(const id in Object.keys(this.favorites[type])) {
-            allIgnore.push({ type, id });
-          }
-        }
-      }
-      items = items.filter((x) => allIgnore.findIndex((y) => y.id === x.id && y.type === x.type) < 0);
+    //   const allIgnore: NftIdType[] = [];
+    //   if (!this.showFavoriteNfts) {
+    //     for (const type in Object.keys(this.favorites)) {
+    //       //@ts-ignore
+    //       for(const id in Object.keys(this.favorites[type])) {
+    //         allIgnore.push({ type, id });
+    //       }
+    //     }
+    //   }
+    //   items = items.filter((x) => allIgnore.findIndex((y) => y.id === x.id && y.type === x.type) < 0);
 
-      if(this.typeFilter) {
-        items = items.filter((x) => x.type?.localeCompare(this.typeFilter, undefined, { sensitivity: 'base' } ) === 0);
-      }
+    //   if(this.typeFilter) {
+    //     items = items.filter((x) => x.type?.localeCompare(this.typeFilter, undefined, { sensitivity: 'base' } ) === 0);
+    //   }
 
-      if (this.starFilter) {
-        items = items.filter((x) => x.stars === +this.starFilter - 1);
-      }
+    //   if (this.starFilter) {
+    //     items = items.filter((x) => x.stars === +this.starFilter - 1);
+    //   }
 
-      if (this.elementFilter) {
-        items = items.filter((x) => x.element?.includes(this.elementFilter));
-      }
+    //   if (this.elementFilter) {
+    //     items = items.filter((x) => x.element?.includes(this.elementFilter));
+    //   }
 
-      if (this.showLimit > 0 && items.length > this.showLimit) {
-        items = items.slice(0, this.showLimit);
-      }
+    //   if (this.showLimit > 0 && items.length > this.showLimit) {
+    //     items = items.slice(0, this.showLimit);
+    //   }
 
-      const favoriteNfts: Nft[] = [];
-      for (const key in this.favorites) {
-        const i = items.findIndex((y) => y?.id === +key);
-        if (i !== -1) {
-          favoriteNfts.push(items[i]);
-          items.splice(i, 1);
-        }
-      }
+    //   const favoriteNfts: Nft[] = [];
+    //   for (const key in this.favorites) {
+    //     const i = items.findIndex((y) => y?.id === +key);
+    //     if (i !== -1) {
+    //       favoriteNfts.push(items[i]);
+    //       items.splice(i, 1);
+    //     }
+    //   }
 
-      return favoriteNfts.concat(items);
-    }
+    //   return favoriteNfts.concat(items);
+    // }
   },
 
   watch: {
@@ -374,12 +427,66 @@ export default Vue.extend({
       'purchaseRenameTagDeal', 'purchaseWeaponRenameTagDeal',
       'purchaseCharacterFireTraitChange', 'purchaseCharacterEarthTraitChange',
       'purchaseCharacterWaterTraitChange', 'purchaseCharacterLightningTraitChange',
-      'purchaseCommonSecretBox', 'purchaseRareSecretBox', 'purchaseEpicSecretBox', 'openCommonSecretBox'
-    ]) as StoreMappedActions),
+      'purchaseCommonSecretBox', 'purchaseRareSecretBox', 'purchaseEpicSecretBox', 'openCommonSecretBox', 'openCommonBox','fetchWeaponId',
+      'buyRareBoxWithXGem', 'buyEpicBoxWithXGem', 'buyCommonBoxWithXGem', 'updateMyXgem'
+    ])),
     ...mapMutations(['setCurrentNft']),
 
     async onShieldBuy() {
       await this.purchaseShield();
+    },
+
+    checkDisableButtonBuy() {
+      const xBladeBalance = fromWeiEther(
+        Bignumber.sum(
+          //@ts-ignore
+          toBN(this.skillBalance),
+          //@ts-ignore
+          toBN(this.inGameOnlyFunds),
+          //@ts-ignore
+          toBN(this.skillRewards)
+        )
+      );
+      // const commonBoxInfo = this.nftIdTypes.find(item => item.id ===0);
+      // const rareBoxInfo = this.nftIdTypes.find(item => item.id===1);
+      // const epicBoxInfo = this.nftIdTypes.find(item => item.id ===2);
+      //@ts-ignore
+      console.log('1111', xBladeBalance);
+      // console.log('2222', commonBoxInfo?.nftPrice);
+      // console.log('3333', xBladeBalance> commonBoxInfo?.nftPrice);
+      this.nftIdTypes.map((item, index) => {
+        return {
+          ...item,
+          isDisable: xBladeBalance > this.nftIdTypes[index].nftPrice
+        };
+      });
+      console.log('1212', this.nftIdTypes);
+      // if(Number(xBladeBalance) < Number(commonBoxInfo?.nftPrice)) {
+      //   this.nftIdTypes.map(item => {
+      //     if(item.id === 0) {
+      //       item.isDisable = true;
+      //     }
+      //     return item;
+      //   });
+      // }
+      // //@ts-ignore
+      // if(Number(xBladeBalance) > Number(rareBoxInfo?.nftPrice)) {
+      //   this.nftIdTypes.map(item => {
+      //     if(item.id === 1) {
+      //       item.isDisable = true;
+      //     }
+      //     return item;
+      //   });
+      // }
+      // //@ts-ignore
+      // if(Number(xBladeBalance) > Number(epicBoxInfo?.nftPrice)) {
+      //   this.nftIdTypes.map(item => {
+      //     if(item.id === 2) {
+      //       item.isDisable = true;
+      //     }
+      //     return item;
+      //   });
+      // }
     },
 
     saveFilters() {
@@ -418,12 +525,15 @@ export default Vue.extend({
 
     toggleFavorite(e: Event, type: string, id: number) {
       e.preventDefault();
+      //@ts-ignore
       if (this.favorites[type] && this.favorites[type][id]) {
+        //@ts-ignore
         this.$delete(this.favorites[type], id);
       } else {
+        //@ts-ignore
         if(!this.favorites[type]) {
           this.$set(this.favorites, type, {});
-        }
+        }//@ts-ignore
         this.$set(this.favorites[type], id, true);
       }
 
@@ -449,61 +559,120 @@ export default Vue.extend({
     },
 
     isFavorite(type: string, id: number): boolean {
+      //@ts-ignore
       return this.favorites && this.favorites[type] && this.favorites[type][id];
     },
 
-    async buyItem(item: nftItem) {
-      if(item.type === 'shield'){
-        console.log('buying shield');
-        await this.purchaseShield();
-      }
-
-      if (item.type === 'SecretBox') {
-        console.log('Buying secret box');
-        if (item.id === 0) { //Common Box
-          await this.purchaseCommonSecretBox();
-        }
-        if (item.id === 1) { // Rare Box
-          await this.purchaseRareSecretBox();
-        }
-        if (item.id === 3) { // Epic Box
-          await this.purchaseEpicSecretBox();
+    async buyItemWithXgem(item: nftItem) {
+      try {
+        this.isLoadingBox = true;
+        if(item.id ===0) {
+          const response = await this.buyCommonBoxWithXGem();
+          //@ts-ignore
+          this.lastBoxId = response.boxId;
+          this.isLoadingBox = false;
+        }else if(item.id ===1) {
+          const response = await this.buyRareBoxWithXGem();
+          //@ts-ignore
+          this.lastBoxId = response.boxId;
+          this.isLoadingBox = false;
+        }else {
+          const response = await this.buyEpicBoxWithXGem();
+          //@ts-ignore
+          this.lastBoxId = response.boxId;
+          this.isLoadingBox = false;
         }
         //@ts-ignore
         this.$bvModal.show('modal-buyitem');
+      }catch(error) {
+        this.isLoadingBox =false;
       }
+    },
+    async buyItem(item: nftItem) {
+      try{
+        this.isLoadingBox = true;
+        if(item.type === 'shield'){
+          console.log('buying shield');
+          await this.purchaseShield();
+        }
 
-      if(item.type === 'CharacterRenameTag'){
-        await this.purchaseRenameTag();
-      }
-      if(item.type === 'CharacterRenameTagDeal'){
-        await this.purchaseRenameTagDeal();
-      }
+        if (item.type === 'SecretBox') {
+          if (item.id === 0) { //Common Box
+            const boxId =  await this.purchaseCommonSecretBox();
+            //@ts-ignore
+            this.lastBoxId = boxId;
+            this.isLoadingBox = false;
+          }
+          if (item.id === 1) { // Rare Box
+            const boxId = await this.purchaseRareSecretBox();
+            //@ts-ignore
+            this.lastBoxId = boxId;
+            this.isLoadingBox = false;
+          }
+          if (item.id === 2) { // Epic Box
+            const boxId = await this.purchaseEpicSecretBox();
+            //@ts-ignore
+            this.lastBoxId = boxId;
+            this.isLoadingBox = false;
+          }
+          //@ts-ignore
+          this.$bvModal.show('modal-buyitem');
+        }
 
-      if(item.type === 'WeaponRenameTag'){
-        await this.purchaseWeaponRenameTag();
-      }
-      if(item.type === 'WeaponRenameTagDeal'){
-        await this.purchaseWeaponRenameTagDeal();
-      }
+        if(item.type === 'CharacterRenameTag'){
+          await this.purchaseRenameTag();
+          this.isLoadingBox = false;
+        }
+        if(item.type === 'CharacterRenameTagDeal'){
+          await this.purchaseRenameTagDeal();
+          this.isLoadingBox = false;
+        }
 
-      if(item.type === 'CharacterFireTraitChange'){
-        await this.purchaseCharacterFireTraitChange();
-      }
-      if(item.type === 'CharacterEarthTraitChange'){
-        await this.purchaseCharacterEarthTraitChange();
-      }
-      if(item.type === 'CharacterWaterTraitChange'){
-        await this.purchaseCharacterWaterTraitChange();
-      }
-      if(item.type === 'CharacterLightningTraitChange'){
-        await this.purchaseCharacterLightningTraitChange();
+        if(item.type === 'WeaponRenameTag'){
+          await this.purchaseWeaponRenameTag();
+          this.isLoadingBox = false;
+        }
+        if(item.type === 'WeaponRenameTagDeal'){
+          await this.purchaseWeaponRenameTagDeal();
+          this.isLoadingBox = false;
+        }
+
+        if(item.type === 'CharacterFireTraitChange'){
+          await this.purchaseCharacterFireTraitChange();
+          this.isLoadingBox = false;
+        }
+        if(item.type === 'CharacterEarthTraitChange'){
+          await this.purchaseCharacterEarthTraitChange();
+          this.isLoadingBox = false;
+        }
+        if(item.type === 'CharacterWaterTraitChange'){
+          await this.purchaseCharacterWaterTraitChange();
+          this.isLoadingBox = false;
+        }
+        if(item.type === 'CharacterLightningTraitChange'){
+          await this.purchaseCharacterLightningTraitChange();
+          this.isLoadingBox = false;
+        }
+      }catch(error) {
+        this.isLoadingBox = false;
       }
     },
 
-    async openBox(item: nftItem) {
-      if (item.id === 0) {
-        await this.openCommonSecretBox();
+    async openBox() {
+      try{
+        this.isLoadingBox = true;
+        //@ts-ignore
+        const res = await this.openCommonBox({boxId: this.lastBoxId});
+        //@ts-ignore
+        const weapon = await this.fetchWeaponId(res?.[0]?.returnValues?.tokenId);
+        this.weaponReceive = weapon;
+        this.isLoadingBox = false;
+        setTimeout(() => {
+          //@ts-ignore
+          this.$bvModal.show('successOpenBox');
+        }, 1000);
+      }catch(error) {
+        this.isLoadingBox = false;
       }
     },
 
@@ -583,7 +752,81 @@ export default Vue.extend({
   flex-direction: row;
   align-self: center;
 }
+.itemWeapon {
+  min-width: 19em;
+  height: 26.5em;
+  background-position: left;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-image: url(../../assets/images/bg-item-top.png);
+  position: relative;
+}
+.waiting {
+  margin: auto;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 0;
+  position: fixed;
+  z-index: 3;
+}
+.animation{
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.waiting.animation .fighting-img {
+  background-image: url(../../assets/images/diamond.gif);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  width: 10rem;
+  height: 10rem;
+}
+#fight-overlay2 {
+  position: fixed;
+  z-index: 999999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: table;
+  transition: opacity 0.3s ease;
+}
+.buttonFightFragment {
+  border: none;
+    height: 47px;
+    background-image: url('../../assets/images/bg-fight-button.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    margin-left: 0.8rem;;
+    min-width: 190px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    margin-top: 2rem;
+    cursor: pointer;
+}
 
+.buttonContainer {
+  display: flex;
+}
+.buttonBuy {
+    border: none !important;
+    border-radius: 0;
+    min-width: 90px;
+    min-height: 42px;
+    font-weight: bold;
+    position: relative;
+    text-align: center;
+    background-repeat: no-repeat !important;
+    background-image: url('../../assets/images/bg-fight-button.png');
+    background-size: 100% 100%;
+}
 .show-favorite-checkbox {
   margin-left: 5px;
 }
