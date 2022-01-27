@@ -186,7 +186,11 @@ export function createStore(web3: Web3) {
       secondsPerStamina: 1,
       careerModeRooms: [],
       careerModeRequest: [],
-      myCareerModeRequest: []
+      myCareerModeRequest: [],
+      myXgem: 0,
+      commonBoxPriceXgem: 0,
+      rareBoxPriceXgem: 0,
+      epicBoxPriceXgem: 0
     },
 
     getters: {
@@ -621,7 +625,7 @@ export function createStore(web3: Web3) {
           'ownedWeaponIds',
           'maxStamina',
           'maxDurability',
-          'ownedShieldIds'
+          'ownedShieldIds',
         ];
         for (const key of keysToAllow) {
           if (Object.hasOwnProperty.call(payload, key)) {
@@ -806,6 +810,15 @@ export function createStore(web3: Web3) {
       },
       updateMyCareerModeRequest(state: IState, payload: {request: RoomRequest[]}) {
         state.myCareerModeRequest = payload.request;
+      },
+      updateMyXgem(state: IState, payload: {myXgem: number | string}) {
+        console.log('payload ne', payload);
+        state.myXgem = payload.myXgem;
+      },
+      updateBoxPriceXgem(state: IState, payload: {commonBoxPriceXgem: string, rareBoxPriceXgem: string, epicBoxPriceXgem: string}) {
+        state.commonBoxPriceXgem = payload.commonBoxPriceXgem;
+        state.rareBoxPriceXgem = payload.rareBoxPriceXgem;
+        state.epicBoxPriceXgem = payload.epicBoxPriceXgem;
       }
     },
 
@@ -1065,6 +1078,7 @@ export function createStore(web3: Web3) {
       },
 
       async getMyBoxes({ state }) {
+        console.log('call bao nhieu lan');
         const { BlindBox } = state.contracts();
         if (!BlindBox || !state.defaultAccount) return;
         const tokens = await BlindBox.methods.balanceOf(state.defaultAccount).call(defaultCallOptions(state));
@@ -1094,6 +1108,10 @@ export function createStore(web3: Web3) {
         if (featureFlagStakeOnly) return;
 
         const ownedCommonBoxIds = await this.cache.dispatch('getMyBoxes');
+        const myXgem = await this.cache.dispatch('getFragmentAmount');
+        commit('updateMyXgem', {
+          myXgem: Number(myXgem.fragmentAmount)
+        });
 
         const [
           ownedCharacterIds,
@@ -1101,6 +1119,9 @@ export function createStore(web3: Web3) {
           ownedShieldIds,
           maxStamina,
           maxDurability,
+          commonBoxPriceXgem,
+          rareBoxPriceXgem,
+          epicBoxPriceXgem
         ] = await Promise.all([
           state
             .contracts()
@@ -1121,7 +1142,10 @@ export function createStore(web3: Web3) {
           state
             .contracts()
             .Weapons!.methods.maxDurability()
-            .call(defaultCallOptions(state))
+            .call(defaultCallOptions(state)),
+          state.contracts().BlindBox?.methods.commonPriceByXGem().call(defaultCallOptions(state)),
+          state.contracts().BlindBox?.methods.rarePriceByXGem().call(defaultCallOptions(state)),
+          state.contracts().BlindBox?.methods.epicPriceByXGem().call(defaultCallOptions(state))
         ]);
 
         commit('updateUserDetails', {
@@ -1131,6 +1155,11 @@ export function createStore(web3: Web3) {
           maxStamina: parseInt(maxStamina, 10),
           maxDurability: parseInt(maxDurability, 10),
           ownedCommonBoxIds: Array.from(ownedCommonBoxIds),
+        });
+        commit('updateBoxPriceXgem', {
+          commonBoxPriceXgem,
+          rareBoxPriceXgem,
+          epicBoxPriceXgem
         });
 
         await Promise.all([
@@ -1799,7 +1828,7 @@ export function createStore(web3: Web3) {
       },
 
       async doEncounter(
-        { state },
+        { state, dispatch, commit },
         { characterId, weaponId, targetString, fightMultiplier }
       ) {
         if(!state.defaultAccount) return;
@@ -1821,8 +1850,8 @@ export function createStore(web3: Web3) {
         )
           .send({value: fightTax, from: state.defaultAccount, gas: '800000' });
         const fragmentOutcome = res.events.FragmentReceived.returnValues.fragmentAmount;
-
-        await this.cache.dispatch('fetchTargets', { characterId, weaponId });
+        commit('updateMyXgem', {myXgem: Number(state.myXgem)+  Number(fragmentOutcome)});
+        await dispatch('fetchTargets', { characterId, weaponId });
 
         const {
           /*owner,
@@ -2536,26 +2565,27 @@ export function createStore(web3: Web3) {
             .send(defaultCallOptions(state));
         }
 
-        await BlindBox.methods.buy(0).send({
+        const res = await BlindBox.methods.buy(0).send({
           from: state.defaultAccount,
           gas: '500000'
         });
-
         await Promise.all([
           dispatch('fetchTotalCommonBoxSupply')
         ]);
+        return res.events.NewBlindBox.returnValues.boxId;
       },
       async openCommonBox({ state, dispatch }, {boxId}) {
         try{
           //error cho nay
           const {BlindBox} = state.contracts();
-          await BlindBox?.methods.open(boxId).send({
+          const res= await BlindBox?.methods.open(boxId).send({
             from: state.defaultAccount,
             gas:'800000'
           });
           await Promise.all([
             dispatch('fetchTotalCommonBoxSupply')
           ]);
+          return res?.events.Transfer;
         }catch(error) {
           console.log('???', error);
         }
@@ -2575,7 +2605,7 @@ export function createStore(web3: Web3) {
             .send(defaultCallOptions(state));
         }
 
-        await BlindBox.methods.buy(1).send({
+        const res = await BlindBox.methods.buy(1).send({
           from: state.defaultAccount,
           gas: '500000'
         });
@@ -2583,6 +2613,7 @@ export function createStore(web3: Web3) {
         await Promise.all([
           this.cache.dispatch('fetchTotalCommonBoxSupply')
         ]);
+        return res.events.NewBlindBox.returnValues.boxId;
       },
 
       async purchaseEpicSecretBox({ state }) {
@@ -2599,7 +2630,7 @@ export function createStore(web3: Web3) {
             .send(defaultCallOptions(state));
         }
 
-        await BlindBox.methods.buy(2).send({
+        const res = await BlindBox.methods.buy(2).send({
           from: state.defaultAccount,
           gas: '500000'
         });
@@ -2607,6 +2638,7 @@ export function createStore(web3: Web3) {
         await Promise.all([
           this.cache.dispatch('fetchTotalEpicBoxSupply')
         ]);
+        return res.events.NewBlindBox.returnValues.boxId;
       },
 
       async openCommonSecretBox({ state }) {
@@ -3575,28 +3607,81 @@ export function createStore(web3: Web3) {
         //@ts-ignore
         const fragmentAmount = await BlindBox?.methods.getFragmentAmount(state.defaultAccount).call(defaultCallOptions(state));
         const fragmentPerBox = await BlindBox?.methods.fragmentPerBox().call(defaultCallOptions(state));
+        const fragmentPerCommonBox = await BlindBox?.methods.commonPriceByXGem().call(defaultCallOptions(state));
+        const fragmentPerHero = await BlindBox?.methods.mintHeroPriceByXGem().call(defaultCallOptions(state));
         if(fragmentAmount) {
           return {
             fragmentAmount,
-            fragmentPerBox
+            fragmentPerBox,
+            fragmentPerCommonBox,
+            fragmentPerHero
           };
         }else {
           return 0;
         }
       },
-      async convertFragmentToBox({state}) {
+      async convertFragmentToBox({state, commit}) {
         const {BlindBox} = state.contracts();
         //@ts-ignore
         const res = await BlindBox?.methods.convertFragmentToBox().send(defaultCallOptions(state));
-        return res?.events.NewBlindBox.returnValues;
+        if(res) {
+          const fragmentPerBox = await BlindBox?.methods.fragmentPerBox().call(defaultCallOptions(state));
+          const xGem: number = Number(state.myXgem)- Number(fragmentPerBox);
+          commit('updateMyXgem', {myXgem: xGem});
+          return res?.events.NewBlindBox.returnValues;
+        }
       },
       async getBoxDetail({state}, {boxId}) {
         const {BlindBox} = state.contracts();
         //@ts-ignore
         const res = await BlindBox?.methods.getBox(boxId).call(defaultCallOptions(state));
-        console.log(res);
         return res;
-      }
+      },
+      async buyCommonBoxWithXGem({state, commit}) {
+        const {BlindBox} = state.contracts();
+        const res = await BlindBox?.methods.buyCommonBoxWithXGem().send(defaultCallOptions(state));
+        if(res) {
+          const xGem: number = Number(state.myXgem)- Number(state.commonBoxPriceXgem);
+          commit('updateMyXgem', {myXgem: xGem});
+          return res.events.NewBlindBox.returnValues;
+        }else {
+          return false;
+        }
+      },
+      // async mintHeroWithXGem({state, dispatch}) {
+      //   const {BlindBox} = state.contracts();
+      //   const res = await BlindBox?.methods.mintHeroWithXGem().send(defaultCallOptions(state));
+      //   await Promise.all([dispatch('fetchCharacter',res?.events.Transfer.returnValues.tokenId)]);
+      //   return res?.events.Transfer;
+      // }
+      async buyRareBoxWithXGem({state, commit}) {
+        const {BlindBox} = state.contracts();
+        const res = await BlindBox?.methods.buyRareBoxWithXGem().send(defaultCallOptions(state));
+        if(res) {
+          const xGem: number = Number(state.myXgem)- Number(state.rareBoxPriceXgem);
+          commit('updateMyXgem', {myXgem: xGem});
+          return res.events.NewBlindBox.returnValues;
+        }else {
+          return false;
+        }
+      },
+      async buyEpicBoxWithXGem({state, commit}) {
+        const {BlindBox} = state.contracts();
+        const res = await BlindBox?.methods.buyEpicBoxWithXGem().send(defaultCallOptions(state));
+        if(res) {
+          const xGem: number = Number(state.myXgem)- Number(state.epicBoxPriceXgem);
+          commit('updateMyXgem', {myXgem: xGem});
+          return res.events.NewBlindBox.returnValues;
+        }else {
+          return false;
+        }
+      },
+      // async getPriceBoxByXgem({state, commit}) {
+      //   const {BlindBox} = state.contracts();
+      //   const fragmentPerCommonBox = await BlindBox?.methods.commonPriceByXGem().call(defaultCallOptions(state));
+      //   const fragmentPerRareBox = await BlindBox?.methods.rarePriceByXGem().call(defaultCallOptions(state));
+      //   const fragmentPerEpicBox = await BlindBox?.methods.epicPriceByXGem().call(defaultCallOptions(state));
+      // }
     },
   });
 }

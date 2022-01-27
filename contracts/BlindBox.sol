@@ -48,6 +48,11 @@ contract BlindBox is
     uint256 private lastMintedBlock;
     uint256 private firstMintedOfLastBlock;
 
+    uint256 public commonPriceByXGem;
+    uint256 public mintHeroPriceByXGem;
+    uint256 public rarePriceByXGem;
+    uint256 public epicPriceByXGem;
+
     event NewBlindBox(uint256 indexed boxId, address indexed minter);
     event Burned(address indexed owner, uint256 indexed burned);
     event Open(address indexed minter, uint256 stars);
@@ -120,22 +125,40 @@ contract BlindBox is
     }
 
     function _noFreshLookup(uint256 id) internal view {
-        require(id < firstMintedOfLastBlock || lastMintedBlock < block.number, "Too fresh for lookup");
+        require(
+            id < firstMintedOfLastBlock || lastMintedBlock < block.number,
+            "Too fresh for lookup"
+        );
     }
 
-    function setBoxesPrice(
-        uint256 _commonPrice,
-        uint256 _rarePrice,
-        uint256 _epicPrice
-    ) public onlyGameAdmin {
-        require(
-            _commonPrice > 0 && _rarePrice > 0 && _epicPrice > 0,
-            "Boxes price must be larger than 0"
-        );
+    function setBoxesPrice(uint8 _type, uint256 _price) public onlyGameAdmin {
+        require(_price > 0, "Boxes price must be larger than 0");
+        if (_type == 0) {
+            commonPrice = _price;
+        }
+        if (_type == 1) {
+            rarePrice = _price;
+        }
 
-        commonPrice = _commonPrice;
-        rarePrice = _rarePrice;
-        epicPrice = _epicPrice;
+        if (_type == 2) {
+            epicPrice = _price;
+        }
+
+        if (_type == 3) {
+            commonPriceByXGem = _price;
+        }
+
+        if (_type == 4) {
+            mintHeroPriceByXGem = _price;
+        }
+
+        if (_type == 5) {
+            rarePriceByXGem = _price;
+        }
+
+        if (_type == 6) {
+            epicPriceByXGem = _price;
+        }
     }
 
     function setBoxesQty(
@@ -160,15 +183,16 @@ contract BlindBox is
         characters = _characters;
     }
 
-    function setFragmentPerBox(uint256 _amount) public onlyGameAdmin{
+    function setFragmentPerBox(uint256 _amount) public onlyGameAdmin {
         fragmentPerBox = _amount;
     }
 
     function buy(Type _type) public {
         uint256 tokenId = tokens.length;
 
-        if(block.number != lastMintedBlock)
+        if (block.number != lastMintedBlock) {
             firstMintedOfLastBlock = tokenId;
+        }
         lastMintedBlock = block.number;
 
         uint256 sellPrice;
@@ -231,7 +255,7 @@ contract BlindBox is
         emit NewBlindBox(tokenId, msg.sender);
     }
 
-    function open(uint256 id) noFreshLookup(id) public {
+    function open(uint256 id) public noFreshLookup(id) {
         address burnOwner = ownerOf(id);
         require(burnOwner == msg.sender, "Not box owner");
         Box memory _box = tokens[id];
@@ -261,6 +285,65 @@ contract BlindBox is
         _burn(id);
         emit Burned(burnOwner, id);
     }
+
+    function buyCommonBoxWithXGem() public {
+        require(
+            fragmentQty[msg.sender] >= commonPriceByXGem,
+            "Not enough fragment to buy common box"
+        );
+
+        fragmentQty[msg.sender] = fragmentQty[msg.sender].sub(
+            commonPriceByXGem
+        );
+        uint256 tokenId = tokens.length;
+        tokens.push(Box(Type.COMMON));
+        _mint(msg.sender, tokenId);
+        emit NewBlindBox(tokenId, msg.sender);
+    }
+
+    function buyRareBoxWithXGem() public {
+        require(
+            fragmentQty[msg.sender] >= rarePriceByXGem,
+            "Not enough fragment to buy common box"
+        );
+
+        fragmentQty[msg.sender] = fragmentQty[msg.sender].sub(
+            rarePriceByXGem
+        );
+        uint256 tokenId = tokens.length;
+        tokens.push(Box(Type.RARE));
+        _mint(msg.sender, tokenId);
+        emit NewBlindBox(tokenId, msg.sender);
+    }
+
+    function buyEpicBoxWithXGem() public {
+        require(
+            fragmentQty[msg.sender] >= epicPriceByXGem,
+            "Not enough fragment to buy common box"
+        );
+
+        fragmentQty[msg.sender] = fragmentQty[msg.sender].sub(
+            epicPriceByXGem
+        );
+        uint256 tokenId = tokens.length;
+        tokens.push(Box(Type.EPIC));
+        _mint(msg.sender, tokenId);
+        emit NewBlindBox(tokenId, msg.sender);
+    }
+
+    // function mintHeroWithXGem() public {
+    //     require(
+    //         fragmentQty[msg.sender] >= mintHeroPriceByXGem,
+    //         "Not enough fragment to buy common box"
+    //     );
+    //     fragmentQty[msg.sender] = fragmentQty[msg.sender].sub(
+    //         mintHeroPriceByXGem
+    //     );
+    //     uint256 seed = uint256(
+    //         keccak256(abi.encodePacked(blockhash(block.number - 1), msg.sender))
+    //     );
+    //     characters.mint(msg.sender, seed);
+    // }
 
     function addFragment(address account, uint256 qty) public onlyGameAdmin {
         require(qty < 30, "Max 30 fragment");
@@ -368,7 +451,7 @@ contract BlindBox is
 
     function getBox(uint256 _id) public view returns (uint256 boxType) {
         Box memory _box = tokens[_id];
-        boxType = uint(_box.boxType);
+        boxType = uint256(_box.boxType);
     }
 
     function commonPriceInXBlade() public view returns (uint256 _price) {
@@ -383,10 +466,14 @@ contract BlindBox is
         _price = cwController.usdToxBlade(epicPrice);
     }
 
-    function calculatedFragment(uint24 playerRoll, uint24 monsterRoll, uint256 seed) external pure returns (uint256 _fragmentAmmount) {
-        _fragmentAmmount  = seed.mod(4).add(5);
+    function calculatedFragment(
+        uint24 playerRoll,
+        uint24 monsterRoll,
+        uint256 seed
+    ) external pure returns (uint256 _fragmentAmmount) {
+        _fragmentAmmount = 1;
         if (playerRoll < monsterRoll) {
-            _fragmentAmmount = seed.mod(4).add(1);
+            return _fragmentAmmount;
         }
         if (seed.mod(1000) < 100) {
             _fragmentAmmount = _fragmentAmmount.add(1);
@@ -395,5 +482,4 @@ contract BlindBox is
             _fragmentAmmount = _fragmentAmmount.add(1);
         }
     }
-
 }

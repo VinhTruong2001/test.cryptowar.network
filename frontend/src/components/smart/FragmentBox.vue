@@ -9,9 +9,19 @@
         <div class="buttonFightFragment" @click="$bvModal.hide('fragmentOpenBoxModal')"><span>GO TO CHECK</span></div>
       </b-modal>
        <b-modal id="successOpenBox" hide-footer hide-header hide-header-close>
-         <div class="congratsText">Check your new weapon at Weapon Store</div>
+         <!-- <div class="congratsText">Check your new item at Weapon Store</div> -->
+         <div class="itemWeapon" >
+          <WeaponSelect :weapon="this.weaponReceive"/>
+         </div>
         <div class="buttonFightFragment" @click="$bvModal.hide('successOpenBox')"><span>GO TO CHECK</span></div>
       </b-modal>
+      <b-modal id="successMintHero" hide-footer hide-header hide-header-close>
+         <!-- <div class="congratsText">Check your new item at Weapon Store</div> -->
+         <div class="itemWeapon">
+          <character-art :character="this.heroReceived" :isMarket="false"/>
+         </div>
+         <div class="buttonFightFragment" @click="$bvModal.hide('successMintHero')"><span>GO TO CHECK</span></div>
+        </b-modal>
       <b-modal id="modal-buyitem">
           <span v-if="this.boxType.length>2" class="congratsText">You received a {{this.boxType[0].toUpperCase() + this.boxType.slice(1)}} Box</span>
           <div :class="this.boxType +'-box'"></div>
@@ -24,44 +34,64 @@
             </div>
           </div>
         </b-modal>
-        <div class="col-lg-12 d-flex justify-content-end align-items-end">
-            <div class="d-flex flex-column">
-                <span class="fragmentAmountText">Your xGem</span>
-                <span class="fragmentAmountNumber">{{xGemAmount}} 💎</span>
-            </div>
-        </div>
         <div class="dust-list row">
+            <!-- <div
+            class="col-lg-4 d-flex flex-column align-items-center"
+            :class="isBlacksmith ? 'col-6' : 'col-12'"
+            >
+            <div
+                class="character-item addnew dust-container"
+                :class="isBlacksmith && 'no-corner'"
+            >
+                <div class="commBox"></div>
+            </div>
+            <div class="buttonFightFragment" @click="purchaseItem">
+                <span>{{'OPEN ('+fragmentPerCommonBox+'💎)'}}</span>
+            </div>
+            </div> -->
             <div
             class="col-lg-4 d-flex flex-column align-items-center"
             :class="isBlacksmith ? 'col-6' : 'col-12'"
             >
-            <div v-if="isConvertingFragmentToBox" id="fight-overlay">
-            <div class="waiting animation" v-if="isConvertingFragmentToBox" margin="auto">
-                  <div class="fighting-img"></div>
-                  <!-- <div class="waiting-text">
-                    <i class="fas fa-spinner fa-spin"></i>
-                    Waiting for fight results...
-                  </div> -->
-                </div>
-            </div>
             <div
                 class="character-item addnew dust-container"
                 :class="isBlacksmith && 'no-corner'"
             >
                 <div class="dust-image dust-image2"></div>
             </div>
-            <div class="buttonFightFragment" @click="handleConvertBox">
+            <div :class="checkDisableButton() ? 'buttonFightFragmentDisable' : 'buttonFightFragment'" @click="checkDisableButton() ?() => {}: handleConvertBox()">
                 <!-- <div class="dust-quantity text-center"> -->
-                <span>{{'OPEN ('+fragmentPerBox+'💎)'}}</span>
+                <span>{{'BUY ('+fragmentPerBox+'💎)'}}</span>
                 <!-- </div> -->
             </div>
             </div>
+            <!-- <div
+            class="col-lg-4 d-flex flex-column align-items-center"
+            :class="isBlacksmith ? 'col-6' : 'col-12'"
+            > -->
+            <div v-if="isConvertingFragmentToBox" id="fight-overlay">
+            <div class="waiting animation" v-if="isConvertingFragmentToBox" margin="auto">
+                  <div class="fighting-img"></div>
+                </div>
+            </div>
+            <!-- <div
+                class="character-item addnew dust-container"
+                :class="isBlacksmith && 'no-corner'"
+            >
+                <div class="mintHero"/>
+            </div>
+            <div class="buttonFightFragment" @click="handleMintHero">
+                <span>{{'RECRUIT ('+fragmentPerHero+'💎)'}}</span>
+            </div>
+            </div> -->
         </div>
     </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
+import WeaponSelect from '@/components/WeaponSelect.vue';
+import CharacterArt from '../CharacterArt.vue';
 
 export default {
   props: ['isBlacksmith'],
@@ -70,18 +100,25 @@ export default {
     return {
       xGemAmount: 0,
       fragmentPerBox: 0,
+      fragmentPerCommonBox: 0,
+      fragmentPerHero: 0,
       isConvertingFragmentToBox: false,
       errorMessage: '',
       boxId: -1,
-      boxType: ''
+      boxType: '',
+      weaponReceive: null,
+      heroReceived: null
     };
   },
 
   components: {
+    WeaponSelect,
+    CharacterArt
   },
 
   computed: {
-    ...mapGetters(['getPowerfulDust', 'getGreaterDust', 'getLesserDust']),
+    ...mapGetters(['getPowerfulDust', 'getGreaterDust', 'getLesserDust', 'ownCharacters']),
+    ...mapState(["characters","myXgem"]),
 
   },
 
@@ -89,10 +126,19 @@ export default {
   },
 
   methods: {
-    ...mapActions(["getFragmentAmount", "convertFragmentToBox", "openCommonBox", "getMyBoxes", "getBoxDetail"]),
+    ...mapActions([
+      "getFragmentAmount",
+      "convertFragmentToBox",
+      "openCommonBox",
+      "getMyBoxes",
+      "getBoxDetail",
+      "buyCommonBoxWithXGem",
+      "fetchWeaponId",
+      "mintHeroWithXGem"
+    ]),
     async handleConvertBox() {
       try{
-        if(this.xGemAmount < this.fragmentPerBox) {
+        if(this.myXgem < this.fragmentPerBox) {
           this.errorMessage = "Not enough xGem!";
           this.$bvModal.show('fragmentOpenBoxModal');
         }
@@ -101,10 +147,7 @@ export default {
           const response = await this.convertFragmentToBox();
           if(response) {
             this.boxId = response.boxId;
-            const objectXGem = await this.getFragmentAmount();
-            this.xGemAmount = objectXGem.fragmentAmount;
-            this.fragmentPerBox = objectXGem.fragmentPerBox;
-            const boxTypeReturn = await this.getBoxDetail({boxId:this.boxId});
+            const boxTypeReturn = await this.getBoxDetail({boxId:response.boxId});
             switch(boxTypeReturn) {
             case 1: {
               this.boxType= 'rare';
@@ -128,6 +171,7 @@ export default {
           }
         }
       }catch(error) {
+        console.log('error nha', error);
         this.isConvertingFragmentToBox =false;
       }
     },
@@ -136,7 +180,9 @@ export default {
       case "common": {
         try{
           this.isConvertingFragmentToBox=true;
-          await this.openCommonBox({boxId: this.boxId});
+          const res = await this.openCommonBox({boxId: this.boxId});
+          const weapon = await this.fetchWeaponId(res?.[0]?.returnValues?.tokenId);
+          this.weaponReceive = weapon;
           this.isConvertingFragmentToBox=false;
           setTimeout(() => {
             this.$bvModal.show('successOpenBox');
@@ -150,14 +196,84 @@ export default {
         break;
       }
       }
+    },
+    checkDisableButton() {
+      if(this.myXgem < this.fragmentPerBox) {
+        return true;
+      }
+      return false;
+    },
+    async purchaseItem() {
+      if(this.xGemAmount > this.fragmentPerCommonBox) {
+        this.errorMessage = "Not enough xGem!";
+        this.$bvModal.show('fragmentOpenBoxModal');
+        return;
+      }
+      this.isConvertingFragmentToBox=true;
+      const response = await this.buyCommonBoxWithXGem();
+      this.boxId = response.boxId;
+      this.xGemAmount -= this.fragmentPerCommonBox;
+      this.isConvertingFragmentToBox =false;
+      const boxTypeReturn = await this.getBoxDetail({boxId:response.boxId});
+      switch(boxTypeReturn) {
+      case 1: {
+        this.boxType= 'rare';
+        break;
+      }
+      case 2: {
+        this.boxType = 'epic';
+        break;
+      }
+      default: {
+        this.boxType = 'common';
+      }
+      }
+      await this.getMyBoxes();
+      setTimeout(() => {
+        this.isConvertingFragmentToBox =false;
+        this.$bvModal.show('modal-buyitem');
+      }, 4000);
+    },
+
+    checkHeroReceived(heroId) {
+      const hero = this.ownCharacters.find(item => item.id === Number(heroId));
+      return hero;
+    },
+    async handleMintHero() {
+      try {
+        if(this.xGemAmount < this.fragmentPerHero) {
+          this.errorMessage = "Not enough xGem!";
+          this.$bvModal.show('fragmentOpenBoxModal');
+          return;
+        }
+        if(this.ownCharacters.length ===8) {
+          this.errorMessage = "You can only recruit 8 characters!";
+          this.$bvModal.show('fragmentOpenBoxModal');
+          return;
+        }
+        this.isConvertingFragmentToBox = true;
+        const response = await this.mintHeroWithXGem();
+        this.xGemAmount -= this.fragmentPerHero;
+        setTimeout(() => {
+          const _heroReceived = this.checkHeroReceived(response?.returnValues?.tokenId);
+          if(_heroReceived) {
+            this.heroReceived = _heroReceived;
+            setTimeout(() => {
+              this.$bvModal.show('successMintHero');
+            }, 500);
+          }
+          this.isConvertingFragmentToBox = false;
+        }, 2000);
+      }catch(error) {
+        this.isConvertingFragmentToBox = false;
+      }
     }
   },
   async mounted() {
     setTimeout(async () => {
       const objectXGem = await this.getFragmentAmount();
-      this.xGemAmount = Number(objectXGem.fragmentAmount);
       this.fragmentPerBox = Number(objectXGem.fragmentPerBox);
-    }, 100);
+    }, 500);
   }
 };
 </script>
@@ -181,6 +297,30 @@ export default {
   font-weight: 600;
 }
 
+.itemWeapon {
+  min-width: 19em;
+  height: 26.5em;
+  background-position: left;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-image: url(../../assets/images/bg-item-top.png);
+  position: relative;
+}
+
+.heroReceive {
+  width: 100%;
+  min-height: 0;
+  height: 100%;
+  /* background-position: center; */
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: transparent;
+  background-image: "../../";
+}
+
 .waiting {
   margin: auto;
   text-align: center;
@@ -191,6 +331,19 @@ export default {
   padding: 10px 0;
   position: fixed;
   z-index: 3;
+}
+
+.commBox {
+  content: url("../../assets/common-box.png");
+  max-width: 298px;
+}
+.mintHero {
+    background: url('../../assets/v2/bg-select-hero.svg') no-repeat 100% 100%;
+    height: 200px;
+    width: 144px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .errorText {
@@ -230,20 +383,34 @@ export default {
   transition: opacity 0.3s ease;
 }
 .buttonFightFragment {
-  border: none;
-  height: 47px;
-  background-image: url('../../assets/images/bg-fight-button.png');
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  background-color: transparent;
-  margin: 2rem 0;
-  margin-left: 0.8rem;;
-  min-width: 190px;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  cursor: pointer;
-  margin-bottom: 5rem;
+    border: none;
+    height: 47px;
+    background-image: url('../../assets/images/bg-fight-button.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    margin-left: 0.8rem;;
+    min-width: 190px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    margin-top: 2rem;
+    cursor: pointer;
+}
+.buttonFightFragmentDisable {
+    border: none;
+    height: 47px;
+    background-image: url('../../assets/images/bg-fight-button.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    margin-left: 0.8rem;;
+    min-width: 190px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    margin-top: 2rem;
+    opacity: 0.7;
 }
 
 .notEnoughImage {
