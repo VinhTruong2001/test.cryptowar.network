@@ -3,8 +3,12 @@
   "env": {
     "node": true
   },
-  "extends": ["plugin:vue/essential", "eslint:recommended", "@vue/typescript"],
-  "plugins": ["prettier"],
+  "extends": [
+    "plugin:vue/essential",
+    "plugin:prettier/recommended",
+    "eslint:recommended",
+    "@vue/typescript"
+  ],
   "parserOptions": {
     "project": ["tsconfig.json"],
     "parser": "@typescript-eslint/parser"
@@ -76,7 +80,7 @@
     "@typescript-eslint/no-namespace": "error",
     "@typescript-eslint/no-unused-expressions": "error",
     "@typescript-eslint/indent": [
-      "error",
+      1,
       2,
       {
         "SwitchCase": 1,
