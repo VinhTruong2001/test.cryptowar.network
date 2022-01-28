@@ -62,76 +62,76 @@ export interface CareerModeRoom {
   weaponId: string
 }
 export interface IState {
-  contracts: () => Contracts;
-  eventSubscriptions: () => IWeb3EventSubscription[];
-  accounts: string[];
-  defaultAccount: string | null;
-  currentNetworkId: number | null;
+  contracts: () => Contracts
+  eventSubscriptions: () => IWeb3EventSubscription[]
+  accounts: string[]
+  defaultAccount: string | null
+  currentNetworkId: number | null
 
-  fightGasOffset: string;
-  fightBaseline: string;
+  fightGasOffset: string
+  fightBaseline: string
 
-  skillBalance: string;
-  skillRewards: string;
-  maxRewardsClaimTax: string;
-  rewardsClaimTax: string;
-  xpRewards: Record<string, string>;
-  inGameOnlyFunds: string;
-  directStakeBonusPercent: number;
-  ownedCharacterIds: number[];
-  ownedWeaponIds: number[];
-  ownedCommonBoxIds: number[];
-  ownedShieldIds: number[];
-  maxStamina: number;
-  ownedDust: string[];
+  skillBalance: string
+  skillRewards: string
+  maxRewardsClaimTax: string
+  rewardsClaimTax: string
+  xpRewards: Record<string, string>
+  inGameOnlyFunds: string
+  directStakeBonusPercent: number
+  ownedCharacterIds: number[]
+  ownedWeaponIds: number[]
+  ownedCommonBoxIds: number[]
+  ownedShieldIds: number[]
+  maxStamina: number
+  ownedDust: string[]
 
-  currentCharacterId: number | null;
-  characters: Record<number, ICharacter>;
-  characterStaminas: Record<number, number>;
-  secondPerCharacter: Record<number,number>;
-  characterRenames: Record<number, string>;
+  currentCharacterId: number | null
+  characters: Record<number, ICharacter>
+  characterStaminas: Record<number, number>
+  secondPerCharacter: Record<number, number>
+  characterRenames: Record<number, string>
 
-  currentWeaponId: number | null;
-  weapons: Record<number, IWeapon>;
-  weaponDurabilities: Record<number, number>;
-  weaponRenames: Record<number, string>;
-  maxDurability: number;
-  targetsByCharacterIdAndWeaponId: Record<number, Record<number, ITarget>>;
+  currentWeaponId: number | null
+  weapons: Record<number, IWeapon>
+  weaponDurabilities: Record<number, number>
+  weaponRenames: Record<number, string>
+  maxDurability: number
+  targetsByCharacterIdAndWeaponId: Record<number, Record<number, ITarget>>
 
-  currentNftType: string | null;
-  currentNftId: number | null;
+  currentNftType: string | null
+  currentNftId: number | null
 
-  characterTransferCooldowns: Record<number, ITransferCooldown | undefined>;
+  characterTransferCooldowns: Record<number, ITransferCooldown | undefined>
 
-  staking: Record<StakeType, IStakeState>;
-  stakeOverviews: Record<StakeType, IStakeOverviewState>;
+  staking: Record<StakeType, IStakeState>
+  stakeOverviews: Record<StakeType, IStakeOverviewState>
 
-  raid: IRaidState;
+  raid: IRaidState
 
-  waxBridgeWithdrawableBnb: string;
-  waxBridgeRemainingWithdrawableBnbDuringPeriod: string;
-  waxBridgeTimeUntilLimitExpires: number;
+  waxBridgeWithdrawableBnb: string
+  waxBridgeRemainingWithdrawableBnbDuringPeriod: string
+  waxBridgeTimeUntilLimitExpires: number
 
-  isInCombat: boolean;
-  isCharacterViewExpanded: boolean;
+  isInCombat: boolean
+  isCharacterViewExpanded: boolean
 
-  shields: Record<number, IShield>;
-  currentShieldId: number | null;
+  shields: Record<number, IShield>
+  currentShieldId: number | null
 
-  nfts: Record<string, Record<number | string, Nft>>;
+  nfts: Record<string, Record<number | string, Nft>>
 
-  commonBoxPrice: string;
-  rareBoxPrice: string;
-  epicBoxPrice: string;
-  secondsPerStamina: number;
-  careerModeRooms: CareerModeRoom[];
-  careerModeRequest:  RoomRequest[];
-  rewardPvp: number;
-  myCareerModeRequest: RoomRequest[];
-  myXgem: number | string;
-  commonBoxPriceXgem: number | string;
-  rareBoxPriceXgem: number | string;
-  epicBoxPriceXgem: number | string;
-  blindBoxPriceXgem: number | string;
+  commonBoxPrice: string
+  rareBoxPrice: string
+  epicBoxPrice: string
+  secondsPerStamina: number
+  careerModeRooms: CareerModeRoom[]
+  careerModeRequest: RoomRequest[]
+  rewardPvp: number
+  myCareerModeRequest: RoomRequest[]
+  myXgem: number | string
+  commonBoxPriceXgem: number | string
+  rareBoxPriceXgem: number | string
+  epicBoxPriceXgem: number | string
+  blindBoxPriceXgem: number | string
   cache?: StoreCache
 }

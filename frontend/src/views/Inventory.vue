@@ -1,44 +1,44 @@
 <template>
-    <div class="body main-font inventory">
-      <b-tabs class="heading">
-        <b-tab title="Hero">
-          <div class="tab-content">
-            <charater-list showFilters />
-          </div>
-        </b-tab>
-        <b-tab title="Weapon">
-          <div class="tab-content">
-            <weapon-grid showFilters/>
-          </div>
-        </b-tab>
-        <b-tab title="Dust">
-          <div class="tab-content">
-            <dust-balance-display />
-          </div>
-        </b-tab>
-        <b-tab title="Box">
-          <div class="tab-content">
-            <box-balance-display />
-          </div>
-        </b-tab>
-      </b-tabs>
-    </div>
+  <div class="body main-font inventory">
+    <b-tabs class="heading">
+      <b-tab title="Hero">
+        <div class="tab-content">
+          <charater-list showFilters />
+        </div>
+      </b-tab>
+      <b-tab title="Weapon">
+        <div class="tab-content">
+          <weapon-grid showFilters />
+        </div>
+      </b-tab>
+      <b-tab title="Dust">
+        <div class="tab-content">
+          <dust-balance-display />
+        </div>
+      </b-tab>
+      <b-tab title="Box">
+        <div class="tab-content">
+          <box-balance-display />
+        </div>
+      </b-tab>
+    </b-tabs>
+  </div>
 </template>
 
-<script lang='ts'>
-import Vue from 'vue';
-import CharaterList from '../components/smart/CharacterList.vue';
-import WeaponGrid from '../components/smart/WeaponGrid.vue';
-import DustBalanceDisplay from '../components/smart/DustBalanceDisplay.vue';
-import BoxBalanceDisplay from '../components/smart/BoxBalanceDisplay.vue';
-import Web3 from "web3";
-import { mapGetters, mapState } from "vuex";
-import { mapCacheActions } from 'vuex-cache';
-import { Accessors } from "vue/types/options";
-import { Contracts, IState } from "../interfaces";
-import { SkillShopListing } from "../interfaces/SkillShopListing";
-import BigNumber from "bignumber.js";
-import { fromWeiEther, toBN } from "../utils/common";
+<script lang="ts">
+import Vue from 'vue'
+import CharaterList from '../components/smart/CharacterList.vue'
+import WeaponGrid from '../components/smart/WeaponGrid.vue'
+import DustBalanceDisplay from '../components/smart/DustBalanceDisplay.vue'
+import BoxBalanceDisplay from '../components/smart/BoxBalanceDisplay.vue'
+import Web3 from 'web3'
+import { mapGetters, mapState } from 'vuex'
+import { mapCacheActions } from 'vuex-cache'
+import { Accessors } from 'vue/types/options'
+import { Contracts, IState } from '../interfaces'
+import { SkillShopListing } from '../interfaces/SkillShopListing'
+import BigNumber from 'bignumber.js'
+import { fromWeiEther, toBN } from '../utils/common'
 
 type StoreMappedState = Pick<
   IState,

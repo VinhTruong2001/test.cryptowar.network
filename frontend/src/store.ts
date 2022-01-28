@@ -188,7 +188,7 @@ export function createStore(web3: Web3) {
       commonBoxPriceXgem: 0,
       rareBoxPriceXgem: 0,
       epicBoxPriceXgem: 0,
-      blindBoxPriceXgem: 0
+      blindBoxPriceXgem: 0,
     },
 
     getters: {
@@ -816,20 +816,23 @@ export function createStore(web3: Web3) {
       ) {
         state.myCareerModeRequest = payload.request
       },
-      updateMyXgem(state: IState, payload: {myXgem: number | string}) {
-        state.myXgem = payload.myXgem;
+      updateMyXgem(state: IState, payload: { myXgem: number | string }) {
+        state.myXgem = payload.myXgem
       },
-      updateBoxPriceXgem(state: IState, payload: {
-        commonBoxPriceXgem: number | string,
-        rareBoxPriceXgem: number | string,
-        epicBoxPriceXgem: number | string,
-        blindBoxPriceXgem: number | string})
-      {
-        state.commonBoxPriceXgem = payload.commonBoxPriceXgem;
-        state.rareBoxPriceXgem = payload.rareBoxPriceXgem;
-        state.epicBoxPriceXgem = payload.epicBoxPriceXgem;
-        state.blindBoxPriceXgem = payload.blindBoxPriceXgem;
-      }
+      updateBoxPriceXgem(
+        state: IState,
+        payload: {
+          commonBoxPriceXgem: number | string
+          rareBoxPriceXgem: number | string
+          epicBoxPriceXgem: number | string
+          blindBoxPriceXgem: number | string
+        }
+      ) {
+        state.commonBoxPriceXgem = payload.commonBoxPriceXgem
+        state.rareBoxPriceXgem = payload.rareBoxPriceXgem
+        state.epicBoxPriceXgem = payload.epicBoxPriceXgem
+        state.blindBoxPriceXgem = payload.blindBoxPriceXgem
+      },
     },
 
     actions: {
@@ -1124,7 +1127,7 @@ export function createStore(web3: Web3) {
       async fetchUserGameDetails({ state, commit }) {
         if (featureFlagStakeOnly) return
 
-        const ownedCommonBoxIds = await this.cache.dispatch('getMyBoxes');
+        const ownedCommonBoxIds = await this.cache.dispatch('getMyBoxes')
         const [
           ownedCharacterIds,
           ownedWeaponIds,
@@ -1135,7 +1138,7 @@ export function createStore(web3: Web3) {
           rareBoxPriceXgem,
           epicBoxPriceXgem,
           blindBoxPriceXgem,
-          myXgem
+          myXgem,
         ] = await Promise.all([
           state
             .contracts()
@@ -1157,13 +1160,28 @@ export function createStore(web3: Web3) {
             .contracts()
             .Weapons!.methods.maxDurability()
             .call(defaultCallOptions(state)),
-          state.contracts().BlindBox?.methods.commonPriceByXGem().call(defaultCallOptions(state)),
-          state.contracts().BlindBox?.methods.rarePriceByXGem().call(defaultCallOptions(state)),
-          state.contracts().BlindBox?.methods.epicPriceByXGem().call(defaultCallOptions(state)),
-          state.contracts().BlindBox?.methods.fragmentPerBox().call(defaultCallOptions(state)),
+          state
+            .contracts()
+            .BlindBox?.methods.commonPriceByXGem()
+            .call(defaultCallOptions(state)),
+          state
+            .contracts()
+            .BlindBox?.methods.rarePriceByXGem()
+            .call(defaultCallOptions(state)),
+          state
+            .contracts()
+            .BlindBox?.methods.epicPriceByXGem()
+            .call(defaultCallOptions(state)),
+          state
+            .contracts()
+            .BlindBox?.methods.fragmentPerBox()
+            .call(defaultCallOptions(state)),
           //@ts-ignore
-          state.contracts().BlindBox?.methods.getFragmentAmount(state?.defaultAccount).call(defaultCallOptions(state))
-        ]);
+          state
+            .contracts()
+            .BlindBox?.methods.getFragmentAmount(state?.defaultAccount)
+            .call(defaultCallOptions(state)),
+        ])
 
         commit('updateUserDetails', {
           ownedCharacterIds: Array.from(ownedCharacterIds),
@@ -1177,11 +1195,11 @@ export function createStore(web3: Web3) {
           commonBoxPriceXgem,
           rareBoxPriceXgem,
           epicBoxPriceXgem,
-          blindBoxPriceXgem
-        });
+          blindBoxPriceXgem,
+        })
         commit('updateMyXgem', {
-          myXgem: Number(myXgem)
-        });
+          myXgem: Number(myXgem),
+        })
 
         await Promise.all([
           this.cache.dispatch('getMyBoxes'),

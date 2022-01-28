@@ -24,20 +24,20 @@ import NftList from '@/components/smart/NftList.vue'
 import Bignumber from 'bignumber.js'
 
 type StoreMappedState = Pick<
-IState,
-| "defaultAccount"
-| "weapons"
-| "characters"
-| "shields"
-| "ownedCharacterIds"
-| "ownedWeaponIds"
-| "ownedShieldIds"
-| "commonBoxPriceXgem"
-| "rareBoxPriceXgem"
-| "epicBoxPriceXgem"
-| "myXgem"
-| "blindBoxPriceXgem"
->;
+  IState,
+  | 'defaultAccount'
+  | 'weapons'
+  | 'characters'
+  | 'shields'
+  | 'ownedCharacterIds'
+  | 'ownedWeaponIds'
+  | 'ownedShieldIds'
+  | 'commonBoxPriceXgem'
+  | 'rareBoxPriceXgem'
+  | 'epicBoxPriceXgem'
+  | 'myXgem'
+  | 'blindBoxPriceXgem'
+>
 
 interface StoreMappedGetters {
   contracts: Contracts
@@ -103,7 +103,7 @@ export default Vue.extend({
       'inGameOnlyFunds',
       'skillRewards',
       'myXgem',
-      'blindBoxPriceXgem'
+      'blindBoxPriceXgem',
     ]) as Accessors<StoreMappedState>),
     ...(mapGetters([
       'contracts',
@@ -194,19 +194,19 @@ export default Vue.extend({
         },
         {
           id: 3,
-          type: "SecretBox",
+          type: 'SecretBox',
           nftPrice: this.blindBoxPriceXgem,
           onlyUseXgem: true,
-          name: "Blind Box",
-          description:`89% chance to get common box, 6% chance to get rare box and 5% chance to get epic box`,
-          image: "blind-box.png",
+          name: 'Blind Box',
+          description: `89% chance to get common box, 6% chance to get rare box and 5% chance to get epic box`,
+          image: 'blind-box.png',
           isSoldOut: false,
           supply: 999,
           isDisable: Number(this.myXgem) < this.blindBoxPriceXgem,
           nftPriceXgem: this.blindBoxPriceXgem,
-          isDisableXgem: Number(this.myXgem) < this.blindBoxPriceXgem
+          isDisableXgem: Number(this.myXgem) < this.blindBoxPriceXgem,
         },
-      ] as SkillShopListing[];
+      ] as SkillShopListing[]
 
       return nftList
     },

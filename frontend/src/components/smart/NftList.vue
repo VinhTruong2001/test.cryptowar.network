@@ -37,10 +37,19 @@
         >
           <div class="nft-item-content">
             <div class="character-item addnew nft-container">
-              <nft-icon :nft="nft" :isShop="isShop" :isLoading="isLoading" :favorite="isFavorite(nft.typeId, nft.id)" :isBlindBox="nft.onlyUseXgem"
-              v-tooltip.top="{ content: itemDescriptionHtml(nft) , trigger: (isMobile() ? 'click' : 'hover') }"
-              @mouseover="hover = !isMobile() || true"
-              @mouseleave="hover = !isMobile()" />
+              <nft-icon
+                :nft="nft"
+                :isShop="isShop"
+                :isLoading="isLoading"
+                :favorite="isFavorite(nft.typeId, nft.id)"
+                :isBlindBox="nft.onlyUseXgem"
+                v-tooltip.top="{
+                  content: itemDescriptionHtml(nft),
+                  trigger: isMobile() ? 'click' : 'hover',
+                }"
+                @mouseover="hover = !isMobile() || true"
+                @mouseleave="hover = !isMobile()"
+              />
             </div>
             <div class="buttonContainer">
               <div class="btn-open-wrap">
@@ -48,7 +57,12 @@
                   :disabled="nft.isSoldOut || nft.isDisable"
                   class="buttonBuy"
                   v-if="!nft.onlyUseXgem"
-                  @click="checkBuy = nft; nft.isSoldOut || nft.isDisable? () => {}: buyItem(checkBuy);"
+                  @click="
+                    checkBuy = nft
+                    nft.isSoldOut || nft.isDisable
+                      ? () => {}
+                      : buyItem(checkBuy)
+                  "
                 >
                   <span v-if="!nft.isSoldOut">
                     ({{ Math.round(nft.nftPrice) }} xBlade)
@@ -71,30 +85,51 @@
                   <span v-if="!nft.isSoldOut">
                     ({{ Math.round(nft.nftPriceXgem) }} 💎 )
                   </span>
-                  <span  v-if="nft.isSoldOut && !isLoading">
-                    SOLD OUT
-                  </span>
-                  <span v-if="isLoading && !nft.onlyUseXgem">
-                    LOADING
-                  </span>
+                  <span v-if="nft.isSoldOut && !isLoading"> SOLD OUT </span>
+                  <span v-if="isLoading && !nft.onlyUseXgem"> LOADING </span>
                 </b-button>
               </div>
             </div>
           </div>
         </li>
         <b-modal id="modal-buyitem">
-          <span v-if="this.boxType.length>2" class="congratsText">You received a {{this.boxType[0].toUpperCase() + this.boxType.slice(1)}} Box</span>
-          <div v-if="this.boxType.length>2"  :class="this.boxType +'-box'"></div>
-          <div v-if="this.boxType.length>2">
+          <span v-if="this.boxType.length > 2" class="congratsText"
+            >You received a
+            {{
+              this.boxType[0].toUpperCase() + this.boxType.slice(1)
+            }}
+            Box</span
+          >
+          <div
+            v-if="this.boxType.length > 2"
+            :class="this.boxType + '-box'"
+          ></div>
+          <div v-if="this.boxType.length > 2">
             <div>
-              <b-button class="mt-3" block @click="$bvModal.hide('modal-buyitem')">LATER</b-button>
+              <b-button
+                class="mt-3"
+                block
+                @click="$bvModal.hide('modal-buyitem')"
+                >LATER</b-button
+              >
             </div>
             <div>
-              <b-button class="mt-2" block @click="$bvModal.hide('modal-buyitem'); openBox()">OPEN NOW</b-button>
+              <b-button
+                class="mt-2"
+                block
+                @click="
+                  $bvModal.hide('modal-buyitem')
+                  openBox()
+                "
+                >OPEN NOW</b-button
+              >
             </div>
           </div>
-          <div v-if="this.boxType.length===0" :class="checkBuy.image?checkBuy.image.split('.')[0]:''"></div>
-          <div v-if="this.boxType.length===0">
+          <div
+            v-if="this.boxType.length === 0"
+            :class="checkBuy.image ? checkBuy.image.split('.')[0] : ''"
+          ></div>
+          <div v-if="this.boxType.length === 0">
             <div>
               <b-button
                 class="mt-3"
@@ -223,7 +258,12 @@
           @click="onNftClick(nft.type, nft.id)"
           @contextmenu="canFavorite && toggleFavorite($event, nft.type, nft.id)"
         >
-          <nft-icon :favorite="isFavorite(nft.type, nft.id)" :nft="nft" :isShop="isShop" :isBlindBox="nft.onlyUseXgem"/>
+          <nft-icon
+            :favorite="isFavorite(nft.type, nft.id)"
+            :nft="nft"
+            :isShop="isShop"
+            :isBlindBox="nft.onlyUseXgem"
+          />
           <div class="above-wrapper" v-if="$slots.above || $scopedSlots.above">
             <slot name="above" :nft="nft"></slot>
           </div>
@@ -235,16 +275,16 @@
 </template>
 
 <script lang="ts">
-import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
-import Events from '../../events';
-import {Nft as nftItem} from '../../interfaces/Nft';
-import { SkillShopListing } from '../../interfaces/SkillShopListing';
-import NftIcon from '../NftIcon.vue';
-import { Nft } from '@/interfaces/Nft';
-import Vue from 'vue';
-import { Accessors, PropType } from 'vue/types/options';
-import { IState } from '@/interfaces';
-import WeaponSelect from "@/components/WeaponSelect.vue";
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
+import Events from '../../events'
+import { Nft as nftItem } from '../../interfaces/Nft'
+import { SkillShopListing } from '../../interfaces/SkillShopListing'
+import NftIcon from '../NftIcon.vue'
+import { Nft } from '@/interfaces/Nft'
+import Vue from 'vue'
+import { Accessors, PropType } from 'vue/types/options'
+import { IState } from '@/interfaces'
+import WeaponSelect from '@/components/WeaponSelect.vue'
 
 const sorts = [
   { name: 'Any', dir: '' },
@@ -253,17 +293,17 @@ const sorts = [
 ]
 
 interface Data {
-  typeFilter: string;
-  starFilter: string;
-  elementFilter: string;
-  favorites: Record<string, Record<number, boolean>>;
-  priceSort: string;
-  showFavoriteNfts: boolean;
-  checkBuy: string;
-  lastBoxId: string | number;
-  isLoadingBox: boolean;
-  weaponReceive: any;
-  boxType: string;
+  typeFilter: string
+  starFilter: string
+  elementFilter: string
+  favorites: Record<string, Record<number, boolean>>
+  priceSort: string
+  showFavoriteNfts: boolean
+  checkBuy: string
+  lastBoxId: string | number
+  isLoadingBox: boolean
+  weaponReceive: any
+  boxType: string
 }
 
 export interface NftIdType {
@@ -385,8 +425,8 @@ export default Vue.extend({
       lastBoxId: '',
       weaponReceive: null,
       isLoadingBox: false,
-      boxType: ''
-    } as Data;
+      boxType: '',
+    } as Data
   },
 
   components: {
@@ -495,13 +535,30 @@ export default Vue.extend({
 
   methods: {
     //@ts-ignore
-    ...(mapActions(['purchaseShield', 'fetchShields', 'purchaseRenameTag', 'purchaseWeaponRenameTag',
-      'purchaseRenameTagDeal', 'purchaseWeaponRenameTagDeal',
-      'purchaseCharacterFireTraitChange', 'purchaseCharacterEarthTraitChange',
-      'purchaseCharacterWaterTraitChange', 'purchaseCharacterLightningTraitChange',
-      'purchaseCommonSecretBox', 'purchaseRareSecretBox', 'purchaseEpicSecretBox', 'openCommonSecretBox', 'openCommonBox','fetchWeaponId',
-      'buyRareBoxWithXGem', 'buyEpicBoxWithXGem', 'buyCommonBoxWithXGem', 'updateMyXgem','convertFragmentToBox','getBoxDetail'
-    ])),
+    ...mapActions([
+      'purchaseShield',
+      'fetchShields',
+      'purchaseRenameTag',
+      'purchaseWeaponRenameTag',
+      'purchaseRenameTagDeal',
+      'purchaseWeaponRenameTagDeal',
+      'purchaseCharacterFireTraitChange',
+      'purchaseCharacterEarthTraitChange',
+      'purchaseCharacterWaterTraitChange',
+      'purchaseCharacterLightningTraitChange',
+      'purchaseCommonSecretBox',
+      'purchaseRareSecretBox',
+      'purchaseEpicSecretBox',
+      'openCommonSecretBox',
+      'openCommonBox',
+      'fetchWeaponId',
+      'buyRareBoxWithXGem',
+      'buyEpicBoxWithXGem',
+      'buyCommonBoxWithXGem',
+      'updateMyXgem',
+      'convertFragmentToBox',
+      'getBoxDetail',
+    ]),
     ...mapMutations(['setCurrentNft']),
 
     async onShieldBuy() {
@@ -589,47 +646,48 @@ export default Vue.extend({
 
     async buyItemWithXgem(item: nftItem) {
       try {
-        this.isLoadingBox = true;
-        if(item.id ===0) {
-          this.boxType = '';
-          const response = await this.buyCommonBoxWithXGem();
-          //@ts-ignore
-          this.lastBoxId = response.boxId;
-          this.isLoadingBox = false;
-        }else if(item.id ===1) {
-          this.boxType = '';
-          const response = await this.buyRareBoxWithXGem();
-          //@ts-ignore
-          this.lastBoxId = response.boxId;
-          this.isLoadingBox = false;
-        }else if(item.id ===2) {
-          this.boxType = '';
-          const response = await this.buyEpicBoxWithXGem();
+        this.isLoadingBox = true
+        if (item.id === 0) {
+          this.boxType = ''
+          const response = await this.buyCommonBoxWithXGem()
           //@ts-ignore
           this.lastBoxId = response.boxId
           this.isLoadingBox = false
-        }
-        else {
-          const response = await this.convertFragmentToBox();
-          if(response) {
-            this.lastBoxId = response.boxId;
-            const boxTypeReturn = await this.getBoxDetail({boxId:response.boxId});
-            switch(boxTypeReturn) {
-            case '1': {
-              this.boxType= 'rare';
-              break;
-            }
-            case '2': {
-              this.boxType = 'epic';
-              break;
-            }
-            default: {
-              this.boxType = 'common';
-              break;
-            }
+        } else if (item.id === 1) {
+          this.boxType = ''
+          const response = await this.buyRareBoxWithXGem()
+          //@ts-ignore
+          this.lastBoxId = response.boxId
+          this.isLoadingBox = false
+        } else if (item.id === 2) {
+          this.boxType = ''
+          const response = await this.buyEpicBoxWithXGem()
+          //@ts-ignore
+          this.lastBoxId = response.boxId
+          this.isLoadingBox = false
+        } else {
+          const response = await this.convertFragmentToBox()
+          if (response) {
+            this.lastBoxId = response.boxId
+            const boxTypeReturn = await this.getBoxDetail({
+              boxId: response.boxId,
+            })
+            switch (boxTypeReturn) {
+              case '1': {
+                this.boxType = 'rare'
+                break
+              }
+              case '2': {
+                this.boxType = 'epic'
+                break
+              }
+              default: {
+                this.boxType = 'common'
+                break
+              }
             }
           }
-          this.isLoadingBox = false;
+          this.isLoadingBox = false
         }
         //@ts-ignore
         this.$bvModal.show('modal-buyitem')
@@ -638,12 +696,12 @@ export default Vue.extend({
       }
     },
     async buyItem(item: nftItem) {
-      try{
-        this.isLoadingBox = true;
-        this.boxType = "";
-        if(item.type === 'shield'){
-          console.log('buying shield');
-          await this.purchaseShield();
+      try {
+        this.isLoadingBox = true
+        this.boxType = ''
+        if (item.type === 'shield') {
+          console.log('buying shield')
+          await this.purchaseShield()
         }
 
         if (item.type === 'SecretBox') {

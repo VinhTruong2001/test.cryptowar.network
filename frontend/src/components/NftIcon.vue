@@ -121,9 +121,7 @@ import { mapCacheActions } from 'vuex-cache'
 // Comment
 export default {
   props: ['nft', 'isDefault', 'isShop', 'isLoading', 'favorite', 'isBlindBox'],
-  async created() {
-
-  },
+  async created() {},
   computed: {
     tooltipHtml() {
       if (!this.nft) return ''
