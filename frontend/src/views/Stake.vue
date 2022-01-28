@@ -6,32 +6,32 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import Staking from '../components/smart/Staking.vue';
-import { isStakeType } from '../interfaces/State';
+import { mapGetters } from 'vuex'
+import Staking from '../components/smart/Staking.vue'
+import { isStakeType } from '../interfaces/State'
 
 export default {
   props: {
     stakeType: {
       type: String,
       validator(type) {
-        return isStakeType(type);
-      }
-    }
+        return isStakeType(type)
+      },
+    },
   },
 
   computed: {
     ...mapGetters(['availableStakeTypes']),
 
     isKnownStakeType() {
-      return this.availableStakeTypes.includes(this.stakeType);
-    }
+      return this.availableStakeTypes.includes(this.stakeType)
+    },
   },
 
   components: {
     Staking,
   },
-};
+}
 </script>
 
 <style scoped>
@@ -44,5 +44,4 @@ export default {
 .staking {
   padding-top: 2em;
 }
-
 </style>

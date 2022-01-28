@@ -1,6 +1,6 @@
 <template>
   <div class="app app-v2">
-    <router-view v-if="isMaintenance"/>
+    <router-view v-if="isMaintenance" />
     <div v-if="!isMaintenance" class="container-box">
       <nav-bar />
       <div class="content dark-bg-text">
@@ -34,7 +34,13 @@
               v-html="'Hide Warning'"
             />
           </div>
-          <div class="back-btn" @click="isMetamask = false; hideWalletWarning = false">
+          <div
+            class="back-btn"
+            @click="
+              isMetamask = false
+              hideWalletWarning = false
+            "
+          >
             <i class="fas fa-chevron-left"></i>
           </div>
         </div>
@@ -51,7 +57,7 @@
       >
         <div class="starter-panel connect-wallet">
           <span class="starter-panel-heading">{{
-            errorMessage || "Get Started With CryptoWars"
+            errorMessage || 'Get Started With CryptoWars'
           }}</span>
           <div class="instructions-list">
             <p>
@@ -81,21 +87,27 @@
                 href="https://discord.gg/MQBWnE8t2G"
                 target="_blank"
                 rel="noopener noreferrer"
-                >Discord</a> / <a
+                >Discord</a
+              >
+              /
+              <a
                 href="https://t.me/elasticbitcoinxbt"
                 target="_blank"
                 rel="noopener noreferrer"
-                >Telegram</a> / <a
+                >Telegram</a
+              >
+              /
+              <a
                 href="https://twitter.com/xbladecryptowar"
                 target="_blank"
                 rel="noopener noreferrer"
-                >Twitter</a>
+                >Twitter</a
+              >
             </p>
           </div>
-          <button
-            class="hide-modal"
-            @click="toggleHideWalletWarning"
-          ><img src='./assets/images/btn-close.svg'/></button>
+          <button class="hide-modal" @click="toggleHideWalletWarning">
+            <img src="./assets/images/btn-close.svg" />
+          </button>
           <div class="button-div" v-if="!isMetamask">
             <big-button
               v-bind:class="[isConnecting ? 'disabled' : '']"
@@ -129,31 +141,31 @@
 </template>
 
 <script>
-import BN from "bignumber.js";
-import WalletConnect from "@walletconnect/client";
-import QRCodeModal from "@walletconnect/qrcode-modal";
-import { mapState, mapActions, mapGetters } from "vuex";
-import _ from "lodash";
-import Vue from "vue";
-import Events from "./events";
-import MetaMaskOnboarding from "@metamask/onboarding";
-import BigButton from "./components/BigButton.vue";
-import SmallButton from "./components/SmallButton.vue";
-import NavBar from "./components/NavBar.vue";
+import BN from 'bignumber.js'
+import WalletConnect from '@walletconnect/client'
+import QRCodeModal from '@walletconnect/qrcode-modal'
+import { mapState, mapActions, mapGetters } from 'vuex'
+import _ from 'lodash'
+import Vue from 'vue'
+import Events from './events'
+import MetaMaskOnboarding from '@metamask/onboarding'
+import BigButton from './components/BigButton.vue'
+import SmallButton from './components/SmallButton.vue'
+import NavBar from './components/NavBar.vue'
 // import CharacterBar from "./components/CharacterBar.vue";
 // import { apiUrl, defaultOptions } from "./utils/common";
 
-Vue.directive("visible", (el, bind) => {
-  el.style.visibility = bind.value ? "visible" : "hidden";
-});
+Vue.directive('visible', (el, bind) => {
+  el.style.visibility = bind.value ? 'visible' : 'hidden'
+})
 
 export default {
   inject: [
-    "web3",
-    "walletConnectProvider",
-    "featureFlagStakeOnly",
-    "expectedNetworkId",
-    "expectedNetworkName",
+    'web3',
+    'walletConnectProvider',
+    'featureFlagStakeOnly',
+    'expectedNetworkId',
+    'expectedNetworkName',
   ],
   components: {
     NavBar,
@@ -163,13 +175,13 @@ export default {
   },
 
   data: () => ({
-    errorMessage: "",
+    errorMessage: '',
     hideWalletWarning: false,
     isConnecting: false,
-    recruitCost: "",
+    recruitCost: '',
     isMaintenance: false,
     connector: new WalletConnect({
-      bridge: "https://bridge.walletconnect.org", // Required
+      bridge: 'https://bridge.walletconnect.org', // Required
       qrcodeModal: QRCodeModal,
     }),
     isMetamask: undefined,
@@ -177,18 +189,18 @@ export default {
 
   computed: {
     ...mapState([
-      "skillBalance",
-      "defaultAccount",
-      "currentNetworkId",
-      "currentCharacterId",
-      "staking",
+      'skillBalance',
+      'defaultAccount',
+      'currentNetworkId',
+      'currentCharacterId',
+      'staking',
     ]),
     ...mapGetters([
-      "contracts",
-      "ownCharacters",
-      "getExchangeUrl",
-      "availableStakeTypes",
-      "hasStakedBalance",
+      'contracts',
+      'ownCharacters',
+      'getExchangeUrl',
+      'availableStakeTypes',
+      'hasStakedBalance',
     ]),
 
     canShowApp() {
@@ -196,11 +208,11 @@ export default {
         this.contracts !== null &&
         !_.isEmpty(this.contracts) &&
         !this.showNetworkError
-      );
+      )
     },
 
     showMetamaskWarning() {
-      return !this.web3.currentProvider;
+      return !this.web3.currentProvider
     },
 
     showNetworkError() {
@@ -208,253 +220,261 @@ export default {
         this.expectedNetworkId &&
         this.currentNetworkId !== null &&
         this.currentNetworkId !== this.expectedNetworkId
-      );
+      )
     },
   },
 
   watch: {
     defaultAccount(account) {
-      this.web3.eth.defaultAccount = account;
+      this.web3.eth.defaultAccount = account
     },
 
     async currentCharacterId() {
-      await this.updateCharacterStamina(this.currentCharacterId);
+      await this.updateCharacterStamina(this.currentCharacterId)
     },
     $route(to) {
-      document.querySelector(".app.app-v2").classList.toggle("bg2", this.$route.name === 'lobby' || this.$route.name === 'arena');
+      document
+        .querySelector('.app.app-v2')
+        .classList.toggle(
+          'bg2',
+          this.$route.name === 'lobby' || this.$route.name === 'arena'
+        )
       // react to route changes
-      window.gtag("event", "page_view", {
+      window.gtag('event', 'page_view', {
         page_title: to.name,
         page_location: to.fullPath,
         page_path: to.path,
         // send_to: "G-C5RLX74PEW",
-      });
+      })
     },
   },
 
   methods: {
-    ...mapActions({ initializeStore: "initialize" }),
+    ...mapActions({ initializeStore: 'initialize' }),
     ...mapActions([
-      "fetchCharacterStamina",
-      "pollAccountsAndNetwork",
-      "fetchCharacterTransferCooldownForOwnCharacters",
-      "setupWeaponDurabilities",
-      "fetchStakeDetails",
-      "fetchWaxBridgeDetails",
-      "fetchRewardsClaimTax",
+      'fetchCharacterStamina',
+      'pollAccountsAndNetwork',
+      'fetchCharacterTransferCooldownForOwnCharacters',
+      'setupWeaponDurabilities',
+      'fetchStakeDetails',
+      'fetchWaxBridgeDetails',
+      'fetchRewardsClaimTax',
     ]),
 
     async updateCharacterStamina(id) {
-      if (this.featureFlagStakeOnly) return;
+      if (this.featureFlagStakeOnly) return
 
       if (id !== null) {
-        await this.fetchCharacterStamina(id);
+        await this.fetchCharacterStamina(id)
       }
     },
 
     checkStorage() {
       this.hideWalletWarning =
-        localStorage.getItem("hideWalletWarning") === "true";
+        localStorage.getItem('hideWalletWarning') === 'true'
     },
 
     checkMetamask() {
-      this.isMetamask = true;
-      if(this.showMetamaskWarning) {
-        this.hideWalletWarning = true;
+      this.isMetamask = true
+      if (this.showMetamaskWarning) {
+        this.hideWalletWarning = true
       }
     },
 
     async initializeRecruitCost() {
       const recruitCost = await this.contracts.CryptoWars.methods
         .mintCharacterFee()
-        .call({ from: this.defaultAccount });
+        .call({ from: this.defaultAccount })
       const xBladeRecruitCost = await this.contracts.CryptoWars.methods
         .usdToxBlade(recruitCost)
-        .call();
-      this.recruitCost = BN(xBladeRecruitCost).div(BN(10).pow(18)).toFixed(4);
+        .call()
+      this.recruitCost = BN(xBladeRecruitCost).div(BN(10).pow(18)).toFixed(4)
     },
     data() {
       return {
         recruitCost: this.recruitCost,
-      };
+      }
     },
 
     async startOnboarding() {
-      const onboarding = new MetaMaskOnboarding();
-      onboarding.startOnboarding();
+      const onboarding = new MetaMaskOnboarding()
+      onboarding.startOnboarding()
     },
     async configureMetaMask() {
-      const web3 = this.web3.currentProvider;
+      const web3 = this.web3.currentProvider
       if (this.currentNetworkId === 97) {
         try {
           await web3.request({
-            method: "wallet_switchEthereumChain",
-            params: [{ chainId: "0x61" }],
-          });
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: '0x61' }],
+          })
         } catch (switchError) {
           try {
             await web3.request({
-              method: "wallet_addEthereumChain",
+              method: 'wallet_addEthereumChain',
               params: [
                 {
-                  chainId: "0x61",
-                  chainName: "Binance Smart Chain Testnet",
+                  chainId: '0x61',
+                  chainName: 'Binance Smart Chain Testnet',
                   nativeCurrency: {
-                    name: "Binance Coin",
-                    symbol: "BNB",
+                    name: 'Binance Coin',
+                    symbol: 'BNB',
                     decimals: 18,
                   },
                   // rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
-                  rpcUrls:["https://speedy-nodes-nyc.moralis.io/eba7d2e0234f08d2741c13aa/bsc/testnet"],
-                  blockExplorerUrls: ["https://testnet.bscscan.com"],
+                  rpcUrls: [
+                    'https://speedy-nodes-nyc.moralis.io/eba7d2e0234f08d2741c13aa/bsc/testnet',
+                  ],
+                  blockExplorerUrls: ['https://testnet.bscscan.com'],
                 },
               ],
-            });
+            })
           } catch (addError) {
-            console.error(addError);
+            console.error(addError)
           }
         }
 
         try {
           await web3.request({
-            method: "wallet_watchAsset",
+            method: 'wallet_watchAsset',
             params: {
-              type: "ERC20",
+              type: 'ERC20',
               options: {
-                address: "0xcaf53066e36eef55ed0663419adff6e503bd134f",
-                symbol: "xBlade",
+                address: '0xcaf53066e36eef55ed0663419adff6e503bd134f',
+                symbol: 'xBlade',
                 decimals: 18,
-                image: "https://cryptowar.network/android-chrome-512x512.png",
+                image: 'https://cryptowar.network/android-chrome-512x512.png',
               },
             },
-          });
+          })
         } catch (error) {
-          console.error(error);
+          console.error(error)
         }
       } else {
         {
           try {
             await web3.request({
-              method: "wallet_switchEthereumChain",
-              params: [{ chainId: "0x38" }],
-            });
+              method: 'wallet_switchEthereumChain',
+              params: [{ chainId: '0x38' }],
+            })
           } catch (switchError) {
             try {
               await web3.request({
-                method: "wallet_addEthereumChain",
+                method: 'wallet_addEthereumChain',
                 params: [
                   {
-                    chainId: "0x38",
-                    chainName: "Binance Smart Chain Mainnet",
+                    chainId: '0x38',
+                    chainName: 'Binance Smart Chain Mainnet',
                     nativeCurrency: {
-                      name: "Binance Coin",
-                      symbol: "BNB",
+                      name: 'Binance Coin',
+                      symbol: 'BNB',
                       decimals: 18,
                     },
-                    rpcUrls: ["https://bsc-dataseed.binance.org/"],
-                    blockExplorerUrls: ["https://bscscan.com/"],
+                    rpcUrls: ['https://bsc-dataseed.binance.org/'],
+                    blockExplorerUrls: ['https://bscscan.com/'],
                   },
                 ],
-              });
+              })
             } catch (addError) {
-              console.error(addError);
+              console.error(addError)
             }
           }
 
           try {
             await web3.request({
-              method: "wallet_watchAsset",
+              method: 'wallet_watchAsset',
               params: {
-                type: "ERC20",
+                type: 'ERC20',
                 options: {
-                  address: "0x27a339d9B59b21390d7209b78a839868E319301B",
-                  symbol: "xBlade",
+                  address: '0x27a339d9B59b21390d7209b78a839868E319301B',
+                  symbol: 'xBlade',
                   decimals: 18,
-                  image: "https://cryptowar.network/android-chrome-512x512.png",
+                  image: 'https://cryptowar.network/android-chrome-512x512.png',
                 },
               },
-            });
+            })
           } catch (error) {
-            console.error(error);
+            console.error(error)
           }
         }
       }
     },
 
     async connectMetamask() {
-      this.isConnecting = true;
-      this.errorMessage = "Connecting to MetaMask...";
+      this.isConnecting = true
+      this.errorMessage = 'Connecting to MetaMask...'
 
-      const web3 = this.web3.givenProvider;
+      const web3 = this.web3.givenProvider
       web3
-        .request({ method: "eth_requestAccounts" })
+        .request({ method: 'eth_requestAccounts' })
         .then(() => {
-          this.errorMessage = "Success: MetaMask connected.";
-          this.isConnecting = false;
+          this.errorMessage = 'Success: MetaMask connected.'
+          this.isConnecting = false
 
-          this.initializeStore();
-          this.toggleHideWalletWarning();
+          this.initializeStore()
+          this.toggleHideWalletWarning()
         })
         .catch(() => {
-          this.errorMessage = "Error: MetaMask could not get permissions.";
-          this.isConnecting = false;
-        });
+          this.errorMessage = 'Error: MetaMask could not get permissions.'
+          this.isConnecting = false
+        })
 
-      this.isConnecting = true;
-      this.errorMessage = "Connecting to MetaMask...";
+      this.isConnecting = true
+      this.errorMessage = 'Connecting to MetaMask...'
     },
 
     async connectWalletconnect() {
-      this.isConnecting = true;
-      this.errorMessage = "Connecting to Walletconnect...";
+      this.isConnecting = true
+      this.errorMessage = 'Connecting to Walletconnect...'
 
-      this.web3.setProvider(this.walletConnectProvider);
-      await this.walletConnectProvider.enable();
-      QRCodeModal.close();
+      this.web3.setProvider(this.walletConnectProvider)
+      await this.walletConnectProvider.enable()
+      QRCodeModal.close()
 
       if (!this.connector.connected) {
-        this.connector.createSession();
+        this.connector.createSession()
       }
 
       // Subscribe to connection events
-      this.connector.on("connect", (error) => {
+      this.connector.on('connect', (error) => {
         if (error) {
-          throw error;
+          throw error
         }
 
-        const web3 = this.web3.currentProvider;
+        const web3 = this.web3.currentProvider
         web3
-          .request({ method: "eth_getAccounts" })
+          .request({ method: 'eth_getAccounts' })
           .then(() => {
-            this.errorMessage = "Success: Walletconnect connected.";
-            this.isConnecting = false;
+            this.errorMessage = 'Success: Walletconnect connected.'
+            this.isConnecting = false
 
-            this.initializeStore();
-            this.toggleHideWalletWarning();
+            this.initializeStore()
+            this.toggleHideWalletWarning()
           })
           .catch(() => {
-            this.errorMessage = "Error: Walletconnect could not get permissions.";
-            this.isConnecting = false;
-          });
-      });
-      this.errorMessage = "Success: Walletconnect connected.";
-      this.isConnecting = false;
-      this.hideWalletWarning = true;
+            this.errorMessage =
+              'Error: Walletconnect could not get permissions.'
+            this.isConnecting = false
+          })
+      })
+      this.errorMessage = 'Success: Walletconnect connected.'
+      this.isConnecting = false
+      this.hideWalletWarning = true
     },
 
     toggleHideWalletWarning() {
-      this.hideWalletWarning = !this.hideWalletWarning;
+      this.hideWalletWarning = !this.hideWalletWarning
       if (this.hideWalletWarning)
-        localStorage.setItem("hideWalletWarning", "true");
-      else localStorage.setItem("hideWalletWarning", "false");
+        localStorage.setItem('hideWalletWarning', 'true')
+      else localStorage.setItem('hideWalletWarning', 'false')
 
-      Events.$emit("setting:hideWalletWarning", {
+      Events.$emit('setting:hideWalletWarning', {
         value: this.hideWalletWarning,
-      });
+      })
     },
 
     async showWarningDialog() {
-      await new Promise((resolve) => setTimeout(resolve, 7500));
+      await new Promise((resolve) => setTimeout(resolve, 7500))
 
       if (
         this.hideWalletWarning &&
@@ -462,7 +482,7 @@ export default {
         (this.errorMessage ||
           this.showNetworkError ||
           (this.ownCharacters.length === 0 &&
-            this.skillBalance === "0" &&
+            this.skillBalance === '0' &&
             !this.hasStakedBalance))
       ) {
         this.$dialog.notify.warning(
@@ -471,41 +491,40 @@ export default {
           {
             timeout: 0,
           }
-        );
+        )
       }
     },
-
   },
 
   async mounted() {
-    this.checkStorage();
+    this.checkStorage()
 
-    Events.$on("setting:hideRewards", () => this.checkStorage());
-    Events.$on("setting:useGraphics", () => this.checkStorage());
-    Events.$on("setting:hideWalletWarning", () => this.checkStorage());
+    Events.$on('setting:hideRewards', () => this.checkStorage())
+    Events.$on('setting:useGraphics', () => this.checkStorage())
+    Events.$on('setting:hideWalletWarning', () => this.checkStorage())
 
-    document.body.addEventListener("click", (e) => {
-      const tagname = e.target.getAttribute("tagname");
-      if (!tagname) return;
+    document.body.addEventListener('click', (e) => {
+      const tagname = e.target.getAttribute('tagname')
+      if (!tagname) return
 
-      if (e.target.nodeName === "BUTTON") {
-        window.gtag("event", "button_clicked", {
+      if (e.target.nodeName === 'BUTTON') {
+        window.gtag('event', 'button_clicked', {
           value: tagname,
-        });
+        })
       }
 
-      if (e.target.className.includes("gtag-link-others")) {
-        window.gtag("event", "nav", {
-          event_category: "navigation",
-          event_label: "navbar",
+      if (e.target.className.includes('gtag-link-others')) {
+        window.gtag('event', 'nav', {
+          event_category: 'navigation',
+          event_label: 'navbar',
           value: tagname,
-        });
+        })
       }
-    });
+    })
 
-    this.showWarningDialog();
+    this.showWarningDialog()
     if (this.connector.connected) {
-      this.connectWalletconnect();
+      this.connectWalletconnect()
     }
   },
 
@@ -515,27 +534,27 @@ export default {
     //   window.location.href = 'maintenance';
     // }
     try {
-      await this.initializeStore();
+      await this.initializeStore()
     } catch (e) {
       this.errorMessage =
-        "Welcome to CryptoWars. Here is how you can get started.";
+        'Welcome to CryptoWars. Here is how you can get started.'
       if (e.code === 4001) {
-        this.errorMessage = "Error: MetaMask could not get permissions.";
+        this.errorMessage = 'Error: MetaMask could not get permissions.'
       }
 
-      console.error(e);
-      throw e;
+      console.error(e)
+      throw e
     }
 
     this.pollCharactersStaminaIntervalId = setInterval(async () => {
       this.ownCharacters.forEach(async (c) => {
-        await this.updateCharacterStamina(c.id);
-      });
-    }, 3000);
+        await this.updateCharacterStamina(c.id)
+      })
+    }, 3000)
 
     this.availableStakeTypes.forEach((item) => {
-      this.fetchStakeDetails({ stakeType: item });
-    });
+      this.fetchStakeDetails({ stakeType: item })
+    })
 
     this.slowPollIntervalId = setInterval(async () => {
       await Promise.all([
@@ -543,42 +562,42 @@ export default {
         this.setupWeaponDurabilities(),
         // this.fetchWaxBridgeDetails(),
         this.fetchRewardsClaimTax(),
-      ]);
-    }, 10 * 1000);
+      ])
+    }, 10 * 1000)
 
-    this.doPollAccounts = true;
+    this.doPollAccounts = true
     const pollAccounts = async () => {
-      if (!this.doPollAccounts) return;
+      if (!this.doPollAccounts) return
 
       try {
-        await this.pollAccountsAndNetwork();
+        await this.pollAccountsAndNetwork()
       } catch (e) {
-        console.error(e);
+        console.error(e)
       }
 
-      setTimeout(pollAccounts, 200);
-    };
+      setTimeout(pollAccounts, 200)
+    }
 
-    pollAccounts();
+    pollAccounts()
 
-    if (!localStorage.getItem("useGraphics"))
-      localStorage.setItem("useGraphics", "false");
-    if (!localStorage.getItem("hideRewards"))
-      localStorage.setItem("hideRewards", "false");
-    if (!localStorage.getItem("hideWalletWarning"))
-      localStorage.setItem("hideWalletWarning", "false");
-    if (!localStorage.getItem("fightMultiplier"))
-      localStorage.setItem("fightMultiplier", "1");
+    if (!localStorage.getItem('useGraphics'))
+      localStorage.setItem('useGraphics', 'false')
+    if (!localStorage.getItem('hideRewards'))
+      localStorage.setItem('hideRewards', 'false')
+    if (!localStorage.getItem('hideWalletWarning'))
+      localStorage.setItem('hideWalletWarning', 'false')
+    if (!localStorage.getItem('fightMultiplier'))
+      localStorage.setItem('fightMultiplier', '1')
 
-    this.initializeRecruitCost();
+    this.initializeRecruitCost()
   },
 
   beforeDestroy() {
-    this.doPollAccounts = false;
-    clearInterval(this.pollCharacterStaminaIntervalId);
-    clearInterval(this.slowPollIntervalId);
+    this.doPollAccounts = false
+    clearInterval(this.pollCharacterStaminaIntervalId)
+    clearInterval(this.slowPollIntervalId)
   },
-};
+}
 </script>
 
 <style lang="scss">
@@ -586,9 +605,9 @@ export default {
 #selectHeroOrWeaponModal .modal-header .close,
 #requestSelect .modal-header .close,
 #fightModal .modal-header .close,
-#listHeroToCareerModal  .modal-header .close,
+#listHeroToCareerModal .modal-header .close,
 #listHeroToChallengeModal .modal-header .close,
-#cancelRequestModal .modal-header .close{
+#cancelRequestModal .modal-header .close {
   font-size: 0;
 }
 html {
@@ -689,7 +708,6 @@ button,
   color: yellow;
 }
 
-
 // .tooltil-icon-element{
 //   width: 1.5rem;
 //   height: 1.5rem;
@@ -703,7 +721,7 @@ button,
 .dex-icon.tooltil-icon-element,
 .int-icon.tooltil-icon-element,
 .cha-icon.tooltil-icon-element,
-.str-icon.tooltil-icon-element{
+.str-icon.tooltil-icon-element {
   width: 1.5rem;
   height: 1.5rem;
   margin-left: 5px;
@@ -712,7 +730,7 @@ button,
 .fire-icon,
 .str-icon {
   color: red;
-  content: url("assets/elements/fire.png");
+  content: url('assets/elements/fire.png');
   width: 2rem;
   height: 2rem;
 }
@@ -720,7 +738,7 @@ button,
 .earth-icon,
 .dex-icon {
   color: green;
-  content: url("assets/elements/earth.png");
+  content: url('assets/elements/earth.png');
   width: 2rem;
   height: 2rem;
 }
@@ -728,7 +746,7 @@ button,
 .water-icon,
 .int-icon {
   color: cyan;
-  content: url("assets/elements/water.png");
+  content: url('assets/elements/water.png');
   width: 2rem;
   height: 2rem;
 }
@@ -736,7 +754,7 @@ button,
 .lightning-icon,
 .cha-icon {
   color: yellow;
-  content: url("assets/elements/lightning.png");
+  content: url('assets/elements/lightning.png');
   width: 2rem;
   height: 2rem;
 }
@@ -768,9 +786,12 @@ button.close {
   cursor: auto;
 }
 
-.btn-primary, .btn-primary.focus, .btn-primary:focus, .btn-primary.disabled:not(:hover) .btn-primary:disabled:hover{
+.btn-primary,
+.btn-primary.focus,
+.btn-primary:focus,
+.btn-primary.disabled:not(:hover) .btn-primary:disabled:hover {
   background-color: transparent;
-  background-image: url("assets/images/bt-bg-center.png");
+  background-image: url('assets/images/bt-bg-center.png');
   background-repeat: repeat-x;
   background-position: 0 0;
   transition: all 0.3s ease-in;
@@ -790,10 +811,10 @@ button.close {
 
 .btn-primary::after,
 .btn-primary::before {
-  content: " ";
+  content: ' ';
   width: 44px;
   height: 100%;
-  background: url("assets/images/bt-bg-right.png") 100% 0 no-repeat;
+  background: url('assets/images/bt-bg-right.png') 100% 0 no-repeat;
   position: absolute;
   top: 0;
   right: -22px;
@@ -803,7 +824,7 @@ button.close {
   transition: all 0.3s ease-in;
 }
 .btn-primary::before {
-  background: url("assets/images/bt-bg-left.png") 0 0 no-repeat;
+  background: url('assets/images/bt-bg-left.png') 0 0 no-repeat;
   left: -22px;
   right: inherit;
   width: 70px;
@@ -811,17 +832,17 @@ button.close {
   background-color: #ffc10729;
 }
 
-
-.btn-primary:not(:disabled):hover, .btn-primary:not(:disabled):not(.disabled):active {
-  background-image: url("assets/images/bt-bg-center-hover.png");
+.btn-primary:not(:disabled):hover,
+.btn-primary:not(:disabled):not(.disabled):active {
+  background-image: url('assets/images/bt-bg-center-hover.png');
   color: #000;
 }
 
 .btn-primary:not(:disabled):hover::before {
-  background-image: url("assets/images/bt-bg-left-hover.png");
+  background-image: url('assets/images/bt-bg-left-hover.png');
 }
 .btn-primary:not(:disabled):hover::after {
-  background-image: url("assets/images/bt-bg-right-hover.png");
+  background-image: url('assets/images/bt-bg-right-hover.png');
 }
 
 .btn-primary:active {
@@ -832,7 +853,7 @@ button.close {
 }
 
 #fightResultsModal .modal-content,
-#listHeroToChallengeModal .modal-content{
+#listHeroToChallengeModal .modal-content {
   min-width: 36rem;
   height: 100%;
   display: flex;
@@ -840,23 +861,23 @@ button.close {
 }
 
 #listHeroToCareerModal .modal-content,
-#loadingModal .modal-content{
+#loadingModal .modal-content {
   min-width: 36rem;
   height: 350px;
   display: flex;
   align-items: center;
 }
 
-#listHeroToCareerModal .modal-content{
+#listHeroToCareerModal .modal-content {
   height: 475px;
 }
 
-#fightResultsModal .close{
+#fightResultsModal .close {
   margin-right: 12px;
   z-index: 2;
 }
 
-#error-request-fight .modal-content{
+#error-request-fight .modal-content {
   height: 190px;
 }
 
@@ -864,7 +885,7 @@ button.close {
 //   width:870px;
 // }
 
-#showWeaponModal .modal-content{
+#showWeaponModal .modal-content {
   height: 580px;
   width: 870px;
   max-width: 870px;
@@ -872,19 +893,19 @@ button.close {
 
 #cancelRequestModal .close,
 #requestSelect .close,
-#selectHeroOrWeaponModal .close{
+#selectHeroOrWeaponModal .close {
   margin-right: 55px;
 }
 
 #selectHeroOrWeaponModal .close,
 #listHeroToChallengeModal .close,
-#listHeroToCareerModal .close{
+#listHeroToCareerModal .close {
   margin-right: 30px;
 }
 
 #requestSelect .modal-content,
 #fightModal .modal-content,
-#cancelRequestModal .modal-content{
+#cancelRequestModal .modal-content {
   min-width: 700px;
   height: 400px;
   display: flex;
@@ -892,31 +913,31 @@ button.close {
   align-items: center;
 }
 
-#selectHeroOrWeaponModal .modal-content{
+#selectHeroOrWeaponModal .modal-content {
   height: 100%;
 }
 
-#selectHeroOrWeaponModal .modal-dialog{
+#selectHeroOrWeaponModal .modal-dialog {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-#selectHeroOrWeaponModal .modal-body{
+#selectHeroOrWeaponModal .modal-body {
   overflow: scroll;
 }
 
 #requestSelect .modal-content,
-#fightModal .modal-content{
+#fightModal .modal-content {
   padding: 20px 0;
 }
 
-#fightResultsModal .modal-body{
+#fightResultsModal .modal-body {
   color: #fff;
   margin-top: 25px;
 }
 
-#selectHeroOrWeaponModal .modal-content{
+#selectHeroOrWeaponModal .modal-content {
   background-image: url(./assets/v2/bg-modal.png);
 }
 
@@ -987,13 +1008,13 @@ button.close {
   border-color: #a50eb36e;
 }
 
-.tabs > div:first-child{
+.tabs > div:first-child {
   display: flex;
   justify-content: center;
 }
 
-.nav.nav-tabs.nav-justified{
-  background-color: rgba(0, 0, 0, .5);
+.nav.nav-tabs.nav-justified {
+  background-color: rgba(0, 0, 0, 0.5);
   border-radius: 20px;
   padding: 0 2%;
 }
@@ -1002,39 +1023,39 @@ button.close {
   border-bottom: none !important;
 }
 
-.tab-categories.nav-tabs{
+.tab-categories.nav-tabs {
   // border-bottom: 1px solid #f76d00 !important;
 }
 
-.nav-justified > .nav-link, .nav-justified .nav-item{
+.nav-justified > .nav-link,
+.nav-justified .nav-item {
   flex-basis: initial;
   flex-grow: initial;
 }
 
-.main-font .nav-tabs a.nav-link{
+.main-font .nav-tabs a.nav-link {
   font-size: 20px;
   color: #fff;
 }
 
-@media (max-width: 577px){
-
-  #listHeroToCareerModal .modal-body{
+@media (max-width: 577px) {
+  #listHeroToCareerModal .modal-body {
     width: 300px;
   }
 
-  #listHeroToCareerModal .modal-content{
-  min-width: 20rem;
-  height: 240px;
-  background-size: contain !important;
-}
+  #listHeroToCareerModal .modal-content {
+    min-width: 20rem;
+    height: 240px;
+    background-size: contain !important;
+  }
 
-  .main-font .nav-tabs a.nav-link{
+  .main-font .nav-tabs a.nav-link {
     font-size: 15px;
   }
   #loadingModal .modal-content,
   #fightResultsModal .modal-content,
   #listHeroToChallengeModal .modal-content,
-  #requestFightModal .modal-content{
+  #requestFightModal .modal-content {
     min-width: 20rem;
     height: 250px;
     display: flex;
@@ -1042,35 +1063,35 @@ button.close {
     background-size: contain !important;
   }
 
-#fightResultsModal .modal-content{
-  padding: 0;
-  min-width: 22rem;
-  height: 230px;
-}
+  #fightResultsModal .modal-content {
+    padding: 0;
+    min-width: 22rem;
+    height: 230px;
+  }
 
   #showWeaponModal .modal-content,
   #claimModal .modal-content,
-  #selectHeroOrWeaponModal .modal-content{
+  #selectHeroOrWeaponModal .modal-content {
     width: 350px;
     background-image: none;
-    background-color: #0C012C;
-    border: 1px solid #F48757;
+    background-color: #0c012c;
+    border: 1px solid #f48757;
     border-radius: 20px 30px 20px 20px;
     position: relative;
   }
 
-  #selectHeroOrWeaponModal .modal-content{
+  #selectHeroOrWeaponModal .modal-content {
     padding: 0;
   }
 
-  #selectHeroOrWeaponModal .modal-content{
+  #selectHeroOrWeaponModal .modal-content {
     height: 646px;
   }
 
   #showWeaponModal .modal-content::after,
   #claimModal .modal-content::after,
-  #selectHeroOrWeaponModal .modal-content::after{
-    content: "";
+  #selectHeroOrWeaponModal .modal-content::after {
+    content: '';
     background-image: url(./assets/v2/corner_yellow.svg);
     background-repeat: no-repeat;
     background-size: contain;
@@ -1082,14 +1103,14 @@ button.close {
   }
 
   #claimModal .close,
-  #selectHeroOrWeaponModal .close{
+  #selectHeroOrWeaponModal .close {
     z-index: 1;
   }
 }
 
 .nav-tabs .nav-link.active {
-  color: #F58B5B !important;
-  border-bottom: 5px solid #F58B5B !important;
+  color: #f58b5b !important;
+  border-bottom: 5px solid #f58b5b !important;
   border-top-color: transparent !important;
   border-left-color: transparent !important;
   border-right-color: transparent !important;
@@ -1099,12 +1120,12 @@ button.close {
 
 .nav-tabs .nav-link:hover {
   // border-bottom: 5px solid #F58B5B !important;
-  border-color: transparent transparent #F58B5B transparent !important ;
+  border-color: transparent transparent #f58b5b transparent !important ;
 }
 
 .containerRight .nav-tabs .nav-link:hover,
-.nav-justified.nav-tabs .nav-link:hover{
-  border-bottom: 5px solid #F58B5B !important;
+.nav-justified.nav-tabs .nav-link:hover {
+  border-bottom: 5px solid #f58b5b !important;
 }
 
 .outline {
@@ -1143,7 +1164,6 @@ div.bg-success {
     rgba(44, 58, 65, 1) 100%
   );
 }
-
 </style>
 <style scoped>
 .content {
@@ -1171,7 +1191,7 @@ div.bg-success {
 .starter-panel {
   width: 50rem;
   height: calc(50rem * 0.69);
-  max-width:  100%;
+  max-width: 100%;
   background-image: url('assets/images/bg-modal.svg');
   background-position: 50% 0;
   background-size: contain;
@@ -1194,7 +1214,7 @@ div.bg-success {
   margin-top: 1.2rem;
   font-size: 2.8rem;
   font-weight: bold;
-  color: #F58B5B;
+  color: #f58b5b;
   display: block;
 }
 
@@ -1202,22 +1222,22 @@ div.bg-success {
   font-size: 1.3rem;
 }
 
-.starter-panel .button-div{
+.starter-panel .button-div {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.starter-panel p{
+.starter-panel p {
   margin-bottom: 2rem;
 }
 
-.hide-modal{
+.hide-modal {
   position: absolute;
   right: 1.5rem;
   top: 1rem;
   background: none;
-  border: none
+  border: none;
 }
 
 .starter-msg {
@@ -1238,8 +1258,8 @@ div.bg-success {
   width: 100%;
 }
 
-.starter-panel a{
-  color: #F58B5B;
+.starter-panel a {
+  color: #f58b5b;
 }
 
 .mini-icon-starter {
@@ -1339,15 +1359,15 @@ div.bg-success {
     width: 100%;
   } */
 
-  .fullscreen-warning .button{
+  .fullscreen-warning .button {
     margin-bottom: 1rem;
     justify-content: center;
   }
-  .starter-panel{
+  .starter-panel {
     background-size: auto 100%;
     background-position: -150px -36px;
   }
-  .blank-slate .button h1{
+  .blank-slate .button h1 {
     font-size: 1.5rem;
   }
 }

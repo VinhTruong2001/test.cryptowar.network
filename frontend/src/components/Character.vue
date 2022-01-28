@@ -2,16 +2,14 @@
   <div class="wrapper">
     <!-- <img src="../assets/chara.png" alt="Placeholder character"> -->
     <!-- :style="{ backgroundImage: `url(${getCharacterArt(this.character)})` }" -->
-    <div
-      class="image"
-    >
+    <div class="image">
       <h1>3D Plaza scene coming soon</h1>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { getCharacterArt } from '../character-arts-placeholder';
+import { getCharacterArt } from '../character-arts-placeholder'
 
 export default {
   props: ['character'],
@@ -19,7 +17,7 @@ export default {
   methods: {
     getCharacterArt,
   },
-};
+}
 </script>
 
 <style>
@@ -28,7 +26,7 @@ export default {
   display: flex;
   justify-content: center;
   align-content: center;
-  background: url("../assets/chara-bg.png") center center no-repeat;
+  background: url('../assets/chara-bg.png') center center no-repeat;
   padding: 5em;
   padding-bottom: 1em;
 }

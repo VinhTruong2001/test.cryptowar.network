@@ -1,26 +1,24 @@
 <template>
   <div class="body main-font">
-
     <div class="left-side fill-space raid-info">
-
       <div class="left-side">
         <div class="finish">
           <span class="title">Finishes on</span>
-          <br>
+          <br />
           May 4th, 2021
         </div>
 
         <div class="raiders">
           <span class="title">Raiders</span> 69
-          <br>
+          <br />
           <span class="title">Total Power</span> 69k
-          <br>
+          <br />
           <span class="title">Bounty</span> 10 xBlade
         </div>
 
         <div class="drops">
           <span class="title">Drops</span>
-          <br>
+          <br />
           items
         </div>
       </div>
@@ -30,13 +28,11 @@
           <span class="title">Raid title</span>
         </div>
 
-        <div class="image">
-          image here
-        </div>
+        <div class="image">image here</div>
 
         <div class="about-raid">
           <span class="title">Raid Name</span>
-          <br>
+          <br />
           <span class="lightning">Lightning</span>
         </div>
       </div>
@@ -54,64 +50,54 @@
       </div>
 
       <div class="signup">
-        <div class="warning">
-          Joining will cost 12h stamina
-        </div>
+        <div class="warning">Joining will cost 12h stamina</div>
 
         <div class="power">
           <div class="left-side">Character Power: 10000</div>
           <div class="right-side">Weapon Multiplier: x1.23</div>
         </div>
 
-        <div class="total-power">
-          Total power: 12300
-        </div>
+        <div class="total-power">Total power: 12300</div>
 
         <div class="action">
-          <big-button
-            class="button"
-            mainText="Sign up"
-          />
+          <big-button class="button" mainText="Sign up" />
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import { mapCacheActions } from 'vuex-cache';
-import CharacterList from '../components/smart/CharacterList.vue';
-import WeaponGrid from '../components/smart/WeaponGrid.vue';
-import BigButton from '../components/BigButton.vue';
+import { mapGetters } from 'vuex'
+import { mapCacheActions } from 'vuex-cache'
+import CharacterList from '../components/smart/CharacterList.vue'
+import WeaponGrid from '../components/smart/WeaponGrid.vue'
+import BigButton from '../components/BigButton.vue'
 
 export default {
   computed: {
-
-    ...mapGetters([
-      'ownCharacters',
-      'ownWeapons'
-    ]),
+    ...mapGetters(['ownCharacters', 'ownWeapons']),
   },
 
-  props: {
-  },
+  props: {},
 
   methods: {
-    ...mapCacheActions(['fetchRaidData', 'fetchOwnedCharacterRaidStatus'])
+    ...mapCacheActions(['fetchRaidData', 'fetchOwnedCharacterRaidStatus']),
   },
 
   async mounted() {
-    await Promise.all([this.fetchRaidData(), this.fetchOwnedCharacterRaidStatus()]);
+    await Promise.all([
+      this.fetchRaidData(),
+      this.fetchOwnedCharacterRaidStatus(),
+    ])
   },
 
   components: {
     BigButton,
     CharacterList,
-    WeaponGrid
+    WeaponGrid,
   },
-};
+}
 </script>
 
 <style scoped>
@@ -133,19 +119,22 @@ export default {
   padding-top: 3em;
 }
 
-.left-side, .right-side {
+.left-side,
+.right-side {
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-.chooser, .power {
+.chooser,
+.power {
   flex: 1;
   display: flex;
   flex-direction: row;
 }
 
-.chooser .left-side, .chooser .right-side {
+.chooser .left-side,
+.chooser .right-side {
   max-height: 300px;
   overflow-y: auto;
 }
@@ -154,17 +143,21 @@ export default {
   flex-direction: row;
 }
 
-.raiders, .drops {
+.raiders,
+.drops {
   margin-top: 1em;
 }
 
-.raid-boss, .raid-signup {
+.raid-boss,
+.raid-signup {
   justify-content: space-between;
 }
 
-.warning, .power, .total-power, .action {
+.warning,
+.power,
+.total-power,
+.action {
   text-align: center;
   margin-top: 0.5em;
 }
-
 </style>

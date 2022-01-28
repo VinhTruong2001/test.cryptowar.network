@@ -17,7 +17,7 @@
       <h2 class="dust-label text-center" v-if="!isBlacksmith">Lesser</h2>
       <div class="dust-quantity-wrap">
         <div class="dust-quantity text-center">
-          <span>{{getLesserDust()}}</span>
+          <span>{{ getLesserDust() }}</span>
         </div>
       </div>
     </div>
@@ -38,13 +38,13 @@
       <h2 class="dust-label text-center" v-if="!isBlacksmith">Greater</h2>
       <div class="dust-quantity-wrap">
         <div class="dust-quantity text-center">
-          <span>{{getGreaterDust()}}</span>
+          <span>{{ getGreaterDust() }}</span>
         </div>
       </div>
     </div>
     <div
       class="col-lg-4 d-flex flex-column align-items-center"
-        :class="isBlacksmith ? 'col-6' : 'col-12'"
+      :class="isBlacksmith ? 'col-6' : 'col-12'"
     >
       <div
         class="character-item addnew dust-container"
@@ -59,7 +59,7 @@
       <h2 class="dust-label text-center" v-if="!isBlacksmith">Powerful</h2>
       <div class="dust-quantity-wrap">
         <div class="dust-quantity text-center">
-          <span>{{getPowerfulDust()}}</span>
+          <span>{{ getPowerfulDust() }}</span>
         </div>
       </div>
     </div>
@@ -67,31 +67,27 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   props: ['isBlacksmith'],
 
   data() {
-    return {
-    };
+    return {}
   },
 
-  components: {
-  },
+  components: {},
 
   computed: {
     ...mapGetters(['getPowerfulDust', 'getGreaterDust', 'getLesserDust']),
-
   },
 
-  async created() {
-  },
+  async created() {},
 
   methods: {
     ...mapActions([]),
-  }
-};
+  },
+}
 </script>
 
 <style>
@@ -106,7 +102,7 @@ export default {
 .character-item.addnew.dust-container {
   max-width: 298px;
   cursor: pointer;
-  align-items :center;
+  align-items: center;
   flex-direction: column;
   justify-content: space-around;
   margin: 0 auto;
@@ -143,15 +139,15 @@ export default {
 }
 
 .dust-image1 {
-  content: url("../../assets/dusts/lesserDust.svg");
+  content: url('../../assets/dusts/lesserDust.svg');
 }
 
 .dust-image2 {
-  content: url("../../assets/dusts/greaterDust.svg");
+  content: url('../../assets/dusts/greaterDust.svg');
 }
 
 .dust-image3 {
-  content: url("../../assets/dusts/powerfulDust.svg");
+  content: url('../../assets/dusts/powerfulDust.svg');
 }
 
 .dust-label {
@@ -172,7 +168,7 @@ export default {
   margin: auto;
   background-color: #000;
   width: 100%;
-  border: 1px solid #1385B7;
+  border: 1px solid #1385b7;
   border-radius: 16px;
   font-size: 32px;
 }
@@ -207,7 +203,7 @@ export default {
 
 @media (max-width: 768px) {
   .dust-list {
-    justify-content: center
+    justify-content: center;
   }
 
   .dust-image {
@@ -241,7 +237,7 @@ export default {
   .no-corner .dust-burn-point {
     font-size: 21px;
   }
-  .no-corner .dust-power{
+  .no-corner .dust-power {
     font-size: 16px;
   }
   /* .dust-quantity-wrap {
@@ -328,5 +324,4 @@ export default {
   border: 1px solid white;
   cursor: pointer;
 } */
-
 </style>

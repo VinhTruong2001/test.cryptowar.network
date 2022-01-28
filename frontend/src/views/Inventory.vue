@@ -41,47 +41,47 @@ import BigNumber from "bignumber.js";
 import { fromWeiEther, toBN } from "../utils/common";
 
 type StoreMappedState = Pick<
-IState,
-| "defaultAccount"
-| "weapons"
-| "characters"
-| "shields"
-| "ownedCharacterIds"
-| "ownedWeaponIds"
-| "ownedShieldIds"
->;
+  IState,
+  | 'defaultAccount'
+  | 'weapons'
+  | 'characters'
+  | 'shields'
+  | 'ownedCharacterIds'
+  | 'ownedWeaponIds'
+  | 'ownedShieldIds'
+>
 
 interface StoreMappedGetters {
-  contracts: Contracts;
-  ownCharacters: any[];
-  totalShieldSupply: 0;
-  getCharacterName(id: string): string;
-  getWeaponName(id: string, stars: number): string;
-  getBoxPrice(): { common: string; rare: string };
+  contracts: Contracts
+  ownCharacters: any[]
+  totalShieldSupply: 0
+  getCharacterName(id: string): string
+  getWeaponName(id: string, stars: number): string
+  getBoxPrice(): { common: string; rare: string }
 }
 
 export interface Nft {
-  id: string;
-  type: string;
-  stars?: number;
-  element?: string;
-  stat1?: string;
-  stat2?: string;
-  stat3?: string;
-  stat1Value?: number;
-  stat2Value?: number;
-  stat3Value?: number;
-  nftPrice?: number;
-  isConsumable: boolean;
-  name: string;
-  description: string;
-  image: string;
+  id: string
+  type: string
+  stars?: number
+  element?: string
+  stat1?: string
+  stat2?: string
+  stat3?: string
+  stat1Value?: number
+  stat2Value?: number
+  stat3Value?: number
+  nftPrice?: number
+  isConsumable: boolean
+  name: string
+  description: string
+  image: string
 }
 
 interface StoreMappedActions {
-  fetchBoxPrice(): Promise<void>;
-  fetchTotalCommonBoxSupply(): Promise<number>;
-  fetchTotalRareBoxSupply(): Promise<number>;
+  fetchBoxPrice(): Promise<void>
+  fetchTotalCommonBoxSupply(): Promise<number>
+  fetchTotalRareBoxSupply(): Promise<number>
 }
 
 export default Vue.extend({
@@ -99,125 +99,129 @@ export default Vue.extend({
       commonBoxSupply: 0,
       rareBoxSupply: 0,
       isLoading: false,
-    };
+    }
   },
   computed: {
     ...(mapState([
-      "defaultAccount",
-      "weapons",
-      "characters",
-      "shields",
-      "ownedCharacterIds",
-      "ownedWeaponIds",
-      "ownedShieldIds",
+      'defaultAccount',
+      'weapons',
+      'characters',
+      'shields',
+      'ownedCharacterIds',
+      'ownedWeaponIds',
+      'ownedShieldIds',
     ]) as Accessors<StoreMappedState>),
     ...(mapGetters([
-      "contracts",
-      "ownCharacters",
-      "totalShieldSupply",
-      "getCharacterName",
-      "getWeaponName",
-      "getBoxPrice",
+      'contracts',
+      'ownCharacters',
+      'totalShieldSupply',
+      'getCharacterName',
+      'getWeaponName',
+      'getBoxPrice',
     ]) as Accessors<StoreMappedGetters>),
-    ...mapGetters(["transferCooldownOfCharacterId"]),
+    ...mapGetters(['transferCooldownOfCharacterId']),
 
     specialOffersNftList(): SkillShopListing[] {
       const nftList = [
         {
-          id: "placeholder",
-          type: "shield",
+          id: 'placeholder',
+          type: 'shield',
           nftPrice: 3,
-          name: "Shield",
-          description: "A Legendary Defender Shield",
-          image: "",
+          name: 'Shield',
+          description: 'A Legendary Defender Shield',
+          image: '',
         },
-      ] as SkillShopListing[];
+      ] as SkillShopListing[]
 
-      return nftList;
+      return nftList
     },
 
     shopOffersNftList(): SkillShopListing[] {
-      const { common, rare } = this.getBoxPrice();
+      const { common, rare } = this.getBoxPrice()
 
       const nftList = [
         {
           id: 0,
-          type: "SecretBox",
+          type: 'SecretBox',
           nftPrice: toBN(fromWeiEther(common)).toNumber(),
-          name: "Common Box",
-          description: "Get common weapon, 1% chance to get 5-stars weapon",
-          image: "common-box.png",
+          name: 'Common Box',
+          description: 'Get common weapon, 1% chance to get 5-stars weapon',
+          image: 'common-box.png',
           isSoldOut: Number(this.commonBoxSupply) === 0,
-          supply: this.commonBoxSupply
+          supply: this.commonBoxSupply,
         },
         {
           id: 1,
-          type: "SecretBox",
+          type: 'SecretBox',
           nftPrice: toBN(fromWeiEther(rare)).toNumber(),
-          name: "Rare Box",
-          description: "Get rare weapon, 4% chance to get 5-stars weapon",
-          image: "rare-box.png",
+          name: 'Rare Box',
+          description: 'Get rare weapon, 4% chance to get 5-stars weapon',
+          image: 'rare-box.png',
           isSoldOut: Number(this.rareBoxSupply) === 0,
-          supply: this.rareBoxSupply
+          supply: this.rareBoxSupply,
         },
         {
           id: 2,
-          type: "SecretBox",
+          type: 'SecretBox',
           nftPrice: 0,
-          name: "Epic Box",
-          description: "Get epic weapon, 6% chance to get 5-stars weapon",
-          image: "epic-box.png",
+          name: 'Epic Box',
+          description: 'Get epic weapon, 6% chance to get 5-stars weapon',
+          image: 'epic-box.png',
           isSoldOut: true,
-          supply: 0
+          supply: 0,
         },
-      ] as SkillShopListing[];
+      ] as SkillShopListing[]
 
-      return nftList;
+      return nftList
     },
 
     itemRender(): SkillShopListing[] {
-      return this.shopOffersNftList;
+      return this.shopOffersNftList
     },
   },
 
   methods: {
     //@ts-ignore
-    ...(mapCacheActions(["fetchBoxPrice", 'fetchTotalRareBoxSupply','fetchTotalCommonBoxSupply']) as StoreMappedActions),
+    ...(mapCacheActions([
+      'fetchBoxPrice',
+      'fetchTotalRareBoxSupply',
+      'fetchTotalCommonBoxSupply',
+    ]) as StoreMappedActions),
     convertWeiToSkill(wei: string) {
-      return fromWeiEther(wei);
+      return fromWeiEther(wei)
     },
     convertSkillToWei(skill: string) {
-      return Web3.utils.toWei(skill);
+      return Web3.utils.toWei(skill)
     },
   },
 
   filters: {
     maxDecimals(val: string, maxDecimals: number) {
-      return new BigNumber(val).toFixed(maxDecimals);
+      return new BigNumber(val).toFixed(maxDecimals)
     },
     dynamicDecimals(val: string, minDecimals: number, maxDecimals: number) {
-      const parsedVal = new BigNumber(val);
+      const parsedVal = new BigNumber(val)
 
       if (parsedVal < new BigNumber(Math.pow(10, -maxDecimals))) {
-        return "< " + Math.pow(10, -maxDecimals).toFixed(maxDecimals);
+        return '< ' + Math.pow(10, -maxDecimals).toFixed(maxDecimals)
       }
 
       for (let i = maxDecimals - 1; i >= minDecimals; i--) {
         if (parsedVal < new BigNumber(Math.pow(10, -i))) {
-          return new BigNumber(val).toFixed(i + 1);
+          return new BigNumber(val).toFixed(i + 1)
         }
       }
 
-      return new BigNumber(val).toFixed(minDecimals);
+      return new BigNumber(val).toFixed(minDecimals)
     },
   },
 
   beforeMount() {
-    this.isLoading = true;
+    this.isLoading = true
   },
 
   async mounted() {
-    document.querySelector(".app.app-v2")?.classList.remove("bg2");
+    document.querySelector('.app.app-v2')?.classList.remove('bg2')
     // @ts-ignore
     // this.fetchBoxPriceInterval = setInterval(() => {
     //   this.fetchBoxPrice();
@@ -239,7 +243,7 @@ export default Vue.extend({
     // clearInterval(this.fetchCommonBoxSupplyInterval);
     // clearInterval(this.fetchRareBoxSupplyInterval);
   },
-});
+})
 </script>
 
 <style>

@@ -1,10 +1,19 @@
 <template>
-
   <div class="main-nav-div">
-    <div v-if="referralAddress" style="color:#7F327C; text-align:center; background: white; padding:10px">
-     ✨ Congratulations! You get 7% discount when mint new heroes ⚔️ only valid in 24 hours ⏰  </div>
+    <div
+      v-if="referralAddress"
+      style="
+        color: #7f327c;
+        text-align: center;
+        background: white;
+        padding: 10px;
+      "
+    >
+      ✨ Congratulations! You get 7% discount when mint new heroes ⚔️ only valid
+      in 24 hours ⏰
+    </div>
     <b-navbar class="main-nav" toggleable="sm">
-      <router-link :to="{name: 'plaza'}" exact>
+      <router-link :to="{ name: 'plaza' }" exact>
         <b-navbar-brand class="nav-logo">
           <img
             src="../assets/logo250.png"
@@ -16,14 +25,18 @@
 
       <view-links class="view-links desktop"></view-links>
 
-      <skill-balance-display class="ml-auto d-none d-sm-flex skill-balance-display" />
+      <skill-balance-display
+        class="ml-auto d-none d-sm-flex skill-balance-display"
+      />
 
       <!-- <claim-rewards class="claim-rewards" v-if="!canShowRewardsBar" /> -->
 
       <options class="d-none d-sm-flex option-desktop" />
 
       <!-- Render only on mobile view -->
-      <div class="d-flex justify-content-between align-items-center option-mobile">
+      <div
+        class="d-flex justify-content-between align-items-center option-mobile"
+      >
         <!-- <skill-balance-display class="skill-display-mobile" /> -->
         <b-navbar-brand href="/" class="nav-logo-mobile">
           <img
@@ -43,10 +56,7 @@
             :checked="checkCloseOption"
           />
           <div class="modal">
-            <label
-              for="input__modal__id"
-              class="modal__overlay"
-            ></label>
+            <label for="input__modal__id" class="modal__overlay"></label>
           </div>
           <div class="modal__body">
             <options class="options-display-mobile" />
@@ -77,16 +87,16 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import Vue from 'vue'
 
-import ViewLinks from "./ViewLinks.vue";
-import Options from "./Options.vue";
-import SkillBalanceDisplay from "./smart/SkillBalanceDisplay.vue";
+import ViewLinks from './ViewLinks.vue'
+import Options from './Options.vue'
+import SkillBalanceDisplay from './smart/SkillBalanceDisplay.vue'
 // import ClaimRewards from "./smart/ClaimRewards.vue";
 // import OptionsMobile from "./OptionsMobile.vue";
 
-import Events from "../events";
-import { mapGetters, mapMutations } from "vuex";
+import Events from '../events'
+import { mapGetters, mapMutations } from 'vuex'
 
 export default Vue.extend({
   components: {
@@ -99,53 +109,57 @@ export default Vue.extend({
 
   data() {
     return {
-      checkCloseOption: "",
+      checkCloseOption: '',
       // canShowRewardsBar: true,
-    };
+    }
   },
 
   computed: {
-    ...mapGetters(["getIsCharacterViewExpanded", "ownCharacters","defaultAccount"]),
+    ...mapGetters([
+      'getIsCharacterViewExpanded',
+      'ownCharacters',
+      'defaultAccount',
+    ]),
     referralAddress(): string {
       // @ts-ignore
-      const referralAddress = this.$route.query.r;
+      const referralAddress = this.$route.query.r
       if (referralAddress && referralAddress !== this.defaultAccount) {
-        return referralAddress;
+        return referralAddress
       }
-      return '';
+      return ''
     },
   },
 
   methods: {
-    ...mapMutations(["setIsCharacterViewExpanded"]),
+    ...mapMutations(['setIsCharacterViewExpanded']),
     // checkStorage(): void {
     //   this.canShowRewardsBar = localStorage.getItem("hideRewards") === "false";
     // },
     toggleCharacterView(): void {
-      this.setIsCharacterViewExpanded(!this.getIsCharacterViewExpanded);
+      this.setIsCharacterViewExpanded(!this.getIsCharacterViewExpanded)
       localStorage.setItem(
-        "isCharacterViewExpanded",
-        this.getIsCharacterViewExpanded ? "true" : "false"
-      );
+        'isCharacterViewExpanded',
+        this.getIsCharacterViewExpanded ? 'true' : 'false'
+      )
     },
   },
 
-  updated(){
-    this.checkCloseOption = "";
+  updated() {
+    this.checkCloseOption = ''
   },
 
   mounted() {
-    Events.$on('hide-option', (i: any) =>{
-      this.checkCloseOption = i;
-    });
+    Events.$on('hide-option', (i: any) => {
+      this.checkCloseOption = i
+    })
     // this.checkStorage();
     // Events.$on("setting:hideRewards", () => this.checkStorage());
   },
-});
+})
 </script>
 
 <style>
-.main-nav-div{
+.main-nav-div {
   position: fixed;
   top: 0;
   width: 100%;
@@ -202,7 +216,6 @@ a {
   max-width: 86px;
 }
 
-
 .main-nav > .view-links {
   flex: 2.3;
 }
@@ -227,7 +240,9 @@ a {
   margin-right: 0;
 }
 
-.expander-button.focus, .expander-button:focus, .expander-button:active{
+.expander-button.focus,
+.expander-button:focus,
+.expander-button:active {
   box-shadow: none;
 }
 
@@ -248,52 +263,57 @@ a {
   grid-row: 1;
 }
 
-.nav-bottom-line{
+.nav-bottom-line {
   border-top: 3px solid;
   border-image-slice: 1;
   border-top-width: 3px;
-  border-image-source: linear-gradient(to left, #3ADD9A, #121154, #A54476);
-  background-image: radial-gradient(ellipse at top, #CBA938 -10%, transparent 35%), radial-gradient(ellipse at bottom, transparent, transparent);
+  border-image-source: linear-gradient(to left, #3add9a, #121154, #a54476);
+  background-image: radial-gradient(
+      ellipse at top,
+      #cba938 -10%,
+      transparent 35%
+    ),
+    radial-gradient(ellipse at bottom, transparent, transparent);
 }
 
-  .option-container-mobile input,
-  .option-container-mobile label i,
-  .nav-logo-mobile,
-  .options-display-mobile{
-    display: none;
-  }
+.option-container-mobile input,
+.option-container-mobile label i,
+.nav-logo-mobile,
+.options-display-mobile {
+  display: none;
+}
 
-@media (max-width: 1400px){
-  .main-nav{
+@media (max-width: 1400px) {
+  .main-nav {
     display: flex;
     padding: 20px 10px;
     justify-content: space-between;
   }
 
   .nav-logo-mobile,
-  .options-display-mobile{
+  .options-display-mobile {
     display: block;
   }
 
   .nav-logo,
   .view-links.desktop,
   .claim-rewards,
-  .option-container-mobile input{
+  .option-container-mobile input {
     display: none;
   }
 
   .skill-balance-display,
-  .option-desktop{
+  .option-desktop {
     display: none !important;
   }
 
-  .option-container-mobile{
+  .option-container-mobile {
     width: 30px;
   }
 
-  .option-container-mobile label i{
+  .option-container-mobile label i {
     font-size: 2em;
-    color: #CD894C;
+    color: #cd894c;
     display: block;
   }
 
@@ -344,5 +364,3 @@ a {
   }
 }
 </style>
-
-

@@ -5,15 +5,18 @@
         :class="characterTrait.toLowerCase() + '-icon circle-element'"
       ></span>
       <div class="black-outline" v-if="!portrait">
-          <div>
-            ID <span class="white">{{ character.id }}</span>
-          </div>
-          <div v-if="isMarket">
-            Lv.<span class="">{{ character.level + 1 }}</span>
-          </div>
+        <div>
+          ID <span class="white">{{ character.id }}</span>
+        </div>
+        <div v-if="isMarket">
+          Lv.<span class="">{{ character.level + 1 }}</span>
+        </div>
       </div>
     </div>
-    <div class="placeholder d-flex align-items-start justify-content-center " :class="characterTrait.toLowerCase() + '-bg'">
+    <div
+      class="placeholder d-flex align-items-start justify-content-center"
+      :class="characterTrait.toLowerCase() + '-bg'"
+    >
       <div
         :style="{
           'background-image': 'url(' + getCharacterArt(character) + ')',
@@ -31,7 +34,11 @@
     </div>
     <div :class="{ 'market-bot': !portrait }">
       <div class="name-lvl-container">
-        <div class="name black-outline" :title="getCleanCharacterName(character.id)" v-if="!portrait">
+        <div
+          class="name black-outline"
+          :title="getCleanCharacterName(character.id)"
+          v-if="!portrait"
+        >
           {{ getCleanCharacterName(character.id) }}
         </div>
         <div class="lv" v-if="!portrait && !isMarket">
@@ -54,7 +61,7 @@
         </div>
       </div> -->
 
-      <div class="xp-wrap" :style="isMarket&&'margin-top: 25px'">
+      <div class="xp-wrap" :style="isMarket && 'margin-top: 25px'">
         <div class="xp" v-if="!portrait">
           <b-progress
             :max="RequiredXp(character.level)"
@@ -76,13 +83,13 @@
 </template>
 
 <script>
-import { getCharacterArt } from "../character-arts-placeholder";
-import { CharacterTrait, RequiredXp } from "../interfaces";
-import { mapGetters, mapState } from "vuex";
-import { getCleanName } from "../rename-censor";
+import { getCharacterArt } from '../character-arts-placeholder'
+import { CharacterTrait, RequiredXp } from '../interfaces'
+import { mapGetters, mapState } from 'vuex'
+import { getCleanName } from '../rename-censor'
 
 export default {
-  props: ["character", "portrait", "isMarket"],
+  props: ['character', 'portrait', 'isMarket'],
   components: {
     //SmallButton,
   },
@@ -102,26 +109,26 @@ export default {
       trait: this.characterTrait,
       showPlaceholder: false,
       heroScore: 0,
-    };
+    }
   },
 
   computed: {
-    ...mapState(["maxStamina"]),
+    ...mapState(['maxStamina']),
     ...mapGetters([
-      "getCharacterName",
-      "transferCooldownOfCharacterId",
-      "getCharacterUnclaimedXp",
-      "timeUntilCharacterHasMaxStamina",
-      "charactersWithIds",
+      'getCharacterName',
+      'transferCooldownOfCharacterId',
+      'getCharacterUnclaimedXp',
+      'timeUntilCharacterHasMaxStamina',
+      'charactersWithIds',
     ]),
 
     characterTrait() {
       const characterWithId =
-        this.charactersWithIds && this.charactersWithIds([this.character.id]);
+        this.charactersWithIds && this.charactersWithIds([this.character.id])
       return (
         (characterWithId && CharacterTrait[characterWithId[0].trait]) ||
         CharacterTrait[this.character.trait]
-      );
+      )
     },
   },
 
@@ -129,51 +136,51 @@ export default {
     RequiredXp,
 
     tooltipHtml(character) {
-      if (!character) return "";
+      if (!character) return ''
 
-      const cooldown = this.transferCooldownOfCharacterId(this.character.id);
+      const cooldown = this.transferCooldownOfCharacterId(this.character.id)
       if (cooldown) {
         if (cooldown === 86400)
           // edge case for when it's exactly 1 day and the iso string cant display
-          return "May not be traded for: 1 day";
+          return 'May not be traded for: 1 day'
         else
           return `May not be traded for: ${new Date(cooldown * 1000)
             .toISOString()
-            .substr(11, 8)}`;
+            .substr(11, 8)}`
       }
 
-      return "";
+      return ''
     },
 
     getCleanCharacterName(id) {
-      return getCleanName(this.getCharacterName(id));
+      return getCleanName(this.getCharacterName(id))
     },
 
     staminaToolTipHtml(time) {
       return (
-        "Regenerates 1 point every 5 minutes, stamina bar will be full at: " +
+        'Regenerates 1 point every 5 minutes, stamina bar will be full at: ' +
         time
-      );
+      )
     },
 
     timestampToStamina(timestamp) {
-      if (timestamp > Math.floor(Date.now() / 1000)) return 0;
+      if (timestamp > Math.floor(Date.now() / 1000)) return 0
       return +Math.min(
         (Math.floor(Date.now() / 1000) - timestamp) / 300,
         200
-      ).toFixed(0);
+      ).toFixed(0)
     },
 
     getCharacterArt,
     async fetchScore() {},
   },
   mounted() {
-    this.fetchScore();
-    this.allLoaded = true;
-    this.showPlaceholder = true;
-    return;
+    this.fetchScore()
+    this.allLoaded = true
+    this.showPlaceholder = true
+    return
   },
-};
+}
 </script>
 
 <style scoped>
@@ -196,7 +203,7 @@ export default {
 }
 
 .thumb-art {
-  background-image: url("../assets/images/bg-item-top.png");
+  background-image: url('../assets/images/bg-item-top.png');
   background-repeat: no-repeat;
   background-position: 0 0;
   background-size: contain;
@@ -206,7 +213,7 @@ export default {
 }
 
 .character-info {
-  background-image: url("../assets/images/bg-item-bot.png");
+  background-image: url('../assets/images/bg-item-bot.png');
   background-repeat: no-repeat;
   background-size: contain;
   background-position: 0 0;
@@ -235,7 +242,7 @@ export default {
   text-shadow: none;
   text-align: end;
 }
-.black-outline .white{
+.black-outline .white {
   color: #fff;
 }
 
@@ -260,7 +267,7 @@ export default {
 
 .xp {
   width: 100%;
-  background-image: url("../assets/v2/xp_bg.svg");
+  background-image: url('../assets/v2/xp_bg.svg');
   background-repeat: no-repeat;
   background-size: cover;
   height: 19px;
@@ -274,7 +281,7 @@ export default {
 
 .xp .bg-success {
   background-position: 0 0;
-  background-image: url("../assets/v2/xp_progress.svg");
+  background-image: url('../assets/v2/xp_progress.svg');
   background-repeat: no-repeat;
   background-size: cover;
   width: 100%;
@@ -296,7 +303,7 @@ export default {
   align-items: center;
 }
 
-.xp .progress .progress-bar{
+.xp .progress .progress-bar {
   background-size: cover;
   height: 19px;
 }
@@ -322,12 +329,12 @@ export default {
 
 .market-bot .lv {
   font-size: 1.2rem;
-  color: #FEA829;
+  color: #fea829;
   font-weight: bold;
   line-height: 1;
 }
 
-.market-bot .lv-market{
+.market-bot .lv-market {
 }
 
 .market-bot .score {
@@ -357,12 +364,12 @@ export default {
   padding: 0 3rem;
 }
 
-.name-lvl-container{
+.name-lvl-container {
   padding: 0 1rem;
   text-align: center;
 }
 
-.name-lvl-container .name{
+.name-lvl-container .name {
   max-width: 100%;
   max-height: inherit;
   font-size: 1.2em;
@@ -403,18 +410,21 @@ export default {
   color: #fff;
 }
 
-.water-bg, .fire-bg, .lightning-bg, .earth-bg {
+.water-bg,
+.fire-bg,
+.lightning-bg,
+.earth-bg {
   background-image: url('../assets/images/water.png');
   background-repeat: no-repeat;
   background-position: center bottom;
 }
-.fire-bg{
+.fire-bg {
   background-image: url('../assets/images/fire.png');
 }
-.lightning-bg{
+.lightning-bg {
   background-image: url('../assets/images/lightning.png');
 }
-.earth-bg{
+.earth-bg {
   background-image: url('../assets/images/earth.png');
 }
 
@@ -474,5 +484,4 @@ export default {
     font-weight: 500;
   }
 }
-
 </style>

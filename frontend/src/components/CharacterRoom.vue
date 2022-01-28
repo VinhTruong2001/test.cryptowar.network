@@ -12,61 +12,65 @@
     </div>
     <div v-if="this.isRequest == true" class="containerButton">
       <button
-          type="button"
-          class="buttonShowWeapon"
-          @click="() =>this.handleShowWeapon(this.room.weaponId)"
-        >
-          <span class="titleButtonShowWeapon">
-            SHOW WEAPON
-          </span>
-        </button>
-        <button
-          type="button"
-          class="buttonFight"
-          @click="() => handleRequestFight()"
-        >
-        <span class="titleButtonFight">
-          REQUEST
-        </span>
-        </button>
-      </div>
-      <div v-if="this.isCancel == true" class="containerButton">
-        <button
-          type="button"
-          class="buttonShowWeapon"
-          @click="() =>this.handleShowWeapon(this.room.weaponId)"
-        >
-          <span class="titleButtonShowWeapon">
-            SHOW WEAPON
-          </span>
-        </button>
-        <button
-          type="button"
-          class="btn-request-fight"
-          @click="() => handleCancelFight(this.room.id,this.checkTimeAvailable())"
-        >
-        <span class="titleButtonFight">
-          CANCEL CAREER
-        </span>
-        </button>
-      </div>
+        type="button"
+        class="buttonShowWeapon"
+        @click="() => this.handleShowWeapon(this.room.weaponId)"
+      >
+        <span class="titleButtonShowWeapon"> SHOW WEAPON </span>
+      </button>
+      <button
+        type="button"
+        class="buttonFight"
+        @click="() => handleRequestFight()"
+      >
+        <span class="titleButtonFight"> REQUEST </span>
+      </button>
+    </div>
+    <div v-if="this.isCancel == true" class="containerButton">
+      <button
+        type="button"
+        class="buttonShowWeapon"
+        @click="() => this.handleShowWeapon(this.room.weaponId)"
+      >
+        <span class="titleButtonShowWeapon"> SHOW WEAPON </span>
+      </button>
+      <button
+        type="button"
+        class="btn-request-fight"
+        @click="
+          () => handleCancelFight(this.room.id, this.checkTimeAvailable())
+        "
+      >
+        <span class="titleButtonFight"> CANCEL CAREER </span>
+      </button>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import CharacterRoomArtPvp from "../components/CharacterRoomArtPvp.vue";
-import { mapActions, mapState } from "vuex";
-import Web3 from "web3";
-import { mapCacheActions } from 'vuex-cache';
+import CharacterRoomArtPvp from '../components/CharacterRoomArtPvp.vue'
+import { mapActions, mapState } from 'vuex'
+import Web3 from 'web3'
+import { mapCacheActions } from 'vuex-cache'
 
 export default {
-  props: ["characterId", "room", "selectedWeaponId", "selectedCharacterId", "isRequest", "handleRequestFight","handleCancelFight", "isCancel", "handleShowWeapon"],
+  props: [
+    'characterId',
+    'room',
+    'selectedWeaponId',
+    'selectedCharacterId',
+    'isRequest',
+    'handleRequestFight',
+    'handleCancelFight',
+    'isCancel',
+    'handleShowWeapon',
+  ],
   components: {
     CharacterRoomArtPvp,
   },
   methods: {
-    ...mapCacheActions(["fetchCharacters"]),
-    ...mapActions(["requestFight", "getStartTimeRoom"]),
+    ...mapCacheActions(['fetchCharacters']),
+    ...mapActions(['requestFight', 'getStartTimeRoom']),
     // handleRequestFight() {
     //   //@ts-ignore
     //   this.requestFight({
@@ -77,48 +81,46 @@ export default {
     // },
     checkTimeAvailable() {
       //@ts-ignore
-      if(!this.isCancel) {
-        return false;
+      if (!this.isCancel) {
+        return false
       }
-      const now = new Date();
+      const now = new Date()
       //@ts-ignore
-      const timeStart = new Date(this.timeRoomStart*1000);
-      if(now.getFullYear() > timeStart.getFullYear()){
-        return true;
-      }else if(now.getMonth() > timeStart.getMonth()) {
-        return true;
-      }else if(now.getDate()> timeStart.getDate()) {
-        return true;
-      }else if(now.getHours() > timeStart.getHours() +1) {
-        return true;
+      const timeStart = new Date(this.timeRoomStart * 1000)
+      if (now.getFullYear() > timeStart.getFullYear()) {
+        return true
+      } else if (now.getMonth() > timeStart.getMonth()) {
+        return true
+      } else if (now.getDate() > timeStart.getDate()) {
+        return true
+      } else if (now.getHours() > timeStart.getHours() + 1) {
+        return true
+      } else {
+        return false
       }
-      else {
-        return false;
-      }
-    }
+    },
   },
   computed: {
-    ...mapState(["characters"]),
+    ...mapState(['characters']),
     //@ts-ignore
     matchReward() {
       //@ts-ignore
-      return Web3.utils.fromWei(this.room.matchReward, "ether");
+      return Web3.utils.fromWei(this.room.matchReward, 'ether')
     },
-
   },
   data() {
-    return{
-      timeRoomStart: 0
-    };
+    return {
+      timeRoomStart: 0,
+    }
   },
   async mounted() {
     //@ts-ignore
-    await this.fetchCharacters([this.characterId]);
+    await this.fetchCharacters([this.characterId])
     //@ts-ignore
-    this.timeRoomStart = await this.getStartTimeRoom({roomId: this.room.id});
+    this.timeRoomStart = await this.getStartTimeRoom({ roomId: this.room.id })
     //@ts-ignore
   },
-};
+}
 </script>
 
 <style scoped>
@@ -126,7 +128,7 @@ export default {
   width: 299px;
   max-width: 100%;
   background-repeat: no-repeat;
-  background-size: 100% 100%;;
+  background-size: 100% 100%;
   margin-top: 1rem;
   margin-bottom: 2.7rem;
   margin-left: 1.25rem;
@@ -157,47 +159,47 @@ export default {
 }
 .buttonShowWeapon {
   border: none;
-    height: 47px;
-    background-image: url('../assets/images/bg-fight-button.png');
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    background-color: transparent;
-    margin-left: 0.8rem;
-  }
-  .titleButtonShowWeapon {
-    font-size: 12px;
-    color: var(--white);
-    padding-left: 6px;
-    padding-right: 6px;
-  }
+  height: 47px;
+  background-image: url('../assets/images/bg-fight-button.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  margin-left: 0.8rem;
+}
+.titleButtonShowWeapon {
+  font-size: 12px;
+  color: var(--white);
+  padding-left: 6px;
+  padding-right: 6px;
+}
 
-  .containerButton {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 2rem;
-    margin-top: 20px;
-    margin-bottom: 20px;
-  }
-  .buttonFight {
-    border: none;
-    height: 47px;
-    background-image: url('../assets/images/bg-fight-button.png');
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    background-color: transparent;
-    margin-left: 0.8rem;;
-    min-width: 140px;
-  }
-  .btn-request-fight{
+.containerButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.buttonFight {
   border: none;
-    height: 47px;
-    background-image: url('../assets/images/bg-fight-button.png');
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    background-color: transparent;
-    margin-left: 0.8rem;;
-    min-width: 175px;
+  height: 47px;
+  background-image: url('../assets/images/bg-fight-button.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  margin-left: 0.8rem;
+  min-width: 140px;
+}
+.btn-request-fight {
+  border: none;
+  height: 47px;
+  background-image: url('../assets/images/bg-fight-button.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  margin-left: 0.8rem;
+  min-width: 175px;
 }
 .titleButtonFight {
   color: var(--white);
@@ -214,7 +216,7 @@ export default {
   }
 
   .character-item.selected {
-    background-image: url("../assets/images/bg-item-top-select.png");
+    background-image: url('../assets/images/bg-item-top-select.png');
   }
   .character-list {
     display: flex;
@@ -227,6 +229,5 @@ export default {
     text-align: center;
     justify-content: center;
   }
-
 }
 </style>

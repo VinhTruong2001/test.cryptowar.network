@@ -1,80 +1,110 @@
 <template>
-  <div
-    class="weapon-icon"
-  >
-  <div class="container">
+  <div class="weapon-icon">
+    <div class="container">
       <div class="containerTop">
-          <div class="containerColumn">
-            <div class="containerWeaponStar">
-              <span :class="weapon.element.toLowerCase() + '-icon'"></span>
-              <span class="weapon-star" v-for="n in this.weapon.stars + 1" :key="n">
-                <i class="fas fa-star"></i>
-              </span>
+        <div class="containerColumn">
+          <div class="containerWeaponStar">
+            <span :class="weapon.element.toLowerCase() + '-icon'"></span>
+            <span
+              class="weapon-star"
+              v-for="n in this.weapon.stars + 1"
+              :key="n"
+            >
+              <i class="fas fa-star"></i>
+            </span>
+          </div>
+          <div class="stats">
+            <div v-if="weapon.stat1Value" class="wrapStat">
+              <span
+                :class="weapon.stat1.toLowerCase() + '-icon'"
+                class="mr-1 icon"
+              ></span>
+              <span :class="weapon.stat1.toLowerCase()"
+                >{{ weapon.stat1 }} +{{ weapon.stat1Value }}</span
+              >
             </div>
-            <div class="stats">
-                <div v-if="weapon.stat1Value" class="wrapStat">
-                    <span :class="weapon.stat1.toLowerCase() + '-icon'" class="mr-1 icon"></span>
-                    <span :class="weapon.stat1.toLowerCase()">{{ weapon.stat1 }} +{{ weapon.stat1Value }}</span>
-                </div>
-                <div v-if="weapon.stat2Value">
-                    <span :class="weapon.stat2.toLowerCase() + '-icon'" class="mr-1 icon"></span>
-                    <span :class="weapon.stat2.toLowerCase()">{{ weapon.stat2 }} +{{ weapon.stat2Value }}</span>
-                </div>
-                <div v-if="weapon.stat3Value">
-                    <span :class="weapon.stat3.toLowerCase() + '-icon'" class="mr-1 icon"></span>
-                    <span :class="weapon.stat3.toLowerCase()">{{ weapon.stat3 }} +{{ weapon.stat3Value }}</span>
-                </div>
+            <div v-if="weapon.stat2Value">
+              <span
+                :class="weapon.stat2.toLowerCase() + '-icon'"
+                class="mr-1 icon"
+              ></span>
+              <span :class="weapon.stat2.toLowerCase()"
+                >{{ weapon.stat2 }} +{{ weapon.stat2Value }}</span
+              >
+            </div>
+            <div v-if="weapon.stat3Value">
+              <span
+                :class="weapon.stat3.toLowerCase() + '-icon'"
+                class="mr-1 icon"
+              ></span>
+              <span :class="weapon.stat3.toLowerCase()"
+                >{{ weapon.stat3 }} +{{ weapon.stat3Value }}</span
+              >
             </div>
           </div>
-          <span class="idWeapon">ID {{this.weapon.id}}</span>
+        </div>
+        <span class="idWeapon">ID {{ this.weapon.id }}</span>
       </div>
-  </div>
-  <div>
+    </div>
+    <div>
       <img
-      v-if="showPlaceholder"
-      class="placeholder"
-      :src="getWeaponArt(weapon)" />
-  </div>
+        v-if="showPlaceholder"
+        class="placeholder"
+        :src="getWeaponArt(weapon)"
+      />
+    </div>
     <div class="name">
-        <div>{{ getCleanWeaponName(weapon.id, weapon.stars) }}</div>
+      <div>{{ getCleanWeaponName(weapon.id, weapon.stars) }}</div>
     </div>
     <div v-if="getWeaponDurability(weapon.id)">
       <div
         v-if="getWeaponDurability(weapon.id) === maxDurability"
         class="small-durability-bar"
-        :style="`--durabilityReady: ${(getWeaponDurability(weapon.id)/maxDurability)*100}%;`"
-        v-tooltip.bottom="{content: `Durability: ${getWeaponDurability(weapon.id)}/${maxDurability}<br>`, trigger: (isMobile() ? 'click' : 'hover')}"
-      >
-      </div>
-      <div class="small-durability-bar"
+        :style="`--durabilityReady: ${
+          (getWeaponDurability(weapon.id) / maxDurability) * 100
+        }%;`"
+        v-tooltip.bottom="{
+          content: `Durability: ${getWeaponDurability(
+            weapon.id
+          )}/${maxDurability}<br>`,
+          trigger: isMobile() ? 'click' : 'hover',
+        }"
+      ></div>
+      <div
+        class="small-durability-bar"
         v-if="getWeaponDurability(this.weapon.id) !== maxDurability"
-        :style="`--durabilityReady: ${(getWeaponDurability(weapon.id)/maxDurability)*100}%;`"
-        v-tooltip.bottom="`Durability: ${getWeaponDurability(weapon.id)}/${maxDurability}<br>
-          Repairs 1 point every 50 minutes`">
-      </div>
+        :style="`--durabilityReady: ${
+          (getWeaponDurability(weapon.id) / maxDurability) * 100
+        }%;`"
+        v-tooltip.bottom="
+          `Durability: ${getWeaponDurability(weapon.id)}/${maxDurability}<br>
+          Repairs 1 point every 50 minutes`
+        "
+      ></div>
     </div>
     <div v-if="!getWeaponDurability(weapon.id)">
       <div
         class="small-durability-bar"
-        :style="`--durabilityReady: ${(getWeaponDurability(weapon.id)/maxDurability)*100}%;`"
-      >
-      </div>
+        :style="`--durabilityReady: ${
+          (getWeaponDurability(weapon.id) / maxDurability) * 100
+        }%;`"
+      ></div>
     </div>
     <!-- <div class="glow-container" ref="el"> -->
-      <!-- <div class="glow-img-box"> -->
-      <!-- <img
+    <!-- <div class="glow-img-box"> -->
+    <!-- <img
       v-if="showPlaceholder"
       class="placeholder"
       :src="getWeaponArt(weapon)" /> -->
-      <!-- </div> -->
-      <!-- <div class="trait">
+    <!-- </div> -->
+    <!-- <div class="trait">
         <span :class="weapon.element.toLowerCase() + '-icon'"></span>
             <div :v-for="r in Array(this.weapon.stars + 1).fill('*')">
             <span>{{r}}</span></div> -->
-        <!-- <div class="yellowStar"> -->
-            <!-- {{Array(this.weapon.stars + 1).fill('★').join('')}} -->
-        <!-- </div> -->
-      <!-- </div>
+    <!-- <div class="yellowStar"> -->
+    <!-- {{Array(this.weapon.stars + 1).fill('★').join('')}} -->
+    <!-- </div> -->
+    <!-- </div>
 
       <div class="name">
         {{ getCleanWeaponName(weapon.id, weapon.stars) }}
@@ -93,7 +123,7 @@
           Repairs 1 point every 50 minutes, durability will be full at: ${timeUntilWeaponHasMaxDurability(weapon.id)}`"></div>
       </div> -->
 
-      <!-- <div class="weapon-bt-box" v-if="isSell">
+    <!-- <div class="weapon-bt-box" v-if="isSell">
         <b-button @click="sellClick()">
           Sell
         </b-button>
@@ -123,16 +153,16 @@
 </template>
 
 <script>
-import { getWeaponArt } from '../weapon-arts-placeholder';
-import '@/mixins/general';
-import { Stat1PercentForChar,
+import { getWeaponArt } from '../weapon-arts-placeholder'
+import '@/mixins/general'
+import {
+  Stat1PercentForChar,
   Stat2PercentForChar,
-  Stat3PercentForChar
-} from '../interfaces';
+  Stat3PercentForChar,
+} from '../interfaces'
 
-import { mapGetters, mapState } from 'vuex';
-import { getCleanName } from '../rename-censor';
-
+import { mapGetters, mapState } from 'vuex'
+import { getCleanName } from '../rename-censor'
 
 export default {
   props: ['weapon', 'favorite', 'isSell', 'sellClick'],
@@ -143,80 +173,99 @@ export default {
       'currentCharacter',
       'getWeaponDurability',
       'timeUntilWeaponHasMaxDurability',
-      'getWeaponName'
+      'getWeaponName',
     ]),
     tooltipHtml() {
-      if(!this.weapon) return '';
+      if (!this.weapon) return ''
 
       const wrapInSpan = (spanClass, text) => {
-        return `<span class="${spanClass.toLowerCase()}">${text}</span><span class="${spanClass.toLowerCase()+'-icon'}"></span>`;
-      };
+        return `<span class="${spanClass.toLowerCase()}">${text}</span><span class="${
+          spanClass.toLowerCase() + '-icon'
+        }"></span>`
+      }
 
       const wrapInSpanTextOnly = (spanClass, text) => {
-        return `<span class="${spanClass.toLowerCase()}">${text}</span>`;
-      };
+        return `<span class="${spanClass.toLowerCase()}">${text}</span>`
+      }
 
       let ttHtml = `
         ID: ${this.weapon.id}
         <br>
-        ${Array(this.weapon.stars + 1).fill('★').join('')}
-      `;
-      if(this.weapon.level > 0) {
-        ttHtml += `<br>Level ${this.weapon.level + 1}`;
+        ${Array(this.weapon.stars + 1)
+          .fill('★')
+          .join('')}
+      `
+      if (this.weapon.level > 0) {
+        ttHtml += `<br>Level ${this.weapon.level + 1}`
       }
 
-      if(this.weapon.element) {
-        ttHtml += `<br>Element: ${wrapInSpan(this.weapon.element, this.weapon.element)}`;
+      if (this.weapon.element) {
+        ttHtml += `<br>Element: ${wrapInSpan(
+          this.weapon.element,
+          this.weapon.element
+        )}`
       }
 
-      if(this.weapon.stat1Value) {
-        ttHtml += `<br>${wrapInSpan(this.weapon.stat1, this.weapon.stat1)}: +${this.weapon.stat1Value}`;
-        if(this.currentCharacter) {
+      if (this.weapon.stat1Value) {
+        ttHtml += `<br>${wrapInSpan(this.weapon.stat1, this.weapon.stat1)}: +${
+          this.weapon.stat1Value
+        }`
+        if (this.currentCharacter) {
           ttHtml += ` (${wrapInSpanTextOnly(
             this.currentCharacter.traitName,
-            '+'+Stat1PercentForChar(this.weapon, +this.currentCharacter.trait)+'%')
-          })`;
+            '+' +
+              Stat1PercentForChar(this.weapon, +this.currentCharacter.trait) +
+              '%'
+          )})`
         }
       }
 
-      if(this.weapon.stat2Value) {
-        ttHtml += `<br>${wrapInSpan(this.weapon.stat2, this.weapon.stat2)}: +${this.weapon.stat2Value}`;
-        if(this.currentCharacter) {
+      if (this.weapon.stat2Value) {
+        ttHtml += `<br>${wrapInSpan(this.weapon.stat2, this.weapon.stat2)}: +${
+          this.weapon.stat2Value
+        }`
+        if (this.currentCharacter) {
           ttHtml += ` (${wrapInSpanTextOnly(
             this.currentCharacter.traitName,
-            '+'+Stat2PercentForChar(this.weapon, +this.currentCharacter.trait)+'%')
-          })`;
+            '+' +
+              Stat2PercentForChar(this.weapon, +this.currentCharacter.trait) +
+              '%'
+          )})`
         }
       }
 
-      if(this.weapon.stat3Value) {
-        ttHtml += `<br>${wrapInSpan(this.weapon.stat3, this.weapon.stat3)}: +${this.weapon.stat3Value}`;
-        if(this.currentCharacter) {
+      if (this.weapon.stat3Value) {
+        ttHtml += `<br>${wrapInSpan(this.weapon.stat3, this.weapon.stat3)}: +${
+          this.weapon.stat3Value
+        }`
+        if (this.currentCharacter) {
           ttHtml += ` (${wrapInSpanTextOnly(
             this.currentCharacter.traitName,
-            '+'+Stat3PercentForChar(this.weapon, +this.currentCharacter.trait)+'%')
-          })`;
+            '+' +
+              Stat3PercentForChar(this.weapon, +this.currentCharacter.trait) +
+              '%'
+          )})`
         }
       }
 
-      if(this.weapon.lowStarBurnPoints > 0) {
-        ttHtml += `<br>LB: ${this.weapon.lowStarBurnPoints}/100`;
+      if (this.weapon.lowStarBurnPoints > 0) {
+        ttHtml += `<br>LB: ${this.weapon.lowStarBurnPoints}/100`
       }
 
-      if(this.weapon.fourStarBurnPoints > 0) {
-        ttHtml += `<br>4B: ${this.weapon.fourStarBurnPoints}/25`;
+      if (this.weapon.fourStarBurnPoints > 0) {
+        ttHtml += `<br>4B: ${this.weapon.fourStarBurnPoints}/25`
       }
 
-      if(this.weapon.fiveStarBurnPoints > 0) {
-        ttHtml += `<br>5B: ${this.weapon.fiveStarBurnPoints}/10`;
+      if (this.weapon.fiveStarBurnPoints > 0) {
+        ttHtml += `<br>5B: ${this.weapon.fiveStarBurnPoints}/10`
       }
 
-      if(this.weapon.bonusPower > 0) {
-        ttHtml += `<br>Bonus power: ${this.weapon.bonusPower}`;
+      if (this.weapon.bonusPower > 0) {
+        ttHtml += `<br>Bonus power: ${this.weapon.bonusPower}`
       }
 
-      return ttHtml;
-    }
+      return ttHtml
+    },
   },
 
   data() {
@@ -246,22 +295,21 @@ export default {
       pommelNormalTexture: null,
       pommelAOTexture: null,
       showPlaceholder: false,
-    };
+    }
   },
 
   methods: {
     getWeaponArt,
     getCleanWeaponName(id, stars) {
-      return getCleanName(this.getWeaponName(id, stars));
-    }
+      return getCleanName(this.getWeaponName(id, stars))
+    },
   },
   mounted() {
-    this.allLoaded = true;
-    this.showPlaceholder = true;
-    return;
-  }
-};
-
+    this.allLoaded = true
+    this.showPlaceholder = true
+    return
+  },
+}
 </script>
 
 <style scoped>
@@ -272,7 +320,11 @@ export default {
   width: 80%;
   margin: 0 auto;
   border-radius: 4px;
-  background : linear-gradient(to right, #DDB73C var(--durabilityReady), rgba(255, 255, 255, 0.1) 0);
+  background: linear-gradient(
+    to right,
+    #ddb73c var(--durabilityReady),
+    rgba(255, 255, 255, 0.1) 0
+  );
 }
 
 .containerWeaponStar {
@@ -295,7 +347,7 @@ export default {
   z-index: 540;
 }
 
-.weapon.selected .glow-container{
+.weapon.selected .glow-container {
   /* border: 1px solid rgb(255 255 255 / 41%); */
   background-color: rgb(255 255 255 / 7%);
 }
@@ -310,12 +362,13 @@ export default {
   padding: 0;
 }
 
-.id, .trait {
+.id,
+.trait {
   position: absolute;
 }
 
 .stats {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .trait {
@@ -353,12 +406,12 @@ export default {
   margin-left: 2rem;
 }
 
-.name{
+.name {
   display: flex;
   justify-content: center;
 }
 
-.name > div{
+.name > div {
   font-size: 1.12em;
   font-weight: bold;
   text-align: center;
@@ -368,11 +421,11 @@ export default {
   width: 80%;
 }
 
-.weapon-market .name{
+.weapon-market .name {
   bottom: 4rem;
 }
 
-.weapon-bt-box{
+.weapon-bt-box {
   position: absolute;
   bottom: 15px;
   display: flex;
@@ -380,55 +433,58 @@ export default {
   justify-content: center;
 }
 
-.sell-grid .glow-img-box, .weapon-grid .glow-img-box{
+.sell-grid .glow-img-box,
+.weapon-grid .glow-img-box {
   padding-top: 1rem;
 }
 
-.glow-img-box{
+.glow-img-box {
   display: flex;
   justify-content: center;
   align-items: flex-end;
 }
 
-.glow-img-box img{
+.glow-img-box img {
   margin: 0;
 }
 
 .idWeapon {
-    font-size: 18px;
-    height: 25px;
-    font-weight: 600;
+  font-size: 18px;
+  height: 25px;
+  font-weight: 600;
 }
 
-.confirmReforge .glow-img-box img, .modal-body .glow-img-box img {
-    max-width: 7rem;
-    margin-top: 1.5rem;
-    padding-bottom: 0.5rem;
+.confirmReforge .glow-img-box img,
+.modal-body .glow-img-box img {
+  max-width: 7rem;
+  margin-top: 1.5rem;
+  padding-bottom: 0.5rem;
 }
 
-
-.confirmReforge .small-durability-bar, .modal-body .small-durability-bar{
-  top:20px
+.confirmReforge .small-durability-bar,
+.modal-body .small-durability-bar {
+  top: 20px;
 }
 
-.confirmReforge .name, .modal-body .name{
+.confirmReforge .name,
+.modal-body .name {
   bottom: 5px;
 }
 
 .containerLeftInfor {
-    display: flex;
-    /* align-items: center; */
-    flex-direction: column;
+  display: flex;
+  /* align-items: center; */
+  flex-direction: column;
 }
 
 .wrapStat {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .glow-0 {
   animation: none;
-   /* display: flex; */
+  /* display: flex; */
   justify-content: center;
   align-items: center;
   /* box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.411);; */
@@ -455,7 +511,7 @@ export default {
 }
 
 .yellowStar {
-    width: 20.4px;
+  width: 20.4px;
   height: 19.5px;
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
   background-image: linear-gradient(to bottom, #fcf738, #fab42b);
@@ -469,24 +525,24 @@ export default {
   text-align: right;
 }
 
-.container{
+.container {
   height: 82px;
 }
 
 .containerTop {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    max-height: 100px;
-    padding-top: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  max-height: 100px;
+  padding-top: 0.5rem;
 }
 
 .containerColumn {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 @keyframes glow-1 {

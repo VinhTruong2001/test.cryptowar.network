@@ -1,55 +1,56 @@
-import { ICharacter } from './Character';
-import { IWeapon } from './Weapon';
-import { ITarget } from './Target';
-import { Contracts } from './Contracts';
-import { Nft } from './Nft';
-import { IShield } from './Shield';
-import RoomRequest from './RoomRequest';
+import { ICharacter } from './Character'
+import { IWeapon } from './Weapon'
+import { ITarget } from './Target'
+import { Contracts } from './Contracts'
+import { Nft } from './Nft'
+import { IShield } from './Shield'
+import RoomRequest from './RoomRequest'
+import { StoreCache } from 'vuex-cache'
 
-export type StakeType = 'lp' | 'lp2';
-export const allStakeTypes: StakeType[] = ['lp'];
+export type StakeType = 'lp' | 'lp2'
+export const allStakeTypes: StakeType[] = ['lp']
 
 export function isStakeType(stakeType: string): stakeType is StakeType {
-  return allStakeTypes.includes(stakeType as StakeType);
+  return allStakeTypes.includes(stakeType as StakeType)
 }
 
 export interface IWeb3EventSubscription {
-  unsubscribe(): void;
+  unsubscribe(): void
 }
 
 export interface ITransferCooldown {
-  secondsLeft: number;
-  lastUpdatedTimestamp: number;
+  secondsLeft: number
+  lastUpdatedTimestamp: number
 }
 
 export interface IStakeState {
-  ownBalance: string;
-  stakedBalance: string;
-  remainingCapacityForDeposit: string | null;
-  remainingCapacityForWithdraw: string;
-  contractBalance: string;
-  currentRewardEarned: string;
-  rewardMinimumStakeTime: number;
-  rewardDistributionTimeLeft: number;
-  unlockTimeLeft: number;
+  ownBalance: string
+  stakedBalance: string
+  remainingCapacityForDeposit: string | null
+  remainingCapacityForWithdraw: string
+  contractBalance: string
+  currentRewardEarned: string
+  rewardMinimumStakeTime: number
+  rewardDistributionTimeLeft: number
+  unlockTimeLeft: number
 }
 
 export interface IStakeOverviewState {
-  rewardRate: string;
-  rewardsDuration: number;
-  totalSupply: string;
-  minimumStakeTime: number;
+  rewardRate: string
+  rewardsDuration: number
+  totalSupply: string
+  minimumStakeTime: number
 }
 
 export interface IRaidState {
-  expectedFinishTime: string;
-  raiderCount: number;
-  bounty: string;
-  totalPower: string;
-  weaponDrops: string[];
-  staminaDrainSeconds: number;
+  expectedFinishTime: string
+  raiderCount: number
+  bounty: string
+  totalPower: string
+  weaponDrops: string[]
+  staminaDrainSeconds: number
 
-  isOwnedCharacterRaidingById: Record<number, boolean>; // ?
+  isOwnedCharacterRaidingById: Record<number, boolean> // ?
 }
 export interface CareerModeRoom {
   id: number
@@ -132,4 +133,5 @@ export interface IState {
   rareBoxPriceXgem: number | string;
   epicBoxPriceXgem: number | string;
   blindBoxPriceXgem: number | string;
+  cache?: StoreCache
 }

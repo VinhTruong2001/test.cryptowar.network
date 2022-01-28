@@ -1,77 +1,178 @@
 <template>
   <div class="body main-font">
-    <CombatPVPFight :propCancelRequest = cancelRequest v-if="checkFight" />
+    <CombatPVPFight :propCancelRequest="cancelRequest" v-if="checkFight" />
     <div v-if="!checkFight" class="container">
       <div class="row">
         <div class="col-12">
           <div class="quantity-heroes">
-            <div><span>{{quantityHeroes(1).length}}</span> Heroes In Career Mode</div>
+            <div>
+              <span>{{ quantityHeroes(1).length }}</span> Heroes In Career Mode
+            </div>
           </div>
         </div>
       </div>
       <div class="row">
         <div class="col-12 d-flex justify-content-end">
-            <div class="info-user-btn">
-                <div class="cost"><div></div> {{this.convertReward(rewardPvp)}}</div>
-              <button @click="handleClaimTokenReward()">Claim Reward PvP</button>
+          <div class="info-user-btn">
+            <div class="cost">
+              <div></div>
+              {{ this.convertReward(rewardPvp) }}
             </div>
+            <button @click="handleClaimTokenReward()">Claim Reward PvP</button>
+          </div>
         </div>
       </div>
       <b-modal id="listHeroToCareerModal" hide-footer hide-header-close>
         <!-- <div class="headerModalCareer"></div> -->
         <div class="listHeroToCareerModal-head">CryptoWar Message</div>
-        <div class="listHeroToCareerModal-body" v-if="errorMessage">{{errorMessage}}</div>
-        <div class="listHeroToCareerModal-body" v-if="!errorMessage">Listing HERO to Career: <span>Done</span></div>
-        <button @click="$bvModal.hide('listHeroToCareerModal'), careerMode = true, changeMode = false, requestChallenge = false,
-          checkSelect = false, addClass = ''" class="listHeroToCareerModal-btn confirm">GO TO CHECK</button>
+        <div class="listHeroToCareerModal-body" v-if="errorMessage">
+          {{ errorMessage }}
+        </div>
+        <div class="listHeroToCareerModal-body" v-if="!errorMessage">
+          Listing HERO to Career: <span>Done</span>
+        </div>
+        <button
+          @click="
+            $bvModal.hide('listHeroToCareerModal'),
+              (careerMode = true),
+              (changeMode = false),
+              (requestChallenge = false),
+              (checkSelect = false),
+              (addClass = '')
+          "
+          class="listHeroToCareerModal-btn confirm"
+        >
+          GO TO CHECK
+        </button>
       </b-modal>
       <b-modal id="showWeaponModal" hide-footer hide-header-close>
         <!-- <div class="headerModalCareer"></div> -->
-        <div class="listHeroToCareerModal-body" v-if="errorMessage">{{errorMessage}}</div>
-        <div class="itemWeapon" >
-            <WeaponSelect :weapon="this.weaponToShow"/>
-          </div>
-        <button @click="$bvModal.hide('showWeaponModal'), addClass = ''" class="weaponShow-btn confirm">CLOSE</button>
+        <div class="listHeroToCareerModal-body" v-if="errorMessage">
+          {{ errorMessage }}
+        </div>
+        <div class="itemWeapon">
+          <WeaponSelect :weapon="this.weaponToShow" />
+        </div>
+        <button
+          @click="$bvModal.hide('showWeaponModal'), (addClass = '')"
+          class="weaponShow-btn confirm"
+        >
+          CLOSE
+        </button>
       </b-modal>
       <b-modal id="fightErrorModal" hide-footer>
-        <div class="icon-close-container"><div class="icon-close" @click="$bvModal.hide('fightErrorModal')"></div></div>
+        <div class="icon-close-container">
+          <div
+            class="icon-close"
+            @click="$bvModal.hide('fightErrorModal')"
+          ></div>
+        </div>
         <div class="listHeroToCareerModal-head">CryptoWar Message</div>
-        <div class="listHeroToCareerModal-body" v-if="errorMessage">{{errorMessage}}</div>
-        <button @click="$bvModal.hide('fightErrorModal'), careerMode = true, changeMode = false, requestChallenge = false,
-          checkSelect = false, addClass = ''" class="listHeroToCareerModal-btn confirm">GO TO CHECK</button>
+        <div class="listHeroToCareerModal-body" v-if="errorMessage">
+          {{ errorMessage }}
+        </div>
+        <button
+          @click="
+            $bvModal.hide('fightErrorModal'),
+              (careerMode = true),
+              (changeMode = false),
+              (requestChallenge = false),
+              (checkSelect = false),
+              (addClass = '')
+          "
+          class="listHeroToCareerModal-btn confirm"
+        >
+          GO TO CHECK
+        </button>
       </b-modal>
       <b-modal id="claimModal" hide-footer>
-        <div class="icon-close-container"><div class="icon-close" @click="$bvModal.hide('claimModal')"></div></div>
+        <div class="icon-close-container">
+          <div class="icon-close" @click="$bvModal.hide('claimModal')"></div>
+        </div>
         <div class="listHeroToCareerModal-head">CryptoWar Message</div>
-        <div class="listHeroToCareerModal-body" v-if="errorMessage">{{errorMessage}}</div>
-        <div class="listHeroToCareerModal-body" v-if="!errorMessage">Claim xBlade<span>Done</span></div>
-        <button @click="$bvModal.hide('claimModal'), careerMode = true, changeMode = false, requestChallenge = false,
-          checkSelect = false, addClass = ''" class="listHeroToCareerModal-btn confirm">GO TO CHECK</button>
+        <div class="listHeroToCareerModal-body" v-if="errorMessage">
+          {{ errorMessage }}
+        </div>
+        <div class="listHeroToCareerModal-body" v-if="!errorMessage">
+          Claim xBlade<span>Done</span>
+        </div>
+        <button
+          @click="
+            $bvModal.hide('claimModal'),
+              (careerMode = true),
+              (changeMode = false),
+              (requestChallenge = false),
+              (checkSelect = false),
+              (addClass = '')
+          "
+          class="listHeroToCareerModal-btn confirm"
+        >
+          GO TO CHECK
+        </button>
       </b-modal>
       <b-modal id="loadingModal" :no-close-on-backdrop="true" hide-footer centered hide-header-close>
         <div class="centerLoading">
-          <pulse-loader :loading="true"/>
+          <pulse-loader :loading="true" />
         </div>
       </b-modal>
       <b-modal id="requestFightModal" hide-footer>
-        <div class="icon-close-container"><div class="icon-close" @click="$bvModal.hide('listHeroToChallengeModal')"></div></div>
+        <div class="icon-close-container">
+          <div
+            class="icon-close"
+            @click="$bvModal.hide('listHeroToChallengeModal')"
+          ></div>
+        </div>
         <div class="listHeroToChallengeModal-head">CryptoWar Message</div>
-        <div class="listHeroToCareerModal-body" v-if="errorMessage">{{errorMessage}}</div>
-        <div class="listHeroToCareerModal-body" v-if="!errorMessage">Request Fight: <span>Done</span></div>
-        <button @click="$bvModal.hide('requestFightModal'), careerMode = true, changeMode = false, requestChallenge = false,
-          checkSelect = false, addClass = ''" class="listHeroToChallengeModal-btn confirm">GO TO CHECK</button>
+        <div class="listHeroToCareerModal-body" v-if="errorMessage">
+          {{ errorMessage }}
+        </div>
+        <div class="listHeroToCareerModal-body" v-if="!errorMessage">
+          Request Fight: <span>Done</span>
+        </div>
+        <button
+          @click="
+            $bvModal.hide('requestFightModal'),
+              (careerMode = true),
+              (changeMode = false),
+              (requestChallenge = false),
+              (checkSelect = false),
+              (addClass = '')
+          "
+          class="listHeroToChallengeModal-btn confirm"
+        >
+          GO TO CHECK
+        </button>
       </b-modal>
       <b-modal id="fightResult" hide-footer>
-        <div class="icon-close-container"><div class="icon-close" @click="$bvModal.hide('listHeroToChallengeModal')"></div></div>
+        <div class="icon-close-container">
+          <div
+            class="icon-close"
+            @click="$bvModal.hide('listHeroToChallengeModal')"
+          ></div>
+        </div>
         <div class="listHeroToChallengeModal-head">CryptoWar Message</div>
-        <FightResult :results="fightResults"/>
-        <button @click="$bvModal.hide('fightResult')" class="listHeroToChallengeModal-btn confirm">GO TO CHECK</button>
+        <FightResult :results="fightResults" />
+        <button
+          @click="$bvModal.hide('fightResult')"
+          class="listHeroToChallengeModal-btn confirm"
+        >
+          GO TO CHECK
+        </button>
       </b-modal>
       <b-modal id="cancelCareerModal" hide-footer hide-header-close>
         <div class="listHeroToChallengeModal-head">CryptoWar Message</div>
-        <div class="listHeroToCareerModal-body" v-if="errorMessage">{{errorMessage}}</div>
-        <div class="listHeroToChallengeModal-body" v-if="!errorMessage">Cancel Career Mode: <span>Done</span></div>
-        <button @click="$bvModal.hide('cancelCareerModal')" class="listHeroToChallengeModal-btn confirm">GO TO CHECK</button>
+        <div class="listHeroToCareerModal-body" v-if="errorMessage">
+          {{ errorMessage }}
+        </div>
+        <div class="listHeroToChallengeModal-body" v-if="!errorMessage">
+          Cancel Career Mode: <span>Done</span>
+        </div>
+        <button
+          @click="$bvModal.hide('cancelCareerModal')"
+          class="listHeroToChallengeModal-btn confirm"
+        >
+          GO TO CHECK
+        </button>
       </b-modal>
       <div class="row">
         <div :class="addClass" class="col-12 info-box">
@@ -79,44 +180,53 @@
             <div class="item" style="margin-top: 0">
               <div class="info">
                 <div class="info-head">
-                    <div
-                    :class="selectedCharacter.traitName.toLowerCase() + '-icon'">
-                    </div>
+                  <div
+                    :class="selectedCharacter.traitName.toLowerCase() + '-icon'"
+                  ></div>
                 </div>
                 <div class="item-id">
-                    <span>#{{selectedCharacter.id}}</span>
-                    <div class="leve">Lv.{{selectedCharacter.level+1}}</div>
+                  <span>#{{ selectedCharacter.id }}</span>
+                  <div class="leve">Lv.{{ selectedCharacter.level + 1 }}</div>
                 </div>
                 <div
                   :style="{
-                    'background-image': 'url(' + getCharacterTrait(selectedCharacter) + ')',
-                    'z-index': 999
-                    }"
-                 class="img-hero-around">
+                    'background-image':
+                      'url(' + getCharacterTrait(selectedCharacter) + ')',
+                    'z-index': 999,
+                  }"
+                  class="img-hero-around"
+                >
                   <div
                     :style="{
-                    'background-image': 'url(' + getCharacterArt(selectedCharacter) + ')',
-                    'z-index': 999
+                      'background-image':
+                        'url(' + getCharacterArt(selectedCharacter) + ')',
+                      'z-index': 999,
                     }"
-                    class="img-hero"></div>
+                    class="img-hero"
+                  ></div>
                 </div>
                 <div class="info-footer">
-                  <div class="hero-name">{{getCleanCharacterName(selectedCharacter.id)}}</div>
-                  <div class="orner-hero">Owner: <span>{{renderOwner(selectedCharacter.owner)}}</span></div>
+                  <div class="hero-name">
+                    {{ getCleanCharacterName(selectedCharacter.id) }}
+                  </div>
+                  <div class="orner-hero">
+                    Owner:
+                    <span>{{ renderOwner(selectedCharacter.owner) }}</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
           <div class="item-selected" v-if="selectedWeapon">
-          <div class="item" style="margin-top: 0">
-            <WeaponSelect :weapon="selectedWeapon"/>
-          </div>
+            <div class="item" style="margin-top: 0">
+              <WeaponSelect :weapon="selectedWeapon" />
+            </div>
           </div>
           <div class="info-user">
             <div class="info-user-title">Your Information</div>
             <div class="info-user-body">
               <span>HEROES available</span>
-              <div>{{ownCharacters.length}}</div>
+              <div>{{ ownCharacters.length }}</div>
             </div>
             <div class="info-user-btn">
               <button @click="openHeroSelect">SELECT HERO</button>
@@ -124,9 +234,15 @@
             </div>
             <div v-if="selectedCharacter" class="info-user-footer">
               <div class="info-user-footer-item">
-                <div>Amount a match
-                  <input class="inputAmountBox" type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
-                  v-model="matchReward" placeholder="Typing a number">
+                <div>
+                  Amount a match
+                  <input
+                    class="inputAmountBox"
+                    type="text"
+                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                    v-model="matchReward"
+                    placeholder="Typing a number"
+                  />
                   <!-- {{matchReward}} -->
                 </div>
               </div>
@@ -136,11 +252,18 @@
                     Toal deposit
                     <span>Min = value * 210%</span>
                   </span>
-                  <input class="inputAmountBox" type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
-                  v-model="totalDeposit" placeholder="Typing a number">
+                  <input
+                    class="inputAmountBox"
+                    type="text"
+                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                    v-model="totalDeposit"
+                    placeholder="Typing a number"
+                  />
                 </div>
               </div>
-              <button @click="handleCreateRoom()">List HERO to Career Mode</button>
+              <button @click="handleCreateRoom()">
+                List HERO to Career Mode
+              </button>
               <!-- <button @click="$bvModal.show('listHeroToChallengeModal')">List HERO to Challenge Mode</button> -->
             </div>
           </div>
@@ -151,56 +274,89 @@
         <CombatResults v-if="resultsAvailable" :results="fightResults" /> -->
         <div class="row list" v-if="selectHero">
           <div class="item" v-for="i in ownCharacters" :key="i.id">
-            <div class="info"
-              v-tooltip.bottom="{content: `<div class='tooltip-container'>Power: ${CharacterPower(i.level).toLocaleString()}<br>
+            <div
+              class="info"
+              v-tooltip.bottom="{
+                content: `<div class='tooltip-container'>Power: ${CharacterPower(
+                  i.level
+                ).toLocaleString()}<br>
               <span>Level </span>
               <span
-                >${ i.level + 1 } (${ i.xp } /
-                ${ RequiredXp(i.level).toLocaleString() } XP)
-              </span></div>`, trigger: (isMobile() ? 'click' : 'hover')}">
+                >${i.level + 1} (${i.xp} /
+                ${RequiredXp(i.level).toLocaleString()} XP)
+              </span></div>`,
+                trigger: isMobile() ? 'click' : 'hover',
+              }"
+            >
               <div class="info-head">
-                  <div
-                    :class="i.traitName.toLowerCase() + '-icon'">
-                    </div>
+                <div :class="i.traitName.toLowerCase() + '-icon'"></div>
               </div>
               <div class="item-id">
-                  <span>#{{i.id}}</span>
-                  <div class="leve">Lv.{{i.level +1}}</div>
+                <span>#{{ i.id }}</span>
+                <div class="leve">Lv.{{ i.level + 1 }}</div>
               </div>
               <div
                 :style="{
-                    'background-image': 'url(' + getCharacterTrait(i) + ')',
-                    'z-index': 999
-                    }"
-               class="img-hero-around">
+                  'background-image': 'url(' + getCharacterTrait(i) + ')',
+                  'z-index': 999,
+                }"
+                class="img-hero-around"
+              >
                 <div
                   :style="{
                     'background-image': 'url(' + getCharacterArt(i) + ')',
-                    'z-index': 999
-                    }"
-                  class="img-hero"></div>
+                    'z-index': 999,
+                  }"
+                  class="img-hero"
+                ></div>
               </div>
               <div class="info-footer">
-                <div class="hero-name">{{getCleanCharacterName(i.id)}}</div>
-                <div class="orner-hero"><span>Owner: {{renderOwner(i.owner)}}</span></div>
+                <div class="hero-name">{{ getCleanCharacterName(i.id) }}</div>
+                <div class="orner-hero">
+                  <span>Owner: {{ renderOwner(i.owner) }}</span>
+                </div>
               </div>
             </div>
-            <div class="button-container"><button @click="onSelectHero(i), checkCurrentMode(),
-              $bvModal.hide('selectHeroOrWeaponModal')" class="btn-request-fight">SELECT</button></div>
+            <div class="button-container">
+              <button
+                @click="
+                  onSelectHero(i),
+                    checkCurrentMode(),
+                    $bvModal.hide('selectHeroOrWeaponModal')
+                "
+                class="btn-request-fight"
+              >
+                SELECT
+              </button>
+            </div>
           </div>
         </div>
         <div class="row list" v-if="selectWeapon">
           <div class="item" v-for="i in ownWeapons" :key="i.id">
-            <WeaponSelect :weapon="i"/>
-            <div class="button-container"><button @click="onSelectWeapon(i), checkCurrentMode(),
-              $bvModal.hide('selectHeroOrWeaponModal')" class="btn-request-fight">SELECT</button></div>
+            <WeaponSelect :weapon="i" />
+            <div class="button-container">
+              <button
+                @click="
+                  onSelectWeapon(i),
+                    checkCurrentMode(),
+                    $bvModal.hide('selectHeroOrWeaponModal')
+                "
+                class="btn-request-fight"
+              >
+                SELECT
+              </button>
+            </div>
           </div>
         </div>
       </b-modal>
       <div class="row">
         <div class="col-xl-3 col-12">
           <div class="search-hero">
-            <input type="text" v-model="valueSearchId" placeholder="Search Hero's ID" />
+            <input
+              type="text"
+              v-model="valueSearchId"
+              placeholder="Search Hero's ID"
+            />
           </div>
         </div>
         <div class="col-xl-9 col-12 nav-option-box">
@@ -209,46 +365,58 @@
               <b-nav-item
                 class="nav-item"
                 @click="
-                  (changeMode = false),
+                  ;(changeMode = false),
                     (careerMode = true),
                     (requestChallenge = false),
-                    (myRequestMode= false)
+                    (myRequestMode = false)
                 "
                 :active="careerMode"
-                ><div>CAREER MODE <div>{{quantityHeroes(1).length}}</div></div></b-nav-item
+                ><div>
+                  CAREER MODE
+                  <div>{{ quantityHeroes(1).length }}</div>
+                </div></b-nav-item
               >
               <b-nav-item
                 class="nav-item"
                 @click="
-                  (changeMode = false),
+                  ;(changeMode = false),
                     (careerMode = false),
                     (requestChallenge = true),
-                    (myRequestMode= false)
+                    (myRequestMode = false)
                 "
                 :active="requestChallenge"
-                ><div>REQUEST TO CHALLENGE <div>{{quantityHeroes(2).length}}</div></div></b-nav-item
+                ><div>
+                  REQUEST TO CHALLENGE
+                  <div>{{ quantityHeroes(2).length }}</div>
+                </div></b-nav-item
               >
               <b-nav-item
                 class="nav-item"
                 @click="
-                  (changeMode = true),
+                  ;(changeMode = true),
                     (careerMode = false),
                     (requestChallenge = false),
-                    (myRequestMode= false)
+                    (myRequestMode = false)
                 "
                 :active="changeMode"
-                ><div>MY CAREER MODE <div>{{quantityHeroes(3).length}}</div></div></b-nav-item
+                ><div>
+                  MY CAREER MODE
+                  <div>{{ quantityHeroes(3).length }}</div>
+                </div></b-nav-item
               >
               <b-nav-item
                 class="nav-item"
                 @click="
-                  (changeMode = false),
+                  ;(changeMode = false),
                     (careerMode = false),
                     (requestChallenge = false),
-                    (myRequestMode= true)
+                    (myRequestMode = true)
                 "
                 :active="myRequestMode"
-                ><div>MY REQUEST<div>{{quantityHeroes(4).length}}</div></div></b-nav-item
+                ><div>
+                  MY REQUEST
+                  <div>{{ quantityHeroes(4).length }}</div>
+                </div></b-nav-item
               >
             </b-nav>
           </div>
@@ -258,15 +426,28 @@
         <div class="icon-close" @click="$bvModal.hide('requestSelect')"></div>
         <div class="requestSelect-head">Request battle to HERO #123</div>
         <div class="requestSelect-body">
-          <div>Amount request
-            <div><div></div><span>100</span></div>
+          <div>
+            Amount request
+            <div>
+              <div></div>
+              <span>100</span>
+            </div>
           </div>
         </div>
-        <button @click="$bvModal.hide('requestSelect')" class="requestSelect-btn confirm">CONFIRM</button>
+        <button
+          @click="$bvModal.hide('requestSelect')"
+          class="requestSelect-btn confirm"
+        >
+          CONFIRM
+        </button>
       </b-modal>
       <div v-if="changeMode">
-          <div class="row list-heroes" style="margin-left: 0">
-          <div class="itemCareer" v-for="i in this.filterMyCareerModeRooms(careerModeRooms)" :key="i.id">
+        <div class="row list-heroes" style="margin-left: 0">
+          <div
+            class="itemCareer"
+            v-for="i in this.filterMyCareerModeRooms(careerModeRooms)"
+            :key="i.id"
+          >
             <CharacterRoom
               :characterId="i.characterId"
               :room="i"
@@ -275,28 +456,48 @@
               :isCancel="true"
               :handleCancelFight="cancelCareerMode"
               :handleShowWeapon="handleShowWeapon"
-              />
-              <!-- <router-link :to="{ name: 'pvp-fight' }">
+            />
+            <!-- <router-link :to="{ name: 'pvp-fight' }">
               </router-link> -->
           </div>
         </div>
       </div>
       <b-modal id="fightModal" class="modal-box" hide-footer>
         <div class="icon-close" @click="$bvModal.hide('fightModal')"></div>
-        <div class="requestSelect-head">You got request battle from Hero #123</div>
+        <div class="requestSelect-head">
+          You got request battle from Hero #123
+        </div>
         <div class="requestSelect-body">
-          <div>Amount request
-            <div><div></div><span>100</span></div>
+          <div>
+            Amount request
+            <div>
+              <div></div>
+              <span>100</span>
+            </div>
           </div>
         </div>
         <div class="requestSelect-footer">
-          <button @click="$bvModal.hide('fightModal')" class="requestSelect-btn reject">REJECT</button>
-          <button @click="$bvModal.hide('fightModal')" class="requestSelect-btn fight">FIGHT</button>
+          <button
+            @click="$bvModal.hide('fightModal')"
+            class="requestSelect-btn reject"
+          >
+            REJECT
+          </button>
+          <button
+            @click="$bvModal.hide('fightModal')"
+            class="requestSelect-btn fight"
+          >
+            FIGHT
+          </button>
         </div>
       </b-modal>
       <div v-if="careerMode">
-        <div class="row list-heroes" style="margin-left: 0;">
-          <div class="itemCareer" v-for="i in this.filterCareerModeRooms(careerModeRooms)" :key="i.id">
+        <div class="row list-heroes" style="margin-left: 0">
+          <div
+            class="itemCareer"
+            v-for="i in this.filterCareerModeRooms(careerModeRooms)"
+            :key="i.id"
+          >
             <CharacterRoom
               :characterId="i.characterId"
               :room="i"
@@ -305,61 +506,87 @@
               :isRequest="true"
               :handleRequestFight="() => handleRequestFight(i.id)"
               :handleShowWeapon="handleShowWeapon"
-              />
-              <!-- <router-link :to="{ name: 'pvp-fight' }">
+            />
+            <!-- <router-link :to="{ name: 'pvp-fight' }">
               </router-link> -->
           </div>
         </div>
       </div>
       <div v-if="requestChallenge">
-          <div class="row list-request" style="margin-left: 0;">
-            <div class="itemCareer" v-for="i in this.filterCareerModeRequest(careerModeRequest)" :key="i.id">
-            <RoomRequest :request="i" :handleFight="handleFight" :isMine="false" :isDone="false" :handleShowWeapon="handleShowWeapon"/>
-            </div>
+        <div class="row list-request" style="margin-left: 0">
+          <div
+            class="itemCareer"
+            v-for="i in this.filterCareerModeRequest(careerModeRequest)"
+            :key="i.id"
+          >
+            <RoomRequest
+              :request="i"
+              :handleFight="handleFight"
+              :isMine="false"
+              :isDone="false"
+              :handleShowWeapon="handleShowWeapon"
+            />
+          </div>
         </div>
       </div>
       <div v-if="myRequestMode">
-          <div class="row list-request" style="margin-left: 0;">
-            <div class="itemCareer" v-for="i in this.filterMyRequestRoom(this.myCareerModeRequest)" :key="i.id">
+        <div class="row list-request" style="margin-left: 0">
+          <div
+            class="itemCareer"
+            v-for="i in this.filterMyRequestRoom(this.myCareerModeRequest)"
+            :key="i.id"
+          >
             <RoomRequest
               :request="i"
-              :handleFight="handleFight" :isMine="true" :isDone="i.done" :cancelRequestFight="handleCancelRequestFight" :isWin="i.win" :handleShowWeapon="handleShowWeapon"/>
-            </div>
+              :handleFight="handleFight"
+              :isMine="true"
+              :isDone="i.done"
+              :cancelRequestFight="handleCancelRequestFight"
+              :isWin="i.win"
+              :handleShowWeapon="handleShowWeapon"
+            />
+          </div>
         </div>
       </div>
     </div>
-    <div v-if="careerModeRooms.length>0" v-observe-visibility="handleScrollToEnd"></div>
-</div>
+    <div
+      v-if="careerModeRooms.length > 0"
+      v-observe-visibility="handleScrollToEnd"
+    ></div>
+  </div>
 </template>
 
 <script>
 // import Character from "../components/Character.vue";
 // import BigButton from '../components/BigButton.vue';
 // import WeaponGrid from '../components/smart/WeaponGrid.vue';
-import { getEnemyArtAround } from "../enemy-art-around";
-import { getEnemyArt } from "../enemy-art";
+import { getEnemyArtAround } from '../enemy-art-around'
+import { getEnemyArt } from '../enemy-art'
 import {
   CharacterPower,
   // CharacterTrait,
   GetTotalMultiplierForTrait,
   WeaponElement,
-} from "../interfaces";
+} from '../interfaces'
 // import Hint from '../components/Hint.vue';
 // import CombatResults from '../components/CombatResults.vue';
-import { toBN, fromWeiEther } from "../utils/common";
+import { toBN, fromWeiEther } from '../utils/common'
 // import WeaponIcon from '../components/WeaponIcon.vue';
-import { mapActions, mapGetters, mapState, mapMutations } from "vuex";
+import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
 // import CharacterBar from "../components/CharacterBar.vue";
-import CombatPVPFight from "../views/CombatPVPFight.vue";
-import { getCleanName } from "../rename-censor";
-import { getCharacterArt, getCharacterTrait } from "../character-arts-placeholder";
-import CharacterRoom from "@/components/CharacterRoom.vue";
-import WeaponSelect from "@/components/WeaponSelect.vue";
-import RoomRequest from "@/components/RoomRequest.vue";
-import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
-import FightResult from "@/components/v2/FightResult.vue";
-import { CharacterTrait } from "../interfaces";
-import { RequiredXp } from "../interfaces";
+import CombatPVPFight from '../views/CombatPVPFight.vue'
+import { getCleanName } from '../rename-censor'
+import {
+  getCharacterArt,
+  getCharacterTrait,
+} from '../character-arts-placeholder'
+import CharacterRoom from '@/components/CharacterRoom.vue'
+import WeaponSelect from '@/components/WeaponSelect.vue'
+import RoomRequest from '@/components/RoomRequest.vue'
+import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
+import FightResult from '@/components/v2/FightResult.vue'
+import { CharacterTrait } from '../interfaces'
+import { RequiredXp } from '../interfaces'
 // import Events from "../events";
 
 export default {
@@ -381,11 +608,11 @@ export default {
       myRequestMode: false,
       fightXpGain: 16,
       selectedWeapon: null,
-      fightMultiplier: Number(localStorage.getItem("fightMultiplier")),
+      fightMultiplier: Number(localStorage.getItem('fightMultiplier')),
       selectHero: false,
       selectWeapon: false,
       checkSelect: false,
-      addClass: "",
+      addClass: '',
       checkFight: false,
       cancelRequest: false,
       checkSelectFromRPS: this.propCheckSelect,
@@ -398,32 +625,41 @@ export default {
       trait: this.characterTrait,
       listMyRequest: [],
       weaponToShow: null,
-      valueSearchId: "",
+      valueSearchId: '',
       quantityHeroesMyRequest: null,
-    };
+    }
   },
 
   computed: {
-    ...mapState(["currentCharacterId", "careerModeRooms", "careerModeRequest","characters","ownedWeaponIds", "defaultAccount", "rewardPvp", "myCareerModeRequest"]),
+    ...mapState([
+      'currentCharacterId',
+      'careerModeRooms',
+      'careerModeRequest',
+      'characters',
+      'ownedWeaponIds',
+      'defaultAccount',
+      'rewardPvp',
+      'myCareerModeRequest',
+    ]),
     ...mapGetters([
-      "getTargetsByCharacterIdAndWeaponId",
-      "ownCharacters",
-      "ownWeapons",
-      "currentCharacter",
-      "currentCharacterStamina",
-      "getWeaponDurability",
-      "fightGasOffset",
-      "fightBaseline",
-      "getCharacterName",
-      "getWeaponName",
-      "charactersWithIds",
+      'getTargetsByCharacterIdAndWeaponId',
+      'ownCharacters',
+      'ownWeapons',
+      'currentCharacter',
+      'currentCharacterStamina',
+      'getWeaponDurability',
+      'fightGasOffset',
+      'fightBaseline',
+      'getCharacterName',
+      'getWeaponName',
+      'charactersWithIds',
     ]),
 
     targets() {
       return this.getTargetsByCharacterIdAndWeaponId(
         this.currentCharacterId,
         this.selectedWeaponId
-      );
+      )
     },
 
     isLoadingTargets() {
@@ -431,24 +667,24 @@ export default {
         this.targets.length === 0 &&
         this.currentCharacterId &&
         this.selectedWeaponId
-      );
+      )
     },
 
     characterTrait() {
       const characterWithId =
-        this.charactersWithIds && this.charactersWithIds([this.character.id]);
+        this.charactersWithIds && this.charactersWithIds([this.character.id])
       return (
         (characterWithId && CharacterTrait[characterWithId[0].trait]) ||
         CharacterTrait[this.character.trait]
-      );
+      )
     },
 
     selections() {
-      return [this.currentCharacterId, this.selectedWeaponId];
+      return [this.currentCharacterId, this.selectedWeaponId]
     },
 
     updateResults() {
-      return [this.fightResults, this.error];
+      return [this.fightResults, this.error]
     },
   },
 
@@ -484,156 +720,154 @@ export default {
 
   methods: {
     ...mapActions([
-      "fetchTargets",
-      "doEncounter",
-      "fetchFightRewardSkill",
-      "fetchFightRewardXp",
-      "getXPRewardsIfWin",
-      "createCareerRoom",
-      "getCareerRooms",
-      "getRequests",
-      "fight",
-      "fetchWeapons",
-      "fetchCharacters",
-      "requestFight",
-      "cancelRequestFight",
-      "endCareerMode",
-      "getRewardPvp",
-      "claimTokenReward",
-      "getListParticipatedRoom",
-      "cancelRequestFight",
-      "fetchWeaponId"
+      'fetchTargets',
+      'doEncounter',
+      'fetchFightRewardSkill',
+      'fetchFightRewardXp',
+      'getXPRewardsIfWin',
+      'createCareerRoom',
+      'getCareerRooms',
+      'getRequests',
+      'fight',
+      'fetchWeapons',
+      'fetchCharacters',
+      'requestFight',
+      'cancelRequestFight',
+      'endCareerMode',
+      'getRewardPvp',
+      'claimTokenReward',
+      'getListParticipatedRoom',
+      'cancelRequestFight',
+      'fetchWeaponId',
     ]),
-    ...mapMutations(["setIsInCombat"]),
+    ...mapMutations(['setIsInCombat']),
     RequiredXp,
     CharacterPower,
-    checkCurrentMode(){
-      if(this.changeMode){
-        this.careerMode = false;
-      }
-      else if(this.careerMode){
-        this.changeMode = false;
+    checkCurrentMode() {
+      if (this.changeMode) {
+        this.careerMode = false
+      } else if (this.careerMode) {
+        this.changeMode = false
       }
     },
     openHeroSelect() {
-      if(this.ownCharacters.length === 0) {
-        this.errorMessage = "You don't have any hero available!";
-        this.$bvModal.show('cancelCareerModal');
-      }
-      else {
-        this.$bvModal.show('selectHeroOrWeaponModal');
-        this.selectHero = true;
-        this.selectWeapon = false;
+      if (this.ownCharacters.length === 0) {
+        this.errorMessage = "You don't have any hero available!"
+        this.$bvModal.show('cancelCareerModal')
+      } else {
+        this.$bvModal.show('selectHeroOrWeaponModal')
+        this.selectHero = true
+        this.selectWeapon = false
       }
     },
     openWeaponSelect() {
-      if(this.ownWeapons.length === 0) {
-        this.errorMessage = "You don't have any weapon available!";
-        this.$bvModal.show('cancelCareerModal');
-      }else {
-        this.selectHero=false;
-        this.selectWeapon=true;
-        this.$bvModal.show('selectHeroOrWeaponModal');
+      if (this.ownWeapons.length === 0) {
+        this.errorMessage = "You don't have any weapon available!"
+        this.$bvModal.show('cancelCareerModal')
+      } else {
+        this.selectHero = false
+        this.selectWeapon = true
+        this.$bvModal.show('selectHeroOrWeaponModal')
       }
     },
     getCharacterArt,
     getCharacterTrait,
     getCleanWeaponName(id, stars) {
-      return getCleanName(this.getWeaponName(id, stars));
+      return getCleanName(this.getWeaponName(id, stars))
     },
     getEnemyArt,
     getEnemyArtAround,
     weaponHasDurability(id) {
-      return this.getWeaponDurability(id) >= this.fightMultiplier * 3;
+      return this.getWeaponDurability(id) >= this.fightMultiplier * 3
     },
     charHasStamina() {
-      return this.currentCharacterStamina >= this.staminaPerFight;
+      return this.currentCharacterStamina >= this.staminaPerFight
     },
     getWinChance(enemyPower, enemyElement) {
-      const characterPower = CharacterPower(this.currentCharacter.level);
-      const playerElement = parseInt(this.currentCharacter.trait, 10);
+      const characterPower = CharacterPower(this.currentCharacter.level)
+      const playerElement = parseInt(this.currentCharacter.trait, 10)
       const selectedWeapon = this.ownWeapons
         .filter(Boolean)
-        .find((weapon) => weapon.id === this.selectedWeaponId);
-      this.selectedWeapon = selectedWeapon;
-      const weaponElement = parseInt(WeaponElement[selectedWeapon.element], 10);
+        .find((weapon) => weapon.id === this.selectedWeaponId)
+      this.selectedWeapon = selectedWeapon
+      const weaponElement = parseInt(WeaponElement[selectedWeapon.element], 10)
       const weaponMultiplier = GetTotalMultiplierForTrait(
         selectedWeapon,
         playerElement
-      );
+      )
       const totalPower =
-        characterPower * weaponMultiplier + selectedWeapon.bonusPower;
+        characterPower * weaponMultiplier + selectedWeapon.bonusPower
       const totalMultiplier =
         1 +
         0.075 * (weaponElement === playerElement ? 1 : 0) +
-        0.075 * this.getElementAdvantage(playerElement, enemyElement);
-      const playerMin = totalPower * totalMultiplier * 0.9;
-      const playerMax = totalPower * totalMultiplier * 1.1;
-      const playerRange = playerMax - playerMin;
-      const enemyMin = enemyPower * 0.9;
-      const enemyMax = enemyPower * 1.1;
-      const enemyRange = enemyMax - enemyMin;
-      let rollingTotal = 0;
+        0.075 * this.getElementAdvantage(playerElement, enemyElement)
+      const playerMin = totalPower * totalMultiplier * 0.9
+      const playerMax = totalPower * totalMultiplier * 1.1
+      const playerRange = playerMax - playerMin
+      const enemyMin = enemyPower * 0.9
+      const enemyMax = enemyPower * 1.1
+      const enemyRange = enemyMax - enemyMin
+      let rollingTotal = 0
       // shortcut: if it is impossible for one side to win, just say so
-      if (playerMin > enemyMax) return "Very Likely";
-      if (playerMax < enemyMin) return "Unlikely";
+      if (playerMin > enemyMax) return 'Very Likely'
+      if (playerMax < enemyMin) return 'Unlikely'
 
       // case 1: player power is higher than enemy power
       if (playerMin >= enemyMin) {
         // case 1: enemy roll is lower than player's minimum
-        rollingTotal = (playerMin - enemyMin) / enemyRange;
+        rollingTotal = (playerMin - enemyMin) / enemyRange
         // case 2: 1 is not true, and player roll is higher than enemy maximum
         rollingTotal +=
-          (1 - rollingTotal) * ((playerMax - enemyMax) / playerRange);
+          (1 - rollingTotal) * ((playerMax - enemyMax) / playerRange)
         // case 3: 1 and 2 are not true, both values are in the overlap range. Since values are basically continuous, we assume 50%
-        rollingTotal += (1 - rollingTotal) * 0.5;
+        rollingTotal += (1 - rollingTotal) * 0.5
       } // otherwise, enemy power is higher
       else {
         // case 1: player rolls below enemy minimum
-        rollingTotal = (enemyMin - playerMin) / playerRange;
+        rollingTotal = (enemyMin - playerMin) / playerRange
         // case 2: enemy rolls above player maximum
         rollingTotal +=
-          (1 - rollingTotal) * ((enemyMax - playerMax) / enemyRange);
+          (1 - rollingTotal) * ((enemyMax - playerMax) / enemyRange)
         // case 3: 1 and 2 are not true, both values are in the overlap range
-        rollingTotal += (1 - rollingTotal) * 0.5;
+        rollingTotal += (1 - rollingTotal) * 0.5
         //since this is chance the enemy wins, we negate it
-        rollingTotal = 1 - rollingTotal;
+        rollingTotal = 1 - rollingTotal
       }
-      if (rollingTotal <= 0.3) return "Unlikely";
-      if (rollingTotal <= 0.5) return "Possible";
-      if (rollingTotal <= 0.7) return "Likely";
-      return "Very Likely";
+      if (rollingTotal <= 0.3) return 'Unlikely'
+      if (rollingTotal <= 0.5) return 'Possible'
+      if (rollingTotal <= 0.7) return 'Likely'
+      return 'Very Likely'
     },
     getElementAdvantage(playerElement, enemyElement) {
-      if ((playerElement + 1) % 4 === enemyElement) return 1;
-      if ((enemyElement + 1) % 4 === playerElement) return -1;
-      return 0;
+      if ((playerElement + 1) % 4 === enemyElement) return 1
+      if ((enemyElement + 1) % 4 === playerElement) return -1
+      return 0
     },
     async onClickEncounter(targetToFight) {
       if (this.selectedWeaponId === null || this.currentCharacterId === null) {
-        return;
+        return
       }
 
-      this.waitingResults = true;
+      this.waitingResults = true
 
       // Force a quick refresh of targets
       await this.fetchTargets({
         characterId: this.currentCharacterId,
         weaponId: this.selectedWeaponId,
-      });
+      })
       // If the targets list no longer contains the chosen target, return so a new target can be chosen
       if (
         !this.targets.find(
           (target) => target.original === targetToFight.original
         )
       ) {
-        this.waitingResults = false;
-        return;
+        this.waitingResults = false
+        return
       }
 
-      this.fightResults = null;
-      this.error = null;
-      this.setIsInCombat(this.waitingResults);
+      this.fightResults = null
+      this.error = null
+      this.setIsInCombat(this.waitingResults)
 
       try {
         const results = await this.doEncounter({
@@ -641,101 +875,99 @@ export default {
           weaponId: this.selectedWeaponId,
           targetString: targetToFight.original,
           fightMultiplier: this.fightMultiplier,
-        });
+        })
 
-        this.fightResults = results;
+        this.fightResults = results
 
-        await this.fetchFightRewardSkill();
-        await this.fetchFightRewardXp();
+        await this.fetchFightRewardSkill()
+        await this.fetchFightRewardXp()
 
-        this.error = null;
+        this.error = null
       } catch (e) {
-        console.error(e);
-        this.error = e.message;
+        console.error(e)
+        this.error = e.message
       }
     },
 
     formattedSkill(skill) {
-      const skillBalance = fromWeiEther(skill, "ether");
-      return `${toBN(skillBalance).toFixed(6)} xBlade`;
+      const skillBalance = fromWeiEther(skill, 'ether')
+      return `${toBN(skillBalance).toFixed(6)} xBlade`
     },
 
     getPotentialXp(targetToFight) {
-      const characterPower = CharacterPower(this.currentCharacter.level);
-      const playerElement = parseInt(this.currentCharacter.trait, 10);
+      const characterPower = CharacterPower(this.currentCharacter.level)
+      const playerElement = parseInt(this.currentCharacter.trait, 10)
       const selectedWeapon = this.ownWeapons
         .filter(Boolean)
-        .find((weapon) => weapon.id === this.selectedWeaponId);
+        .find((weapon) => weapon.id === this.selectedWeaponId)
       const weaponMultiplier = GetTotalMultiplierForTrait(
         selectedWeapon,
         playerElement
-      );
+      )
       const totalPower =
-        characterPower * weaponMultiplier + selectedWeapon.bonusPower;
+        characterPower * weaponMultiplier + selectedWeapon.bonusPower
 
       //Formula taken from getXpGainForFight funtion of CryptoWars.sol
       return (
         Math.floor((targetToFight.power / totalPower) * this.fightXpGain) *
         this.fightMultiplier
-      );
+      )
     },
 
     setFightMultiplier() {
-      localStorage.setItem("fightMultiplier", this.fightMultiplier.toString());
+      localStorage.setItem('fightMultiplier', this.fightMultiplier.toString())
     },
     getCleanCharacterName(id) {
-      return getCleanName(this.getCharacterName(id));
+      return getCleanName(this.getCharacterName(id))
     },
     renderOwner(owner) {
-      if(!owner) {
-        return '';
-      }
-      else if(owner?.length<11) {
-        return owner;
-      }else {
-        const hiddenString = owner.slice(5, owner?.length-5);
-        const hiddenOwner = owner.split(hiddenString).join('...');
-        return hiddenOwner;
+      if (!owner) {
+        return ''
+      } else if (owner?.length < 11) {
+        return owner
+      } else {
+        const hiddenString = owner.slice(5, owner?.length - 5)
+        const hiddenOwner = owner.split(hiddenString).join('...')
+        return hiddenOwner
       }
     },
 
     onSelectHero(heroId) {
-      this.selectedCharacter = heroId;
+      this.selectedCharacter = heroId
     },
 
     onSelectWeapon(weapon) {
-      this.selectedWeapon = weapon;
+      this.selectedWeapon = weapon
     },
 
     convertReward(reward) {
-      const _reward = fromWeiEther(reward);
-      return `${_reward}`;
+      const _reward = fromWeiEther(reward)
+      return `${_reward}`
     },
 
     async handleCreateRoom() {
-      this.$bvModal.show('loadingModal');
+      this.$bvModal.show('loadingModal')
       // @ts-ignore
       // @ts-ignore
-      if(!this.selectedCharacter || !this.selectedWeapon) {
+      if (!this.selectedCharacter || !this.selectedWeapon) {
         // @ts-ignore
-        this.errorMessage = 'Please select weapon and hero!';
-        this.$bvModal.show('listHeroToCareerModal');
+        this.errorMessage = 'Please select weapon and hero!'
+        this.$bvModal.show('listHeroToCareerModal')
         // @ts-ignore
         setTimeout(() => {
-          this.$bvModal.hide('loadingModal');
-        }, 500);
-      }
-      else if(!this.totalDeposit || !this.matchReward) {
-        this.errorMessage = 'Please input total deposit and match reward!';
-        this.$bvModal.show('listHeroToCareerModal');
-        this.$bvModal.hide('loadingModal');
+          this.$bvModal.hide('loadingModal')
+        }, 500)
+      } else if (!this.totalDeposit || !this.matchReward) {
+        this.errorMessage = 'Please input total deposit and match reward!'
+        this.$bvModal.show('listHeroToCareerModal')
+        this.$bvModal.hide('loadingModal')
         setTimeout(() => {
-          this.$bvModal.hide('loadingModal');
-        }, 500);
-      }
-      else if(this.totalDeposit< 2.1*this.matchReward) {
-        this.errorMessage = 'The Total deposit needs to bigger than 210% of the Match reward!';
-        this.$bvModal.show('listHeroToCareerModal');
+          this.$bvModal.hide('loadingModal')
+        }, 500)
+      } else if (this.totalDeposit < 2.1 * this.matchReward) {
+        this.errorMessage =
+          'The Total deposit needs to bigger than 210% of the Match reward!'
+        this.$bvModal.show('listHeroToCareerModal')
         setTimeout(() => {
           this.$bvModal.hide('loadingModal');
         }, 500);
@@ -775,240 +1007,268 @@ export default {
     },
 
     async handleFight(roomId, requestId) {
-      const room = this.careerModeRooms.filter(item => item.id ===roomId);
-      if(!room?.[0]) {
-        return;
+      const room = this.careerModeRooms.filter((item) => item.id === roomId)
+      if (!room?.[0]) {
+        return
       }
-      this.$bvModal.show('loadingModal');
-      this.waitingResults = true;
+      this.$bvModal.show('loadingModal')
+      this.waitingResults = true
       // @ts-ignore
-      this.fightResults = null;
+      this.fightResults = null
       // @ts-ignore
-      this.error = null;
+      this.error = null
       // this.setIsInCombat(this.waitingResults);
-      try{
+      try {
         // @ts-ignore
         const results = await this.fight({
-          roomId, requestId
-        });
-        if(results) {
-          console.log('results', results);
-          this.$bvModal.show('fightResult');
-          const fightResultsFull = {...results, matchReward: room?.[0]?.matchReward};
-          this.fightResults=fightResultsFull;
+          roomId,
+          requestId,
+        })
+        if (results) {
+          console.log('results', results)
+          this.$bvModal.show('fightResult')
+          const fightResultsFull = {
+            ...results,
+            matchReward: room?.[0]?.matchReward,
+          }
+          this.fightResults = fightResultsFull
           setTimeout(() => {
-            this.$bvModal.hide('loadingModal');
-          }, 500);
-          await this.getRequests();
-          await this.getRewardPvp();
-          await this.getCareerRooms({cursor: 0});
-        }else {
-          console.log('bug here');
-          this.$bvModal.hide('loadingModal');
-          this.errorMessage="Something went wrong! Please check later!";
+            this.$bvModal.hide('loadingModal')
+          }, 500)
+          await this.getRequests()
+          await this.getRewardPvp()
+          await this.getCareerRooms({ cursor: 0 })
+        } else {
+          console.log('bug here')
+          this.$bvModal.hide('loadingModal')
+          this.errorMessage = 'Something went wrong! Please check later!'
           setTimeout(() => {
-            this.$bvModal.show('fightErrorModal');
-          }, 500);
+            this.$bvModal.show('fightErrorModal')
+          }, 500)
         }
         // @ts-ignore
         // @ts-ignore
-        this.error=null;
+        this.error = null
       } catch (e) {
-        console.error(e);
+        console.error(e)
         // @ts-ignore
-        this.error = e.message;
+        this.error = e.message
       }
       // @ts-ignore
     },
-    async handleCancelRequestFight (roomId, requestId) {
-      this.$bvModal.show('loadingModal');
-      const response = await this.cancelRequestFight({roomId, requestId});
-      if(response) {
-        this.$bvModal.hide('loadingModal');
-        this.getListParticipatedRoom();
+    async handleCancelRequestFight(roomId, requestId) {
+      this.$bvModal.show('loadingModal')
+      const response = await this.cancelRequestFight({ roomId, requestId })
+      if (response) {
+        this.$bvModal.hide('loadingModal')
+        this.getListParticipatedRoom()
       }
     },
     async handleShowWeapon(weaponId) {
-      this.errorMessage = "";
-      const weapon = await this.fetchWeaponId(weaponId);
-      this.weaponToShow = weapon;
-      this.$bvModal.show('showWeaponModal');
+      this.errorMessage = ''
+      const weapon = await this.fetchWeaponId(weaponId)
+      this.weaponToShow = weapon
+      this.$bvModal.show('showWeaponModal')
     },
-    filterCareerModeRequest () {
-      const newCareerModeRequest = [];
-      const object = {};
-      for(let i = 0 ;i< this.careerModeRequest.length; i++) {
-        object[this.careerModeRequest[i].id] = this.careerModeRequest[i];
+    filterCareerModeRequest() {
+      const newCareerModeRequest = []
+      const object = {}
+      for (let i = 0; i < this.careerModeRequest.length; i++) {
+        object[this.careerModeRequest[i].id] = this.careerModeRequest[i]
       }
-      for(const i in object) {
-        newCareerModeRequest.push(object[i]);
+      for (const i in object) {
+        newCareerModeRequest.push(object[i])
       }
       const listRoomRequest = this.careerModeRequest.filter((item) => {
-        const roomCareer = this.careerModeRooms.find(room => room.id === item.roomId);
-        if(this.valueSearchId !== ""){
-          return item.done === '0' && !roomCareer.claimed && item.heroId === this.valueSearchId;
+        const roomCareer = this.careerModeRooms.find(
+          (room) => room.id === item.roomId
+        )
+        if (this.valueSearchId !== '') {
+          return (
+            item.done === '0' &&
+            !roomCareer.claimed &&
+            item.heroId === this.valueSearchId
+          )
         }
-        return item.done === '0' && !roomCareer.claimed;
-      });
-      return listRoomRequest;
+        return item.done === '0' && !roomCareer.claimed
+      })
+      return listRoomRequest
     },
 
     filterCareerModeRooms() {
-      if(this.valueSearchId !== ""){
-        return this.careerModeRooms.filter((item)=> {
-          const _matchReward = fromWeiEther(item.matchReward);
-          const _totalDeposit = fromWeiEther(item.totalDeposit);
-          return item.owner!==this.defaultAccount && !item.claimed && Number(_matchReward) < Number(_totalDeposit) && item.characterId === this.valueSearchId;
-        });
+      if (this.valueSearchId !== '') {
+        return this.careerModeRooms.filter((item) => {
+          const _matchReward = fromWeiEther(item.matchReward)
+          const _totalDeposit = fromWeiEther(item.totalDeposit)
+          return (
+            item.owner !== this.defaultAccount &&
+            !item.claimed &&
+            Number(_matchReward) < Number(_totalDeposit) &&
+            item.characterId === this.valueSearchId
+          )
+        })
       }
-      return this.careerModeRooms.filter((item)=> {
-        const _matchReward = fromWeiEther(item.matchReward);
-        const _totalDeposit = fromWeiEther(item.totalDeposit);
-        return item.owner!==this.defaultAccount && !item.claimed && Number(_matchReward) < Number(_totalDeposit);
-      });
+      return this.careerModeRooms.filter((item) => {
+        const _matchReward = fromWeiEther(item.matchReward)
+        const _totalDeposit = fromWeiEther(item.totalDeposit)
+        return (
+          item.owner !== this.defaultAccount &&
+          !item.claimed &&
+          Number(_matchReward) < Number(_totalDeposit)
+        )
+      })
     },
     filterMyCareerModeRooms() {
-      if(this.valueSearchId !== ""){
-        return this.careerModeRooms.filter((item)=> item.owner===this.defaultAccount && !item.claimed && item.characterId === this.valueSearchId);
+      if (this.valueSearchId !== '') {
+        return this.careerModeRooms.filter(
+          (item) =>
+            item.owner === this.defaultAccount &&
+            !item.claimed &&
+            item.characterId === this.valueSearchId
+        )
       }
-      return this.careerModeRooms.filter((item)=> item.owner===this.defaultAccount && !item.claimed);
+      return this.careerModeRooms.filter(
+        (item) => item.owner === this.defaultAccount && !item.claimed
+      )
     },
     filterMyRequestRoom() {
-      const newCareerModeRequest = [];
-      const object = {};
-      for(let i = 0 ;i< this.myCareerModeRequest.length; i++) {
-        object[this.myCareerModeRequest[i].id] = this.myCareerModeRequest[i];
+      const newCareerModeRequest = []
+      const object = {}
+      for (let i = 0; i < this.myCareerModeRequest.length; i++) {
+        object[this.myCareerModeRequest[i].id] = this.myCareerModeRequest[i]
       }
-      for(const i in object) {
-        newCareerModeRequest.push(object[i]);
+      for (const i in object) {
+        newCareerModeRequest.push(object[i])
       }
-      if(this.valueSearchId !== ""){
-        return newCareerModeRequest.filter(item => item.done !== '2' && item.heroId === this.valueSearchId);
+      if (this.valueSearchId !== '') {
+        return newCareerModeRequest.filter(
+          (item) => item.done !== '2' && item.heroId === this.valueSearchId
+        )
       }
-      return newCareerModeRequest.filter(item => item.done !== '2');
+      return newCareerModeRequest.filter((item) => item.done !== '2')
     },
     async handleScrollToEnd(isVisible) {
-      if(!isVisible) { return; }
-      this.cursor +=20;
-      if(this.careerModeRooms.length < this.cursor) {
-        return ;
+      if (!isVisible) {
+        return
       }
-      this.getCareerRooms({cursor:this.cursor});
+      this.cursor += 20
+      if (this.careerModeRooms.length < this.cursor) {
+        return
+      }
+      this.getCareerRooms({ cursor: this.cursor })
     },
     async handleRequestFight(roomId) {
-      if(!this.selectedWeapon || !this.selectedCharacter) {
-        this.errorMessage='Please select weapon and hero';
-        this.$bvModal.show('requestFightModal');
-      }
-      else {
-        this.$bvModal.show('loadingModal');
+      if (!this.selectedWeapon || !this.selectedCharacter) {
+        this.errorMessage = 'Please select weapon and hero'
+        this.$bvModal.show('requestFightModal')
+      } else {
+        this.$bvModal.show('loadingModal')
         const res = await this.requestFight({
           roomId,
           weaponId: this.selectedWeapon.id,
           characterId: this.selectedCharacter.id,
-        });
-        if(res) {
-          this.$bvModal.hide('loadingModal');
-          this.getListParticipatedRoom();
+        })
+        if (res) {
+          this.$bvModal.hide('loadingModal')
+          this.getListParticipatedRoom()
           setTimeout(() => {
-            this.errorMessage = '';
-            this.$bvModal.show('requestFightModal');
-          }, 500);
-        }
-        else {
-          this.$bvModal.hide('loadingModal');
-          this.errorMessage="Something went wrong! Please check later!";
+            this.errorMessage = ''
+            this.$bvModal.show('requestFightModal')
+          }, 500)
+        } else {
+          this.$bvModal.hide('loadingModal')
+          this.errorMessage = 'Something went wrong! Please check later!'
           setTimeout(() => {
-            this.$bvModal.show('requestFightModal');
-          }, 500);
+            this.$bvModal.show('requestFightModal')
+          }, 500)
         }
       }
     },
     async cancelCareerMode(roomId, isAvailable) {
-      if(isAvailable) {
-        this.$bvModal.show('loadingModal');
-        const res = await this.endCareerMode({roomId});
-        if(res) {
-          this.$bvModal.hide('loadingModal');
+      if (isAvailable) {
+        this.$bvModal.show('loadingModal')
+        const res = await this.endCareerMode({ roomId })
+        if (res) {
+          this.$bvModal.hide('loadingModal')
           setTimeout(() => {
-            this.$bvModal.show('cancelCareerModal');
-          }, 500);
-        }else {
-          this.$bvModal.hide('loadingModal');
-          this.errorMessage="Something went wrong! Please check later!";
+            this.$bvModal.show('cancelCareerModal')
+          }, 500)
+        } else {
+          this.$bvModal.hide('loadingModal')
+          this.errorMessage = 'Something went wrong! Please check later!'
           setTimeout(() => {
-            this.$bvModal.show('cancelCareerModal');
-          }, 500);
+            this.$bvModal.show('cancelCareerModal')
+          }, 500)
         }
-      }
-      else {
-        this.errorMessage= `You only can "Cancel Career" after 1 hour`;
-        this.$bvModal.show('cancelCareerModal');
+      } else {
+        this.errorMessage = `You only can "Cancel Career" after 1 hour`
+        this.$bvModal.show('cancelCareerModal')
       }
     },
     async handleClaimTokenReward() {
-      if(this.rewardPvp > 0) {
-        this.$bvModal.show('loadingModal');
-        const res = await this.claimTokenReward();
-        console.log('resss', res);
-        if(res) {
-          this.errorMessage = '';
-          this.$bvModal.hide('loadingModal');
-          this.$bvModal.show('claimModal');
-          this.getRewardPvp();
-        }else {
-          this.$bvModal.hide('loadingModal');
+      if (this.rewardPvp > 0) {
+        this.$bvModal.show('loadingModal')
+        const res = await this.claimTokenReward()
+        console.log('resss', res)
+        if (res) {
+          this.errorMessage = ''
+          this.$bvModal.hide('loadingModal')
+          this.$bvModal.show('claimModal')
+          this.getRewardPvp()
+        } else {
+          this.$bvModal.hide('loadingModal')
         }
-      }
-      else {
-        this.errorMessage = 'You have 0 xBlade!';
-        this.$bvModal.show('claimModal');
-        return ;
+      } else {
+        this.errorMessage = 'You have 0 xBlade!'
+        this.$bvModal.show('claimModal')
+        return
       }
     },
 
     // quantityHeroes
-    quantityHeroes(check){
-      if(check === 1){
-        return this.careerModeRooms.filter((item)=> {
-          const _matchReward = fromWeiEther(item.matchReward);
-          const _totalDeposit = fromWeiEther(item.totalDeposit);
-          return item.owner!==this.defaultAccount && !item.claimed && Number(_matchReward) < Number(_totalDeposit);
-        });
-      }
-
-      else if(check === 2){
-        const newCareerModeRequest = [];
-        const object = {};
-        for(let i = 0 ;i< this.careerModeRequest.length; i++) {
-          object[this.careerModeRequest[i].id] = this.careerModeRequest[i];
+    quantityHeroes(check) {
+      if (check === 1) {
+        return this.careerModeRooms.filter((item) => {
+          const _matchReward = fromWeiEther(item.matchReward)
+          const _totalDeposit = fromWeiEther(item.totalDeposit)
+          return (
+            item.owner !== this.defaultAccount &&
+            !item.claimed &&
+            Number(_matchReward) < Number(_totalDeposit)
+          )
+        })
+      } else if (check === 2) {
+        const newCareerModeRequest = []
+        const object = {}
+        for (let i = 0; i < this.careerModeRequest.length; i++) {
+          object[this.careerModeRequest[i].id] = this.careerModeRequest[i]
         }
-        for(const i in object) {
-          newCareerModeRequest.push(object[i]);
+        for (const i in object) {
+          newCareerModeRequest.push(object[i])
         }
         const listRoomRequest = this.careerModeRequest.filter((item) => {
-          const roomCareer = this.careerModeRooms.find(room => room.id === item.roomId);
-          return item.done === '0' && !roomCareer.claimed;
-        });
-        return listRoomRequest;
-      }
-
-      else if(check === 3){
-        return this.careerModeRooms.filter((item)=> item.owner===this.defaultAccount && !item.claimed);
-      }
-
-      else if(check === 4){
-        const newCareerModeRequest = [];
-        const object = {};
-        for(let i = 0 ;i< this.myCareerModeRequest.length; i++) {
-          object[this.myCareerModeRequest[i].id] = this.myCareerModeRequest[i];
+          const roomCareer = this.careerModeRooms.find(
+            (room) => room.id === item.roomId
+          )
+          return item.done === '0' && !roomCareer.claimed
+        })
+        return listRoomRequest
+      } else if (check === 3) {
+        return this.careerModeRooms.filter(
+          (item) => item.owner === this.defaultAccount && !item.claimed
+        )
+      } else if (check === 4) {
+        const newCareerModeRequest = []
+        const object = {}
+        for (let i = 0; i < this.myCareerModeRequest.length; i++) {
+          object[this.myCareerModeRequest[i].id] = this.myCareerModeRequest[i]
         }
-        for(const i in object) {
-          newCareerModeRequest.push(object[i]);
+        for (const i in object) {
+          newCareerModeRequest.push(object[i])
         }
-        return newCareerModeRequest.filter(item => item.done !== '2');
+        return newCareerModeRequest.filter((item) => item.done !== '2')
       }
-    }
+    },
 
     // setStaminaSelectorValues() {
     //   if(this.currentCharacterStamina < 40) {
@@ -1059,38 +1319,38 @@ export default {
     WeaponSelect,
     RoomRequest,
     PulseLoader,
-    FightResult
+    FightResult,
   },
   async beforeMount() {
-    await this.getCareerRooms({cursor: 0});
-    await this.getRewardPvp();
-    await this.getListParticipatedRoom();
-    await this.getRequests();
+    await this.getCareerRooms({ cursor: 0 })
+    await this.getRewardPvp()
+    await this.getListParticipatedRoom()
+    await this.getRequests()
   },
 
-  updated(){
-    if(this.selectedWeapon || this.selectedCharacter){
-      this.addClass = "background";
+  updated() {
+    if (this.selectedWeapon || this.selectedCharacter) {
+      this.addClass = 'background'
     }
   },
 
-  async mounted(){
-    if(this.checkSelectFromRPS){
-      this.addClass = "background";
+  async mounted() {
+    if (this.checkSelectFromRPS) {
+      this.addClass = 'background'
     }
     setTimeout(async () => {
-      this.fetchInfoInterval = setInterval(async() => {
-        await this.getCareerRooms({cursor: 0});
-        await this.getRewardPvp();
-        await this.getListParticipatedRoom();
-      }, 180000);
+      this.fetchInfoInterval = setInterval(async () => {
+        await this.getCareerRooms({ cursor: 0 })
+        await this.getRewardPvp()
+        await this.getListParticipatedRoom()
+      }, 180000)
       this.fetchRequestInterval = setInterval(async () => {
-        await this.getRequests();
-      }, 5000);
-      console.log('111', this.careerModeRooms);
-    }, 1000);
+        await this.getRequests()
+      }, 5000)
+      console.log('111', this.careerModeRooms)
+    }, 1000)
   },
-};
+}
 </script>
 
 <style scoped>
@@ -1105,7 +1365,7 @@ export default {
   max-width: 1550px;
 }
 
-#selectHeroOrWeaponModal .icon-close{
+#selectHeroOrWeaponModal .icon-close {
   background-image: url(../assets/v2/icon-close-2.svg);
   width: 50px;
   height: 47px;
@@ -1113,7 +1373,7 @@ export default {
 }
 
 #requestSelect .icon-close,
-#fightModal .icon-close{
+#fightModal .icon-close {
   background-image: url(../assets/v2/icon-close.svg);
   width: 50px;
   height: 47px;
@@ -1124,7 +1384,7 @@ export default {
 
 #loadingModal .icon-close,
 #listHeroToCareerModal .icon-close,
-#listHeroToChallengeModal .icon-close{
+#listHeroToChallengeModal .icon-close {
   background-image: url(../assets/v2/icon-close.svg);
   width: 50px;
   height: 50px;
@@ -1134,28 +1394,28 @@ export default {
 #loadingModal .icon-close-container,
 #listHeroToChallengeModal .icon-close-container,
 #listHeroToCareerModal .icon-close-container,
-#selectHeroOrWeaponModal .icon-close-container{
+#selectHeroOrWeaponModal .icon-close-container {
   display: flex;
   justify-content: flex-end;
 }
 #requestFightModal .modalContent,
 #cancelCareerModal .modalContent,
 #fightErrorModal .modalContent {
-    max-width: 50rem;
-    margin: auto;
-    padding: 20px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    background-clip: padding-box;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 0.3rem;
-    outline: 0;
-    background-image: url('../assets/v2/shop-select-item.svg');
-    background-position: 50% 0;
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
+  max-width: 50rem;
+  margin: auto;
+  padding: 20px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 0.3rem;
+  outline: 0;
+  background-image: url('../assets/v2/shop-select-item.svg');
+  background-position: 50% 0;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
 }
 
 #loadingModal .centerLoading {
@@ -1179,7 +1439,7 @@ export default {
 }
 
 .info-box {
-  padding:50px 100px;
+  padding: 50px 100px;
   display: flex;
   justify-content: center;
 }
@@ -1239,12 +1499,12 @@ export default {
   color: #fff;
 }
 
-.info-user-btn button:hover{
+.info-user-btn button:hover {
   background-image: url(../assets/v2/btn-fight-big-opcity.svg);
   transition: 0.9s;
 }
 
-.list-heroes{
+.list-heroes {
   display: flex;
   justify-content: center;
   padding-bottom: 5rem;
@@ -1256,7 +1516,7 @@ export default {
   margin: 0 auto;
 }
 
-.search-hero{
+.search-hero {
   display: flex;
   align-items: center;
 }
@@ -1282,17 +1542,17 @@ export default {
   margin: 0;
 }
 
-.nav-item div{
-    display: flex;
-    align-items: center;
+.nav-item div {
+  display: flex;
+  align-items: center;
 }
 
-.nav-item div div{
-    padding: 0 20px;
-    margin-left: 10px;
-    color: #fff;
-    background-color: #f58b5b;
-    border-radius: 20px;
+.nav-item div div {
+  padding: 0 20px;
+  margin-left: 10px;
+  color: #fff;
+  background-color: #f58b5b;
+  border-radius: 20px;
 }
 
 .nav.nav-pills .nav-link {
@@ -1317,21 +1577,21 @@ export default {
   background: transparent;
 }
 
-.list{
-    color: #fff;
-    overflow-y: scroll;
-    padding: 0;
-    margin-top: 20px;
-    margin-bottom: 40px;
-    scroll-margin-left: 50px;
-    display: flex;
+.list {
+  color: #fff;
+  overflow-y: scroll;
+  padding: 0;
+  margin-top: 20px;
+  margin-bottom: 40px;
+  scroll-margin-left: 50px;
+  display: flex;
   justify-content: center;
   height: 700px;
   width: 90%;
   margin: 0 auto;
 }
 
-.item{
+.item {
   min-width: 18em;
   height: 26.5em;
   background-position: left;
@@ -1369,7 +1629,7 @@ export default {
   margin-top: 55px;
 }
 
-.info .property{
+.info .property {
   /* content: url(../assets/elements/earth.png); */
   width: 30px;
   height: 30px;
@@ -1382,30 +1642,29 @@ export default {
   top: 0;
 }
 
-.element-container{
+.element-container {
   position: relative;
   top: 0;
 }
 
-.info-head > div{
+.info-head > div {
   font-size: 1.3em;
 }
 
-.item-id{
+.item-id {
   position: absolute;
   right: 30px;
   top: 30px;
 }
 
-.item-id > div{
+.item-id > div {
   text-align: end;
   font-size: 1em;
   line-height: 15px;
-  color: #F2BE3E;
+  color: #f2be3e;
 }
 
-
-.info-head{
+.info-head {
   /* display: flex; */
   position: relative;
   top: -20px;
@@ -1414,11 +1673,11 @@ export default {
   /* justify-content: space-between; */
 }
 
-.info-head span:first-child{
+.info-head span:first-child {
   margin: 0;
 }
 
-.img-hero-around{
+.img-hero-around {
   width: 151px;
   height: 207px;
   background-repeat: no-repeat;
@@ -1431,7 +1690,7 @@ export default {
   /* z-index: 1; */
 }
 
-.img-hero{
+.img-hero {
   width: 151px;
   height: 238px;
   background-repeat: no-repeat;
@@ -1442,7 +1701,7 @@ export default {
   top: -25px;
 }
 
-.img-weapon{
+.img-weapon {
   width: 190px;
   height: 214px;
   /* background-image: url(../assets/sword/sword-air-04.png); */
@@ -1454,33 +1713,33 @@ export default {
   top: 35px;
 }
 
-.info-footer{
+.info-footer {
   position: absolute;
   bottom: 40px;
   width: 100%;
 }
 
-.info-footer div{
+.info-footer div {
   font-weight: 600;
   text-align: center;
 }
 
-.info-footer .weapon-name{
+.info-footer .weapon-name {
   /* margin-top: 40px;
   margin-bottom: 10px; */
 }
 
-.info-footer .bar-xp-weapon{
+.info-footer .bar-xp-weapon {
   /* margin-top: 10px;
   margin-bottom: 40px; */
 }
 
-.info-footer > div > span{
+.info-footer > div > span {
   color: #f58b5b;
 }
 
-.cost{
-  color: #D858F7;
+.cost {
+  color: #d858f7;
   display: flex;
   width: 100%;
   justify-content: center;
@@ -1488,7 +1747,7 @@ export default {
   font-size: 1.3em;
 }
 
-.cost > div{
+.cost > div {
   background-image: url(../assets/v2/icon-crypto.svg);
   width: 20px;
   height: 19px;
@@ -1497,18 +1756,18 @@ export default {
   margin-right: 6px;
 }
 
-.button-container{
+.button-container {
   width: 100%;
   position: absolute;
   bottom: -70px;
 }
 
-.btn-request-fight{
+.btn-request-fight {
   margin: 0 auto;
   display: block;
   background-color: transparent;
   border: none;
-  background-image:  url(../assets/v2/btn-fight-big.svg);
+  background-image: url(../assets/v2/btn-fight-big.svg);
   width: 190px;
   height: 42px;
   background-size: cover;
@@ -1519,17 +1778,16 @@ export default {
   margin-bottom: 20px;
 }
 
-.btn-request-fight:hover{
+.btn-request-fight:hover {
   background-image: url(../assets/v2/btn-fight-big-opcity.svg);
   transition: 0.9s;
 }
 
-.info-head-left{
+.info-head-left {
   display: flex;
-
 }
 
-.star-weapon{
+.star-weapon {
   background-image: url(../assets/v2/star.svg);
   width: 30px;
   height: 36px;
@@ -1537,29 +1795,29 @@ export default {
   margin-bottom: 10px;
 }
 
-.info-head-left > div > div{
+.info-head-left > div > div {
   margin-left: 10px;
 }
 
-.bar-xp-weapon{
-  background-color: #F2BE3E;
+.bar-xp-weapon {
+  background-color: #f2be3e;
   width: 70%;
   height: 15px;
   margin: 0 auto;
   border-radius: 10px;
 }
 
-.info-head-right{
+.info-head-right {
   position: absolute;
   right: 40px;
   top: 0;
 }
 
-.info-head > div{
+.info-head > div {
   font-size: 1em;
 }
 
-.id-weapon{
+.id-weapon {
   margin-bottom: 5px;
   display: block;
   font-size: 1em;
@@ -1567,18 +1825,18 @@ export default {
 
 .requestSelect-head,
 .listHeroToCareerModal-head,
-.listHeroToChallengeModal-head{
+.listHeroToChallengeModal-head {
   font-size: 1.8em;
   font-weight: 600;
-  color: #F58B5B;
+  color: #f58b5b;
   text-align: center;
 }
 
-.requestSelect-body{
+.requestSelect-body {
   margin: 50px 0;
 }
 
-.requestSelect-body > div{
+.requestSelect-body > div {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1586,7 +1844,7 @@ export default {
   color: #fff;
 }
 
-.requestSelect-body > div > div{
+.requestSelect-body > div > div {
   width: 315px;
   height: 50px;
   border: 1px solid #707070;
@@ -1596,7 +1854,7 @@ export default {
   align-items: center;
 }
 
-.requestSelect-body > div > div > div{
+.requestSelect-body > div > div > div {
   background-image: url(../assets/v2/icon-crypto.svg);
   width: 27px;
   height: 26px;
@@ -1605,7 +1863,7 @@ export default {
   margin-right: 16px;
 }
 
-.requestSelect-body > div > div > span{
+.requestSelect-body > div > div > span {
   display: block;
   border-left: 1px solid #707070;
   display: flex;
@@ -1613,11 +1871,11 @@ export default {
   height: 100%;
   padding-left: 16px;
   font-size: 1.3em;
-  color: #F58B5B;
+  color: #f58b5b;
 }
 
 .requestSelect-btn,
-.requestSelect-btn{
+.requestSelect-btn {
   background-color: transparent;
   border: none;
   background-image: url(../assets/v2/btn-fight.png);
@@ -1631,16 +1889,16 @@ export default {
   font-size: 1.3em;
   font-weight: 600;
 }
-.requestSelect-btn.reject{
+.requestSelect-btn.reject {
   background-image: url(../assets/v2/Btn-blue.svg);
   height: 48px;
 }
 
-.requestSelect-btn.confirm{
+.requestSelect-btn.confirm {
   margin: 0 auto;
 }
 
-.requestSelect-btn{
+.requestSelect-btn {
   background-color: transparent;
   border: none;
   background-repeat: no-repeat;
@@ -1653,36 +1911,39 @@ export default {
   font-weight: 600;
 }
 
-.requestSelect-footer{
+.requestSelect-footer {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.background{
-  background-image: linear-gradient(rgba(245, 111, 86, 0.3), rgba(86, 82, 219, 0.3));
-  border: 1px solid #3CDE9B;
+.background {
+  background-image: linear-gradient(
+    rgba(245, 111, 86, 0.3),
+    rgba(86, 82, 219, 0.3)
+  );
+  border: 1px solid #3cde9b;
   margin-bottom: 3.5em;
   margin-top: 40px;
 }
 
-.item-selected{
+.item-selected {
   display: flex;
   margin-right: 1.5rem;
 }
 
-.info-user-footer{
+.info-user-footer {
   margin-top: 10px;
 }
 .headerModalCareer {
   padding: 1.8rem;
 }
 
-.info-user-footer-item{
+.info-user-footer-item {
   margin: 10px 0;
 }
 
-.info-user-footer-item > div{
+.info-user-footer-item > div {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1690,7 +1951,7 @@ export default {
   color: #fff;
 }
 
-.info-user-footer-item > div > div{
+.info-user-footer-item > div > div {
   width: 315px;
   height: 50px;
   border: 1px solid #707070;
@@ -1700,7 +1961,7 @@ export default {
   align-items: center;
 }
 
-.info-user-footer-item > div > div > div{
+.info-user-footer-item > div > div > div {
   background-image: url(../assets/v2/icon-crypto.svg);
   width: 27px;
   height: 26px;
@@ -1709,7 +1970,7 @@ export default {
   margin-right: 16px;
 }
 
-.info-user-footer-item > div > div > span{
+.info-user-footer-item > div > div > span {
   display: block;
   border-left: 1px solid #707070;
   display: flex;
@@ -1717,21 +1978,21 @@ export default {
   height: 100%;
   padding-left: 16px;
   font-size: 1.3em;
-  color: #F58B5B;
+  color: #f58b5b;
 }
 
-.info-user-footer-item > div > span{
+.info-user-footer-item > div > span {
   width: 170px;
 }
-.info-user-footer-item > div > span > span{
+.info-user-footer-item > div > span > span {
   display: block;
   font-size: 0.8em;
 }
 
-.info-user-footer button{
+.info-user-footer button {
   display: block;
   width: 100%;
-  background-image: linear-gradient(#F3859C, #7F327C);
+  background-image: linear-gradient(#f3859c, #7f327c);
   border: none;
   margin-top: 20px;
   padding: 10px 0;
@@ -1741,7 +2002,7 @@ export default {
 }
 
 .listHeroToCareerModal-body,
-.listHeroToChallengeModal-body{
+.listHeroToChallengeModal-body {
   text-align: center;
   margin: 20px 0;
   font-size: 1.3em;
@@ -1749,12 +2010,12 @@ export default {
 }
 
 .listHeroToCareerModal-body span,
-.listHeroToChallengeModal-body span{
-  color: #D858F7;
+.listHeroToChallengeModal-body span {
+  color: #d858f7;
 }
 
 .listHeroToCareerModal-btn,
-.listHeroToChallengeModal-btn{
+.listHeroToChallengeModal-btn {
   background-color: transparent;
   border: none;
   background-image: url(../assets/v2/btn-fight-big.svg);
@@ -1789,197 +2050,195 @@ input::-webkit-inner-spin-button {
 }
 
 @media (max-width: 767.98px) {
-  .search-hero{
+  .search-hero {
     margin-bottom: 10px;
     display: flex;
     justify-content: center;
   }
-  .search-hero input{
+  .search-hero input {
     width: 100%;
   }
 
-  .info-user-btn{
+  .info-user-btn {
     display: flex;
     flex-direction: column;
     align-items: center;
   }
-  .background{
+  .background {
     display: flex;
     flex-direction: column;
     align-items: center;
   }
 
-  .item{
+  .item {
     margin-top: 70px;
     margin-bottom: 0;
   }
 
-  .item-selected{
+  .item-selected {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-right: 0;
   }
 
-  .info-user{
+  .info-user {
     width: 450px;
     padding: 20px;
   }
 
-  .info-user-footer{
+  .info-user-footer {
     width: 390px;
   }
 
-    .info-user-btn button{
+  .info-user-btn button {
     font-size: 1em;
   }
 
-  .btn-request-fight{
+  .btn-request-fight {
     font-size: 1em;
   }
-.requestSelect-head,
-.listHeroToCareerModal-head,
-.listHeroToChallengeModal-head{
-  font-size: 1.4em;
-}
+  .requestSelect-head,
+  .listHeroToCareerModal-head,
+  .listHeroToChallengeModal-head {
+    font-size: 1.4em;
+  }
 
-.listHeroToCareerModal-body,
-.listHeroToChallengeModal-body{
-  font-size: 1.1em;
-}
-.listHeroToCareerModal-btn,
-.listHeroToChallengeModal-btn{
-  width: 160px;
-  height: 35px;
-  font-size: 1em;
-}
+  .listHeroToCareerModal-body,
+  .listHeroToChallengeModal-body {
+    font-size: 1.1em;
+  }
+  .listHeroToCareerModal-btn,
+  .listHeroToChallengeModal-btn {
+    width: 160px;
+    height: 35px;
+    font-size: 1em;
+  }
 }
 
 @media (max-width: 575.98px) {
-
-  .itemCareer{
+  .itemCareer {
     height: 29.5em;
   }
   .quantity-heroes {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.4em;
-}
-.search-hero input{
-  width: 100%;
-}
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4em;
+  }
+  .search-hero input {
+    width: 100%;
+  }
 
-.search-hero{
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: center;
-}
-.nav-option{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  /* width: 200px; */
-}
+  .search-hero {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+  }
+  .nav-option {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* width: 200px; */
+  }
 
-.info-user-btn{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.background{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+  .info-user-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .background {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
-.item{
-  margin-top: 70px;
-  margin-bottom: 0;
-}
+  .item {
+    margin-top: 70px;
+    margin-bottom: 0;
+  }
 
-.item-selected{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-right: 0;
-}
+  .item-selected {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 0;
+  }
 
-.info-user{
-  width: 285px;
-  padding: 20px;
-}
+  .info-user {
+    width: 285px;
+    padding: 20px;
+  }
 
-.info-user-footer{
-  width: 230px;
-}
+  .info-user-footer {
+    width: 230px;
+  }
 
-.info-user-title{
-  font-size: 1em;
-}
+  .info-user-title {
+    font-size: 1em;
+  }
 
-.info-user-body span{
-  font-size: 1em;
-  padding: 0;
-}
+  .info-user-body span {
+    font-size: 1em;
+    padding: 0;
+  }
 
-.info-user-body > div{
-  font-size: 1.3em;
-  width: 140px;
-}
+  .info-user-body > div {
+    font-size: 1.3em;
+    width: 140px;
+  }
 
-.info-user-btn button{
-  width: 140px;
-  height: 42px;
-  font-size: 0.8em;
-  background-image: url(../assets/v2/btn-fight.png);
-}
+  .info-user-btn button {
+    width: 140px;
+    height: 42px;
+    font-size: 0.8em;
+    background-image: url(../assets/v2/btn-fight.png);
+  }
 
-.info-user-footer-item > div{
-  font-size: 1em;
-}
+  .info-user-footer-item > div {
+    font-size: 1em;
+  }
 
-.info-user-footer-item > div > div{
-  width: 120px;
-  height: 40px;
-  margin: 0 5px;
-  padding: 0 12px;
-  margin-right: 12px;
-}
+  .info-user-footer-item > div > div {
+    width: 120px;
+    height: 40px;
+    margin: 0 5px;
+    padding: 0 12px;
+    margin-right: 12px;
+  }
 
-.info-user-footer-item > div > div > div{
-  width: 23px;
-  height: 22px;
-}
+  .info-user-footer-item > div > div > div {
+    width: 23px;
+    height: 22px;
+  }
 
-.info-user-footer-item > div > div > span{
-  font-size: 1em;
-}
+  .info-user-footer-item > div > div > span {
+    font-size: 1em;
+  }
 
-.info-user-footer button{
-  font-size: 1em;
-}
+  .info-user-footer button {
+    font-size: 1em;
+  }
 
-.btn-request-fight{
-  font-size: 0.8em;
-}
+  .btn-request-fight {
+    font-size: 0.8em;
+  }
 }
 
 @media (max-width: 376px) {
-  #selectHeroOrWeaponModal .icon-close{
+  #selectHeroOrWeaponModal .icon-close {
     margin-right: 10px;
   }
 }
 
 @media (max-width: 767px) {
-  #selectHeroOrWeaponModal .icon-close{
+  #selectHeroOrWeaponModal .icon-close {
     margin-right: 10px;
   }
 }
 
 @media (min-width: 768px) {
-
 }
 </style>
 <style>

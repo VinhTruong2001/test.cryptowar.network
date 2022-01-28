@@ -1,65 +1,123 @@
 <template>
   <div v-bind:class="isDefault ? 'default-icon-wrapper' : 'nft-icon-wrapper'">
-
-    <div v-if="!isDefault" class="nft-icon"
-      v-tooltip="!isShop && { content: tooltipHtml , trigger: (isMobile() ? 'click' : 'hover') }"
+    <div
+      v-if="!isDefault"
+      class="nft-icon"
+      v-tooltip="
+        !isShop && {
+          content: tooltipHtml,
+          trigger: isMobile() ? 'click' : 'hover',
+        }
+      "
       @mouseover="hover = !isMobile() || true"
       @mouseleave="hover = !isMobile()"
     >
       <!-- show nft with id: nftId of type: nftfType (contract address?)
         either load properties here or wherever the list of nfts is created and pass in nft object-->
-      <div v-if="nft.type === 'shield'" class="nft-details glow-container" ref="el" :class="['glow-' + (nft.stars || 0)]">
-        <img class="placeholder-shield" src="../assets/shield1.png" v-if="!isShop && nft.id < 10000" />
-        <img class="placeholder-shield" src="../assets/shield2.png" v-if="!isShop && nft.id >= 10000 && nft.id < 25000" />
-        <img class="placeholder-shield" src="../assets/shield2.png" v-if="isShop" />
+      <div
+        v-if="nft.type === 'shield'"
+        class="nft-details glow-container"
+        ref="el"
+        :class="['glow-' + (nft.stars || 0)]"
+      >
+        <img
+          class="placeholder-shield"
+          src="../assets/shield1.png"
+          v-if="!isShop && nft.id < 10000"
+        />
+        <img
+          class="placeholder-shield"
+          src="../assets/shield2.png"
+          v-if="!isShop && nft.id >= 10000 && nft.id < 25000"
+        />
+        <img
+          class="placeholder-shield"
+          src="../assets/shield2.png"
+          v-if="isShop"
+        />
 
         <div v-if="!isShop" class="trait">
           <span :class="nft.element.toLowerCase() + '-icon'"></span>
-          <b-icon v-if="favorite" class="favorite-star" icon="star-fill" variant="warning" />
+          <b-icon
+            v-if="favorite"
+            class="favorite-star"
+            icon="star-fill"
+            variant="warning"
+          />
         </div>
 
-        <span v-if="isShop" class="nft-supply">Quantity: <span>{{totalShieldSupply}}</span></span>
+        <span v-if="isShop" class="nft-supply"
+          >Quantity: <span>{{ totalShieldSupply }}</span></span
+        >
         <div v-if="!isShop" class="id">ID {{ nft.id }}</div>
 
         <div v-if="!isShop" class="stats">
           <div v-if="nft.stat1Value">
-            <span :class="nft.stat1.toLowerCase() + '-icon'" class="mr-1 icon"></span>
-            <span :class="nft.stat1.toLowerCase()">{{ nft.stat1 }} +{{ nft.stat1Value }}</span>
+            <span
+              :class="nft.stat1.toLowerCase() + '-icon'"
+              class="mr-1 icon"
+            ></span>
+            <span :class="nft.stat1.toLowerCase()"
+              >{{ nft.stat1 }} +{{ nft.stat1Value }}</span
+            >
           </div>
           <div v-if="nft.stat2Value">
-            <span :class="nft.stat2.toLowerCase() + '-icon'" class="mr-1 icon"></span>
-            <span :class="nft.stat2.toLowerCase()">{{ nft.stat2 }} +{{ nft.stat2Value }}</span>
+            <span
+              :class="nft.stat2.toLowerCase() + '-icon'"
+              class="mr-1 icon"
+            ></span>
+            <span :class="nft.stat2.toLowerCase()"
+              >{{ nft.stat2 }} +{{ nft.stat2Value }}</span
+            >
           </div>
           <div v-if="nft.stat3Value">
-            <span :class="nft.stat3.toLowerCase() + '-icon'" class="mr-1 icon"></span>
-            <span :class="nft.stat3.toLowerCase()">{{ nft.stat3 }} +{{ nft.stat3Value }}</span>
+            <span
+              :class="nft.stat3.toLowerCase() + '-icon'"
+              class="mr-1 icon"
+            ></span>
+            <span :class="nft.stat3.toLowerCase()"
+              >{{ nft.stat3 }} +{{ nft.stat3Value }}</span
+            >
           </div>
         </div>
       </div>
 
-
-      <div v-if="nft.type === 'SecretBox'" class="nft-details glow-container" ref="el" :class="['glow-' + (nft.stars || 0)]">
+      <div
+        v-if="nft.type === 'SecretBox'"
+        class="nft-details glow-container"
+        ref="el"
+        :class="['glow-' + (nft.stars || 0)]"
+      >
         <img class="placeholder-box" :src="imgPath(nft.image)" v-if="isShop" />
         <h2 v-if="isShop" class="nft-name">{{ nft.name }}</h2>
         <div class="box-quantity-wrap">
           <div v-if="!isBlindBox" class="box-quantity">
             Supply left:
-            <span v-if="isShop" class="nft-supply">{{ isLoading ? "Loading" : nft.supply }}</span>
+            <span v-if="isShop" class="nft-supply">{{
+              isLoading ? 'Loading' : nft.supply
+            }}</span>
           </div>
         </div>
       </div>
 
-      <div v-if="nft.type !== 'shield' && nft.type !== 'SecretBox'" class="nft-details">
-        <img class="placeholder-consumable" :src="nft.image.startsWith('http') ? nft.image : imgPath(nft.image)"/>
-        <span v-if="isShop" class="nft-supply">Owned: {{this.quantityOwned}}</span>
+      <div
+        v-if="nft.type !== 'shield' && nft.type !== 'SecretBox'"
+        class="nft-details"
+      >
+        <img
+          class="placeholder-consumable"
+          :src="nft.image.startsWith('http') ? nft.image : imgPath(nft.image)"
+        />
+        <span v-if="isShop" class="nft-supply"
+          >Owned: {{ this.quantityOwned }}</span
+        >
       </div>
-
     </div>
   </div>
 </template>
 
 <script>
-import { mapCacheActions } from 'vuex-cache';
+import { mapCacheActions } from 'vuex-cache'
 // Comment
 export default {
   props: ['nft', 'isDefault', 'isShop', 'isLoading', 'favorite', 'isBlindBox'],
@@ -68,26 +126,33 @@ export default {
   },
   computed: {
     tooltipHtml() {
-      if(!this.nft) return '';
+      if (!this.nft) return ''
 
       const wrapInSpan = (spanClass, text) => {
-        return `<span class="${spanClass.toLowerCase()}">${text}</span><span class="${spanClass.toLowerCase()+'-icon'}"></span>`;
-      };
+        return `<span class="${spanClass.toLowerCase()}">${text}</span><span class="${
+          spanClass.toLowerCase() + '-icon'
+        }"></span>`
+      }
 
       let ttHtml = `
         ID: ${this.nft.id}
         <br>
-        ${Array(this.nft.stars + 1).fill('★').join('')}
-      `;
-      if(this.nft.level > 0) {
-        ttHtml += `<br>Level ${this.nft.level + 1}`;
+        ${Array(this.nft.stars + 1)
+          .fill('★')
+          .join('')}
+      `
+      if (this.nft.level > 0) {
+        ttHtml += `<br>Level ${this.nft.level + 1}`
       }
 
-      if(this.nft.element) {
-        ttHtml += `<br>Element: ${wrapInSpan(this.nft.element, this.nft.element)}`;
+      if (this.nft.element) {
+        ttHtml += `<br>Element: ${wrapInSpan(
+          this.nft.element,
+          this.nft.element
+        )}`
       }
-      return ttHtml;
-    }
+      return ttHtml
+    },
   },
 
   data() {
@@ -99,74 +164,88 @@ export default {
       commonBoxSupply: 0,
       rareBoxSupply: 0,
       quantityOwned: 0,
-      images: require.context('../assets/', false, /\.png$/)
-    };
-  },
-
-  methods: {
-    ...mapCacheActions(['fetchTotalShieldSupply', 'fetchTotalRenameTags', 'fetchTotalWeaponRenameTags',
-      'fetchTotalCharacterFireTraitChanges', 'fetchTotalCharacterEarthTraitChanges',
-      'fetchTotalCharacterWaterTraitChanges', 'fetchTotalCharacterLightningTraitChanges',
-      'fetchTotalRareBoxSupply','fetchTotalCommonBoxSupply',]),
-
-    imgPath(img) {
-      return this.images('./' + img);
+      images: require.context('../assets/', false, /\.png$/),
     }
   },
 
-  async mounted() {
-    if(this.nft.type === 'shield') {
-      this.totalShieldSupply = 25000 - (await this.fetchTotalShieldSupply());
-      this.fetchSupplyInterval = setInterval(async () => {
-        this.totalShieldSupply = 25000 - (await this.fetchTotalShieldSupply());
-      }, 3000);
-    } else if(this.nft.type === 'CharacterRenameTag' || this.nft.type === 'CharacterRenameTagDeal') {
-      this.quantityOwned = await this.fetchTotalRenameTags();
-      this.fetchSupplyInterval = setInterval(async () => {
-        this.quantityOwned = await this.fetchTotalRenameTags();
-      }, 3000);
-    } else if(this.nft.type === 'WeaponRenameTag' || this.nft.type === 'WeaponRenameTagDeal') {
-      this.quantityOwned = await this.fetchTotalWeaponRenameTags();
-      this.fetchSupplyInterval = setInterval(async () => {
-        this.quantityOwned = await this.fetchTotalWeaponRenameTags();
-      }, 3000);
-    } else if(this.nft.type === 'CharacterFireTraitChange') {
-      this.quantityOwned = await this.fetchTotalCharacterFireTraitChanges();
-      this.fetchSupplyInterval = setInterval(async () => {
-        this.quantityOwned = await this.fetchTotalCharacterFireTraitChanges();
-      }, 3000);
-    } else if(this.nft.type === 'CharacterEarthTraitChange') {
-      this.quantityOwned = await this.fetchTotalCharacterEarthTraitChanges();
-      this.fetchSupplyInterval = setInterval(async () => {
-        this.quantityOwned = await this.fetchTotalCharacterEarthTraitChanges();
-      }, 3000);
-    } else if(this.nft.type === 'CharacterWaterTraitChange') {
-      this.quantityOwned = await this.fetchTotalCharacterWaterTraitChanges();
-      this.fetchSupplyInterval = setInterval(async () => {
-        this.quantityOwned = await this.fetchTotalCharacterWaterTraitChanges();
-      }, 3000);
-    } else if(this.nft.type === 'CharacterLightningTraitChange') {
-      this.quantityOwned = await this.fetchTotalCharacterLightningTraitChanges();
-      this.fetchSupplyInterval = setInterval(async () => {
-        this.quantityOwned = await this.fetchTotalCharacterLightningTraitChanges();
-      }, 3000);
-    } else if (this.nft.type === 'SecretBox') {
-      this.fetchCommonBoxSupplyInterval = setInterval(async () =>{
-        this.commonBoxSupply = await this.fetchTotalCommonBoxSupply();
-      }, 3000);
+  methods: {
+    ...mapCacheActions([
+      'fetchTotalShieldSupply',
+      'fetchTotalRenameTags',
+      'fetchTotalWeaponRenameTags',
+      'fetchTotalCharacterFireTraitChanges',
+      'fetchTotalCharacterEarthTraitChanges',
+      'fetchTotalCharacterWaterTraitChanges',
+      'fetchTotalCharacterLightningTraitChanges',
+      'fetchTotalRareBoxSupply',
+      'fetchTotalCommonBoxSupply',
+    ]),
 
-      this.fetchRareBoxSupplyInterval = setInterval(async ()=> {
-        this.rareBoxSupply = await this.fetchTotalRareBoxSupply();
-      }, 3000);
+    imgPath(img) {
+      return this.images('./' + img)
+    },
+  },
+
+  async mounted() {
+    if (this.nft.type === 'shield') {
+      this.totalShieldSupply = 25000 - (await this.fetchTotalShieldSupply())
+      this.fetchSupplyInterval = setInterval(async () => {
+        this.totalShieldSupply = 25000 - (await this.fetchTotalShieldSupply())
+      }, 3000)
+    } else if (
+      this.nft.type === 'CharacterRenameTag' ||
+      this.nft.type === 'CharacterRenameTagDeal'
+    ) {
+      this.quantityOwned = await this.fetchTotalRenameTags()
+      this.fetchSupplyInterval = setInterval(async () => {
+        this.quantityOwned = await this.fetchTotalRenameTags()
+      }, 3000)
+    } else if (
+      this.nft.type === 'WeaponRenameTag' ||
+      this.nft.type === 'WeaponRenameTagDeal'
+    ) {
+      this.quantityOwned = await this.fetchTotalWeaponRenameTags()
+      this.fetchSupplyInterval = setInterval(async () => {
+        this.quantityOwned = await this.fetchTotalWeaponRenameTags()
+      }, 3000)
+    } else if (this.nft.type === 'CharacterFireTraitChange') {
+      this.quantityOwned = await this.fetchTotalCharacterFireTraitChanges()
+      this.fetchSupplyInterval = setInterval(async () => {
+        this.quantityOwned = await this.fetchTotalCharacterFireTraitChanges()
+      }, 3000)
+    } else if (this.nft.type === 'CharacterEarthTraitChange') {
+      this.quantityOwned = await this.fetchTotalCharacterEarthTraitChanges()
+      this.fetchSupplyInterval = setInterval(async () => {
+        this.quantityOwned = await this.fetchTotalCharacterEarthTraitChanges()
+      }, 3000)
+    } else if (this.nft.type === 'CharacterWaterTraitChange') {
+      this.quantityOwned = await this.fetchTotalCharacterWaterTraitChanges()
+      this.fetchSupplyInterval = setInterval(async () => {
+        this.quantityOwned = await this.fetchTotalCharacterWaterTraitChanges()
+      }, 3000)
+    } else if (this.nft.type === 'CharacterLightningTraitChange') {
+      this.quantityOwned = await this.fetchTotalCharacterLightningTraitChanges()
+      this.fetchSupplyInterval = setInterval(async () => {
+        this.quantityOwned =
+          await this.fetchTotalCharacterLightningTraitChanges()
+      }, 3000)
+    } else if (this.nft.type === 'SecretBox') {
+      this.fetchCommonBoxSupplyInterval = setInterval(async () => {
+        this.commonBoxSupply = await this.fetchTotalCommonBoxSupply()
+      }, 3000)
+
+      this.fetchRareBoxSupplyInterval = setInterval(async () => {
+        this.rareBoxSupply = await this.fetchTotalRareBoxSupply()
+      }, 3000)
     }
   },
 
   beforeDestroy() {
-    clearInterval(this.fetchSupplyInterval);
-    clearInterval(this.fetchCommonBoxSupplyInterval);
-    clearInterval(this.fetchRareBoxSupplyInterval);
-  }
-};
+    clearInterval(this.fetchSupplyInterval)
+    clearInterval(this.fetchCommonBoxSupplyInterval)
+    clearInterval(this.fetchRareBoxSupplyInterval)
+  },
+}
 </script>
 
 <style scoped>
@@ -248,13 +327,15 @@ export default {
   text-align: center;
   height: 100%;
   position: relative;
-  align-items :center;
+  align-items: center;
   flex-direction: column;
   justify-content: space-around;
   padding: 30px 0;
 }
 
-.trait, .id, .stats {
+.trait,
+.id,
+.stats {
   position: absolute;
 }
 

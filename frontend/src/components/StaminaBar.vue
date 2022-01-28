@@ -13,14 +13,14 @@ export default {
 
   computed: {
     factor(): number {
-      return Math.min(1, ((this as any).current) / ((this as any).max));
+      return Math.min(1, (this as any).current / (this as any).max)
     },
 
     percent(): string {
-      return (this.factor as unknown as number * 100) + '%';
+      return (this.factor as unknown as number) * 100 + '%'
     },
   },
-};
+}
 </script>
 
 <style scoped>

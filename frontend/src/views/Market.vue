@@ -1,28 +1,69 @@
 <template>
   <div class="body main-font market">
-    <div class="market-hero-weapon" style="max-width: 1769px; margin-left: auto; margin-right: auto;">
-      <button @click="activeType = 'character'; isBtnSell=false;" :class="activeType === 'character' && 'selected'">HERO</button>
-      <button @click="activeType = 'weapon'; isBtnSell=false;" :class="activeType === 'weapon' && 'selected'">WEAPON</button>
+    <div
+      class="market-hero-weapon"
+      style="max-width: 1769px; margin-left: auto; margin-right: auto"
+    >
+      <button
+        @click="
+          activeType = 'character'
+          isBtnSell = false
+        "
+        :class="activeType === 'character' && 'selected'"
+      >
+        HERO
+      </button>
+      <button
+        @click="
+          activeType = 'weapon'
+          isBtnSell = false
+        "
+        :class="activeType === 'weapon' && 'selected'"
+      >
+        WEAPON
+      </button>
     </div>
-    <b-tabs justified style="max-width: 1769px; margin-left: auto; margin-right: auto;">
-      <b-tab @click="clearData();browseTabActive = true;skillShopTabActive = false;searchAllCharacterListings(currentPage - 1)">
+    <b-tabs
+      justified
+      style="max-width: 1769px; margin-left: auto; margin-right: auto"
+    >
+      <b-tab
+        @click="
+          clearData()
+          browseTabActive = true
+          skillShopTabActive = false
+          searchAllCharacterListings(currentPage - 1)
+        "
+      >
         <template #title>
           ON SALES NFTS
-          <hint class="hint" text="NFT stands for Non Fungible Token.<br>Weapons and Characters are NFTs of the ERC721 standard" />
+          <hint
+            class="hint"
+            text="NFT stands for Non Fungible Token.<br>Weapons and Characters are NFTs of the ERC721 standard"
+          />
         </template>
         <div class="row mt-3">
           <div class="col">
             <div class="search-results">
-              <b-pagination class="customPagination"
+              <b-pagination
+                class="customPagination"
                 v-visible="resultSearch.length > 0"
-                align="center" v-model="currentPage"
+                align="center"
+                v-model="currentPage"
                 :total-rows="totalPages"
-                :per-page="activeType === 'weapon' ? weaponShowLimit : characterShowLimit"
+                :per-page="
+                  activeType === 'weapon' ? weaponShowLimit : characterShowLimit
+                "
                 first-number
                 last-number
-                v-on:click.native="(activeType == 'weapon' && searchAllWeaponListings(currentPage - 1)) ||
-                  (activeType == 'character' && searchAllCharacterListings(currentPage - 1)) ||
-                  (activeType == 'shield' && searchAllShieldListings(currentPage - 1))"
+                v-on:click.native="
+                  ;(activeType == 'weapon' &&
+                    searchAllWeaponListings(currentPage - 1)) ||
+                    (activeType == 'character' &&
+                      searchAllCharacterListings(currentPage - 1)) ||
+                    (activeType == 'shield' &&
+                      searchAllShieldListings(currentPage - 1))
+                "
               ></b-pagination>
               <character-list
                 v-on:character-filters-changed="searchAllCharacterListings(0)"
@@ -33,32 +74,67 @@
                 :showLimit="characterShowLimit"
                 :isMarket="true"
                 :isPage="true"
-                v-model="selectedNftId">
+                v-model="selectedNftId"
+              >
                 <template #above="{ character: { id } }">
                   <div>
                     <span class="d-block text-center" v-if="nftPricesById[id]">
-                      <span v-if="convertWeiToSkill(nftPricesById[id]) !== '0'"
-                      v-tooltip.top="{ content: maxPrecisionSkill(nftPricesById[id]) , trigger: (isMobile() ? 'click' : 'hover') }"
-                      @mouseover="hover = !isMobile() || true"
-                      @mouseleave="hover = !isMobile()"
-                      class="value-price">
-                      Price <span>{{ convertWeiToSkill(nftPricesById[id]) | dynamicDecimals(2, 4) }}</span> xBlade
+                      <span
+                        v-if="convertWeiToSkill(nftPricesById[id]) !== '0'"
+                        v-tooltip.top="{
+                          content: maxPrecisionSkill(nftPricesById[id]),
+                          trigger: isMobile() ? 'click' : 'hover',
+                        }"
+                        @mouseover="hover = !isMobile() || true"
+                        @mouseleave="hover = !isMobile()"
+                        class="value-price"
+                      >
+                        Price
+                        <span>{{
+                          convertWeiToSkill(nftPricesById[id])
+                            | dynamicDecimals(2, 4)
+                        }}</span>
+                        xBlade
                       </span>
                     </span>
-                    <span class="d-block text-center" v-else>Loading price...</span>
+                    <span class="d-block text-center" v-else
+                      >Loading price...</span
+                    >
                     <button
                       :hidden="convertWeiToSkill(nftPricesById[id]) === '0'"
-                      @click="selectedNftId = id; canPurchase && purchaseNft();"
+                      @click="
+                        selectedNftId = id
+                        canPurchase && purchaseNft()
+                      "
                       variant="primary"
                       v-bind:class="[!canPurchase ? 'disabled-button' : '']"
-                      class="gtag-link-others btn-purchase" tagname="confirm_purchase">
-                        {{ convertWeiToSkill(nftPricesById[id]) !== '0' ? 'PURCHASE' : 'SOLD' }} <b-icon-question-circle v-if="!canPurchase"
-                      v-tooltip.bottom="'You already have max amount of characters (8).'"/>
+                      class="gtag-link-others btn-purchase"
+                      tagname="confirm_purchase"
+                    >
+                      {{
+                        convertWeiToSkill(nftPricesById[id]) !== '0'
+                          ? 'PURCHASE'
+                          : 'SOLD'
+                      }}
+                      <b-icon-question-circle
+                        v-if="!canPurchase"
+                        v-tooltip.bottom="
+                          'You already have max amount of characters (8).'
+                        "
+                      />
                     </button>
                   </div>
                 </template>
                 <template #sold="{ character: { id } }">
-                  <div class="sold" v-if="nftPricesById[id] && convertWeiToSkill(nftPricesById[id]) === '0'"><span>sold</span></div>
+                  <div
+                    class="sold"
+                    v-if="
+                      nftPricesById[id] &&
+                      convertWeiToSkill(nftPricesById[id]) === '0'
+                    "
+                  >
+                    <span>sold</span>
+                  </div>
                 </template>
               </character-list>
               <weapon-grid
@@ -78,87 +154,159 @@
                 <template #above="{ weapon: { id } }">
                   <div>
                     <span class="d-block text-center" v-if="nftPricesById[id]">
-                      <span v-if="convertWeiToSkill(nftPricesById[id]) !== '0'"
-                      v-tooltip.top="{ content: maxPrecisionSkill(nftPricesById[id]) , trigger: (isMobile() ? 'click' : 'hover') }"
-                      @mouseover="hover = !isMobile() || true"
-                      @mouseleave="hover = !isMobile()"
-                      class="value-price">
-                        Price <span>{{ convertWeiToSkill(nftPricesById[id])  | dynamicDecimals(2, 4) }}</span> xBlade
+                      <span
+                        v-if="convertWeiToSkill(nftPricesById[id]) !== '0'"
+                        v-tooltip.top="{
+                          content: maxPrecisionSkill(nftPricesById[id]),
+                          trigger: isMobile() ? 'click' : 'hover',
+                        }"
+                        @mouseover="hover = !isMobile() || true"
+                        @mouseleave="hover = !isMobile()"
+                        class="value-price"
+                      >
+                        Price
+                        <span>{{
+                          convertWeiToSkill(nftPricesById[id])
+                            | dynamicDecimals(2, 4)
+                        }}</span>
+                        xBlade
                       </span>
                     </span>
-                    <span class="d-block text-center" v-else>Loading price...</span>
+                    <span class="d-block text-center" v-else
+                      >Loading price...</span
+                    >
                     <button
                       :hidden="convertWeiToSkill(nftPricesById[id]) === '0'"
-                      @click="selectedNftId = id; purchaseNft();"
+                      @click="
+                        selectedNftId = id
+                        purchaseNft()
+                      "
                       variant="primary"
-                      class="gtag-link-others btn-purchase">
-                      {{ convertWeiToSkill(nftPricesById[id]) !== '0' ? 'PURCHASE' : 'SOLD' }}
+                      class="gtag-link-others btn-purchase"
+                    >
+                      {{
+                        convertWeiToSkill(nftPricesById[id]) !== '0'
+                          ? 'PURCHASE'
+                          : 'SOLD'
+                      }}
                     </button>
                   </div>
                 </template>
                 <template #sold="{ weapon: { id } }">
-                  <div class="sold" v-if="nftPricesById[id] && convertWeiToSkill(nftPricesById[id]) === '0'"><span>sold</span></div>
+                  <div
+                    class="sold"
+                    v-if="
+                      nftPricesById[id] &&
+                      convertWeiToSkill(nftPricesById[id]) === '0'
+                    "
+                  >
+                    <span>sold</span>
+                  </div>
                 </template>
               </weapon-grid>
               <nft-list
                 v-on:nft-filters-changed="searchAllShieldListings(0)"
                 v-if="activeType === 'shield'"
                 :showGivenNftIdTypes="true"
-                :nftIdTypes="allSearchResults.map(id => { return { id: id, type: 'shield' }; })"
+                :nftIdTypes="
+                  allSearchResults.map((id) => {
+                    return { id: id, type: 'shield' }
+                  })
+                "
                 :showLimit="shieldShowLimit"
                 :showReforgedToggle="false"
                 :showFavoriteToggle="false"
                 :isMarket="true"
                 :isPage="true"
                 v-model="selectedNftId"
-                :canFavorite="false">
-
+                :canFavorite="false"
+              >
                 <template #above="{ nft: { id } }">
-                  <div class="d-flex flex-column align-items-center justify-content-center m-top-negative-5">
-                    <span class="d-block text-center fix-h24" v-if="nftPricesById[id]">
-                      <span v-if="convertWeiToSkill(nftPricesById[id]) !== '0'"
-                      v-tooltip.top="{ content: maxPrecisionSkill(nftPricesById[id]) , trigger: (isMobile() ? 'click' : 'hover') }"
-                      @mouseover="hover = !isMobile() || true"
-                      @mouseleave="hover = !isMobile()"
-                      class="value-price"
+                  <div
+                    class="d-flex flex-column align-items-center justify-content-center m-top-negative-5"
+                  >
+                    <span
+                      class="d-block text-center fix-h24"
+                      v-if="nftPricesById[id]"
+                    >
+                      <span
+                        v-if="convertWeiToSkill(nftPricesById[id]) !== '0'"
+                        v-tooltip.top="{
+                          content: maxPrecisionSkill(nftPricesById[id]),
+                          trigger: isMobile() ? 'click' : 'hover',
+                        }"
+                        @mouseover="hover = !isMobile() || true"
+                        @mouseleave="hover = !isMobile()"
+                        class="value-price"
                       >
-                        Price <span>{{ convertWeiToSkill(nftPricesById[id]) | dynamicDecimals(2, 4) }}</span> xBlade
+                        Price
+                        <span>{{
+                          convertWeiToSkill(nftPricesById[id])
+                            | dynamicDecimals(2, 4)
+                        }}</span>
+                        xBlade
                       </span>
                     </span>
-                    <span class="d-block text-center" v-else>Loading price...</span>
+                    <span class="d-block text-center" v-else
+                      >Loading price...</span
+                    >
                     <b-button
                       :hidden="convertWeiToSkill(nftPricesById[id]) === '0'"
-                      @click="selectedNftId = id; purchaseNft();"
+                      @click="
+                        selectedNftId = id
+                        purchaseNft()
+                      "
                       variant="primary"
-                      class="gtag-link-others">
-                      {{ convertWeiToSkill(nftPricesById[id]) !== '0' ? 'Purchase' : 'Sold' }}
+                      class="gtag-link-others"
+                    >
+                      {{
+                        convertWeiToSkill(nftPricesById[id]) !== '0'
+                          ? 'Purchase'
+                          : 'Sold'
+                      }}
                     </b-button>
                   </div>
                 </template>
 
                 <template #sold="{ nft: { id } }">
-                  <div class="sold" v-if="nftPricesById[id] && convertWeiToSkill(nftPricesById[id]) === '0'"><span>sold</span></div>
+                  <div
+                    class="sold"
+                    v-if="
+                      nftPricesById[id] &&
+                      convertWeiToSkill(nftPricesById[id]) === '0'
+                    "
+                  >
+                    <span>sold</span>
+                  </div>
                 </template>
-
               </nft-list>
-              <b-pagination class="customPagination"
+              <b-pagination
+                class="customPagination"
                 style="margin-top: 20px"
                 v-visible="resultSearch.length > 0"
-                align="center" v-model="currentPage"
+                align="center"
+                v-model="currentPage"
                 :total-rows="totalPages"
-                :per-page="activeType === 'weapon' ? weaponShowLimit : characterShowLimit"
+                :per-page="
+                  activeType === 'weapon' ? weaponShowLimit : characterShowLimit
+                "
                 first-number
                 last-number
-                v-on:click.native="(activeType == 'weapon' && searchAllWeaponListings(currentPage - 1)) ||
-                  (activeType == 'character' && searchAllCharacterListings(currentPage - 1)) ||
-                  (activeType == 'shield' && searchAllShieldListings(currentPage - 1))"
+                v-on:click.native="
+                  ;(activeType == 'weapon' &&
+                    searchAllWeaponListings(currentPage - 1)) ||
+                    (activeType == 'character' &&
+                      searchAllCharacterListings(currentPage - 1)) ||
+                    (activeType == 'shield' &&
+                      searchAllShieldListings(currentPage - 1))
+                "
               ></b-pagination>
             </div>
           </div>
         </div>
         <div v-if="waitingMarketOutcome" class="modal-loading">
           <div class="modal-loading-content">
-            <div class="outcome" >
+            <div class="outcome">
               <i class="fas fa-spinner fa-spin"></i>
               Loading...
             </div>
@@ -174,10 +322,21 @@
           </div>
         </div> -->
       </b-tab>
-      <b-tab @click="clearData();loadMarketTaxes();browseTabActive = false;skillShopTabActive = false;isSell=true">
+      <b-tab
+        @click="
+          clearData()
+          loadMarketTaxes()
+          browseTabActive = false
+          skillShopTabActive = false
+          isSell = true
+        "
+      >
         <template #title>
           MY NFTS
-          <hint class="hint" text="When you list an NFT for sale, it is transferred to the<br>market until someone buys it or you cancel the sale" />
+          <hint
+            class="hint"
+            text="When you list an NFT for sale, it is transferred to the<br>market until someone buys it or you cancel the sale"
+          />
         </template>
         <div class="row mt-3">
           <div class="col-12 col-xl-3 col-md-12 col-sm-12">
@@ -185,15 +344,28 @@
               <!-- <input class="form-control search-item" v-model.trim="search" type="text" placeholder="  Seller Address, NFT ID"> -->
               <div class="mb-2">
                 <b-button
-                  @click="activeType = 'weapon', isBtnSell=false"  class="gtag-link-others  search-btn"
-                  :class="isBtnSell===false&&activeType==='weapon'?'gtag-link-others search-btn selected':'gtag-link-others search-btn'"
-                  tagname="show_characters_market">Show Weapons</b-button>
+                  @click=";(activeType = 'weapon'), (isBtnSell = false)"
+                  class="gtag-link-others search-btn"
+                  :class="
+                    isBtnSell === false && activeType === 'weapon'
+                      ? 'gtag-link-others search-btn selected'
+                      : 'gtag-link-others search-btn'
+                  "
+                  tagname="show_characters_market"
+                  >Show Weapons</b-button
+                >
               </div>
               <div class="mb-2">
                 <b-button
-                  @click="activeType = 'character', isBtnSell=false"
-                  :class="isBtnSell===false&&activeType==='character'?'gtag-link-others search-btn selected':'gtag-link-others search-btn'"
-                  tagname="show_weapons_market">Show Characters</b-button>
+                  @click=";(activeType = 'character'), (isBtnSell = false)"
+                  :class="
+                    isBtnSell === false && activeType === 'character'
+                      ? 'gtag-link-others search-btn selected'
+                      : 'gtag-link-others search-btn'
+                  "
+                  tagname="show_weapons_market"
+                  >Show Characters</b-button
+                >
               </div>
 
               <div>
@@ -219,17 +391,39 @@
                   v-tooltip.bottom="shieldMarketTax + '% tax (paid by the buyer) will be added to the final price.'"/>
                 </b-button> -->
 
-                <b-modal class="centered-modal" ref="listing-setup-modal"
-                  @ok="!priceChangeModal ? addListingForNft() : updateNftListingPrice()">
+                <b-modal
+                  class="centered-modal"
+                  ref="listing-setup-modal"
+                  @ok="
+                    !priceChangeModal
+                      ? addListingForNft()
+                      : updateNftListingPrice()
+                  "
+                >
                   <template #modal-title>
-                    {{!priceChangeModal ? `Sell ${activeType}` : `Change ${activeType} price`}}
+                    {{
+                      !priceChangeModal
+                        ? `Sell ${activeType}`
+                        : `Change ${activeType} price`
+                    }}
                   </template>
-                  <b-form-input type="number" :max="10000"
-                    class="modal-input" v-model="listingSellPrice" placeholder="Sell Price (xBlade)" />
+                  <b-form-input
+                    type="number"
+                    :max="10000"
+                    class="modal-input"
+                    v-model="listingSellPrice"
+                    placeholder="Sell Price (xBlade)"
+                  />
 
-                  <span v-if="listingSellPrice">Do you want to sell your {{activeType}} for {{listingSellPrice}} xBlade?<br>
-                  <i>The buyer will pay an extra {{activeListingMarketTax()}}% market fee for a total of
-                  {{calculatedBuyerCost(listingSellPrice)}} xBlade</i></span>
+                  <span v-if="listingSellPrice"
+                    >Do you want to sell your {{ activeType }} for
+                    {{ listingSellPrice }} xBlade?<br />
+                    <i
+                      >The buyer will pay an extra
+                      {{ activeListingMarketTax() }}% market fee for a total of
+                      {{ calculatedBuyerCost(listingSellPrice) }} xBlade</i
+                    ></span
+                  >
                 </b-modal>
               </div>
               <!-- <div class="mb-2">
@@ -282,16 +476,28 @@
               </div> -->
               <div class="mb-2">
                 <b-button
-                  @click="searchOwnListings('weapon'), isBtnSell=true"
-                  :class="isBtnSell===true&&activeType==='weapon'?'gtag-link-others search-btn selected':'gtag-link-others search-btn'"
-                  tagname="search_own_weapons">Selling Weapons</b-button>
+                  @click="searchOwnListings('weapon'), (isBtnSell = true)"
+                  :class="
+                    isBtnSell === true && activeType === 'weapon'
+                      ? 'gtag-link-others search-btn selected'
+                      : 'gtag-link-others search-btn'
+                  "
+                  tagname="search_own_weapons"
+                  >Selling Weapons</b-button
+                >
               </div>
 
               <div class="mb-2">
                 <b-button
-                  @click="searchOwnListings('character'), isBtnSell=true"
-                  :class="isBtnSell===true&&activeType==='character'?'gtag-link-others search-btn selected':'gtag-link-others search-btn'"
-                  tagname="search_own_characters">Selling Characters</b-button>
+                  @click="searchOwnListings('character'), (isBtnSell = true)"
+                  :class="
+                    isBtnSell === true && activeType === 'character'
+                      ? 'gtag-link-others search-btn selected'
+                      : 'gtag-link-others search-btn'
+                  "
+                  tagname="search_own_characters"
+                  >Selling Characters</b-button
+                >
               </div>
               <!-- <div v-if="activeType === 'character' && isBtnSell" class="mb-2 search-btn-selling">
                 <b-button
@@ -313,25 +519,35 @@
               :canFavorite="false"
               :weaponIds="searchResults"
               :isMarket="true"
-
               :cancelNftListing="cancelNftListing"
               :isBtnSell="isBtnSell"
               :showListingSetupModal="showListingSetupModal"
-
-              v-model="selectedNftId">
+              v-model="selectedNftId"
+            >
               <template #above="{ weapon: { id } }">
                 <div>
                   <span class="d-block text-center" v-if="nftPricesById[id]">
-                    <span v-if="convertWeiToSkill(nftPricesById[id]) !== '0'"
-                    v-tooltip.top="{ content: maxPrecisionSkill(nftPricesById[id]) , trigger: (isMobile() ? 'click' : 'hover') }"
-                    @mouseover="hover = !isMobile() || true"
-                    @mouseleave="hover = !isMobile()"
-                    class="value-price"
+                    <span
+                      v-if="convertWeiToSkill(nftPricesById[id]) !== '0'"
+                      v-tooltip.top="{
+                        content: maxPrecisionSkill(nftPricesById[id]),
+                        trigger: isMobile() ? 'click' : 'hover',
+                      }"
+                      @mouseover="hover = !isMobile() || true"
+                      @mouseleave="hover = !isMobile()"
+                      class="value-price"
                     >
-                      Price <span>{{ convertWeiToSkill(nftPricesById[id]) | dynamicDecimals(2, 4) }}</span> xBlade
+                      Price
+                      <span>{{
+                        convertWeiToSkill(nftPricesById[id])
+                          | dynamicDecimals(2, 4)
+                      }}</span>
+                      xBlade
                     </span>
                   </span>
-                  <span class="d-block text-center" v-else>Loading price...</span>
+                  <span class="d-block text-center" v-else
+                    >Loading price...</span
+                  >
                   <!-- <b-button
                       v-if="id !== null && !searchResultsOwned"
                       :hidden="convertWeiToSkill(nftPricesById[id]) === '0'"
@@ -343,7 +559,15 @@
                 </div>
               </template>
               <template #sold="{ weapon: { id } }">
-                <div class="sold" v-if="nftPricesById[id] && convertWeiToSkill(nftPricesById[id]) === '0'"><span>sold</span></div>
+                <div
+                  class="sold"
+                  v-if="
+                    nftPricesById[id] &&
+                    convertWeiToSkill(nftPricesById[id]) === '0'
+                  "
+                >
+                  <span>sold</span>
+                </div>
               </template>
             </weapon-grid>
 
@@ -352,25 +576,35 @@
               :showGivenCharacterIds="true"
               :characterIds="searchResults"
               :isMarket="true"
-
               :cancelNftListing="cancelNftListing"
               :isBtnSell="isBtnSell"
               :showListingSetupModal="showListingSetupModal"
-
-              v-model="selectedNftId">
+              v-model="selectedNftId"
+            >
               <template #above="{ character: { id } }">
                 <div>
                   <span class="d-block text-center" v-if="nftPricesById[id]">
-                    <span v-if="convertWeiToSkill(nftPricesById[id]) !== '0'"
-                    v-tooltip.top="{ content: maxPrecisionSkill(nftPricesById[id]) , trigger: (isMobile() ? 'click' : 'hover') }"
-                    @mouseover="hover = !isMobile() || true"
-                    @mouseleave="hover = !isMobile()"
-                    class="value-price"
+                    <span
+                      v-if="convertWeiToSkill(nftPricesById[id]) !== '0'"
+                      v-tooltip.top="{
+                        content: maxPrecisionSkill(nftPricesById[id]),
+                        trigger: isMobile() ? 'click' : 'hover',
+                      }"
+                      @mouseover="hover = !isMobile() || true"
+                      @mouseleave="hover = !isMobile()"
+                      class="value-price"
                     >
-                      Price <span>{{ convertWeiToSkill(nftPricesById[id])  | dynamicDecimals(2, 4) }}</span> xBlade
+                      Price
+                      <span>{{
+                        convertWeiToSkill(nftPricesById[id])
+                          | dynamicDecimals(2, 4)
+                      }}</span>
+                      xBlade
                     </span>
                   </span>
-                  <span class="d-block text-center" v-else>Loading price...</span>
+                  <span class="d-block text-center" v-else
+                    >Loading price...</span
+                  >
                   <!-- <b-button
                     v-if="id !== null && !searchResultsOwned"
                     :hidden="convertWeiToSkill(nftPricesById[id]) === '0'"
@@ -384,7 +618,15 @@
                 </div>
               </template>
               <template #sold="{ character: { id } }">
-                <div class="sold" v-if="nftPricesById[id] && convertWeiToSkill(nftPricesById[id]) === '0'"><span>sold</span></div>
+                <div
+                  class="sold"
+                  v-if="
+                    nftPricesById[id] &&
+                    convertWeiToSkill(nftPricesById[id]) === '0'
+                  "
+                >
+                  <span>sold</span>
+                </div>
               </template>
             </character-list>
 
@@ -393,24 +635,45 @@
               :showGivenNftIdTypes="true"
               :showReforgedToggle="false"
               :showFavoriteToggle="false"
-              :nftIdTypes="searchResults.map(id => { return { id: id, type: 'shield' }; })"
+              :nftIdTypes="
+                searchResults.map((id) => {
+                  return { id: id, type: 'shield' }
+                })
+              "
               :showLimit="shieldShowLimit"
               :isMarket="true"
               v-model="selectedNftId"
-              :canFavorite="false">
+              :canFavorite="false"
+            >
               <template #above="{ nft: { id } }">
-                <div class="d-flex flex-column align-items-center justify-content-center m-top-negative-5">
-                  <span class="d-block text-center fix-h24" v-if="nftPricesById[id]">
-                    <span v-if="convertWeiToSkill(nftPricesById[id]) !== '0'"
-                    v-tooltip.top="{ content: maxPrecisionSkill(nftPricesById[id]) , trigger: (isMobile() ? 'click' : 'hover') }"
-                    @mouseover="hover = !isMobile() || true"
-                    @mouseleave="hover = !isMobile()"
-                    class="value-price"
+                <div
+                  class="d-flex flex-column align-items-center justify-content-center m-top-negative-5"
+                >
+                  <span
+                    class="d-block text-center fix-h24"
+                    v-if="nftPricesById[id]"
+                  >
+                    <span
+                      v-if="convertWeiToSkill(nftPricesById[id]) !== '0'"
+                      v-tooltip.top="{
+                        content: maxPrecisionSkill(nftPricesById[id]),
+                        trigger: isMobile() ? 'click' : 'hover',
+                      }"
+                      @mouseover="hover = !isMobile() || true"
+                      @mouseleave="hover = !isMobile()"
+                      class="value-price"
                     >
-                      Price <span>{{ convertWeiToSkill(nftPricesById[id]) | dynamicDecimals(2, 4) }}</span> xBlade
+                      Price
+                      <span>{{
+                        convertWeiToSkill(nftPricesById[id])
+                          | dynamicDecimals(2, 4)
+                      }}</span>
+                      xBlade
                     </span>
                   </span>
-                  <span class="d-block text-center" v-else>Loading price...</span>
+                  <span class="d-block text-center" v-else
+                    >Loading price...</span
+                  >
                   <!-- <b-button
                     v-if="id !== null && !searchResultsOwned"
                     :hidden="convertWeiToSkill(nftPricesById[id]) === '0'"
@@ -422,11 +685,22 @@
                 </div>
               </template>
               <template #sold="{ nft: { id } }">
-                <div class="sold" v-if="nftPricesById[id] && convertWeiToSkill(nftPricesById[id]) === '0'"><span>sold</span></div>
+                <div
+                  class="sold"
+                  v-if="
+                    nftPricesById[id] &&
+                    convertWeiToSkill(nftPricesById[id]) === '0'
+                  "
+                >
+                  <span>sold</span>
+                </div>
               </template>
             </nft-list>
           </div>
-          <div class="col-12 col-xl-9 col-md-12 col-sm-12 sell-grid" v-show="activeType === 'weapon' && !isBtnSell">
+          <div
+            class="col-12 col-xl-9 col-md-12 col-sm-12 sell-grid"
+            v-show="activeType === 'weapon' && !isBtnSell"
+          >
             <weapon-grid
               v-model="selectedNftId"
               :showReforgedWeaponsDefVal="true"
@@ -439,7 +713,10 @@
               :isMarket="true"
             />
           </div>
-          <div class="col-12 col-xl-9 col-md-12 col-sm-12 sell-grid" v-show="activeType === 'character' && !isBtnSell">
+          <div
+            class="col-12 col-xl-9 col-md-12 col-sm-12 sell-grid"
+            v-show="activeType === 'character' && !isBtnSell"
+          >
             <character-list
               v-model="selectedNftId"
               :sellClick="showListingSetupModal"
@@ -448,7 +725,10 @@
               :isMarket="true"
             />
           </div>
-          <div class="col-12col-xl-3 col-md-12 col-sm-12 sell-grid" v-if="activeType === 'shield'">
+          <div
+            class="col-12col-xl-3 col-md-12 col-sm-12 sell-grid"
+            v-if="activeType === 'shield'"
+          >
             <nft-list
               :isShop="false"
               v-model="selectedNftId"
@@ -458,7 +738,7 @@
         </div>
         <div v-if="waitingMarketOutcome" class="modal-loading">
           <div class="modal-loading-content">
-            <div class="outcome" >
+            <div class="outcome">
               <i class="fas fa-spinner fa-spin"></i>
               Loading...
             </div>
@@ -479,132 +759,201 @@
 </template>
 
 <script lang="ts">
-import assert from 'assert';
-import Vue from 'vue';
-import CharacterList from '../components/smart/CharacterList.vue';
-import WeaponGrid from '../components/smart/WeaponGrid.vue';
-import Hint from '../components/Hint.vue';
-import Web3 from 'web3';
-import { mapActions, mapGetters, mapState } from 'vuex';
-import { Accessors } from 'vue/types/options';
-import { Contract, Contracts, IState } from '../interfaces';
-import { Characters, Weapons, Shields } from '../../../build/abi-interfaces';
-import { SkillShopListing } from '../interfaces/SkillShopListing';
-import BigNumber from 'bignumber.js';
-import { BModal } from 'bootstrap-vue';
-import { traitNameToNumber } from '@/contract-models';
-import { market_blockchain as useBlockchain } from './../feature-flags';
-import { CharacterTransactionHistoryData, ICharacterHistory,
-  IWeaponHistory, WeaponTransactionHistoryData,
-  IShieldHistory, ShieldTransactionHistoryData } from '@/interfaces/History';
-import { getShieldNameFromSeed } from '@/shield-name';
-import { fromWeiEther, apiUrl, defaultOptions } from '../utils/common';
-import NftList, { NftIdType } from '@/components/smart/NftList.vue';
-import { getCleanName } from '../rename-censor';
-import { mapCacheActions } from 'vuex-cache';
+import assert from 'assert'
+import Vue from 'vue'
+import CharacterList from '../components/smart/CharacterList.vue'
+import WeaponGrid from '../components/smart/WeaponGrid.vue'
+import Hint from '../components/Hint.vue'
+import Web3 from 'web3'
+import { mapActions, mapGetters, mapState } from 'vuex'
+import { Accessors } from 'vue/types/options'
+import { Contract, Contracts, IState } from '../interfaces'
+import { Characters, Weapons, Shields } from '../../../build/abi-interfaces'
+import { SkillShopListing } from '../interfaces/SkillShopListing'
+import BigNumber from 'bignumber.js'
+import { BModal } from 'bootstrap-vue'
+import { traitNameToNumber } from '@/contract-models'
+import { market_blockchain as useBlockchain } from './../feature-flags'
+import {
+  CharacterTransactionHistoryData,
+  ICharacterHistory,
+  IWeaponHistory,
+  WeaponTransactionHistoryData,
+  IShieldHistory,
+  ShieldTransactionHistoryData,
+} from '@/interfaces/History'
+import { getShieldNameFromSeed } from '@/shield-name'
+import { fromWeiEther, apiUrl, defaultOptions } from '../utils/common'
+import NftList, { NftIdType } from '@/components/smart/NftList.vue'
+import { getCleanName } from '../rename-censor'
+import { mapCacheActions } from 'vuex-cache'
 
-type SellType = 'weapon' | 'character' | 'shield';
-type WeaponId = string;
-type CharacterId = string;
-type ShieldId = string;
-type NftId = WeaponId | CharacterId | ShieldId;
+type SellType = 'weapon' | 'character' | 'shield'
+type WeaponId = string
+type CharacterId = string
+type ShieldId = string
+type NftId = WeaponId | CharacterId | ShieldId
 
 interface Data {
-  activeType: SellType;
-  search: string;
-  searchResults: CharacterId[] | WeaponId[] | NftIdType[];
-  allSearchResults: CharacterId[] | WeaponId[] | NftIdType[];
-  searchResultsOwned: boolean;
-  selectedNftId: NftId | null;
-  marketOutcome: boolean;
-  marketOutcomeHeading: string | null;
-  marketOutcomeActiveType: string | null;
-  marketOutcomeID: string | null;
-  marketOutcomePrice: string | null;
-  marketOutcomeSeller: string | null;
-  waitingMarketOutcome: boolean;
-  nftPricesById: Record<string, string>;
-  characterMarketTax: string;
-  weaponMarketTax: string ;
-  shieldMarketTax: string;
-  characterShowLimit: number;
-  weaponShowLimit: number;
-  shieldShowLimit: number;
-  allListingsAmount: number;
-  currentPage: number;
-  browseTabActive: boolean;
-  skillShopTabActive: boolean;
-  listingSellPrice: string;
-  priceChangeModal: boolean;
-  weaponTransactionHistoryData: WeaponTransactionHistoryData[];
-  weaponTransactionHistoryHeader: any;
-  characterTransactionHistoryData: CharacterTransactionHistoryData[];
-  characterTransactionHistoryHeader: any;
-  shieldTransactionHistoryData: ShieldTransactionHistoryData[];
-  shieldTransactionHistoryHeader: any;
-  historyCounter: number;
-  isSell: boolean;
-  isBtnSell: boolean;
-  resultSearch: CharacterId[] | WeaponId[] | NftIdType[];
-  totalPages: number;
+  activeType: SellType
+  search: string
+  searchResults: CharacterId[] | WeaponId[] | NftIdType[]
+  allSearchResults: CharacterId[] | WeaponId[] | NftIdType[]
+  searchResultsOwned: boolean
+  selectedNftId: NftId | null
+  marketOutcome: boolean
+  marketOutcomeHeading: string | null
+  marketOutcomeActiveType: string | null
+  marketOutcomeID: string | null
+  marketOutcomePrice: string | null
+  marketOutcomeSeller: string | null
+  waitingMarketOutcome: boolean
+  nftPricesById: Record<string, string>
+  characterMarketTax: string
+  weaponMarketTax: string
+  shieldMarketTax: string
+  characterShowLimit: number
+  weaponShowLimit: number
+  shieldShowLimit: number
+  allListingsAmount: number
+  currentPage: number
+  browseTabActive: boolean
+  skillShopTabActive: boolean
+  listingSellPrice: string
+  priceChangeModal: boolean
+  weaponTransactionHistoryData: WeaponTransactionHistoryData[]
+  weaponTransactionHistoryHeader: any
+  characterTransactionHistoryData: CharacterTransactionHistoryData[]
+  characterTransactionHistoryHeader: any
+  shieldTransactionHistoryData: ShieldTransactionHistoryData[]
+  shieldTransactionHistoryHeader: any
+  historyCounter: number
+  isSell: boolean
+  isBtnSell: boolean
+  resultSearch: CharacterId[] | WeaponId[] | NftIdType[]
+  totalPages: number
 }
 
-type StoreMappedState = Pick<IState, 'defaultAccount' | 'weapons' | 'characters' | 'shields' | 'ownedCharacterIds' | 'ownedWeaponIds' | 'ownedShieldIds'>;
+type StoreMappedState = Pick<
+  IState,
+  | 'defaultAccount'
+  | 'weapons'
+  | 'characters'
+  | 'shields'
+  | 'ownedCharacterIds'
+  | 'ownedWeaponIds'
+  | 'ownedShieldIds'
+>
 
-const defaultLimit = 40;
+const defaultLimit = 40
 
 interface StoreMappedGetters {
-  contracts: Contracts;
-  ownCharacters: any[];
-  totalShieldSupply: 0;
-  getCharacterName(id: string): string;
-  getWeaponName(id: string, stars: number): string;
-  getBoxPrice(): { common: string, rare: string };
+  contracts: Contracts
+  ownCharacters: any[]
+  totalShieldSupply: 0
+  getCharacterName(id: string): string
+  getWeaponName(id: string, stars: number): string
+  getBoxPrice(): { common: string; rare: string }
 }
 
 export interface Nft {
-  id: string;
-  type: string;
-  stars?: number;
-  element?: string;
-  stat1?: string;
-  stat2?: string;
-  stat3?: string;
-  stat1Value?: number;
-  stat2Value?: number;
-  stat3Value?: number;
-  nftPrice?: number;
-  isConsumable: boolean;
-  name: string;
-  description: string;
-  image: string;
+  id: string
+  type: string
+  stars?: number
+  element?: string
+  stat1?: string
+  stat2?: string
+  stat3?: string
+  stat1Value?: number
+  stat2Value?: number
+  stat3Value?: number
+  nftPrice?: number
+  isConsumable: boolean
+  name: string
+  description: string
+  image: string
 }
 
 interface StoreMappedActions {
-  fetchAllMarketNftIds(payload: { nftContractAddr: string }): Promise<string[]>;
+  fetchAllMarketNftIds(payload: { nftContractAddr: string }): Promise<string[]>
   fetchAllMarketCharacterNftIdsPage(payload: {
-    nftContractAddr: string, limit: number, pageNumber: number, trait: number, minLevel: number, maxLevel: number
-  }): Promise<string[]>;
-  fetchAllMarketWeaponNftIdsPage(payload: { nftContractAddr: string, limit: number, pageNumber: number, trait: number, stars: number }): Promise<string[]>;
-  fetchAllMarketShieldNftIdsPage(payload: { nftContractAddr: string, limit: number, pageNumber: number, trait: number, stars: number }): Promise<string[]>;
-  fetchNumberOfWeaponListings(payload: { nftContractAddr: string, trait: number, stars: number }): Promise<number>;
-  fetchNumberOfCharacterListings(payload: { nftContractAddr: string, trait: number, minLevel: number, maxLevel: number}): Promise<number>;
-  fetchNumberOfShieldListings(payload: { nftContractAddr: string, trait: number, stars: number}): Promise<number>;
-  fetchMarketNftIdsBySeller(payload: { nftContractAddr: string, sellerAddr: string }): Promise<string[]>;
-  fetchMarketNftPrice(payload: { nftContractAddr: string, tokenId: string | number }): Promise<string>;
-  fetchMarketTax(payload: { nftContractAddr: string }): Promise<string>;
-  checkMarketItemOwnership(payload: { nftContractAddr: string, tokenId: string | number}): Promise<string>;
-  addMarketListing(payload: { nftContractAddr: string, tokenId: string, price: string }): Promise<{ seller: string, nftID: string, price: string }>;
-  changeMarketListingPrice(
-    payload: { nftContractAddr: string, tokenId: string, newPrice: string }
-  ): Promise<{ seller: string, nftID: string, newPrice: string }>;
-  cancelMarketListing(payload: { nftContractAddr: string, tokenId: string }): Promise<{ seller: string, nftID: string }>;
-  purchaseMarketListing(payload: { nftContractAddr: string, tokenId: string, maxPrice: string }): Promise<{ seller: string, nftID: string, price: string }>;
-  fetchSellerOfNft(payload: { nftContractAddr: string, tokenId: string }): Promise<string>;
-  fetchTotalShieldSupply(): Promise<number>;
-  setupWeaponsWithIdsRenames(weaponIds: string[]): Promise<void>;
-  setupCharactersWithIdsRenames(weaponIds: string[]): Promise<void>;
-  fetchBoxPrice(): Promise<void>;
+    nftContractAddr: string
+    limit: number
+    pageNumber: number
+    trait: number
+    minLevel: number
+    maxLevel: number
+  }): Promise<string[]>
+  fetchAllMarketWeaponNftIdsPage(payload: {
+    nftContractAddr: string
+    limit: number
+    pageNumber: number
+    trait: number
+    stars: number
+  }): Promise<string[]>
+  fetchAllMarketShieldNftIdsPage(payload: {
+    nftContractAddr: string
+    limit: number
+    pageNumber: number
+    trait: number
+    stars: number
+  }): Promise<string[]>
+  fetchNumberOfWeaponListings(payload: {
+    nftContractAddr: string
+    trait: number
+    stars: number
+  }): Promise<number>
+  fetchNumberOfCharacterListings(payload: {
+    nftContractAddr: string
+    trait: number
+    minLevel: number
+    maxLevel: number
+  }): Promise<number>
+  fetchNumberOfShieldListings(payload: {
+    nftContractAddr: string
+    trait: number
+    stars: number
+  }): Promise<number>
+  fetchMarketNftIdsBySeller(payload: {
+    nftContractAddr: string
+    sellerAddr: string
+  }): Promise<string[]>
+  fetchMarketNftPrice(payload: {
+    nftContractAddr: string
+    tokenId: string | number
+  }): Promise<string>
+  fetchMarketTax(payload: { nftContractAddr: string }): Promise<string>
+  checkMarketItemOwnership(payload: {
+    nftContractAddr: string
+    tokenId: string | number
+  }): Promise<string>
+  addMarketListing(payload: {
+    nftContractAddr: string
+    tokenId: string
+    price: string
+  }): Promise<{ seller: string; nftID: string; price: string }>
+  changeMarketListingPrice(payload: {
+    nftContractAddr: string
+    tokenId: string
+    newPrice: string
+  }): Promise<{ seller: string; nftID: string; newPrice: string }>
+  cancelMarketListing(payload: {
+    nftContractAddr: string
+    tokenId: string
+  }): Promise<{ seller: string; nftID: string }>
+  purchaseMarketListing(payload: {
+    nftContractAddr: string
+    tokenId: string
+    maxPrice: string
+  }): Promise<{ seller: string; nftID: string; price: string }>
+  fetchSellerOfNft(payload: {
+    nftContractAddr: string
+    tokenId: string
+  }): Promise<string>
+  fetchTotalShieldSupply(): Promise<number>
+  setupWeaponsWithIdsRenames(weaponIds: string[]): Promise<void>
+  setupCharactersWithIdsRenames(weaponIds: string[]): Promise<void>
+  fetchBoxPrice(): Promise<void>
 }
 
 export default Vue.extend({
@@ -649,62 +998,82 @@ export default Vue.extend({
       isBtnSell: false,
       resultSearch: [],
       totalPages: 0,
-    } as Data;
+    } as Data
   },
 
   computed: {
     ...(mapState([
-      'defaultAccount', 'weapons', 'characters', 'shields', 'ownedCharacterIds', 'ownedWeaponIds', 'ownedShieldIds',
+      'defaultAccount',
+      'weapons',
+      'characters',
+      'shields',
+      'ownedCharacterIds',
+      'ownedWeaponIds',
+      'ownedShieldIds',
     ]) as Accessors<StoreMappedState>),
     ...(mapGetters([
-      'contracts', 'ownCharacters', 'totalShieldSupply','getCharacterName','getWeaponName', 'getBoxPrice'
+      'contracts',
+      'ownCharacters',
+      'totalShieldSupply',
+      'getCharacterName',
+      'getWeaponName',
+      'getBoxPrice',
     ]) as Accessors<StoreMappedGetters>),
-    ...mapGetters(['transferCooldownOfCharacterId', 'charactersWithIds', 'weaponsWithIds']),
+    ...mapGetters([
+      'transferCooldownOfCharacterId',
+      'charactersWithIds',
+      'weaponsWithIds',
+    ]),
 
     Weapons(): Contract<Weapons> {
       // we use x! here because we assert that they're set already in created()
       // this helps with typings
-      return this.contracts.Weapons!;
+      return this.contracts.Weapons!
     },
 
     Characters(): Contract<Characters> {
       // we use x! here because we assert that they're set already in created()
       // this helps with typings
-      return this.contracts.Characters!;
+      return this.contracts.Characters!
     },
 
     Shields(): Contract<Shields> {
       // we use x! here because we assert that they're set already in created()
       // this helps with typings
-      return this.contracts.Shields!;
+      return this.contracts.Shields!
     },
 
     contractAddress(): string {
       return this.activeType === 'weapon'
         ? this.Weapons.options.address
-        : (this.activeType === 'character' ? this.Characters.options.address
-          : this.Shields.options.address);
+        : this.activeType === 'character'
+        ? this.Characters.options.address
+        : this.Shields.options.address
     },
 
     buyableNftSelected(): boolean {
-      return this.selectedNftId !== null
-        && !this.searchResultsOwned;
+      return this.selectedNftId !== null && !this.searchResultsOwned
     },
 
     ownListedNftSelected(): boolean {
-      return this.selectedNftId !== null
-        && this.searchResultsOwned;
+      return this.selectedNftId !== null && this.searchResultsOwned
     },
 
     selectedNftOnCooldown(): boolean {
-      return this.selectedNftId !== null
-      && (this.activeType === 'weapon' || this.activeType === 'shield'
-        ? false
-        : (this.transferCooldownOfCharacterId(+this.selectedNftId) > 0));
+      return (
+        this.selectedNftId !== null &&
+        (this.activeType === 'weapon' || this.activeType === 'shield'
+          ? false
+          : this.transferCooldownOfCharacterId(+this.selectedNftId) > 0)
+      )
     },
 
     canPurchase(): boolean {
-      return this.activeType === 'weapon' || this.activeType === 'shield' || this.ownCharacters.length < 8 ;
+      return (
+        this.activeType === 'weapon' ||
+        this.activeType === 'shield' ||
+        this.ownCharacters.length < 8
+      )
     },
 
     specialOffersNftList(): SkillShopListing[] {
@@ -717,9 +1086,9 @@ export default Vue.extend({
           description: 'A Legendary Defender Shield',
           image: '',
         },
-      ] as SkillShopListing[];
+      ] as SkillShopListing[]
 
-      return nftList;
+      return nftList
     },
   },
 
@@ -737,7 +1106,7 @@ export default Vue.extend({
       'fetchMarketTax',
       'fetchSellerOfNft',
       'fetchTotalShieldSupply',
-      'fetchBoxPrice'
+      'fetchBoxPrice',
     ]) as StoreMappedActions),
 
     ...(mapActions([
@@ -752,100 +1121,123 @@ export default Vue.extend({
     ]) as StoreMappedActions),
 
     clearData() {
-      this.activeType = 'weapon';
-      this.search = '';
-      this.searchResults = [];
-      this.allSearchResults = [];
-      this.searchResultsOwned = false;
-      this.selectedNftId = null;
-      this.marketOutcome = false;
-      this.waitingMarketOutcome = false;
-      this.nftPricesById = {};
-      this.allListingsAmount = 0;
-      this.currentPage = 1;
-      this.listingSellPrice = '';
-      this.isSell = false;
+      this.activeType = 'weapon'
+      this.search = ''
+      this.searchResults = []
+      this.allSearchResults = []
+      this.searchResultsOwned = false
+      this.selectedNftId = null
+      this.marketOutcome = false
+      this.waitingMarketOutcome = false
+      this.nftPricesById = {}
+      this.allListingsAmount = 0
+      this.currentPage = 1
+      this.listingSellPrice = ''
+      this.isSell = false
     },
 
     async loadMarketTaxes() {
-      if(!this.characterMarketTax) {
-        const tax = await this.getMarketTax(this.Characters.options.address) as string;
-        this.characterMarketTax = this.convertMarketTax(tax);
+      if (!this.characterMarketTax) {
+        const tax = (await this.getMarketTax(
+          this.Characters.options.address
+        )) as string
+        this.characterMarketTax = this.convertMarketTax(tax)
       }
-      if(!this.weaponMarketTax) {
-        const tax = await this.getMarketTax(this.Weapons.options.address) as string;
-        this.weaponMarketTax = this.convertMarketTax(tax);
+      if (!this.weaponMarketTax) {
+        const tax = (await this.getMarketTax(
+          this.Weapons.options.address
+        )) as string
+        this.weaponMarketTax = this.convertMarketTax(tax)
       }
-      if(!this.shieldMarketTax) {
-        const tax = await this.getMarketTax(this.Shields.options.address) as string;
-        this.shieldMarketTax = this.convertMarketTax(tax);
+      if (!this.shieldMarketTax) {
+        const tax = (await this.getMarketTax(
+          this.Shields.options.address
+        )) as string
+        this.shieldMarketTax = this.convertMarketTax(tax)
       }
     },
 
     convertMarketTax(tax: string): string {
-      return new BigNumber(tax).div(new BigNumber(2).pow(64)).multipliedBy(100).integerValue(BigNumber.ROUND_CEIL).toString();
+      return new BigNumber(tax)
+        .div(new BigNumber(2).pow(64))
+        .multipliedBy(100)
+        .integerValue(BigNumber.ROUND_CEIL)
+        .toString()
     },
 
     async getMarketTax(contractAddress: string) {
-      if(!contractAddress) return;
+      if (!contractAddress) return
 
       return await this.fetchMarketTax({
         nftContractAddr: contractAddress,
-      });
+      })
     },
 
     async lookupNftPrice(id: NftId) {
-      if(!this.contractAddress) return;
+      if (!this.contractAddress) return
 
       return await this.fetchMarketNftPrice({
         nftContractAddr: this.contractAddress,
         tokenId: id,
-      });
+      })
     },
 
     async fetchNftPrices(nftIds: NftId[]) {
-      if(!this.contractAddress) return;
-      this.nftPricesById = {};
-      await Promise.all(nftIds.map(async id => {
-        const price = (await this.lookupNftPrice(id))!;
-        void price;
-        this.nftPricesById[id] = price;
-      }));
-      this.resultSearch = this.allSearchResults;
+      if (!this.contractAddress) return
+      this.nftPricesById = {}
+      await Promise.all(
+        nftIds.map(async (id) => {
+          const price = (await this.lookupNftPrice(id))!
+          void price
+          this.nftPricesById[id] = price
+        })
+      )
+      this.resultSearch = this.allSearchResults
       // filter price character
-      if(this.activeType === 'character'){
-        this.idFilter(this.characterIdFilter());
-        this.minPriceFilter(parseFloat(this.characterMinPriceFilter()));
-        this.maxPriceFilter(parseFloat(this.characterMaxPriceFilter()));
-        this.sortPrice(this.characterPriceOrder());
-        if(this.characterMaxLevelFilter() !== 255 || this.characterTraitFilter()){
-          const dataSearch = this.charactersWithIds(this.resultSearch);
-          if(dataSearch.length !== 0){
-            if(this.characterMaxLevelFilter() !== 255)
-              this.levelFilter(this.characterMinLevelFilter(), this.characterMaxLevelFilter(), dataSearch);
-            if(this.characterTraitFilter())
-              this.elementFilter(this.characterTraitFilter(), dataSearch);
+      if (this.activeType === 'character') {
+        this.idFilter(this.characterIdFilter())
+        this.minPriceFilter(parseFloat(this.characterMinPriceFilter()))
+        this.maxPriceFilter(parseFloat(this.characterMaxPriceFilter()))
+        this.sortPrice(this.characterPriceOrder())
+        if (
+          this.characterMaxLevelFilter() !== 255 ||
+          this.characterTraitFilter()
+        ) {
+          const dataSearch = this.charactersWithIds(this.resultSearch)
+          if (dataSearch.length !== 0) {
+            if (this.characterMaxLevelFilter() !== 255)
+              this.levelFilter(
+                this.characterMinLevelFilter(),
+                this.characterMaxLevelFilter(),
+                dataSearch
+              )
+            if (this.characterTraitFilter())
+              this.elementFilter(this.characterTraitFilter(), dataSearch)
           }
         }
       }
       // filter price weapon
-      else if(this.activeType === 'weapon'){
-        this.idFilter(this.weaponIdFilter());
-        this.sortPrice(this.weaponPriceOrder());
-        this.minPriceFilter(parseFloat(this.weaponMinPriceFilter()));
-        this.maxPriceFilter(parseFloat(this.weaponMaxPriceFilter()));
-        if(this.weaponStarFilter() || this.weaponTraitFilter()){
-          const dataSearch = this.weaponsWithIds(this.resultSearch);
-          if(dataSearch.length !== 0){
-            if(this.weaponStarFilter())
-              this.starFilter(this.weaponStarFilter(), dataSearch);
-            if(this.weaponTraitFilter())
-              this.elementFilter(this.weaponTraitFilter(), dataSearch);
+      else if (this.activeType === 'weapon') {
+        this.idFilter(this.weaponIdFilter())
+        this.sortPrice(this.weaponPriceOrder())
+        this.minPriceFilter(parseFloat(this.weaponMinPriceFilter()))
+        this.maxPriceFilter(parseFloat(this.weaponMaxPriceFilter()))
+        if (this.weaponStarFilter() || this.weaponTraitFilter()) {
+          const dataSearch = this.weaponsWithIds(this.resultSearch)
+          if (dataSearch.length !== 0) {
+            if (this.weaponStarFilter())
+              this.starFilter(this.weaponStarFilter(), dataSearch)
+            if (this.weaponTraitFilter())
+              this.elementFilter(this.weaponTraitFilter(), dataSearch)
           }
         }
       }
-      this.totalPages = this.resultSearch.length;
-      this.resultSearch = this.resultSearch.slice((this.currentPage - 1) * this.characterShowLimit, (this.currentPage - 1) * this.characterShowLimit + this.characterShowLimit);
+      this.totalPages = this.resultSearch.length
+      this.resultSearch = this.resultSearch.slice(
+        (this.currentPage - 1) * this.characterShowLimit,
+        (this.currentPage - 1) * this.characterShowLimit +
+          this.characterShowLimit
+      )
     },
 
     async searchAllCharacterListingsThroughChain(page: number) {
@@ -853,286 +1245,322 @@ export default Vue.extend({
         nftContractAddr: this.contractAddress,
         trait: 255,
         minLevel: 255,
-        maxLevel: 255
-      });
+        maxLevel: 255,
+      })
       this.allSearchResults = await this.fetchAllMarketCharacterNftIdsPage({
         nftContractAddr: this.contractAddress,
         limit: this.allListingsAmount || defaultLimit,
         pageNumber: page - page,
         trait: 255,
         minLevel: 255,
-        maxLevel: 255
-      });
+        maxLevel: 255,
+      })
     },
 
-    idFilter(id: string){
-      if(id && id !== ''){
-        const arrStr: string[] = [];
-        this.resultSearch.forEach((val: any)=>{
-          if(id === val){
-            arrStr.push(val);
+    idFilter(id: string) {
+      if (id && id !== '') {
+        const arrStr: string[] = []
+        this.resultSearch.forEach((val: any) => {
+          if (id === val) {
+            arrStr.push(val)
           }
-        });
-        this.resultSearch = arrStr;
+        })
+        this.resultSearch = arrStr
       }
     },
 
-    levelFilter(minLevel: number, maxLevel: number, arr: []){
-      if(arr.length !== 0){
-        const arrStr: string[] = [];
+    levelFilter(minLevel: number, maxLevel: number, arr: []) {
+      if (arr.length !== 0) {
+        const arrStr: string[] = []
         arr.forEach((arr_item: any) => {
-          if(this.resultSearch.includes(arr_item.id.toString()) && arr_item.level >= minLevel && arr_item.level <= maxLevel){
-            arrStr.push(arr_item.id.toString());
+          if (
+            this.resultSearch.includes(arr_item.id.toString()) &&
+            arr_item.level >= minLevel &&
+            arr_item.level <= maxLevel
+          ) {
+            arrStr.push(arr_item.id.toString())
           }
-        });
-        this.resultSearch = arrStr;
+        })
+        this.resultSearch = arrStr
       }
     },
 
-    starFilter(star: number, arr: []){
-      if(arr.length !== 0){
-        const arrStr: string[] = [];
+    starFilter(star: number, arr: []) {
+      if (arr.length !== 0) {
+        const arrStr: string[] = []
         arr.forEach((arr_item: any) => {
-          if(this.resultSearch.includes(arr_item.id.toString()) && arr_item.stars+1 === star){
-            arrStr.push(arr_item.id.toString());
+          if (
+            this.resultSearch.includes(arr_item.id.toString()) &&
+            arr_item.stars + 1 === star
+          ) {
+            arrStr.push(arr_item.id.toString())
           }
-        });
-        this.resultSearch = arrStr;
+        })
+        this.resultSearch = arrStr
       }
     },
 
-    elementFilter(element: string, arr: []){
-      if(arr.length !== 0){
-        const arrStr: string[] = [];
+    elementFilter(element: string, arr: []) {
+      if (arr.length !== 0) {
+        const arrStr: string[] = []
         arr.forEach((arr_item: any) => {
-          if(this.activeType==='character' && this.resultSearch.includes(arr_item.id.toString()) && arr_item.traitName.toLowerCase() === element){
-            arrStr.push(arr_item.id.toString());
+          if (
+            this.activeType === 'character' &&
+            this.resultSearch.includes(arr_item.id.toString()) &&
+            arr_item.traitName.toLowerCase() === element
+          ) {
+            arrStr.push(arr_item.id.toString())
+          } else if (
+            this.activeType === 'weapon' &&
+            this.resultSearch.includes(arr_item.id.toString()) &&
+            arr_item.element.toLowerCase() === element
+          ) {
+            arrStr.push(arr_item.id.toString())
           }
-          else if(this.activeType==='weapon' && this.resultSearch.includes(arr_item.id.toString()) && arr_item.element.toLowerCase() === element){
-            arrStr.push(arr_item.id.toString());
-          }
-        });
-        this.resultSearch = arrStr;
+        })
+        this.resultSearch = arrStr
       }
     },
 
-    minPriceFilter(minPrice: number){
-      if(minPrice && minPrice > 0){
-        const arrStr: string[] = [];
-        this.resultSearch.forEach((val: any)=>{
-          if(parseFloat(this.convertWeiToSkill(this.nftPricesById[val])) >= minPrice){
-            arrStr.push(val);
+    minPriceFilter(minPrice: number) {
+      if (minPrice && minPrice > 0) {
+        const arrStr: string[] = []
+        this.resultSearch.forEach((val: any) => {
+          if (
+            parseFloat(this.convertWeiToSkill(this.nftPricesById[val])) >=
+            minPrice
+          ) {
+            arrStr.push(val)
           }
-        });
-        this.resultSearch = arrStr;
+        })
+        this.resultSearch = arrStr
       }
     },
 
-    maxPriceFilter(maxPrice: number){
-      if(maxPrice && maxPrice > 0){
-        const arrStr: string[] = [];
-        this.resultSearch.forEach((val: any)=>{
-          if(parseFloat(this.convertWeiToSkill(this.nftPricesById[val])) <= maxPrice){
-            arrStr.push(val);
+    maxPriceFilter(maxPrice: number) {
+      if (maxPrice && maxPrice > 0) {
+        const arrStr: string[] = []
+        this.resultSearch.forEach((val: any) => {
+          if (
+            parseFloat(this.convertWeiToSkill(this.nftPricesById[val])) <=
+            maxPrice
+          ) {
+            arrStr.push(val)
           }
-        });
-        this.resultSearch = arrStr;
+        })
+        this.resultSearch = arrStr
       }
     },
 
-    sortPrice(typeSort: string){
-      if(typeSort){
-        const sortable: any[] = [];
-        this.resultSearch.forEach((item: any)=>{
-          sortable.push([item, this.convertWeiToSkill(this.nftPricesById[item])]);
-        });
-        if(typeSort === '1'){
-          sortable.sort(function(a, b) {
-            return parseFloat(a[1]) - parseFloat(b[1]);
-          });
-        } else if(typeSort === '-1'){
-          sortable.sort(function(a, b) {
-            return parseFloat(b[1]) - parseFloat(a[1]);
-          });
+    sortPrice(typeSort: string) {
+      if (typeSort) {
+        const sortable: any[] = []
+        this.resultSearch.forEach((item: any) => {
+          sortable.push([
+            item,
+            this.convertWeiToSkill(this.nftPricesById[item]),
+          ])
+        })
+        if (typeSort === '1') {
+          sortable.sort(function (a, b) {
+            return parseFloat(a[1]) - parseFloat(b[1])
+          })
+        } else if (typeSort === '-1') {
+          sortable.sort(function (a, b) {
+            return parseFloat(b[1]) - parseFloat(a[1])
+          })
         }
 
-        const result: string[] = [];
-        sortable.forEach((item)=>{
-          result.push(item[0] as string);
-        });
-        this.resultSearch = result;
+        const result: string[] = []
+        sortable.forEach((item) => {
+          result.push(item[0] as string)
+        })
+        this.resultSearch = result
       }
     },
 
     async addListingForNft() {
-      this.marketOutcome = true;
-      if(this.selectedNftId === null) return;
-      if(!this.listingSellPrice) return;
+      this.marketOutcome = true
+      if (this.selectedNftId === null) return
+      if (!this.listingSellPrice) return
 
-      const val = +this.listingSellPrice;
-      if(val <= 0 || !val || isNaN(val)) return;
+      const val = +this.listingSellPrice
+      if (val <= 0 || !val || isNaN(val)) return
 
-      this.waitingMarketOutcome = true;
+      this.waitingMarketOutcome = true
       try {
         const results = await this.addMarketListing({
           nftContractAddr: this.contractAddress,
           // nft-list keys have a typeid format, e.g. shield0
-          tokenId: this.activeType === 'weapon' || this.activeType === 'character'
-            ? this.selectedNftId
-            : this.selectedNftId.split('.')[1],
+          tokenId:
+            this.activeType === 'weapon' || this.activeType === 'character'
+              ? this.selectedNftId
+              : this.selectedNftId.split('.')[1],
           price: this.convertSkillToWei(val.toString()),
-        });
+        })
 
-        await this.searchOwnListings(this.activeType);
+        await this.searchOwnListings(this.activeType)
 
-        this.selectedNftId = null;
-        this.waitingMarketOutcome = false;
-        this.marketOutcome = true;
-        this.marketOutcomeHeading = 'Successfully listed ';
-        this.marketOutcomeActiveType = this.activeType;
-        this.marketOutcomeID = results.nftID;
-        this.marketOutcomePrice = this.convertWeiToSkill(results.price)+' xBlade';
-      } catch(error) {
-        this.marketOutcome = false;
-        this.waitingMarketOutcome = false;
+        this.selectedNftId = null
+        this.waitingMarketOutcome = false
+        this.marketOutcome = true
+        this.marketOutcomeHeading = 'Successfully listed '
+        this.marketOutcomeActiveType = this.activeType
+        this.marketOutcomeID = results.nftID
+        this.marketOutcomePrice =
+          this.convertWeiToSkill(results.price) + ' xBlade'
+      } catch (error) {
+        this.marketOutcome = false
+        this.waitingMarketOutcome = false
       }
     },
 
     async updateNftListingPrice() {
+      this.marketOutcome = true
+      if (this.selectedNftId === null) return
 
-      this.marketOutcome = true;
-      if(this.selectedNftId === null) return;
+      const val = Math.min(+this.listingSellPrice, 10000)
+      if (val <= 0 || !val || isNaN(val)) return
 
-      const val = Math.min(+this.listingSellPrice, 10000);
-      if(val <= 0 || !val || isNaN(val)) return;
-
-      this.waitingMarketOutcome = true;
+      this.waitingMarketOutcome = true
       try {
         const results = await this.changeMarketListingPrice({
           nftContractAddr: this.contractAddress,
-          tokenId: this.activeType === 'weapon' || this.activeType === 'character'
-            ? this.selectedNftId
-            : this.selectedNftId.split('.')[1],
-          newPrice: this.convertSkillToWei(val.toString())
-        });
+          tokenId:
+            this.activeType === 'weapon' || this.activeType === 'character'
+              ? this.selectedNftId
+              : this.selectedNftId.split('.')[1],
+          newPrice: this.convertSkillToWei(val.toString()),
+        })
 
-        await this.searchOwnListings(this.activeType);
+        await this.searchOwnListings(this.activeType)
 
-        this.selectedNftId = null;
-        this.waitingMarketOutcome = false;
-        this.marketOutcome = true;
-        this.marketOutcomeHeading = 'Successfully changed price';
-        this.marketOutcomeActiveType = this.activeType;
-        this.marketOutcomeID = results.nftID;
-        this.marketOutcomePrice = this.convertWeiToSkill(results.newPrice)+' xBlade';
+        this.selectedNftId = null
+        this.waitingMarketOutcome = false
+        this.marketOutcome = true
+        this.marketOutcomeHeading = 'Successfully changed price'
+        this.marketOutcomeActiveType = this.activeType
+        this.marketOutcomeID = results.nftID
+        this.marketOutcomePrice =
+          this.convertWeiToSkill(results.newPrice) + ' xBlade'
       } catch {
-        this.marketOutcome = false;
-        this.waitingMarketOutcome = false;
+        this.marketOutcome = false
+        this.waitingMarketOutcome = false
       }
     },
 
     async purchaseNft() {
-      this.marketOutcome = true;
-      this.marketOutcomeHeading = null;
-      this.marketOutcomeActiveType = null;
-      this.marketOutcomeID = null;
-      this.marketOutcomePrice = null;
-      this.marketOutcomeSeller = null;
+      this.marketOutcome = true
+      this.marketOutcomeHeading = null
+      this.marketOutcomeActiveType = null
+      this.marketOutcomeID = null
+      this.marketOutcomePrice = null
+      this.marketOutcomeSeller = null
 
-      if(this.selectedNftId === null) return;
+      if (this.selectedNftId === null) return
 
-      const price = await this.lookupNftPrice(this.selectedNftId);
-      if(!price) return;
+      const price = await this.lookupNftPrice(this.selectedNftId)
+      if (!price) return
 
-      if(this.activeType !== 'weapon' && this.activeType !== 'character') {
-        this.selectedNftId = this.selectedNftId.split('.')[1];
+      if (this.activeType !== 'weapon' && this.activeType !== 'character') {
+        this.selectedNftId = this.selectedNftId.split('.')[1]
       }
 
-      const skillChainPrice = this.convertStringToDecimal(this.convertWeiToSkill(price), 2);
-      const skillUIPrice = this.convertStringToDecimal(this.convertWeiToSkill(this.nftPricesById[this.selectedNftId]), 2);
+      const skillChainPrice = this.convertStringToDecimal(
+        this.convertWeiToSkill(price),
+        2
+      )
+      const skillUIPrice = this.convertStringToDecimal(
+        this.convertWeiToSkill(this.nftPricesById[this.selectedNftId]),
+        2
+      )
 
-      if(skillChainPrice !== skillUIPrice) {
-        (this as any).$dialog.notify.error('The price of the listing has changed. Please refresh listing and try again');
-        return;
+      if (skillChainPrice !== skillUIPrice) {
+        ;(this as any).$dialog.notify.error(
+          'The price of the listing has changed. Please refresh listing and try again'
+        )
+        return
       }
 
-      this.waitingMarketOutcome = true;
+      this.waitingMarketOutcome = true
       try {
         const results: any = await this.purchaseMarketListing({
           nftContractAddr: this.contractAddress,
           tokenId: this.selectedNftId,
-          maxPrice: price
-        });
+          maxPrice: price,
+        })
 
-        const results2: any  = await this.fetchAllMarketNftIds({
-          nftContractAddr: this.contractAddress
-        });
+        const results2: any = await this.fetchAllMarketNftIds({
+          nftContractAddr: this.contractAddress,
+        })
 
-        this.allSearchResults = results2;
+        this.allSearchResults = results2
 
-        this.allSearchResults = Array.from(this.allSearchResults as string[]).filter((x: any) => x.id !== this.selectedNftId);
+        this.allSearchResults = Array.from(
+          this.allSearchResults as string[]
+        ).filter((x: any) => x.id !== this.selectedNftId)
 
-        this.waitingMarketOutcome = false;
-        this.marketOutcome = true;
-        this.marketOutcomeHeading = 'Successfully purchased ';
-        this.marketOutcomeActiveType = this.activeType;
-        this.marketOutcomeID = results.nftID;
-        this.marketOutcomePrice = this.convertWeiToSkill(results.price) + ' xBlade';
-        this.marketOutcomeSeller = results.seller;
+        this.waitingMarketOutcome = false
+        this.marketOutcome = true
+        this.marketOutcomeHeading = 'Successfully purchased '
+        this.marketOutcomeActiveType = this.activeType
+        this.marketOutcomeID = results.nftID
+        this.marketOutcomePrice =
+          this.convertWeiToSkill(results.price) + ' xBlade'
+        this.marketOutcomeSeller = results.seller
       } catch {
-        this.marketOutcome = false;
-        this.waitingMarketOutcome = false;
+        this.marketOutcome = false
+        this.waitingMarketOutcome = false
       }
     },
 
     async cancelNftListing() {
-      this.marketOutcome = true;
+      this.marketOutcome = true
 
-      if(this.selectedNftId === null) return;
+      if (this.selectedNftId === null) return
 
-      this.waitingMarketOutcome = true;
+      this.waitingMarketOutcome = true
       try {
         const results = await this.cancelMarketListing({
           nftContractAddr: this.contractAddress,
-          tokenId: this.activeType === 'weapon' || this.activeType === 'character'
-            ? this.selectedNftId
-            : this.selectedNftId.split('.')[1],
-        });
+          tokenId:
+            this.activeType === 'weapon' || this.activeType === 'character'
+              ? this.selectedNftId
+              : this.selectedNftId.split('.')[1],
+        })
 
-        this.waitingMarketOutcome = false;
-        this.marketOutcome = true;
-        this.marketOutcomeHeading = 'Successfully taken off the market';
-        this.marketOutcomeActiveType = this.activeType;
-        this.marketOutcomeID = results.nftID;
+        this.waitingMarketOutcome = false
+        this.marketOutcome = true
+        this.marketOutcomeHeading = 'Successfully taken off the market'
+        this.marketOutcomeActiveType = this.activeType
+        this.marketOutcomeID = results.nftID
 
-        await this.searchOwnListings(this.activeType);
+        await this.searchOwnListings(this.activeType)
       } catch {
-        this.marketOutcome = false;
-        this.waitingMarketOutcome = false;
+        this.marketOutcome = false
+        this.waitingMarketOutcome = false
       }
     },
 
     async searchAllCharacterListings(page: number) {
-      this.activeType = 'character';
-      this.marketOutcome = true;
-      this.waitingMarketOutcome = true;
-      this.currentPage = page + 1;
+      this.activeType = 'character'
+      this.marketOutcome = true
+      this.waitingMarketOutcome = true
+      this.currentPage = page + 1
 
-
-      await this.searchAllCharacterListingsThroughChain(page);
-
+      await this.searchAllCharacterListingsThroughChain(page)
 
       // searchResultsOwned does not mesh with this function
       // will need per-result checking of it, OR filtering out own NFTs
       //this.searchResultsOwned = nftSeller === this.defaultAccount;
-      this.searchResultsOwned = false; // temp
+      this.searchResultsOwned = false // temp
 
-      this.waitingMarketOutcome = false;
-      this.marketOutcome = false;
+      this.waitingMarketOutcome = false
+      this.marketOutcome = false
     },
 
     async searchAllCharacterListingsThroughAPI(page: number) {
-      const url = new URL(apiUrl('static/market/character'));
+      const url = new URL(apiUrl('static/market/character'))
       const params = {
         element: '' + this.characterTraitFilter(),
         minLevel: '' + this.characterMinLevelFilter(),
@@ -1143,21 +1571,21 @@ export default Vue.extend({
         maxPrice: '' + this.characterMaxPriceFilter(),
         pageSize: '' + (this.characterShowLimit || defaultLimit),
         pageNum: '' + page,
-      };
+      }
 
-      url.search = new URLSearchParams(params).toString();
+      url.search = new URLSearchParams(params).toString()
 
-      const charactersData = await fetch(url.toString(),defaultOptions);
-      const characters = await charactersData.json();
-      this.allListingsAmount = characters.page.total;
-      this.allSearchResults = characters.idResults;
+      const charactersData = await fetch(url.toString(), defaultOptions)
+      const characters = await charactersData.json()
+      this.allListingsAmount = characters.page.total
+      this.allSearchResults = characters.idResults
     },
 
     async searchAllWeaponListings(page: number) {
-      this.activeType = 'weapon';
-      this.marketOutcome = true;
-      this.waitingMarketOutcome = true;
-      this.currentPage = page + 1;
+      this.activeType = 'weapon'
+      this.marketOutcome = true
+      this.waitingMarketOutcome = true
+      this.currentPage = page + 1
       // try {
       //   if(useBlockchain === true)
       //     await this.searchAllWeaponListingsThroughChain(page);
@@ -1173,13 +1601,13 @@ export default Vue.extend({
       //   this.waitingMarketOutcome = false;
       //   this.marketOutcome = false;
       // }
-      await this.searchAllWeaponListingsThroughChain(page);
+      await this.searchAllWeaponListingsThroughChain(page)
       // searchResultsOwned does not mesh with this function
       // will need per-result checking of it, OR filtering out own NFTs
       //this.searchResultsOwned = nftSeller === this.defaultAccount;
-      this.searchResultsOwned = false; // temp
-      this.waitingMarketOutcome = false;
-      this.marketOutcome = false;
+      this.searchResultsOwned = false // temp
+      this.waitingMarketOutcome = false
+      this.marketOutcome = false
     },
 
     async searchAllWeaponListingsThroughChain(page: number) {
@@ -1187,25 +1615,24 @@ export default Vue.extend({
       this.allListingsAmount = await this.fetchNumberOfWeaponListings({
         nftContractAddr: this.contractAddress,
         trait: 255,
-        stars: 255
-      });
+        stars: 255,
+      })
 
       this.allSearchResults = await this.fetchAllMarketWeaponNftIdsPage({
         nftContractAddr: this.contractAddress,
         limit: this.allListingsAmount || defaultLimit,
         pageNumber: page - page,
         trait: 255,
-        stars: 255
-      });
+        stars: 255,
+      })
 
       // this.minPriceFilter(parseFloat(this.weaponMinPriceFilter()));
       // this.maxPriceFilter(parseFloat(this.weaponMaxPriceFilter()));
       // this.sortPrice(this.weaponPriceOrder());
     },
 
-
     async searchAllWeaponListingsThroughAPI(page: number) {
-      const url = new URL(apiUrl('static/market/weapon'));
+      const url = new URL(apiUrl('static/market/weapon'))
       const params = {
         element: '' + this.weaponTraitFilter(),
         minStars: '' + this.weaponStarFilter(),
@@ -1216,54 +1643,54 @@ export default Vue.extend({
         maxPrice: '' + this.weaponMaxPriceFilter(),
         pageSize: '' + (this.weaponShowLimit || defaultLimit),
         pageNum: '' + page,
-      };
+      }
 
-      url.search = new URLSearchParams(params).toString();
-      const weaponsData = await fetch(url.toString(),defaultOptions);
-      const weapons = await weaponsData.json();
-      this.allListingsAmount = weapons.page.total;
-      this.allSearchResults = weapons.idResults;
+      url.search = new URLSearchParams(params).toString()
+      const weaponsData = await fetch(url.toString(), defaultOptions)
+      const weapons = await weaponsData.json()
+      this.allListingsAmount = weapons.page.total
+      this.allSearchResults = weapons.idResults
     },
 
     async searchAllShieldListings(page: number) {
-      this.activeType = 'shield';
-      this.marketOutcome = true;
-      this.waitingMarketOutcome = true;
-      this.currentPage = page + 1;
+      this.activeType = 'shield'
+      this.marketOutcome = true
+      this.waitingMarketOutcome = true
+      this.currentPage = page + 1
 
-      if(useBlockchain === true)
-        await this.searchAllShieldListingsThroughChain(page);
-      else
-        await this.searchAllShieldListingsThroughAPI(page);
+      if (useBlockchain === true)
+        await this.searchAllShieldListingsThroughChain(page)
+      else await this.searchAllShieldListingsThroughAPI(page)
 
       // searchResultsOwned does not mesh with this function
       // will need per-result checking of it, OR filtering out own NFTs
       //this.searchResultsOwned = nftSeller === this.defaultAccount;
-      this.searchResultsOwned = false; // temp
+      this.searchResultsOwned = false // temp
 
-      this.waitingMarketOutcome = false;
-      this.marketOutcome = false;
+      this.waitingMarketOutcome = false
+      this.marketOutcome = false
     },
 
     async searchAllShieldListingsThroughChain(page: number) {
-      const filterStar = this.nftStarFilter() !== 0 ? this.nftStarFilter() - 1 : 255;
+      const filterStar =
+        this.nftStarFilter() !== 0 ? this.nftStarFilter() - 1 : 255
       this.allListingsAmount = await this.fetchNumberOfShieldListings({
         nftContractAddr: this.contractAddress,
         trait: traitNameToNumber(this.nftTraitFilter()),
-        stars: filterStar
-      });
+        stars: filterStar,
+      })
 
       this.allSearchResults = await this.fetchAllMarketShieldNftIdsPage({
         nftContractAddr: this.contractAddress,
         limit: this.shieldShowLimit || defaultLimit,
         pageNumber: page,
         trait: traitNameToNumber(this.nftTraitFilter()),
-        stars: filterStar
-      });
+        stars: filterStar,
+      })
     },
 
     async searchAllShieldListingsThroughAPI(page: number) {
-      const url = new URL(apiUrl('static/market/shield'));
+      const url = new URL(apiUrl('static/market/shield'))
       const params = {
         element: '' + this.nftTraitFilter(),
         minStars: '' + this.nftStarFilter(),
@@ -1272,26 +1699,26 @@ export default Vue.extend({
         sortDir: '' + this.nftPriceOrder(),
         pageSize: '' + (this.shieldShowLimit || defaultLimit),
         pageNum: '' + page,
-      };
+      }
 
-      url.search = new URLSearchParams(params).toString();
+      url.search = new URLSearchParams(params).toString()
 
-      const shieldsData = await fetch(url.toString(),defaultOptions);
-      const shields = await shieldsData.json();
-      this.allListingsAmount = shields.page.total;
-      this.allSearchResults = shields.idResults;
+      const shieldsData = await fetch(url.toString(), defaultOptions)
+      const shields = await shieldsData.json()
+      this.allListingsAmount = shields.page.total
+      this.allSearchResults = shields.idResults
     },
 
     async searchListingsByNftId(type: SellType) {
-      this.activeType = type;
-      this.marketOutcome = true;
-      this.waitingMarketOutcome = true;
+      this.activeType = type
+      this.marketOutcome = true
+      this.waitingMarketOutcome = true
 
       const nftSeller = await this.fetchSellerOfNft({
         nftContractAddr: this.contractAddress,
-        tokenId: this.search
-      });
-      this.searchResultsOwned = nftSeller === this.defaultAccount;
+        tokenId: this.search,
+      })
+      this.searchResultsOwned = nftSeller === this.defaultAccount
       // const url = new URL('https://xblades.herokuapp.com/static/wallet/banned/' + nftSeller);
       // const data = await fetch(url.toString(),defaultOptions);
       // const banned = await data.json();
@@ -1299,88 +1726,90 @@ export default Vue.extend({
       //   (this as any).$dialog.notify.error('Item not available!');
       // }
 
-      const price = await this.lookupNftPrice(this.search);
-      if(price !== '0' /* && !banned.banned */) {
-        this.searchResults = [this.search];
+      const price = await this.lookupNftPrice(this.search)
+      if (price !== '0' /* && !banned.banned */) {
+        this.searchResults = [this.search]
       } else {
-        this.searchResults = [];
+        this.searchResults = []
       }
 
-      this.waitingMarketOutcome = false;
-      this.marketOutcome = false;
+      this.waitingMarketOutcome = false
+      this.marketOutcome = false
     },
 
     async searchListingsBySeller(type: SellType) {
-      this.activeType = type;
-      this.marketOutcome = true;
-      this.waitingMarketOutcome = true;
+      this.activeType = type
+      this.marketOutcome = true
+      this.waitingMarketOutcome = true
 
       try {
-        if(useBlockchain){
-          await this.searchListingsBySellerThroughChain();
-        }
-        else {
-          await this.searchListingsBySellerThroughAPI();
+        if (useBlockchain) {
+          await this.searchListingsBySellerThroughChain()
+        } else {
+          await this.searchListingsBySellerThroughAPI()
         }
       } catch {
-        this.searchResultsOwned = false;
-        this.waitingMarketOutcome = false;
-        this.marketOutcome = false;
-        this.searchResults = [];
+        this.searchResultsOwned = false
+        this.waitingMarketOutcome = false
+        this.marketOutcome = false
+        this.searchResults = []
       }
 
-      this.waitingMarketOutcome = false;
-      this.marketOutcome = false;
+      this.waitingMarketOutcome = false
+      this.marketOutcome = false
     },
 
-    async searchListingsBySellerThroughChain(){
+    async searchListingsBySellerThroughChain() {
       this.searchResults = await this.fetchMarketNftIdsBySeller({
         nftContractAddr: this.contractAddress,
-        sellerAddr: this.search
-      });
+        sellerAddr: this.search,
+      })
 
-      this.searchResultsOwned = this.search === this.defaultAccount;
+      this.searchResultsOwned = this.search === this.defaultAccount
     },
 
-    async searchListingsBySellerThroughAPI(){
-      this.searchResults = this.activeType === 'weapon' ?
-        await this.searchWeaponListingsBySeller(this.search)
-        : (this.activeType === 'character' ?
-          await this.searchCharacterListingsBySeller(this.search)
-          : await this.searchShieldListingsBySeller(this.search));
+    async searchListingsBySellerThroughAPI() {
+      this.searchResults =
+        this.activeType === 'weapon'
+          ? await this.searchWeaponListingsBySeller(this.search)
+          : this.activeType === 'character'
+          ? await this.searchCharacterListingsBySeller(this.search)
+          : await this.searchShieldListingsBySeller(this.search)
 
-      this.searchResultsOwned = false;
+      this.searchResultsOwned = false
     },
     async searchOwnListings(type: SellType) {
-      this.marketOutcome = true;
-      this.activeType = type;
-      if(!this.defaultAccount) {
-        this.searchResults = [];
-        return;
+      this.marketOutcome = true
+      this.activeType = type
+      if (!this.defaultAccount) {
+        this.searchResults = []
+        return
       }
-      this.waitingMarketOutcome = true;
+      this.waitingMarketOutcome = true
 
       try {
-        await this.searchOwnListingsThroughChain();
+        await this.searchOwnListingsThroughChain()
 
-        this.searchResultsOwned = true;
-        this.waitingMarketOutcome = false;
-        this.marketOutcome = false;
+        this.searchResultsOwned = true
+        this.waitingMarketOutcome = false
+        this.marketOutcome = false
       } catch {
-        this.waitingMarketOutcome = false;
-        this.marketOutcome = false;
+        this.waitingMarketOutcome = false
+        this.marketOutcome = false
       }
     },
 
     async searchOwnListingsThroughChain() {
       this.searchResults = await this.fetchMarketNftIdsBySeller({
         nftContractAddr: this.contractAddress,
-        sellerAddr: this.defaultAccount as string
-      });
+        sellerAddr: this.defaultAccount as string,
+      })
     },
 
-    async searchCharacterListingsBySeller(sellerAddress: string): Promise<string[]>{
-      const url = new URL(apiUrl('static/market/character'));
+    async searchCharacterListingsBySeller(
+      sellerAddress: string
+    ): Promise<string[]> {
+      const url = new URL(apiUrl('static/market/character'))
       const params = {
         element: '' + this.characterTraitFilter(),
         minLevel: '' + this.characterMinLevelFilter(),
@@ -1390,17 +1819,19 @@ export default Vue.extend({
         maxPrice: '' + this.characterMaxPriceFilter(),
         sortDir: '' + this.characterPriceOrder(),
         sellerAddress: '' + sellerAddress,
-      };
+      }
 
-      url.search = new URLSearchParams(params).toString();
+      url.search = new URLSearchParams(params).toString()
 
-      const charactersData = await fetch(url.toString(),defaultOptions);
-      const characters = await charactersData.json();
-      return characters.idResults;
+      const charactersData = await fetch(url.toString(), defaultOptions)
+      const characters = await charactersData.json()
+      return characters.idResults
     },
 
-    async searchWeaponListingsBySeller(sellerAddress: string): Promise<string[]>{
-      const url = new URL(apiUrl('static/market/weapon'));
+    async searchWeaponListingsBySeller(
+      sellerAddress: string
+    ): Promise<string[]> {
+      const url = new URL(apiUrl('static/market/weapon'))
       const params = {
         element: '' + this.weaponTraitFilter(),
         minStars: '' + this.weaponStarFilter(),
@@ -1411,17 +1842,19 @@ export default Vue.extend({
         maxPrice: '' + this.weaponMaxPriceFilter(),
         pageSize: '' + (this.weaponShowLimit || defaultLimit),
         sellerAddress: '' + sellerAddress,
-      };
+      }
 
-      url.search = new URLSearchParams(params).toString();
+      url.search = new URLSearchParams(params).toString()
 
-      const weaponsData = await fetch(url.toString(),defaultOptions);
-      const weapons = await weaponsData.json();
-      return weapons.idResults;
+      const weaponsData = await fetch(url.toString(), defaultOptions)
+      const weapons = await weaponsData.json()
+      return weapons.idResults
     },
 
-    async searchShieldListingsBySeller(sellerAddress: string): Promise<NftIdType[]>{
-      const url = new URL(apiUrl('static/market/shield'));
+    async searchShieldListingsBySeller(
+      sellerAddress: string
+    ): Promise<NftIdType[]> {
+      const url = new URL(apiUrl('static/market/shield'))
       const params = {
         element: '' + this.nftTraitFilter(),
         minStars: '' + this.nftStarFilter(),
@@ -1430,336 +1863,408 @@ export default Vue.extend({
         sortDir: '' + this.nftPriceOrder(),
         pageSize: '' + (this.shieldShowLimit || defaultLimit),
         sellerAddress: '' + sellerAddress,
-      };
+      }
 
-      url.search = new URLSearchParams(params).toString();
+      url.search = new URLSearchParams(params).toString()
 
-      const shieldsData = await fetch(url.toString(),defaultOptions);
-      const shields = await shieldsData.json();
-      return shields.idResults;
+      const shieldsData = await fetch(url.toString(), defaultOptions)
+      const shields = await shieldsData.json()
+      return shields.idResults
     },
 
-    async searchItemsSoldBySeller(sellerAddress: string): Promise<any[]>{
-      const url = new URL(apiUrl(`static/market/transactions/${sellerAddress}`));
+    async searchItemsSoldBySeller(sellerAddress: string): Promise<any[]> {
+      const url = new URL(apiUrl(`static/market/transactions/${sellerAddress}`))
 
-      const weaponsData = await fetch(url.toString(),defaultOptions);
-      const weapons = await weaponsData.json();
-      return weapons.results;
+      const weaponsData = await fetch(url.toString(), defaultOptions)
+      const weapons = await weaponsData.json()
+      return weapons.results
     },
 
     async showWeaponsSoldModal() {
-      const weaponHistory: IWeaponHistory[] = await this.searchItemsSoldBySeller(this.defaultAccount as string);
+      const weaponHistory: IWeaponHistory[] =
+        await this.searchItemsSoldBySeller(this.defaultAccount as string)
       this.weaponTransactionHistoryHeader = [
         {
           key: 'weaponId',
           sortable: true,
-          label: 'Weapon ID'
+          label: 'Weapon ID',
         },
         {
           key: 'weaponName',
           sortable: true,
-          label: 'Name'
+          label: 'Name',
         },
         {
           key: 'weaponPrice',
           label: 'Price',
           sortable: true,
-        }
-      ];
+        },
+      ]
 
       this.characterTransactionHistoryHeader = [
         {
           key: 'charId',
           sortable: true,
-          label: 'Character ID'
+          label: 'Character ID',
         },
         {
           key: 'charName',
           sortable: true,
-          label: 'Name'
+          label: 'Name',
         },
         {
           key: 'charPrice',
           label: 'Price',
           sortable: true,
-        }
-      ];
-      if(weaponHistory.length === 0){
-        this.historyCounter = 0;
-      }
-      else{
-        this.historyCounter = weaponHistory.length;
-        for (let i = 0; i<weaponHistory.length; ++i){
-          if(weaponHistory[i].type === 'weapon' && weaponHistory !== undefined){
+        },
+      ]
+      if (weaponHistory.length === 0) {
+        this.historyCounter = 0
+      } else {
+        this.historyCounter = weaponHistory.length
+        for (let i = 0; i < weaponHistory.length; ++i) {
+          if (
+            weaponHistory[i].type === 'weapon' &&
+            weaponHistory !== undefined
+          ) {
             // eslint-disable-next-line prefer-const
             let items: WeaponTransactionHistoryData = {
               weaponId: weaponHistory[i].weaponId,
-              weaponName: getCleanName(this.getWeaponName(weaponHistory[i].weaponId, weaponHistory[i].weaponStars)),
-              weaponPrice: weaponHistory[i].price
-            };
+              weaponName: getCleanName(
+                this.getWeaponName(
+                  weaponHistory[i].weaponId,
+                  weaponHistory[i].weaponStars
+                )
+              ),
+              weaponPrice: weaponHistory[i].price,
+            }
 
-            this.weaponTransactionHistoryData.push(items);
+            this.weaponTransactionHistoryData.push(items)
           }
         }
       }
 
-      (this.$refs['weapons-sold-modal'] as BModal).show();
+      ;(this.$refs['weapons-sold-modal'] as BModal).show()
     },
     async showCharactersSoldModal() {
-      const characterHistory: ICharacterHistory[] = await this.searchItemsSoldBySeller(this.defaultAccount as string);
+      const characterHistory: ICharacterHistory[] =
+        await this.searchItemsSoldBySeller(this.defaultAccount as string)
       this.characterTransactionHistoryHeader = [
         {
           key: 'charId',
           sortable: true,
-          label: 'Character ID'
+          label: 'Character ID',
         },
         {
           key: 'charName',
           sortable: true,
-          label: 'Name'
+          label: 'Name',
         },
         {
           key: 'charPrice',
           label: 'Price',
           sortable: true,
-        }
-      ];
-      if(characterHistory.length === 0){
-        this.historyCounter = 0;
-      }
-      else{
-        this.historyCounter = characterHistory.length;
-        for (let i = 0; i<characterHistory.length; ++i){
-
-          if(characterHistory[i].type === 'character' && characterHistory !== undefined){
+        },
+      ]
+      if (characterHistory.length === 0) {
+        this.historyCounter = 0
+      } else {
+        this.historyCounter = characterHistory.length
+        for (let i = 0; i < characterHistory.length; ++i) {
+          if (
+            characterHistory[i].type === 'character' &&
+            characterHistory !== undefined
+          ) {
             // eslint-disable-next-line prefer-const
             let items: CharacterTransactionHistoryData = {
               charId: characterHistory[i].charId,
-              charName: getCleanName(this.getCharacterName(characterHistory[i].charId)),
-              charPrice: characterHistory[i].price
-            };
+              charName: getCleanName(
+                this.getCharacterName(characterHistory[i].charId)
+              ),
+              charPrice: characterHistory[i].price,
+            }
 
-            this.characterTransactionHistoryData.push(items);
+            this.characterTransactionHistoryData.push(items)
           }
         }
       }
 
-      (this.$refs['characters-sold-modal'] as BModal).show();
+      ;(this.$refs['characters-sold-modal'] as BModal).show()
     },
 
     async showShieldsSoldModal() {
-      const shieldHistory: IShieldHistory[] = await this.searchItemsSoldBySeller(this.defaultAccount as string);
+      const shieldHistory: IShieldHistory[] =
+        await this.searchItemsSoldBySeller(this.defaultAccount as string)
       this.shieldTransactionHistoryHeader = [
         {
           key: 'shieldId',
           sortable: true,
-          label: 'Shield ID'
+          label: 'Shield ID',
         },
         {
           key: 'shieldName',
           sortable: true,
-          label: 'Name'
+          label: 'Name',
         },
         {
           key: 'shieldPrice',
           label: 'Price',
           sortable: true,
-        }
-      ];
+        },
+      ]
 
-      if(shieldHistory.length === 0){
-        this.historyCounter = 0;
-      }
-      else{
-        this.historyCounter = shieldHistory.length;
-        for (let i = 0; i<shieldHistory.length; ++i){
-          if(shieldHistory[i].type === 'shield' && shieldHistory !== undefined){
+      if (shieldHistory.length === 0) {
+        this.historyCounter = 0
+      } else {
+        this.historyCounter = shieldHistory.length
+        for (let i = 0; i < shieldHistory.length; ++i) {
+          if (
+            shieldHistory[i].type === 'shield' &&
+            shieldHistory !== undefined
+          ) {
             // eslint-disable-next-line prefer-const
             let items: ShieldTransactionHistoryData = {
               shieldId: shieldHistory[i].shieldId,
-              shieldName: getShieldNameFromSeed(parseInt(shieldHistory[i].shieldId,10),shieldHistory[i].shieldStars),
-              shieldPrice: shieldHistory[i].price
-            };
+              shieldName: getShieldNameFromSeed(
+                parseInt(shieldHistory[i].shieldId, 10),
+                shieldHistory[i].shieldStars
+              ),
+              shieldPrice: shieldHistory[i].price,
+            }
 
-            this.shieldTransactionHistoryData.push(items);
+            this.shieldTransactionHistoryData.push(items)
           }
         }
       }
 
-      (this.$refs['shields-sold-modal'] as BModal).show();
+      ;(this.$refs['shields-sold-modal'] as BModal).show()
     },
 
-
-    resetTransactionHistoryValues(modalName: string){
-      this.characterTransactionHistoryData = [];
-      this.weaponTransactionHistoryData = [];
-      this.shieldTransactionHistoryData = [];
-      (this.$refs[modalName] as BModal).hide();
+    resetTransactionHistoryValues(modalName: string) {
+      this.characterTransactionHistoryData = []
+      this.weaponTransactionHistoryData = []
+      this.shieldTransactionHistoryData = []
+      ;(this.$refs[modalName] as BModal).hide()
     },
 
     showListingSetupModal(changingPrice: boolean = false) {
-      this.clearInputs();
-      this.priceChangeModal = changingPrice;
-      (this.$refs['listing-setup-modal'] as BModal).show();
+      this.clearInputs()
+      this.priceChangeModal = changingPrice
+      ;(this.$refs['listing-setup-modal'] as BModal).show()
     },
 
     clearInputs() {
-      this.listingSellPrice = '';
+      this.listingSellPrice = ''
     },
 
     convertWeiToSkill(wei: string) {
-      return fromWeiEther(wei);
+      return fromWeiEther(wei)
     },
     convertSkillToWei(skill: string) {
-      return Web3.utils.toWei(skill);
+      return Web3.utils.toWei(skill)
     },
 
     characterMinLevelFilter(): number {
-      return sessionStorage.getItem('character-levelfilter') ? +(sessionStorage.getItem('character-levelfilter') as string) - 1 : 0;
+      return sessionStorage.getItem('character-levelfilter')
+        ? +(sessionStorage.getItem('character-levelfilter') as string) - 1
+        : 0
     },
 
     characterMaxLevelFilter(): number {
-      return sessionStorage.getItem('character-levelfilter') ? +(sessionStorage.getItem('character-levelfilter') as string) + 8 : 255;
+      return sessionStorage.getItem('character-levelfilter')
+        ? +(sessionStorage.getItem('character-levelfilter') as string) + 8
+        : 255
     },
 
     characterTraitFilter(): string {
-      return sessionStorage.getItem('character-elementfilter') ? (sessionStorage.getItem('character-elementfilter') as string).toLowerCase() : '';
+      return sessionStorage.getItem('character-elementfilter')
+        ? (
+            sessionStorage.getItem('character-elementfilter') as string
+          ).toLowerCase()
+        : ''
     },
 
     characterIdFilter(): string {
-      return sessionStorage.getItem('character-searchvalue') ? (sessionStorage.getItem('character-searchvalue') as string).toLowerCase() : '';
+      return sessionStorage.getItem('character-searchvalue')
+        ? (
+            sessionStorage.getItem('character-searchvalue') as string
+          ).toLowerCase()
+        : ''
     },
 
     characterPriceOrder(): string {
-      return sessionStorage.getItem('character-price-order') ? (sessionStorage.getItem('character-price-order') as string) : '';
+      return sessionStorage.getItem('character-price-order')
+        ? (sessionStorage.getItem('character-price-order') as string)
+        : ''
     },
 
     characterMinPriceFilter(): string {
-      return sessionStorage.getItem('character-price-minfilter') ? (sessionStorage.getItem('character-price-minfilter') as string) : '';
+      return sessionStorage.getItem('character-price-minfilter')
+        ? (sessionStorage.getItem('character-price-minfilter') as string)
+        : ''
     },
     characterMaxPriceFilter(): string {
-      return sessionStorage.getItem('character-price-maxfilter') ? (sessionStorage.getItem('character-price-maxfilter') as string) : '';
+      return sessionStorage.getItem('character-price-maxfilter')
+        ? (sessionStorage.getItem('character-price-maxfilter') as string)
+        : ''
     },
 
     weaponTraitFilter(): string {
-      return sessionStorage.getItem('market-weapon-elementfilter') ? (sessionStorage.getItem('market-weapon-elementfilter') as string).toLowerCase() : '';
+      return sessionStorage.getItem('market-weapon-elementfilter')
+        ? (
+            sessionStorage.getItem('market-weapon-elementfilter') as string
+          ).toLowerCase()
+        : ''
     },
 
     weaponStarFilter(): number {
-      return sessionStorage.getItem('market-weapon-starfilter') ? +(sessionStorage.getItem('market-weapon-starfilter') as string) : 0;
+      return sessionStorage.getItem('market-weapon-starfilter')
+        ? +(sessionStorage.getItem('market-weapon-starfilter') as string)
+        : 0
     },
 
     weaponPriceOrder(): string {
-      return sessionStorage.getItem('market-weapon-price-order') ? (sessionStorage.getItem('market-weapon-price-order') as string) : '';
+      return sessionStorage.getItem('market-weapon-price-order')
+        ? (sessionStorage.getItem('market-weapon-price-order') as string)
+        : ''
     },
 
     weaponMinPriceFilter(): string {
-      return sessionStorage.getItem('market-weapon-price-minfilter') ? (sessionStorage.getItem('market-weapon-price-minfilter') as string) : '';
+      return sessionStorage.getItem('market-weapon-price-minfilter')
+        ? (sessionStorage.getItem('market-weapon-price-minfilter') as string)
+        : ''
     },
     weaponMaxPriceFilter(): string {
-      return sessionStorage.getItem('market-weapon-price-maxfilter') ? (sessionStorage.getItem('market-weapon-price-maxfilter') as string) : '';
+      return sessionStorage.getItem('market-weapon-price-maxfilter')
+        ? (sessionStorage.getItem('market-weapon-price-maxfilter') as string)
+        : ''
     },
 
     weaponIdFilter(): string {
-      return sessionStorage.getItem('market-weapon-searchvalue') ? (sessionStorage.getItem('market-weapon-searchvalue') as string) : '';
+      return sessionStorage.getItem('market-weapon-searchvalue')
+        ? (sessionStorage.getItem('market-weapon-searchvalue') as string)
+        : ''
     },
 
     nftTypeFilter(): string {
-      return sessionStorage.getItem('market-nft-elementfilter') ? (sessionStorage.getItem('market-nft-elementfilter') as string).toLowerCase() : '';    },
+      return sessionStorage.getItem('market-nft-elementfilter')
+        ? (
+            sessionStorage.getItem('market-nft-elementfilter') as string
+          ).toLowerCase()
+        : ''
+    },
 
     nftTraitFilter(): string {
-      return sessionStorage.getItem('market-nft-elementfilter') ? (sessionStorage.getItem('market-nft-elementfilter') as string).toLowerCase() : '';
+      return sessionStorage.getItem('market-nft-elementfilter')
+        ? (
+            sessionStorage.getItem('market-nft-elementfilter') as string
+          ).toLowerCase()
+        : ''
     },
 
     nftStarFilter(): number {
-      return sessionStorage.getItem('market-nft-starfilter') ? +(sessionStorage.getItem('market-nft-starfilter') as string) : 0;
+      return sessionStorage.getItem('market-nft-starfilter')
+        ? +(sessionStorage.getItem('market-nft-starfilter') as string)
+        : 0
     },
 
     nftPriceOrder(): string {
-      return sessionStorage.getItem('market-nft-price-order') ? (sessionStorage.getItem('market-nft-price-order') as string) : '';
+      return sessionStorage.getItem('market-nft-price-order')
+        ? (sessionStorage.getItem('market-nft-price-order') as string)
+        : ''
     },
 
     convertStringToDecimal(val: string, maxDecimals: number) {
-      return new BigNumber(val).toFixed(maxDecimals);
+      return new BigNumber(val).toFixed(maxDecimals)
     },
-    activeListingMarketTax(): string{
-      if(this.activeType === 'weapon'){
-        return this.weaponMarketTax;
+    activeListingMarketTax(): string {
+      if (this.activeType === 'weapon') {
+        return this.weaponMarketTax
       }
 
-      if(this.activeType === 'character'){
-        return this.characterMarketTax;
+      if (this.activeType === 'character') {
+        return this.characterMarketTax
       }
 
-      if(this.activeType === 'shield'){
-        return this.shieldMarketTax;
+      if (this.activeType === 'shield') {
+        return this.shieldMarketTax
       }
 
-      return '0';
+      return '0'
     },
 
     calculatedBuyerCost(listedPrice: number): string {
-      return (0.01 * listedPrice * (100 + parseFloat(this.activeListingMarketTax()))).toFixed(8).replace(/(\.0+|0+)$/, '');
+      return (
+        0.01 *
+        listedPrice *
+        (100 + parseFloat(this.activeListingMarketTax()))
+      )
+        .toFixed(8)
+        .replace(/(\.0+|0+)$/, '')
     },
 
     maxPrecisionSkill(listedPrice: string): string {
-      return this.convertStringToDecimal(this.convertWeiToSkill(listedPrice), 8);
-    }
+      return this.convertStringToDecimal(this.convertWeiToSkill(listedPrice), 8)
+    },
   },
 
   watch: {
     async searchResults(nftIds: CharacterId[] | WeaponId[] | ShieldId[]) {
-      this.selectedNftId = null;
-      await this.fetchNftPrices(nftIds);
-      if(this.activeType === 'weapon') {
-        await this.setupWeaponsWithIdsRenames(nftIds);
-      } else if(this.activeType === 'character') {
-        await this.setupCharactersWithIdsRenames(nftIds);
+      this.selectedNftId = null
+      await this.fetchNftPrices(nftIds)
+      if (this.activeType === 'weapon') {
+        await this.setupWeaponsWithIdsRenames(nftIds)
+      } else if (this.activeType === 'character') {
+        await this.setupCharactersWithIdsRenames(nftIds)
       }
     },
 
     async allSearchResults(nftIds: CharacterId[] | WeaponId[] | ShieldId[]) {
-      this.selectedNftId = null;
-      await this.fetchNftPrices(nftIds);
-      if(this.activeType === 'weapon') {
-        await this.setupWeaponsWithIdsRenames(nftIds);
-      } else if(this.activeType === 'character') {
-        await this.setupCharactersWithIdsRenames(nftIds);
+      this.selectedNftId = null
+      await this.fetchNftPrices(nftIds)
+      if (this.activeType === 'weapon') {
+        await this.setupWeaponsWithIdsRenames(nftIds)
+      } else if (this.activeType === 'character') {
+        await this.setupCharactersWithIdsRenames(nftIds)
       }
-    }
+    },
   },
 
   filters: {
     maxDecimals(val: string, maxDecimals: number) {
-      return new BigNumber(val).toFixed(maxDecimals);
+      return new BigNumber(val).toFixed(maxDecimals)
     },
     dynamicDecimals(val: string, minDecimals: number, maxDecimals: number) {
-      const parsedVal = new BigNumber(val);
+      const parsedVal = new BigNumber(val)
 
-      if(parsedVal < new BigNumber(Math.pow(10, -maxDecimals))){
-        return '< ' + Math.pow(10, -maxDecimals).toFixed(maxDecimals);
+      if (parsedVal < new BigNumber(Math.pow(10, -maxDecimals))) {
+        return '< ' + Math.pow(10, -maxDecimals).toFixed(maxDecimals)
       }
 
-      for(let i = maxDecimals - 1; i >= minDecimals; i--){
-        if(parsedVal < new BigNumber(Math.pow(10, -i))){
-          return new BigNumber(val).toFixed(i + 1);
+      for (let i = maxDecimals - 1; i >= minDecimals; i--) {
+        if (parsedVal < new BigNumber(Math.pow(10, -i))) {
+          return new BigNumber(val).toFixed(i + 1)
         }
       }
 
-      return new BigNumber(val).toFixed(minDecimals);
-    }
+      return new BigNumber(val).toFixed(minDecimals)
+    },
   },
 
   async mounted() {
-    assert.ok(this.contracts.Weapons && this.contracts.Characters && this.contracts.Shields, 'Expected required contracts to be available');
-    this.searchAllCharacterListings(0);
-    await this.fetchBoxPrice();
+    assert.ok(
+      this.contracts.Weapons &&
+        this.contracts.Characters &&
+        this.contracts.Shields,
+      'Expected required contracts to be available'
+    )
+    this.searchAllCharacterListings(0)
+    await this.fetchBoxPrice()
   },
-});
+})
 </script>
 
 <style scoped>
-
 html {
   overscroll-behavior: auto;
   overflow: hidden;
@@ -1772,14 +2277,14 @@ body {
   height: 100%;
 }
 
-.search-btn-selling{
+.search-btn-selling {
   display: flex;
   justify-content: center;
   margin-top: 30px;
 }
 
-.search-btn-selling button{
-  background: url("../assets/v2/btn-bg-blue.png");
+.search-btn-selling button {
+  background: url('../assets/v2/btn-bg-blue.png');
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
@@ -1795,15 +2300,15 @@ body {
   font-weight: 700;
 }
 
-.search-item{
+.search-item {
   background-color: #000;
-  border: 1px solid #1385B7;
+  border: 1px solid #1385b7;
   border-radius: 16px;
   height: 68px;
   font-size: 18px;
 }
 
-.search-results{
+.search-results {
   flex: 1;
 }
 
@@ -1819,7 +2324,8 @@ body {
   width: 100%;
 }
 
-.search-buttons, .self-buttons {
+.search-buttons,
+.self-buttons {
   margin-top: 10px;
   display: flex;
   justify-content: space-around;
@@ -1854,15 +2360,15 @@ body {
   opacity: 0.65;
 }
 
-.transaction-history-text{
+.transaction-history-text {
   color: #9e8a57 !important;
 }
 
-.transaction-history-header-text{
-   color: #9e8a57;
+.transaction-history-header-text {
+  color: #9e8a57;
   font-size: 34px;
 }
-.m-top-negative-5{
+.m-top-negative-5 {
   margin-top: -5px;
 }
 
@@ -1909,8 +2415,8 @@ body {
   margin-top: 65px;
 } */
 
-.btn-purchase{
-  background: url("../assets/v2/shop_nft_btn.svg");
+.btn-purchase {
+  background: url('../assets/v2/shop_nft_btn.svg');
   background-repeat: no-repeat;
   background-size: contain;
   box-shadow: none;
@@ -1927,62 +2433,62 @@ body {
   font-size: 18px;
 }
 
-.value-price{
+.value-price {
   font-size: 14px;
 }
 
-.value-price span{
+.value-price span {
   font-size: 20px;
-  color: rgb(216,88,247);
+  color: rgb(216, 88, 247);
   font-weight: 800;
 }
 
-.button-row{
+.button-row {
   flex-direction: column;
   align-items: center;
-  background-color: rgba(0, 0, 0, .5);
+  background-color: rgba(0, 0, 0, 0.5);
   padding: 60px 30px;
 }
 
-.button-row > div{
+.button-row > div {
   width: 100%;
   padding: 0 20px;
 }
 
-.gtag-link-others{
+.gtag-link-others {
   border: none;
   padding: 10px 20px;
   margin-bottom: 15px;
 }
 
-.search-btn{
-  background-color: rgb(175,175,175);
+.search-btn {
+  background-color: rgb(175, 175, 175);
   border-radius: 10px;
 }
 
-.search-btn:hover{
-  background-color: rgb(245,139,91);
+.search-btn:hover {
+  background-color: rgb(245, 139, 91);
 }
 
-.form-control{
+.form-control {
   background-color: transparent;
-  border: 1px solid rgb(17,65,105);
+  border: 1px solid rgb(17, 65, 105);
   margin-bottom: 50px;
   border-radius: 10px;
   padding: 15px 20px;
-  color: white
+  color: white;
 }
 
-.form-control::placeholder{
-  color: rgba(255, 255, 255, .8);
+.form-control::placeholder {
+  color: rgba(255, 255, 255, 0.8);
 }
 
-.form-control:focus{
+.form-control:focus {
   background-color: transparent;
   color: white;
 }
 
-.market-hero-weapon{
+.market-hero-weapon {
   position: relative;
   /* top: -42.515px; */
   display: flex;
@@ -1991,16 +2497,16 @@ body {
   margin-left: 8px;
   margin-bottom: 50px;
 }
-.market-hero-weapon::before{
-  content: "";
+.market-hero-weapon::before {
+  content: '';
   position: absolute;
   bottom: 0;
-  background-color: rgb(245,139,91);
+  background-color: rgb(245, 139, 91);
   height: 5px;
   width: 100%;
 }
 
-.market-hero-weapon button{
+.market-hero-weapon button {
   width: 18%;
   height: 46px;
   font-size: 20px;
@@ -2011,25 +2517,24 @@ body {
   text-align: center;
 }
 
-
-button.selected{
-  background-color: rgb(245,139,91);
+button.selected {
+  background-color: rgb(245, 139, 91);
 }
 
-@media (max-width: 1200px){
-  .market-hero-weapon button{
+@media (max-width: 1200px) {
+  .market-hero-weapon button {
     width: 30%;
   }
 }
 
-@media (max-width: 993px){
-  .market-hero-weapon button{
+@media (max-width: 993px) {
+  .market-hero-weapon button {
     width: 35%;
   }
 }
 
-@media (max-width: 767px){
-  .market-hero-weapon button{
+@media (max-width: 767px) {
+  .market-hero-weapon button {
     width: 40%;
   }
   .body {
@@ -2043,7 +2548,7 @@ button.selected{
     margin-top: 3px;
     padding: 0 10px;
   }
-  .market-hero-weapon button{
+  .market-hero-weapon button {
     width: 50%;
   }
 }
@@ -2056,11 +2561,11 @@ button.selected{
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgb(0,0,0);
-  background-color: rgba(0,0,0,0.4);
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
-.modal-loading-content{
+.modal-loading-content {
   height: 100%;
   width: 100%;
   display: flex;
@@ -2068,12 +2573,11 @@ button.selected{
   justify-content: center;
 }
 
-.modal-loading-content .outcome{
+.modal-loading-content .outcome {
   font-size: 3em;
 }
 
-.modal-loading-content .outcome i{
+.modal-loading-content .outcome i {
   margin-right: 20px;
 }
-
 </style>

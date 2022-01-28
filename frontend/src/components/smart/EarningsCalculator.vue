@@ -26,35 +26,35 @@
 </template>
 
 <script lang="ts">
-import { CharacterPower } from "@/interfaces";
-import Vue from "vue";
-import { mapGetters } from "vuex";
-import { toBN, fromWeiEther } from "../../utils/common";
+import { CharacterPower } from '@/interfaces'
+import Vue from 'vue'
+import { mapGetters } from 'vuex'
+import { toBN, fromWeiEther } from '../../utils/common'
 
 export default Vue.extend({
   computed: {
     ...mapGetters([
-      "currentCharacter",
-      "currentWeapon",
-      "fightGasOffset",
-      "fightBaseline",
+      'currentCharacter',
+      'currentWeapon',
+      'fightGasOffset',
+      'fightBaseline',
     ]),
 
     isLoadingCharacter(): boolean {
-      return !this.currentCharacter;
+      return !this.currentCharacter
     },
   },
 
   data() {
     return {
-      characterElementValue: "",
+      characterElementValue: '',
       levelSliderValue: 1,
       staminaSelectValue: 40,
       starsValue: 1,
-      wepElementValue: "",
-      wepFirstStatElementValue: "",
-      wepSecondStatElementValue: "",
-      wepThirdStatElementValue: "",
+      wepElementValue: '',
+      wepFirstStatElementValue: '',
+      wepSecondStatElementValue: '',
+      wepThirdStatElementValue: '',
       wepFirstStatSliderValue: 4,
       wepSecondStatSliderValue: 4,
       wepThirdStatSliderValue: 4,
@@ -62,17 +62,17 @@ export default Vue.extend({
       bnbPrice: 0,
       skillPrice: 0,
       calculationResults: [] as number[][],
-    };
+    }
   },
 
   methods: {
     getNextMilestoneBonus(level: number): string {
-      const nextMilestoneLevel = this.getNextMilestoneLevel(level);
-      return this.getRewardDiffBonus(level, nextMilestoneLevel);
+      const nextMilestoneLevel = this.getNextMilestoneLevel(level)
+      return this.getRewardDiffBonus(level, nextMilestoneLevel)
     },
 
     getNextMilestoneLevel(level: number): number {
-      return (Math.floor(level / 10) + 1) * 10 + 1;
+      return (Math.floor(level / 10) + 1) * 10 + 1
     },
 
     getAverageRewardAtLevel(level: number): number {
@@ -80,7 +80,7 @@ export default Vue.extend({
         this.formattedSkill(this.fightGasOffset) +
         this.formattedSkill(this.fightBaseline) *
           Math.sqrt(CharacterPower(level - 1) / 1000)
-      );
+      )
     },
 
     getRewardDiffBonus(level: number, targetLevel: number): string {
@@ -90,15 +90,15 @@ export default Vue.extend({
           100 -
           100) /
         10
-      ).toFixed(2);
+      ).toFixed(2)
     },
 
     formattedSkill(skill: number): number {
-      const skillBalance = fromWeiEther(skill.toString());
-      return toBN(skillBalance).toNumber();
+      const skillBalance = fromWeiEther(skill.toString())
+      return toBN(skillBalance).toNumber()
     },
   },
-});
+})
 </script>
 <style scoped>
 .milestone-text {

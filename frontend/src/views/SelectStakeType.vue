@@ -9,7 +9,8 @@
           :stakeType="e.stakeType"
           :minimumStakeTime="stakeOverviews[e.stakeType].minimumStakeTime"
           :estimatedYield="estimatedYields[e.stakeType]"
-          :deprecated="e.deprecated" />
+          :deprecated="e.deprecated"
+        />
       </li>
     </ul>
     <div class="loading-indicator" v-else>
@@ -19,14 +20,14 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex';
-import BN from 'bignumber.js';
-import _ from 'lodash';
-BN.config({ ROUNDING_MODE: BN.ROUND_DOWN });
-BN.config({ EXPONENTIAL_AT: 100 });
-import StakeSelectorItem from '../components/StakeSelectorItem.vue';
+import { mapActions, mapGetters, mapState } from 'vuex'
+import BN from 'bignumber.js'
+import _ from 'lodash'
+BN.config({ ROUNDING_MODE: BN.ROUND_DOWN })
+BN.config({ EXPONENTIAL_AT: 100 })
+import StakeSelectorItem from '../components/StakeSelectorItem.vue'
 
-import { humanReadableDetailsForStakeTypes } from '../stake-types';
+import { humanReadableDetailsForStakeTypes } from '../stake-types'
 
 export default {
   components: {
@@ -38,18 +39,19 @@ export default {
     ...mapGetters(['availableStakeTypes']),
 
     entries() {
-      return this.availableStakeTypes.map(stakeType => ({
-        stakeType, ...humanReadableDetailsForStakeTypes[stakeType]
-      }));
+      return this.availableStakeTypes.map((stakeType) => ({
+        stakeType,
+        ...humanReadableDetailsForStakeTypes[stakeType],
+      }))
     },
 
     estimatedYields() {
       return _.fromPairs(
-        this.availableStakeTypes.map(stakeType => [
+        this.availableStakeTypes.map((stakeType) => [
           stakeType,
-          this.calculateEstimatedYield(stakeType)
+          this.calculateEstimatedYield(stakeType),
         ])
-      );
+      )
     },
   },
 
@@ -57,27 +59,27 @@ export default {
     ...mapActions(['fetchStakeOverviewData']),
 
     calculateEstimatedYield(stakeType) {
-      const rewardRate = this.stakeOverviews[stakeType].rewardRate;
-      const totalStaked = this.stakeOverviews[stakeType].totalSupply;
+      const rewardRate = this.stakeOverviews[stakeType].rewardRate
+      const totalStaked = this.stakeOverviews[stakeType].totalSupply
 
-      const rewardsPerDay = BN(rewardRate).multipliedBy(365.24 * 24 * 60 * 60);
+      const rewardsPerDay = BN(rewardRate).multipliedBy(365.24 * 24 * 60 * 60)
 
-      const totalSupply = BN(totalStaked);
+      const totalSupply = BN(totalStaked)
 
-      const estYield = rewardsPerDay.dividedBy(totalSupply);
+      const estYield = rewardsPerDay.dividedBy(totalSupply)
 
-      if(stakeType === 'lp' || stakeType === 'lp2') {
-        return estYield.multipliedBy(0.102); // temporary, fetch from pancakeswap instead in the future
+      if (stakeType === 'lp' || stakeType === 'lp2') {
+        return estYield.multipliedBy(0.102) // temporary, fetch from pancakeswap instead in the future
       }
 
-      return estYield;
-    }
+      return estYield
+    },
   },
 
   async mounted() {
-    await this.fetchStakeOverviewData();
-  }
-};
+    await this.fetchStakeOverviewData()
+  },
+}
 </script>
 
 <style scoped>

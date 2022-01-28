@@ -2,25 +2,25 @@
   <div class="skill-balance-display">
     <div class="balance-container">
       <div class="xbladeContainer">
-      <div
-      size="sm"
-      class="my-2 my-sm-0"
-      variant="primary"
-      v-tooltip="'Buy xBlade'"
-      @click="onBuySkill"
-    >
-      <div class="btn-buy gtag-link-others" tagname="buy_skill">+</div>
-    </div>
-      <span
-        class="balance"
-        v-tooltip="{
-          content: totalSkillTooltipHtml,
-          trigger: isMobile() ? 'click' : 'hover',
-        }"
-        @mouseover="hover = !isMobile() || true"
-        @mouseleave="hover = !isMobile()"
-        >{{ formattedTotalSkillBalance }} <span class="xblade">xBlade</span>
-      </span>
+        <div
+          size="sm"
+          class="my-2 my-sm-0"
+          variant="primary"
+          v-tooltip="'Buy xBlade'"
+          @click="onBuySkill"
+        >
+          <div class="btn-buy gtag-link-others" tagname="buy_skill">+</div>
+        </div>
+        <span
+          class="balance"
+          v-tooltip="{
+            content: totalSkillTooltipHtml,
+            trigger: isMobile() ? 'click' : 'hover',
+          }"
+          @mouseover="hover = !isMobile() || true"
+          @mouseleave="hover = !isMobile()"
+          >{{ formattedTotalSkillBalance }} <span class="xblade">xBlade</span>
+        </span>
       </div>
       <span
         class="balance"
@@ -47,44 +47,46 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import Bignumber from "bignumber.js";
-import { Accessors } from "vue/types/options";
-import { mapActions, mapState, mapGetters } from "vuex";
-import { toBN, fromWeiEther } from "../../utils/common";
-import { IState } from "@/interfaces";
-import { formatDurationFromSeconds } from "@/utils/date-time";
+import Vue from 'vue'
+import Bignumber from 'bignumber.js'
+import { Accessors } from 'vue/types/options'
+import { mapActions, mapState, mapGetters } from 'vuex'
+import { toBN, fromWeiEther } from '../../utils/common'
+import { IState } from '@/interfaces'
+import { formatDurationFromSeconds } from '@/utils/date-time'
 
-type StoreMappedState = Pick<IState,
-| "skillRewards"
-| "skillBalance"
-| "inGameOnlyFunds"
-| "waxBridgeWithdrawableBnb"
-| "waxBridgeTimeUntilLimitExpires">;
+type StoreMappedState = Pick<
+  IState,
+  | 'skillRewards'
+  | 'skillBalance'
+  | 'inGameOnlyFunds'
+  | 'waxBridgeWithdrawableBnb'
+  | 'waxBridgeTimeUntilLimitExpires'
+>
 
 interface StoreMappedGetters {
-  getExchangeUrl: string;
-  availableBNB: string;
+  getExchangeUrl: string
+  availableBNB: string
 }
 
 interface StoreMappedActions {
-  addMoreSkill(skillToAdd: string): Promise<void>;
-  withdrawBnbFromWaxBridge(): Promise<void>;
+  addMoreSkill(skillToAdd: string): Promise<void>
+  withdrawBnbFromWaxBridge(): Promise<void>
 }
 
 export default Vue.extend({
   computed: {
     ...(mapState([
-      "skillRewards",
-      "skillBalance",
-      "inGameOnlyFunds",
-      "waxBridgeWithdrawableBnb",
-      "waxBridgeTimeUntilLimitExpires",
-      "myXgem"
+      'skillRewards',
+      'skillBalance',
+      'inGameOnlyFunds',
+      'waxBridgeWithdrawableBnb',
+      'waxBridgeTimeUntilLimitExpires',
+      'myXgem',
     ]) as Accessors<StoreMappedState>),
     ...(mapGetters({
-      availableBNB: "waxBridgeAmountOfBnbThatCanBeWithdrawnDuringPeriod",
-      getExchangeUrl: "getExchangeUrl",
+      availableBNB: 'waxBridgeAmountOfBnbThatCanBeWithdrawnDuringPeriod',
+      getExchangeUrl: 'getExchangeUrl',
     }) as Accessors<StoreMappedGetters>),
 
     formattedTotalSkillBalance() {
@@ -94,36 +96,34 @@ export default Vue.extend({
           toBN(this.inGameOnlyFunds),
           toBN(this.skillRewards)
         )
-      );
-      const { format } = new Intl.NumberFormat("en-EN");
-      return `${format(
-        toBN(xBladeBalance).toNumber()
-      )}`;
+      )
+      const { format } = new Intl.NumberFormat('en-EN')
+      return `${format(toBN(xBladeBalance).toNumber())}`
     },
 
     formattedSkillBalance(): string {
-      const skillBalance = fromWeiEther(this.skillBalance);
-      return `${toBN(skillBalance).toFixed(4)} xBlade`;
+      const skillBalance = fromWeiEther(this.skillBalance)
+      return `${toBN(skillBalance).toFixed(4)} xBlade`
     },
 
     hasBnbAvailableToWithdraw(): boolean {
-      return toBN(this.waxBridgeWithdrawableBnb).gt(0);
+      return toBN(this.waxBridgeWithdrawableBnb).gt(0)
     },
 
     canWithdrawBnb(): boolean {
-      return toBN(this.availableBNB).gt(0);
+      return toBN(this.availableBNB).gt(0)
     },
 
     formattedBnbThatCanBeWithdrawn(): string {
-      return this.formatBnb(this.availableBNB);
+      return this.formatBnb(this.availableBNB)
     },
 
     formattedTotalAvailableBnb(): string {
-      return this.formatBnb(this.waxBridgeWithdrawableBnb);
+      return this.formatBnb(this.waxBridgeWithdrawableBnb)
     },
 
     durationUntilLimitPeriodOver(): string {
-      return formatDurationFromSeconds(this.waxBridgeTimeUntilLimitExpires);
+      return formatDurationFromSeconds(this.waxBridgeTimeUntilLimitExpires)
     },
 
     bnbClaimTooltip(): string {
@@ -132,66 +132,65 @@ export default Vue.extend({
           You have reached your limit for withdrawing BNB from the portal for this period,
           please wait about ${this.durationUntilLimitPeriodOver}
           (${this.formattedTotalAvailableBnb} left)
-        `;
+        `
       }
 
-      return `${this.formattedBnbThatCanBeWithdrawn} of ${this.formattedTotalAvailableBnb} withdrawable from the portal`;
+      return `${this.formattedBnbThatCanBeWithdrawn} of ${this.formattedTotalAvailableBnb} withdrawable from the portal`
     },
     formattedInGameOnlyFunds(): string {
-      const skillBalance = fromWeiEther(this.inGameOnlyFunds);
-      return `${toBN(skillBalance).toFixed(4)} xBlade`;
+      const skillBalance = fromWeiEther(this.inGameOnlyFunds)
+      return `${toBN(skillBalance).toFixed(4)} xBlade`
     },
     totalSkillTooltipHtml() {
-      const inGameOnlyFundsBalance = fromWeiEther(this.inGameOnlyFunds);
-      const skillRewards = fromWeiEther(this.skillRewards);
-      const skillBalance = fromWeiEther(this.skillBalance);
+      const inGameOnlyFundsBalance = fromWeiEther(this.inGameOnlyFunds)
+      const skillRewards = fromWeiEther(this.skillRewards)
+      const skillBalance = fromWeiEther(this.skillBalance)
 
-      let html = toBN(skillBalance).toFixed(4) + "xBlade";
+      let html = toBN(skillBalance).toFixed(4) + 'xBlade'
 
       if (parseFloat(skillRewards) !== 0) {
-        html +=
-          "<br>+ WITHDRAWABLE " + toBN(skillRewards).toFixed(4) + "xBlade";
+        html += '<br>+ WITHDRAWABLE ' + toBN(skillRewards).toFixed(4) + 'xBlade'
       }
 
       if (parseFloat(inGameOnlyFundsBalance) !== 0) {
         html +=
-          "<br>+ IN GAME ONLY " +
+          '<br>+ IN GAME ONLY ' +
           toBN(inGameOnlyFundsBalance).toFixed(4) +
-          "xBlade";
+          'xBlade'
       }
 
-      return html;
+      return html
     },
     hasInGameSkill(): boolean {
-      const inGameOnlyFundsBalance = fromWeiEther(this.inGameOnlyFunds);
-      return parseFloat(inGameOnlyFundsBalance) !== 0;
+      const inGameOnlyFundsBalance = fromWeiEther(this.inGameOnlyFunds)
+      return parseFloat(inGameOnlyFundsBalance) !== 0
     },
   },
 
   methods: {
     ...(mapActions([
-      "addMoreSkill",
-      "withdrawBnbFromWaxBridge",
+      'addMoreSkill',
+      'withdrawBnbFromWaxBridge',
     ]) as StoreMappedActions),
 
     formatBnb(bnb: string): string {
-      const amount = fromWeiEther(bnb);
-      return `${toBN(amount).toFixed(4)} BNB`;
+      const amount = fromWeiEther(bnb)
+      return `${toBN(amount).toFixed(4)} BNB`
     },
 
     onBuySkill() {
-      window.open(this.getExchangeUrl, "_blank");
+      window.open(this.getExchangeUrl, '_blank')
     },
 
     async onWithdrawBNB() {
-      if (!this.canWithdrawBnb) return;
+      if (!this.canWithdrawBnb) return
 
-      await this.withdrawBnbFromWaxBridge();
+      await this.withdrawBnbFromWaxBridge()
     },
   },
 
   components: {},
-});
+})
 </script>
 
 <style lang="scss">
@@ -218,31 +217,31 @@ export default Vue.extend({
   color: #c755f8;
   font-size: 12px;
 }
-.btn-buy.gtag-link-others{
-  background: linear-gradient(to bottom, #F58B5B, #F58B5B);
+.btn-buy.gtag-link-others {
+  background: linear-gradient(to bottom, #f58b5b, #f58b5b);
 }
-.navbar-light .navbar-nav .nav-link{
+.navbar-light .navbar-nav .nav-link {
   color: #fff;
 }
 
-@media (max-width: 767.98px){
-.balance-container{
-  margin: 0 1.3rem;
-}
+@media (max-width: 767.98px) {
+  .balance-container {
+    margin: 0 1.3rem;
+  }
 
-.balance-container span{
-  font-size: 1.2em;
-}
+  .balance-container span {
+    font-size: 1.2em;
+  }
 
-.btn-buy.gtag-link-others{
-  margin-right: 0;
-  margin-left: 5px;
-  width: 45px;
-  height: 45px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2em;
-}
+  .btn-buy.gtag-link-others {
+    margin-right: 0;
+    margin-left: 5px;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2em;
+  }
 }
 </style>

@@ -4,26 +4,26 @@
       <span
         :class="characterTrait.toLowerCase() + '-icon circle-element'"
       ></span>
-    <div>
-       <div class="name-lvl-container">
-        <div
-          class="name black-outline"
-          :title="getCleanCharacterName(character.id)"
-          v-if="!portrait"
-        >
-          {{'#'+ character.id }}
-        </div>
-        <div class="lv" v-if="!portrait">
-          Lv.<span class="">{{ character.level + 1 }}</span>
+      <div>
+        <div class="name-lvl-container">
+          <div
+            class="name black-outline"
+            :title="getCleanCharacterName(character.id)"
+            v-if="!portrait"
+          >
+            {{ '#' + character.id }}
+          </div>
+          <div class="lv" v-if="!portrait">
+            Lv.<span class="">{{ character.level + 1 }}</span>
+          </div>
         </div>
       </div>
-    </div>
     </div>
     <div class="placeholder d-flex align-items-start justify-content-center">
       <div
         :style="{
           'background-image': 'url(' + getCharacterArt(character) + ')',
-          'z-index': 999
+          'z-index': 999,
         }"
         :class="{
           'w-100': portrait,
@@ -31,11 +31,13 @@
           'h-75': isMarket,
         }"
       ></div>
-      <div class="traitOfCharacter" :style="{
-        'background-image': 'url(' + getCharacterTrait(character) + ')',
-        'height': '89px'
-        }">
-      </div>
+      <div
+        class="traitOfCharacter"
+        :style="{
+          'background-image': 'url(' + getCharacterTrait(character) + ')',
+          height: '89px',
+        }"
+      ></div>
     </div>
     <div class="loading-container" v-if="!allLoaded">
       <i class="fas fa-spinner fa-spin"></i>
@@ -49,7 +51,8 @@
 
       <div class="score-id-container">
         <div class="black-outline" v-if="!portrait">
-          Owner: <span class="ownerText">{{ renderOwner(this.room.owner) }}</span>
+          Owner:
+          <span class="ownerText">{{ renderOwner(this.room.owner) }}</span>
         </div>
       </div>
       <div class="score-id-container">
@@ -57,28 +60,34 @@
           Remain: <span class="ownerText">{{ this.totalReward }}</span>
         </div>
       </div>
-      <div class="cost"><div></div> {{this.matchReward}}</div>
+      <div class="cost">
+        <div></div>
+        {{ this.matchReward }}
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { getCharacterArt, getCharacterTrait } from "../character-arts-placeholder";
-import { CharacterTrait, RequiredXp } from "../interfaces";
-import { mapActions, mapGetters, mapState  } from "vuex";
-import { getCleanName } from "../rename-censor";
-import Web3 from "web3";
-import { mapCacheActions } from 'vuex-cache';
+import {
+  getCharacterArt,
+  getCharacterTrait,
+} from '../character-arts-placeholder'
+import { CharacterTrait, RequiredXp } from '../interfaces'
+import { mapActions, mapGetters, mapState } from 'vuex'
+import { getCleanName } from '../rename-censor'
+import Web3 from 'web3'
+import { mapCacheActions } from 'vuex-cache'
 
 export default {
   props: [
-    "character",
-    "portrait",
-    "isMarket",
-    "matchReward",
-    "room",
-    "selectedWeaponId",
-    "selectedCharacterId",
+    'character',
+    'portrait',
+    'isMarket',
+    'matchReward',
+    'room',
+    'selectedWeaponId',
+    'selectedCharacterId',
   ],
   components: {
     //SmallButton,
@@ -100,72 +109,72 @@ export default {
       trait: this.characterTrait,
       showPlaceholder: false,
       heroScore: 0,
-    };
+    }
   },
 
   computed: {
     console: () => console,
-    ...mapState(["maxStamina"]),
+    ...mapState(['maxStamina']),
     ...mapGetters([
-      "getCharacterName",
-      "transferCooldownOfCharacterId",
-      "getCharacterUnclaimedXp",
-      "timeUntilCharacterHasMaxStamina",
-      "charactersWithIds",
+      'getCharacterName',
+      'transferCooldownOfCharacterId',
+      'getCharacterUnclaimedXp',
+      'timeUntilCharacterHasMaxStamina',
+      'charactersWithIds',
     ]),
 
     characterTrait() {
       const characterWithId =
-        this.charactersWithIds && this.charactersWithIds([this.character.id]);
+        this.charactersWithIds && this.charactersWithIds([this.character.id])
       return (
         (characterWithId && CharacterTrait[characterWithId[0].trait]) ||
         CharacterTrait[this.character.trait]
-      );
+      )
     },
-    totalReward(){
-      return Web3.utils.fromWei(this.room.totalDeposit, "ether");
-    }
+    totalReward() {
+      return Web3.utils.fromWei(this.room.totalDeposit, 'ether')
+    },
   },
 
   methods: {
-    ...mapCacheActions(["fetchCharacters"]),
-    ...mapActions(["requestFight"]),
+    ...mapCacheActions(['fetchCharacters']),
+    ...mapActions(['requestFight']),
     RequiredXp,
 
     tooltipHtml(character) {
-      if (!character) return "";
+      if (!character) return ''
 
-      const cooldown = this.transferCooldownOfCharacterId(this.character.id);
+      const cooldown = this.transferCooldownOfCharacterId(this.character.id)
       if (cooldown) {
         if (cooldown === 86400)
           // edge case for when it's exactly 1 day and the iso string cant display
-          return "May not be traded for: 1 day";
+          return 'May not be traded for: 1 day'
         else
           return `May not be traded for: ${new Date(cooldown * 1000)
             .toISOString()
-            .substr(11, 8)}`;
+            .substr(11, 8)}`
       }
 
-      return "";
+      return ''
     },
 
     getCleanCharacterName(id) {
-      return getCleanName(this.getCharacterName(id));
+      return getCleanName(this.getCharacterName(id))
     },
 
     staminaToolTipHtml(time) {
       return (
-        "Regenerates 1 point every 5 minutes, stamina bar will be full at: " +
+        'Regenerates 1 point every 5 minutes, stamina bar will be full at: ' +
         time
-      );
+      )
     },
 
     timestampToStamina(timestamp) {
-      if (timestamp > Math.floor(Date.now() / 1000)) return 0;
+      if (timestamp > Math.floor(Date.now() / 1000)) return 0
       return +Math.min(
         (Math.floor(Date.now() / 1000) - timestamp) / 300,
         200
-      ).toFixed(0);
+      ).toFixed(0)
     },
 
     getCharacterArt,
@@ -175,28 +184,27 @@ export default {
         roomId: this.room.id,
         weaponId: this.selectedWeaponId,
         characterId: this.selectedCharacterId,
-      });
+      })
     },
 
     renderOwner(owner) {
-      if(!owner) {
-        return '';
+      if (!owner) {
+        return ''
+      } else if (owner?.length < 11) {
+        return owner
+      } else {
+        const hiddenString = owner.slice(5, owner?.length - 5)
+        const hiddenOwner = owner.split(hiddenString).join('...')
+        return hiddenOwner
       }
-      else if(owner?.length<11) {
-        return owner;
-      }else {
-        const hiddenString = owner.slice(5, owner?.length-5);
-        const hiddenOwner = owner.split(hiddenString).join('...');
-        return hiddenOwner;
-      }
-    }
+    },
   },
   mounted() {
-    this.allLoaded = true;
-    this.showPlaceholder = true;
-    return;
+    this.allLoaded = true
+    this.showPlaceholder = true
+    return
   },
-};
+}
 </script>
 
 <style scoped>
@@ -219,7 +227,7 @@ export default {
 }
 
 .thumb-art {
-  background-image: url("../assets/images/bg-item-top.png");
+  background-image: url('../assets/images/bg-item-top.png');
   background-repeat: no-repeat;
   background-position: 0 0;
   background-size: contain;
@@ -229,7 +237,7 @@ export default {
 }
 
 .character-info {
-  background-image: url("../assets/images/bg-item-bot.png");
+  background-image: url('../assets/images/bg-item-bot.png');
   background-repeat: no-repeat;
   background-size: contain;
   background-position: 0 0;
@@ -276,7 +284,7 @@ export default {
   width: 238px;
   right: 0;
 
-  background-image: url("../assets/images/bg-process-box.png");
+  background-image: url('../assets/images/bg-process-box.png');
   background-repeat: no-repeat;
   background-position: 0 0;
   height: 50px;
@@ -288,7 +296,7 @@ export default {
 
 .xp .bg-success {
   background-position: 0 0;
-  background-image: url("../assets/images/chara-process.png");
+  background-image: url('../assets/images/chara-process.png');
   background-repeat: no-repeat;
   width: 218px;
   height: 27px;
@@ -335,7 +343,7 @@ export default {
 }
 
 .lv {
-  color:#dabf75;
+  color: #dabf75;
   font-weight: bold;
   font-size: 1rem;
   font-family: 'Rubik';
@@ -431,25 +439,25 @@ export default {
 
 .traitOfCharacter {
   position: absolute;
-  top:5.5rem;
+  top: 5.5rem;
   background-size: '100% 100%';
   background-repeat: 'no-repeat';
   transform: scale(2);
 }
 .ownerText {
-  color:#FEA829;
+  color: #fea829;
   font-size: 18px;
   font-weight: bold;
 }
-.cost{
-  color: #D858F7;
+.cost {
+  color: #d858f7;
   display: flex;
   width: 100%;
   justify-content: center;
   align-items: center;
   font-size: 1.3em;
 }
-.cost > div{
+.cost > div {
   background-image: url(../assets/v2/icon-crypto.svg);
   width: 20px;
   height: 19px;
