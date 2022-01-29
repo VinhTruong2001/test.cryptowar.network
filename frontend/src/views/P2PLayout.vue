@@ -110,7 +110,13 @@
           GO TO CHECK
         </button>
       </b-modal>
-      <b-modal id="loadingModal" :no-close-on-backdrop="true" hide-footer centered hide-header-close>
+      <b-modal
+        id="loadingModal"
+        :no-close-on-backdrop="true"
+        hide-footer
+        centered
+        hide-header-close
+      >
         <div class="centerLoading">
           <pulse-loader :loading="true" />
         </div>
@@ -969,39 +975,38 @@ export default {
           'The Total deposit needs to bigger than 210% of the Match reward!'
         this.$bvModal.show('listHeroToCareerModal')
         setTimeout(() => {
-          this.$bvModal.hide('loadingModal');
-        }, 500);
-      }
-      else {
-        try{
+          this.$bvModal.hide('loadingModal')
+        }, 500)
+      } else {
+        try {
           // @ts-ignore
           const res = await this.createCareerRoom({
-          // @ts-ignore
+            // @ts-ignore
             character: this.selectedCharacter.id,
             // @ts-ignore
             weapon: this.selectedWeapon.id,
             // @ts-ignore
             matchReward: this.matchReward,
             // @ts-ignore
-            totalDeposit: this.totalDeposit
-          });
-          if(res) {
-            this.selectedCharacter= null;
-            this.selectedWeapon=null;
-            this.errorMessage='';
-            this.$bvModal.hide('loadingModal');
-            this.getCareerRooms({cursor:0});
+            totalDeposit: this.totalDeposit,
+          })
+          if (res) {
+            this.selectedCharacter = null
+            this.selectedWeapon = null
+            this.errorMessage = ''
+            this.$bvModal.hide('loadingModal')
+            this.getCareerRooms({ cursor: 0 })
             setTimeout(() => {
-              this.$bvModal.show('listHeroToCareerModal');
-            }, 500);
+              this.$bvModal.show('listHeroToCareerModal')
+            }, 500)
           }
           // console.log('hiihi', result);
           // if(result) {
           //   this.errorMessage='';
           //   this.$bvModal.show('listHeroToCareerModal');
           // }
-        }catch{
-          this.$bvModal.hide('loadingModal');
+        } catch {
+          this.$bvModal.hide('loadingModal')
         }
       }
     },
