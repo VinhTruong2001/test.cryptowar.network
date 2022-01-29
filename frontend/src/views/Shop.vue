@@ -152,6 +152,7 @@ export default Vue.extend({
           nftPrice: toBN(fromWeiEther(common)).toNumber(),
           name: 'Common Box',
           description:
+            // eslint-disable-next-line max-len
             '0.4% chance to get 5-stars weapon, 1% chance to get 4-stars weapon, 2% chance to get 3-stars weapon, 8.5% chance to get 2-stars weapon, 88.1% chance to get 1-stars weapon',
           image: 'common-box.png',
           isSoldOut: Number(this.commonBoxSupply) === 0,
@@ -167,6 +168,7 @@ export default Vue.extend({
           nftPrice: toBN(fromWeiEther(rare)).toNumber(),
           name: 'Rare Box',
           description:
+            // eslint-disable-next-line max-len
             '2.5% chance to get 5-stars weapon, 5% chance to get 4-stars weapon, 10% chance to get 3-stars weapon, 56% chance to get 2-stars weapon, 26.5% chance to get 1-stars weapon',
           image: 'rare-box.png',
           isSoldOut: Number(this.rareBoxSupply) === 0,
@@ -182,8 +184,9 @@ export default Vue.extend({
           nftPrice: toBN(fromWeiEther(epic)).toNumber(),
           name: 'Epic Box',
           description: `0.6% chance to get 5-stars weapon,
-       1.5% chance to get 4-stars weapon, 2.5% chance to get 3-stars weapon, 10% chance to get 2-stars weapon,
-       84.4% chance to get 1-stars weapon and 1% chance to get hero`,
+        1.5% chance to get 4-stars weapon, 2.5% chance to get 3-stars weapon,
+        10% chance to get 2-stars weapon,
+        84.4% chance to get 1-stars weapon and 1% chance to get hero`,
           image: 'epic-box.png',
           isSoldOut: Number(this.epicBoxSupply) === 0,
           supply: this.epicBoxSupply,
@@ -198,6 +201,7 @@ export default Vue.extend({
           nftPrice: this.blindBoxPriceXgem,
           onlyUseXgem: true,
           name: 'Blind Box',
+          // eslint-disable-next-line max-len
           description: `89% chance to get common box, 6% chance to get rare box and 5% chance to get epic box`,
           image: 'blind-box.png',
           isSoldOut: false,

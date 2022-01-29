@@ -2047,7 +2047,7 @@ export default Vue.extend({
       ;(this.$refs[modalName] as BModal).hide()
     },
 
-    showListingSetupModal(changingPrice: boolean = false) {
+    showListingSetupModal(changingPrice = false) {
       this.clearInputs()
       this.priceChangeModal = changingPrice
       ;(this.$refs['listing-setup-modal'] as BModal).show()

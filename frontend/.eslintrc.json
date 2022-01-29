@@ -11,19 +11,28 @@
     "plugin:@typescript-eslint/recommended",
     "prettier"
   ],
+  "plugins": ["prettier"],
   "parser": "vue-eslint-parser",
   "parserOptions": {
     "project": ["tsconfig.json"],
     "parser": "@typescript-eslint/parser"
   },
   "rules": {
+    "prettier/prettier": [
+      2,
+      {
+        "usePrettierrc": true
+      }
+    ],
     "no-multiple-empty-lines": "off",
     "eqeqeq": "error",
     "max-len": [
       "error",
       {
         "ignorePattern": "//",
-        "code": 180
+        "code": 80,
+        "ignoreUrls": true,
+        "ignoreComments": true
       }
     ],
     "no-console": 1,
@@ -82,7 +91,8 @@
     "@typescript-eslint/no-misused-new": "error",
     "@typescript-eslint/no-namespace": "error",
     "@typescript-eslint/no-unused-expressions": "error",
-    "@typescript-eslint/indent": [1, 2],
+    "@typescript-eslint/indent": [1, 2, { "SwitchCase": 2 }],
+    "no-tabs": ["error", { "allowIndentationTabs": true }],
     "@typescript-eslint/semi": 0,
     "@typescript-eslint/explicit-module-boundary-types": 0,
     "@typescript-eslint/ban-ts-comment": 0,

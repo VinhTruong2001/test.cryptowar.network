@@ -245,7 +245,11 @@
                   <input
                     class="inputAmountBox"
                     type="text"
-                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                    @oninput="
+                      this.value = this.value
+                        .replace(/[^0-9.]/g, '')
+                        .replace(/(\..*?)\..*/g, '$1')
+                    "
                     v-model="matchReward"
                     placeholder="Typing a number"
                   />
@@ -261,7 +265,11 @@
                   <input
                     class="inputAmountBox"
                     type="text"
-                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                    @oninput="
+                      this.value = this.value
+                        .replace(/[^0-9.]/g, '')
+                        .replace(/(\..*?)\..*/g, '$1')
+                    "
                     v-model="totalDeposit"
                     placeholder="Typing a number"
                   />
@@ -270,7 +278,9 @@
               <button @click="handleCreateRoom()">
                 List HERO to Career Mode
               </button>
-              <!-- <button @click="$bvModal.show('listHeroToChallengeModal')">List HERO to Challenge Mode</button> -->
+              <!-- <button @click="$bvModal.show('listHeroToChallengeModal')">
+                List HERO to Challenge Mode
+              </button> -->
             </div>
           </div>
         </div>
@@ -283,9 +293,8 @@
             <div
               class="info"
               v-tooltip.bottom="{
-                content: `<div class='tooltip-container'>Power: ${CharacterPower(
-                  i.level
-                ).toLocaleString()}<br>
+                content: `<div class='tooltip-container'>Power:
+                  ${CharacterPower(i.level).toLocaleString()}<br>
               <span>Level </span>
               <span
                 >${i.level + 1} (${i.xp} /
