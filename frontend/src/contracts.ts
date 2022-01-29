@@ -18,9 +18,13 @@ import { abi as blacksmithAbi } from '../../build/contracts/Blacksmith.json'
 import { abi as shieldsAbi } from '../../build/contracts/Shields.json'
 import { abi as weaponRenameTagConsumablesAbi } from '../../build/contracts/WeaponRenameTagConsumables.json'
 import { abi as characterRenameTagConsumablesAbi } from '../../build/contracts/CharacterRenameTagConsumables.json'
+// eslint-disable-next-line max-len
 import { abi as characterFireTraitChangeConsumablesAbi } from '../../build/contracts/CharacterFireTraitChangeConsumables.json'
+// eslint-disable-next-line max-len
 import { abi as characterEarthTraitChangeConsumablesAbi } from '../../build/contracts/CharacterEarthTraitChangeConsumables.json'
+// eslint-disable-next-line max-len
 import { abi as characterWaterTraitChangeConsumablesAbi } from '../../build/contracts/CharacterWaterTraitChangeConsumables.json'
+// eslint-disable-next-line max-len
 import { abi as characterLightningTraitChangeConsumablesAbi } from '../../build/contracts/CharacterLightningTraitChangeConsumables.json'
 import { abi as randomsAbi } from '../../build/contracts/IRandoms.json'
 import {
@@ -138,7 +142,7 @@ async function setUpStakingContracts(web3: Web3) {
       ),
     }
   }
-  // consoqle.log('process.env.VUE_APP_XBLADE_TOKEN_CONTRACT_ADDRESS', process.env.VUE_APP_XBLADE_TOKEN_CONTRACT_ADDRESS);
+
   const xBladeTokenAddress =
     process.env.VUE_APP_XBLADE_TOKEN_CONTRACT_ADDRESS ||
     (xBladeTokenNetworks as Networks)[networkId]!.address

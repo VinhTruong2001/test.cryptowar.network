@@ -47,7 +47,8 @@
         v-if="deprecated"
         v-tooltip="
           `This stake pool has been deprecated, and should not be staked in anymore.
-          You can still pull tokens out or stake at your own risk, but it is not recommended, and it cannot be reversed.`
+          You can still pull tokens out or stake at your own risk, but it is not recommended,
+          and it cannot be reversed.`
         "
       />
     </router-link>

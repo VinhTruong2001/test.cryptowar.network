@@ -45,10 +45,6 @@
         <b-dropdown-group>
           <b-dropdown-header>Links</b-dropdown-header>
 
-          <!-- <b-dropdown-item @click.native="$router.push('leaderboard')" class="gtag-link-others" tagname="leaderboard_screen">
-        <i class="fa fa-trophy mr-2"></i>Leaderboard
-        </b-dropdown-item> -->
-
           <b-dropdown-item href="https://www.cryptowar.network/" target="_blank"
             ><i class="fa fa-book mr-2"></i>HomePage</b-dropdown-item
           >
@@ -123,7 +119,8 @@
           : ''
       }}
       miss out on {{ formattedBonusLost }} bonus xBlade. Are you sure you wish
-      to continue? <b>This action cannot be undone.</b>
+      to continue?
+      <b>This action cannot be undone.</b>
     </b-modal>
   </div>
 </template>

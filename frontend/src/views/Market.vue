@@ -318,7 +318,9 @@
               <i class="fas fa-spinner fa-spin"></i>
               Loading...
             </div>
-            <div class="outcome" v-if="marketOutcome !== null">{{ marketOutcome }}</div>
+            <div class="outcome" v-if="marketOutcome !== null">
+              {{ marketOutcome }}
+            </div>
           </div>
         </div> -->
       </b-tab>
@@ -335,13 +337,19 @@
           MY NFTS
           <hint
             class="hint"
-            text="When you list an NFT for sale, it is transferred to the<br>market until someone buys it or you cancel the sale"
+            text="When you list an NFT for sale, it is transferred to the<br />
+            market until someone buys it or you cancel the sale"
           />
         </template>
         <div class="row mt-3">
           <div class="col-12 col-xl-3 col-md-12 col-sm-12">
             <div class="row button-row">
-              <!-- <input class="form-control search-item" v-model.trim="search" type="text" placeholder="  Seller Address, NFT ID"> -->
+              <!-- <input
+                class="form-control search-item"
+                v-model.trim="search"
+                type="text"
+                placeholder="  Seller Address, NFT ID"
+              /> -->
               <div class="mb-2">
                 <b-button
                   @click=";(activeType = 'weapon'), (isBtnSell = false)"
@@ -371,24 +379,51 @@
               <div>
                 <!-- <b-button
                   v-if="activeType === 'weapon'"
-                   class="gtag-link-others  search-btn" tagname="add_listing_weapon"
+                  class="gtag-link-others search-btn"
+                  tagname="add_listing_weapon"
                   :disabled="selectedNftId === null || selectedNftOnCooldown"
-                  @click="showListingSetupModal()">Sell Weapon/Character <b-icon-question-circle :hidden=!weaponMarketTax
-                  v-tooltip.bottom="weaponMarketTax + '% tax (paid by the buyer) will be added to the final price.'"/></b-button>
+                  @click="showListingSetupModal()"
+                  >Sell Weapon/Character
+                  <b-icon-question-circle
+                    :hidden="!weaponMarketTax"
+                    v-tooltip.bottom="
+                      weaponMarketTax +
+                      '% tax (paid by the buyer) will be' +
+                      ' added to the final price.'
+                    "
+                /></b-button> -->
 
-                <b-button
+                <!-- <b-button
                   v-if="activeType === 'character'"
                   :disabled="selectedNftId === null || selectedNftOnCooldown"
-                   class="gtag-link-others search-btn" tagname="add_listing_character"
-                  @click="showListingSetupModal()">List Character <b-icon-question-circle :hidden=!characterMarketTax
-                  v-tooltip.bottom="characterMarketTax + '% tax (paid by the buyer) will be added to the final price.'"/></b-button> -->
+                  class="gtag-link-others search-btn"
+                  tagname="add_listing_character"
+                  @click="showListingSetupModal()"
+                  >List Character
+                  <b-icon-question-circle
+                    :hidden="!characterMarketTax"
+                    v-tooltip.bottom="
+                      characterMarketTax +
+                      '% tax (paid by the buyer) will' +
+                      ' be added to the final price.'
+                    "
+                /></b-button> -->
 
                 <!-- <b-button
                   v-if="activeType === 'shield'"
-                   class="gtag-link-others search-btn" tagname="add_listing_shield"
+                  class="gtag-link-others search-btn"
+                  tagname="add_listing_shield"
                   :disabled="selectedNftId === null || selectedNftOnCooldown"
-                  @click="showListingSetupModal()">List Shield <b-icon-question-circle :hidden=!shieldMarketTax
-                  v-tooltip.bottom="shieldMarketTax + '% tax (paid by the buyer) will be added to the final price.'"/>
+                  @click="showListingSetupModal()"
+                  >List Shield
+                  <b-icon-question-circle
+                    :hidden="!shieldMarketTax"
+                    v-tooltip.bottom="
+                      shieldMarketTax +
+                      '% tax (paid by the buyer) will be' +
+                      ' added to the final price.'
+                    "
+                  />
                 </b-button> -->
 
                 <b-modal
@@ -426,54 +461,7 @@
                   >
                 </b-modal>
               </div>
-              <!-- <div class="mb-2">
-                <b-button
-                  class="gtag-link-others search-btn" tagname="show_weapons_sold"
-                  @click="showWeaponsSoldModal()"> Weapons Sold
-                  <b-icon-question-circle v-tooltip.bottom="'View weapons you have sold.'"/>
-                </b-button>
-                <b-modal class="centered-modal " ref="weapons-sold-modal">
-                  <template #modal-header>
-                        <div class="transaction-history-header-text">
-                          Weapon Transaction History
-                        </div>
-                  </template>
-                  <div v-if="historyCounter > 0">
-                    <b-table class="transaction-history-text" :items="weaponTransactionHistoryData" :fields="weaponTransactionHistoryHeader"></b-table>
-                  </div>
-                  <div v-if="historyCounter === 0">
-                    <p>It's seems like there's nothing here.</p>
-                    <p>For tips on how to list NFTs, you may click this <strong><a href="https://wiki.cryptowar.network/market/trading" target="_blank">link</a></strong></p>
-                  </div>
-                  <template #modal-footer>
-                  <b-button class="mt-3 btn-buy" block @click="resetTransactionHistoryValues('weapons-sold-modal')">Ok</b-button>
-                  </template>
-                </b-modal>
-              </div>
-              <div class="mb-2">
-                <b-button
-                  class="gtag-link-others  search-btn" tagname="show_characters_sold"
-                  @click="showCharactersSoldModal()"> Characters Sold
-                  <b-icon-question-circle v-tooltip.bottom="'View characters you have sold.'"/>
-                </b-button>
-                <b-modal class="centered-modal " ref="characters-sold-modal">
-                  <template #modal-header>
-                    <div class="transaction-history-header-text">
-                      Character Transaction History
-                    </div>
-                  </template>
-                  <div v-if="historyCounter > 0">
-                    <b-table class="transaction-history-text" :items="characterTransactionHistoryData" :fields="characterTransactionHistoryHeader"></b-table>
-                  </div>
-                  <div v-if="historyCounter === 0">
-                    <p>It's seems like there's nothing here.</p>
-                    <p>For tips on how to list NFTs, you may click this <strong><a href="https://wiki.cryptowar.network/market/trading" target="_blank">link</a></strong></p>
-                  </div>
-                  <template #modal-footer>
-                    <b-button class="mt-3 btn-buy" block @click="resetTransactionHistoryValues('characters-sold-modal')">Ok</b-button>
-                  </template>
-                </b-modal>
-              </div> -->
+
               <div class="mb-2">
                 <b-button
                   @click="searchOwnListings('weapon'), (isBtnSell = true)"
@@ -499,15 +487,6 @@
                   >Selling Characters</b-button
                 >
               </div>
-              <!-- <div v-if="activeType === 'character' && isBtnSell" class="mb-2 search-btn-selling">
-                <b-button
-                  @click="searchListingsByNftId('character')" tagname="search_character_id">SEARCH</b-button>
-              </div>
-
-              <div v-if="activeType === 'weapon' && isBtnSell" class="mb-2 search-btn-selling">
-                <b-button
-                  @click="searchListingsByNftId('weapon')" tagname="search_weapon_id">SEARCH</b-button>
-              </div> -->
             </div>
           </div>
           <div class="search-results">
@@ -548,14 +527,6 @@
                   <span class="d-block text-center" v-else
                     >Loading price...</span
                   >
-                  <!-- <b-button
-                      v-if="id !== null && !searchResultsOwned"
-                      :hidden="convertWeiToSkill(nftPricesById[id]) === '0'"
-                      @click="selectedNftId = id; purchaseNft();"
-                      variant="primary"
-                      class="gtag-link-others">
-                      {{ convertWeiToSkill(nftPricesById[id]) !== '0' ? 'Purchase' : 'Sold' }}
-                  </b-button> -->
                 </div>
               </template>
               <template #sold="{ weapon: { id } }">
@@ -605,16 +576,6 @@
                   <span class="d-block text-center" v-else
                     >Loading price...</span
                   >
-                  <!-- <b-button
-                    v-if="id !== null && !searchResultsOwned"
-                    :hidden="convertWeiToSkill(nftPricesById[id]) === '0'"
-                    @click="selectedNftId = id; canPurchase && purchaseNft();"
-                    variant="primary"
-                    v-bind:class="[!canPurchase ? 'disabled-button' : '']"
-                    class="gtag-link-others" tagname="confirm_purchase">
-                    {{ convertWeiToSkill(nftPricesById[id]) !== '0' ? 'Purchase' : 'Sold' }} <b-icon-question-circle v-if="!canPurchase"
-                    v-tooltip.bottom="'You already have max amount of characters (8).'"/>
-                  </b-button> -->
                 </div>
               </template>
               <template #sold="{ character: { id } }">

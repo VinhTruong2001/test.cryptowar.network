@@ -1008,11 +1008,6 @@ export default {
               this.$bvModal.show('listHeroToCareerModal')
             }, 500)
           }
-          // console.log('hiihi', result);
-          // if(result) {
-          //   this.errorMessage='';
-          //   this.$bvModal.show('listHeroToCareerModal');
-          // }
         } catch {
           this.$bvModal.hide('loadingModal')
         }
@@ -1061,7 +1056,6 @@ export default {
         // @ts-ignore
         this.error = null
       } catch (e) {
-        console.error(e)
         // @ts-ignore
         this.error = e.message
       }

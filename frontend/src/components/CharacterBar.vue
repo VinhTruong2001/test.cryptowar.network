@@ -56,7 +56,6 @@ export default {
   border-image-slice: 1;
   border-top-width: 3px;
   border-image-source: linear-gradient(to left, #3add9a, #121154, #a54476);
-  /* background-image: radial-gradient(ellipse at top, #CBA938 -10%, transparent 35%), radial-gradient(ellipse at bottom, transparent, transparent); */
 }
 
 @media (max-width: 767.98px) {

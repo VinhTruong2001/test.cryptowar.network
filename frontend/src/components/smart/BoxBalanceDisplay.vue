@@ -124,8 +124,6 @@ export default {
     ...mapGetters(['getCommonBox', 'getRareBox', 'getEpicBox']),
   },
 
-  async created() {},
-
   methods: {
     ...mapActions([
       'getMyBoxes',

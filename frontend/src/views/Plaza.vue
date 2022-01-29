@@ -77,7 +77,9 @@
               variant="primary"
               class="ml-auto gtag-link-others"
               @click="openChangeTrait"
-              v-tooltip="'Change character\'s trait'" tagname="change_trait_character">
+              v-tooltip="'Change character\'s trait'"
+              tagname="change_trait_character"
+            >
               Change Trait
             </b-button> -->
             <!-- <b-button
@@ -99,10 +101,20 @@
                 tagname="recruit_character"
               >
                 Recruit (<span
-                  :class="`${referralAddress == '0x0000000000000000000000000000000000000000' ? 'old-price' : ''}`"
+                  :class="`${
+                    referralAddress ==
+                    '0x0000000000000000000000000000000000000000'
+                      ? 'old-price'
+                      : ''
+                  }`"
                   >{{ recruitCost }}</span
                 >
-                <span v-if="referralAddress != '0x0000000000000000000000000000000000000000'">
+                <span
+                  v-if="
+                    referralAddress !=
+                    '0x0000000000000000000000000000000000000000'
+                  "
+                >
                   {{ (recruitCost * 0.93).toFixed(2) }}</span
                 >
                 xBlade)&nbsp;

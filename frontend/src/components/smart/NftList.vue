@@ -149,31 +149,6 @@
             </div>
           </div>
         </b-modal>
-        <!-- <b-modal id="modal-selectitem">
-          <div class="items">
-            <div class="item" @click="buyItem(checkBuy)" v-for="i in 10" :key="i">
-              <div class="info">
-                <div class="info-head">
-                  <div class="property"></div>
-                  <div class="info-head-right">
-                    <span>#123456</span>
-                    <div class="leve">Lv.1</div>
-                  </div>
-                </div>
-                <div class="img-hero-around">
-                  <div class="img-hero"></div>
-                </div>
-                <div class="info-footer">
-                  <div class="hero-name">Amiria Angurvidel</div>
-                </div>
-              </div>
-              <div class="btn-request-fight">
-                <button @click="checkSelect = true, (changeMode = true), (careerMode = false), (requestChallenge = false),
-                $bvModal.hide('selectHeroOrWeaponModal')  , addClass = 'background'">SELECT</button>
-              </div>
-            </div>
-          </div>
-        </b-modal> -->
       </ul>
     </div>
 

@@ -172,7 +172,6 @@ export default {
     },
 
     getCharacterArt,
-    async fetchScore() {},
   },
   mounted() {
     this.fetchScore()

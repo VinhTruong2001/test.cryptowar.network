@@ -107,27 +107,6 @@
           <strong>Max Price</strong>
           <input class="form-control" type="number" v-model.trim="maxPriceFilter" :min="0" placeholder="Max" />
         </div> -->
-
-      <!-- <div class="start">
-          <strong>STARS</strong>
-          <div>
-            <div v-for="x in ['1', '2', '3', '4', '5']"
-            :style="starFilter>=x?'background: url('+require('../../assets/v2/market-star-click.svg')+'); background-repeat: no-repeat; background-size: contain; color: black':''"
-            :key="x"
-            @click="starFilter = x"
-            >{{x}}</div>
-          </div>
-        </div>
-
-        <div>
-          <strong>LEVEL</strong>
-          <select class="form-control" v-model="levelFilter">
-            <option v-for="x in ['', 1, 11, 21, 31, 41, 51, 61, 71, 81, 91]" :value="x" :key="x">
-              {{ x ? `${x} - ${x + 9}` : 'Any' }}
-            </option>
-          </select>
-        </div>
-      </template> -->
     </div>
 
     <div

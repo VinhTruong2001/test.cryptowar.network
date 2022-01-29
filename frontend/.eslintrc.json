@@ -18,19 +18,14 @@
     "parser": "@typescript-eslint/parser"
   },
   "rules": {
-    "prettier/prettier": [
-      2,
-      {
-        "usePrettierrc": true
-      }
-    ],
+    "prettier/prettier": 2,
     "no-multiple-empty-lines": "off",
     "eqeqeq": "error",
     "max-len": [
       "error",
       {
         "ignorePattern": "//",
-        "code": 80,
+        "code": 120,
         "ignoreUrls": true,
         "ignoreComments": true
       }
@@ -91,7 +86,7 @@
     "@typescript-eslint/no-misused-new": "error",
     "@typescript-eslint/no-namespace": "error",
     "@typescript-eslint/no-unused-expressions": "error",
-    "@typescript-eslint/indent": [1, 2, { "SwitchCase": 2 }],
+    "@typescript-eslint/indent": [1, 2, { "SwitchCase": 1 }],
     "no-tabs": ["error", { "allowIndentationTabs": true }],
     "@typescript-eslint/semi": 0,
     "@typescript-eslint/explicit-module-boundary-types": 0,

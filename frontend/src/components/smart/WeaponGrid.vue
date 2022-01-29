@@ -394,7 +394,9 @@ export default Vue.extend({
       default: false,
     },
     sellClick: {
-      type: () => {},
+      type: () => {
+        // Ignore
+      },
       default: null,
     },
     showFilters: {
@@ -402,7 +404,9 @@ export default Vue.extend({
       default: false,
     },
     cancelNftListing: {
-      type: () => {},
+      type: () => {
+        // Ignore
+      },
       default: null,
     },
     isBtnSell: {
@@ -410,7 +414,9 @@ export default Vue.extend({
       default: false,
     },
     showListingSetupModal: {
-      type: () => {},
+      type: () => {
+        // Ignore
+      },
       default: null,
     },
     isPage: {

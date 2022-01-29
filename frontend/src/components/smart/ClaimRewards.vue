@@ -87,7 +87,8 @@
           : ''
       }}
       miss out on {{ formattedBonusLost }} bonus xBlade. Are you sure you wish
-      to continue? <b>This action cannot be undone.</b>
+      to continue?
+      <b>This action cannot be undone.</b>
     </b-modal>
   </div>
 </template>

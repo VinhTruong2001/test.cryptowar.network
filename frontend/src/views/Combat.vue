@@ -163,8 +163,6 @@
             <div class="row mb-3 enemy-container" v-if="targets.length > 0">
               <div class="col-12 text-center">
                 <div class="combat-hints">
-                  <!-- <span class="fire-icon" /> » <span class="earth-icon" /> » <span class="lightning-icon" /> » <span class="water-icon" /> » -->
-                  <!-- <span class="fire-icon" /> -->
                   <div class="property-icon"></div>
                   <!-- <Hint
                     text="The elements affect power:<br>
@@ -1127,7 +1125,6 @@ button.btn.button.main-font.dark-bg-text.encounter-button.btn-styled.encounter-b
   border-image-slice: 1;
   border-top-width: 3px;
   border-image-source: linear-gradient(to left, #3add9a, #121154, #a54476);
-  /* background-image: radial-gradient(ellipse at top, #CBA938 -10%, transparent 35%), radial-gradient(ellipse at bottom, transparent, transparent); */
 }
 
 #fightResultsModal .results-panel {
