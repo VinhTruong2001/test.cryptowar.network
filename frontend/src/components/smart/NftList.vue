@@ -95,9 +95,7 @@
         <b-modal id="modal-buyitem">
           <span v-if="this.boxType.length > 2" class="congratsText"
             >You received a
-            {{
-              this.boxType[0].toUpperCase() + this.boxType.slice(1)
-            }}
+            {{ this.boxType[0].toUpperCase() + this.boxType.slice(1) }}
             Box</span
           >
           <div

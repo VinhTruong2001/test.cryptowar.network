@@ -79,22 +79,7 @@
     "@typescript-eslint/no-misused-new": "error",
     "@typescript-eslint/no-namespace": "error",
     "@typescript-eslint/no-unused-expressions": "error",
-    "@typescript-eslint/indent": [
-      1,
-      2,
-      {
-        "SwitchCase": 1,
-        "FunctionDeclaration": {
-          "parameters": "first"
-        },
-        "FunctionExpression": {
-          "parameters": "first"
-        },
-        "ArrayExpression": 1,
-        "MemberExpression": 4,
-        "ignoredNodes": ["ConditionalExpression"]
-      }
-    ],
+    "@typescript-eslint/indent": [1, 2],
     "@typescript-eslint/semi": 0
   }
 }
