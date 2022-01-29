@@ -465,7 +465,6 @@ export default Vue.extend({
     BigButton,
     CharacterList,
   },
-  mounted() {},
 })
 </script>
 

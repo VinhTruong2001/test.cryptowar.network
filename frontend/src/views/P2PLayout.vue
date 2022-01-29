@@ -890,7 +890,6 @@ export default {
 
         this.error = null
       } catch (e) {
-        console.error(e)
         this.error = e.message
       }
     },
@@ -1030,7 +1029,6 @@ export default {
           requestId,
         })
         if (results) {
-          console.log('results', results)
           this.$bvModal.show('fightResult')
           const fightResultsFull = {
             ...results,
@@ -1044,7 +1042,6 @@ export default {
           await this.getRewardPvp()
           await this.getCareerRooms({ cursor: 0 })
         } else {
-          console.log('bug here')
           this.$bvModal.hide('loadingModal')
           this.errorMessage = 'Something went wrong! Please check later!'
           setTimeout(() => {
@@ -1214,7 +1211,7 @@ export default {
       if (this.rewardPvp > 0) {
         this.$bvModal.show('loadingModal')
         const res = await this.claimTokenReward()
-        console.log('resss', res)
+
         if (res) {
           this.errorMessage = ''
           this.$bvModal.hide('loadingModal')
@@ -1352,7 +1349,6 @@ export default {
       this.fetchRequestInterval = setInterval(async () => {
         await this.getRequests()
       }, 5000)
-      console.log('111', this.careerModeRooms)
     }, 1000)
   },
 }

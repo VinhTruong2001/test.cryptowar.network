@@ -46,8 +46,6 @@ export default {
 
   methods: {},
 
-  async mounted() {},
-
   components: {
     // CombatPVP,
   },

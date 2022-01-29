@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build && npm run crush-images && npm run copy:abi",
-    "lint": "vue-cli-service lint",
+    "lint": "eslint --ext .js,.vue,.ts src",
     "start": "npm run serve",
     "crush-images": "node scripts/crush-images",
     "copy:abi": "copyfiles -f \"../build/contracts/*.json\" ./dist/abi",

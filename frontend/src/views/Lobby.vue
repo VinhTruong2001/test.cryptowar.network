@@ -74,8 +74,6 @@ export default {
 
   methods: {},
 
-  async mounted() {},
-
   components: {
     ClaimRewardsBar,
   },

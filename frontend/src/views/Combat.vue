@@ -285,8 +285,11 @@ export default {
       selectedWeapon: null,
       fightMultiplier: Number(localStorage.getItem('fightMultiplier')),
       staminaPerFight: 40,
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       soundFight: new Audio(require('../assets/sound/sound_fight.wav')),
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       soundWin: new Audio(require('../assets/sound/sound_win.wav')),
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       soundLose: new Audio(require('../assets/sound/sound_lose.wav')),
       showModalFight: false,
       countTargetToFight: 0,

@@ -1947,7 +1947,7 @@ export function createStore(web3: Web3) {
 
         const bnbGasUsed = gasUsedToBnb(res.gasUsed, gasPrice)
 
-        await dispatch('fetchWeaponDurability', weaponId);
+        await dispatch('fetchWeaponDurability', weaponId)
 
         return [
           parseInt(playerRoll, 10) >= parseInt(enemyRoll, 10),
