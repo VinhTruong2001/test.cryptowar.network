@@ -82,8 +82,6 @@ export default {
     ...mapGetters(['getPowerfulDust', 'getGreaterDust', 'getLesserDust']),
   },
 
-  async created() {},
-
   methods: {
     ...mapActions([]),
   },

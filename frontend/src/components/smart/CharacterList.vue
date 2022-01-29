@@ -284,7 +284,9 @@ export default {
       default: true,
     },
     cancelNftListing: {
-      type: () => {},
+      type: () => {
+        // Ignore
+      },
       default: null,
     },
     isBtnSell: {
@@ -292,7 +294,9 @@ export default {
       default: false,
     },
     showListingSetupModal: {
-      type: () => {},
+      type: () => {
+        // Ignore
+      },
       default: null,
     },
     isPage: {
