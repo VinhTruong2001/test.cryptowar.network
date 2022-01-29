@@ -1,6 +1,6 @@
 <template>
   <div class="body main-font">
-    <CombatPVP :propCheckSelect = checkSelect v-if="checkSelect"/>
+    <CombatPVP :propCheckSelect="checkSelect" v-if="checkSelect" />
     <div v-if="!checkSelect" class="container">
       <div class="row">
         <div class="col-12">
@@ -19,8 +19,20 @@
               <div>4</div>
             </div>
             <div class="info-user-btn">
-              <button @click="$bvModal.show('selectHeroOrWeaponModal'), selectHero = true">SELECT HERO</button>
-              <button @click="checkCreateRoom = true, selectHero = false, console()">CREATEROOM</button>
+              <button
+                @click="
+                  $bvModal.show('selectHeroOrWeaponModal'), (selectHero = true)
+                "
+              >
+                SELECT HERO
+              </button>
+              <button
+                @click="
+                  ;(checkCreateRoom = true), (selectHero = false), console()
+                "
+              >
+                CREATEROOM
+              </button>
             </div>
           </div>
         </div>
@@ -45,12 +57,22 @@
                 <div class="hero-name">Amiria Angurvidel</div>
                 <div class="orner-hero">Owner: <span>0x4933...44644</span></div>
                 <div class="remain-hero">Remain: <span>345.9098</span></div>
-                <div class="cost"><div></div> 100</div>
+                <div class="cost">
+                  <div></div>
+                  100
+                </div>
               </div>
             </div>
             <div class="button-container">
-                <button @click="checkSelect = true,
-                $bvModal.hide('selectHeroOrWeaponModal')" class="btn-request-fight">SELECT</button>
+              <button
+                @click="
+                  ;(checkSelect = true),
+                    $bvModal.hide('selectHeroOrWeaponModal')
+                "
+                class="btn-request-fight"
+              >
+                SELECT
+              </button>
             </div>
           </div>
         </div>
@@ -59,10 +81,11 @@
         <div class="col-xl-3 col-12 row-left">
           <div>
             <div class="search-hero">
-                <input type="text" placeholder="Search Hero's ID" />
+              <input type="text" placeholder="Search Hero's ID" />
             </div>
             <label class="checkbox-hero">
-                <input type="checkbox"> <span class="checkb"></span> <span class="checkbox-content">Browse Hroes</span>
+              <input type="checkbox" /> <span class="checkb"></span>
+              <span class="checkbox-content">Browse Hroes</span>
             </label>
             <button class="reset-hero">RESET</button>
             <div class="hero-selected"><div class="bg-hero"></div></div>
@@ -73,15 +96,16 @@
         <div class="col-xl-9 col-12 nav-option-box">
           <div class="nav-option">
             <b-nav pills>
-              <b-nav-item
-                class="nav-item"
-                :active="true"
-                ><div>ROOM LIST<div>456</div></div></b-nav-item
+              <b-nav-item class="nav-item" :active="true"
+                ><div>
+                  ROOM LIST
+                  <div>456</div>
+                </div></b-nav-item
               >
             </b-nav>
           </div>
-          <div class="row list-heroes" style="margin-left: 0;">
-          <div class="item" v-for="i in 10" :key="i">
+          <div class="row list-heroes" style="margin-left: 0">
+            <div class="item" v-for="i in 10" :key="i">
               <div class="info">
                 <div class="info-head">
                   <span class="property"></span>
@@ -95,31 +119,43 @@
                 </div>
                 <div class="info-footer">
                   <div class="hero-name">Amiria Angurvidel</div>
-                  <div class="orner-hero">Owner: <span>0x4933...44644</span></div>
-                  <div class="remain-hero">Room Status: <span>1/2</span> or <span>2/2</span></div>
+                  <div class="orner-hero">
+                    Owner: <span>0x4933...44644</span>
+                  </div>
+                  <div class="remain-hero">
+                    Room Status: <span>1/2</span> or <span>2/2</span>
+                  </div>
                 </div>
               </div>
-              <div class="button-container"><button @click="$bvModal.show('fightModal')" class="btn-request-fight">JOIN</button></div>
+              <div class="button-container">
+                <button
+                  @click="$bvModal.show('fightModal')"
+                  class="btn-request-fight"
+                >
+                  JOIN
+                </button>
+              </div>
               <!-- <router-link :to="{ name: 'pvp-fight' }">
               </router-link> -->
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="row container-create-room" v-if="checkCreateRoom">
+      <div class="row container-create-room" v-if="checkCreateRoom">
         <div class="col-xl-12 col-12 nav-option-box create">
           <div class="nav-option">
             <b-nav pills>
-              <b-nav-item
-                class="nav-item"
-                :active="true"
-                ><div>ROOM LIST<div>456</div></div></b-nav-item
+              <b-nav-item class="nav-item" :active="true"
+                ><div>
+                  ROOM LIST
+                  <div>456</div>
+                </div></b-nav-item
               >
             </b-nav>
           </div>
         </div>
-      <div class="col-xl-12 create-room">
-        <div>
+        <div class="col-xl-12 create-room">
+          <div>
             <div class="item">
               <div class="info">
                 <div class="info-head">
@@ -134,7 +170,9 @@
                 </div>
                 <div class="info-footer">
                   <div class="hero-name">Amiria Angurvidel</div>
-                  <div class="orner-hero">Owner: <span>0x4933...44644</span></div>
+                  <div class="orner-hero">
+                    Owner: <span>0x4933...44644</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -166,7 +204,9 @@
                 </div>
                 <div class="info-footer">
                   <div class="hero-name">Amiria Angurvidel</div>
-                  <div class="orner-hero">Owner: <span>0x4933...44644</span></div>
+                  <div class="orner-hero">
+                    Owner: <span>0x4933...44644</span>
+                  </div>
                 </div>
               </div>
               <div class="btn-leave-room"><button>LEAVE ROOM</button></div>
@@ -182,7 +222,7 @@
 // import Character from "../components/Character.vue";
 // import { mapActions, mapGetters, mapState, mapMutations } from "vuex";
 // import Events from "../events";
-import CombatPVP from "../views/CombatPVP.vue";
+import CombatPVP from '../views/CombatPVP.vue'
 
 export default {
   data() {
@@ -195,11 +235,10 @@ export default {
       checkSelect: false,
       cancelRequest: false,
       checkCreateRoom: false,
-    };
+    }
   },
 
-  computed: {
-  },
+  computed: {},
 
   methods: {
     // sendMessage(){
@@ -212,41 +251,30 @@ export default {
     //     this.checkSelect = false;
     //   }
     // },
-
-
     // setStaminaSelectorValues() {
     //   if(this.currentCharacterStamina < 40) {
     //     return [{ value: this.fightMultiplier, text: 'You need more stamina to fight!', disabled: true}];
     //   }
-
     //   const choices = [
     //     {value: null, text: 'Please select Stamina Cost per Fight', disabled: true},
     //   ];
-
     //   const addChoices = [];
-
     //   if(this.currentCharacterStamina >= 200) {
     //     addChoices.push({ value: 5, text: 200 });
     //   }
-
     //   if(this.currentCharacterStamina >= 160) {
     //     addChoices.push({ value: 4, text: 160 });
     //   }
-
     //   if(this.currentCharacterStamina >= 120) {
     //     addChoices.push({ value: 3, text: 120 });
     //   }
-
     //   if(this.currentCharacterStamina >= 80) {
     //     addChoices.push({ value: 2, text: 80 });
     //   }
-
     //   if(this.currentCharacterStamina >= 40) {
     //     addChoices.push({ value: 1, text: 40 });
     //   }
-
     //   choices.push(...addChoices.reverse());
-
     //   return choices;
     // },
   },
@@ -260,7 +288,7 @@ export default {
     // CharacterBar,
     CombatPVP,
   },
-};
+}
 </script>
 
 <style scoped>
@@ -288,7 +316,7 @@ export default {
 }
 
 .info-box {
-  padding:50px 100px;
+  padding: 50px 100px;
   display: flex;
   justify-content: center;
 }
@@ -348,17 +376,17 @@ export default {
   color: #fff;
 }
 
-.info-user-btn button:hover{
+.info-user-btn button:hover {
   background-image: url(../assets/v2/btn-fight-big-opcity.svg);
   transition: 0.9s;
 }
 
-.list-heroes{
+.list-heroes {
   display: flex;
   justify-content: center;
 }
 
-.search-hero{
+.search-hero {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -388,17 +416,17 @@ export default {
   margin: 0;
 }
 
-.nav-item div{
-    display: flex;
-    align-items: center;
+.nav-item div {
+  display: flex;
+  align-items: center;
 }
 
-.nav-item div div{
-    padding: 0 20px;
-    margin-left: 10px;
-    color: #fff;
-    background-color: #f58b5b;
-    border-radius: 20px;
+.nav-item div div {
+  padding: 0 20px;
+  margin-left: 10px;
+  color: #fff;
+  background-color: #f58b5b;
+  border-radius: 20px;
 }
 
 .nav.nav-pills .nav-link {
@@ -423,7 +451,7 @@ export default {
   background: transparent;
 }
 
-.list{
+.list {
   display: flex;
   justify-content: center;
   height: 700px;
@@ -431,7 +459,7 @@ export default {
   margin: 0 auto;
 }
 
-.item{
+.item {
   width: 17.3em;
   height: 24.5em;
   background-position: left;
@@ -442,7 +470,7 @@ export default {
   position: relative;
 }
 
-.item-modal{
+.item-modal {
   width: 18.5em;
   height: 26.5em;
   background-position: left;
@@ -458,7 +486,7 @@ export default {
   height: 100%;
 }
 
-.info .property{
+.info .property {
   content: url(../assets/elements/earth.png);
   width: 30px;
   height: 30px;
@@ -471,31 +499,31 @@ export default {
   top: 0;
 }
 
-.info-head > div{
+.info-head > div {
   font-size: 1.2em;
   margin-right: 28px;
 }
 
-.item-id{
+.item-id {
   position: absolute;
   right: 30px;
   top: 30px;
 }
 
-.item-id > div{
+.item-id > div {
   text-align: end;
   font-size: 1em;
   line-height: 15px;
-  color: #F2BE3E;
+  color: #f2be3e;
 }
 
-.info-head{
+.info-head {
   position: relative;
   top: 30px;
   left: 15px;
 }
 
-.img-hero-around{
+.img-hero-around {
   width: 151px;
   height: 227px;
   background-image: url(../assets/images/water.png);
@@ -509,7 +537,7 @@ export default {
   /* z-index: 1; */
 }
 
-.img-hero{
+.img-hero {
   width: 151px;
   height: 238px;
   background-image: url(../assets/hero/hero-water-02.png);
@@ -521,7 +549,7 @@ export default {
   top: -25px;
 }
 
-.img-weapon{
+.img-weapon {
   width: 190px;
   height: 214px;
   background-image: url(../assets/sword/sword-air-04.png);
@@ -533,32 +561,32 @@ export default {
   top: 35px;
 }
 
-.info-footer{
+.info-footer {
   position: absolute;
   bottom: 30px;
   width: 100%;
 }
 
-.info-footer div{
+.info-footer div {
   font-weight: 600;
   text-align: center;
 }
 
-.info-footer .weapon-name{
+.info-footer .weapon-name {
   margin-top: 40px;
   margin-bottom: 10px;
 }
 
-.info-footer .bar-xp-weapon{
+.info-footer .bar-xp-weapon {
   margin-top: 10px;
   margin-bottom: 40px;
 }
 
-.info-footer > div > span{
-  color: #FEA829;
+.info-footer > div > span {
+  color: #fea829;
 }
 
-.info-footer .cost > div{
+.info-footer .cost > div {
   background-image: url(../assets/v2/icon-crypto.svg);
   width: 20px;
   height: 19px;
@@ -567,31 +595,31 @@ export default {
   margin-right: 6px;
 }
 
-.button-container{
+.button-container {
   width: 100%;
   position: absolute;
   bottom: -70px;
 }
 
-.remain-hero span:first-child{
-  color: #29FD2E;
+.remain-hero span:first-child {
+  color: #29fd2e;
 }
 
-.remain-hero span:last-child{
-  color: #FD0D1B;
+.remain-hero span:last-child {
+  color: #fd0d1b;
 }
-.cost{
+.cost {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.btn-request-fight{
+.btn-request-fight {
   margin: 0 auto;
   display: block;
   background-color: transparent;
   border: none;
-  background-image:  url(../assets/v2/btn-fight.png);
+  background-image: url(../assets/v2/btn-fight.png);
   width: 150px;
   height: 44px;
   background-size: cover;
@@ -603,17 +631,16 @@ export default {
   margin-bottom: 20px;
 }
 
-.btn-request-fight:hover{
+.btn-request-fight:hover {
   background-image: url(../assets/v2/Btn-fight-opcity.png);
   transition: 0.9s;
 }
 
-.info-head-left{
+.info-head-left {
   display: flex;
-
 }
 
-.star-weapon{
+.star-weapon {
   background-image: url(../assets/v2/star.svg);
   width: 30px;
   height: 36px;
@@ -621,37 +648,37 @@ export default {
   margin-bottom: 10px;
 }
 
-.info-head-left > div > div{
+.info-head-left > div > div {
   margin-left: 10px;
 }
 
-.bar-xp-weapon{
-  background-color: #F2BE3E;
+.bar-xp-weapon {
+  background-color: #f2be3e;
   width: 70%;
   height: 15px;
   margin: 0 auto;
   border-radius: 10px;
 }
 
-.id-weapon{
+.id-weapon {
   margin-bottom: 5px;
   display: block;
 }
 
 .requestSelect-head,
 .listHeroToCareerModal-head,
-.listHeroToChallengeModal-head{
+.listHeroToChallengeModal-head {
   font-size: 1.8em;
   font-weight: 600;
-  color: #F58B5B;
+  color: #f58b5b;
   text-align: center;
 }
 
-.requestSelect-body{
+.requestSelect-body {
   margin: 50px 0;
 }
 
-.requestSelect-body > div{
+.requestSelect-body > div {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -659,7 +686,7 @@ export default {
   color: #fff;
 }
 
-.requestSelect-body > div > div{
+.requestSelect-body > div > div {
   width: 315px;
   height: 50px;
   border: 1px solid #707070;
@@ -669,7 +696,7 @@ export default {
   align-items: center;
 }
 
-.requestSelect-body > div > div > div{
+.requestSelect-body > div > div > div {
   background-image: url(../assets/v2/icon-crypto.svg);
   width: 27px;
   height: 26px;
@@ -678,7 +705,7 @@ export default {
   margin-right: 16px;
 }
 
-.requestSelect-body > div > div > span{
+.requestSelect-body > div > div > span {
   display: block;
   border-left: 1px solid #707070;
   display: flex;
@@ -686,11 +713,11 @@ export default {
   height: 100%;
   padding-left: 16px;
   font-size: 1.3em;
-  color: #F58B5B;
+  color: #f58b5b;
 }
 
 .requestSelect-btn,
-.requestSelect-btn{
+.requestSelect-btn {
   background-color: transparent;
   border: none;
   background-image: url(../assets/v2/btn-fight.png);
@@ -704,16 +731,16 @@ export default {
   font-size: 1.3em;
   font-weight: 600;
 }
-.requestSelect-btn.reject{
+.requestSelect-btn.reject {
   background-image: url(../assets/v2/Btn-blue.svg);
   height: 48px;
 }
 
-.requestSelect-btn.confirm{
+.requestSelect-btn.confirm {
   margin: 0 auto;
 }
 
-.requestSelect-btn{
+.requestSelect-btn {
   background-color: transparent;
   border: none;
   background-repeat: no-repeat;
@@ -726,33 +753,36 @@ export default {
   font-weight: 600;
 }
 
-.requestSelect-footer{
+.requestSelect-footer {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.background{
-  background-image: linear-gradient(rgba(245, 111, 86, 0.3), rgba(86, 82, 219, 0.3));
-  border: 1px solid #3CDE9B;
+.background {
+  background-image: linear-gradient(
+    rgba(245, 111, 86, 0.3),
+    rgba(86, 82, 219, 0.3)
+  );
+  border: 1px solid #3cde9b;
   margin-top: 40px;
   margin-bottom: 3.5em;
 }
 
-.item-selected{
+.item-selected {
   display: flex;
   margin-right: 3.8em;
 }
 
-.info-user-footer{
+.info-user-footer {
   margin-top: 10px;
 }
 
-.info-user-footer-item{
+.info-user-footer-item {
   margin: 10px 0;
 }
 
-.info-user-footer-item > div{
+.info-user-footer-item > div {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -760,7 +790,7 @@ export default {
   color: #fff;
 }
 
-.info-user-footer-item > div > div{
+.info-user-footer-item > div > div {
   width: 315px;
   height: 50px;
   border: 1px solid #707070;
@@ -770,7 +800,7 @@ export default {
   align-items: center;
 }
 
-.info-user-footer-item > div > div > div{
+.info-user-footer-item > div > div > div {
   background-image: url(../assets/v2/icon-crypto.svg);
   width: 27px;
   height: 26px;
@@ -779,7 +809,7 @@ export default {
   margin-right: 16px;
 }
 
-.info-user-footer-item > div > div > span{
+.info-user-footer-item > div > div > span {
   display: block;
   border-left: 1px solid #707070;
   display: flex;
@@ -787,21 +817,21 @@ export default {
   height: 100%;
   padding-left: 16px;
   font-size: 1.3em;
-  color: #F58B5B;
+  color: #f58b5b;
 }
 
-.info-user-footer-item > div > span{
+.info-user-footer-item > div > span {
   width: 170px;
 }
-.info-user-footer-item > div > span > span{
+.info-user-footer-item > div > span > span {
   display: block;
   font-size: 0.8em;
 }
 
-.info-user-footer button{
+.info-user-footer button {
   display: block;
   width: 100%;
-  background-image: linear-gradient(#F3859C, #7F327C);
+  background-image: linear-gradient(#f3859c, #7f327c);
   border: none;
   margin-top: 20px;
   padding: 10px 0;
@@ -811,7 +841,7 @@ export default {
 }
 
 .listHeroToCareerModal-body,
-.listHeroToChallengeModal-body{
+.listHeroToChallengeModal-body {
   text-align: center;
   margin: 20px 0;
   font-size: 1.3em;
@@ -819,12 +849,12 @@ export default {
 }
 
 .listHeroToCareerModal-body span,
-.listHeroToChallengeModal span{
-  color: #D858F7;
+.listHeroToChallengeModal span {
+  color: #d858f7;
 }
 
 .listHeroToCareerModal-btn,
-.listHeroToChallengeModal-btn{
+.listHeroToChallengeModal-btn {
   background-color: transparent;
   border: none;
   background-image: url(../assets/v2/btn-fight-big.svg);
@@ -839,57 +869,57 @@ export default {
   font-weight: 600;
 }
 
-.checkbox-hero{
-    position: relative;
-    margin: 20px 0;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    padding: 0 5px;
+.checkbox-hero {
+  position: relative;
+  margin: 20px 0;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 0 5px;
 }
-.checkbox-hero input{
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    width: 30px;
-    height: 30px;
-    padding-top: 2px;
+.checkbox-hero input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  padding-top: 2px;
 }
-.checkb{
-    position: absolute;
-    top: 0;
-    left: 4px;
-    height: 25px;
-    width: 25px;
-    background-color: #000;
-    border: solid 3px white;
-    border-radius: 5px;
+.checkb {
+  position: absolute;
+  top: 0;
+  left: 4px;
+  height: 25px;
+  width: 25px;
+  background-color: #000;
+  border: solid 3px white;
+  border-radius: 5px;
 }
-.checkb:after{
-    content: "";
-    position: absolute;
-    display: none;
+.checkb:after {
+  content: '';
+  position: absolute;
+  display: none;
 }
-.checkbox-hero .checkb:after{
-    left: 6px;
-    top: 3px;
-    width: 7px;
-    height: 12px;
-    border: solid white;
-    border-width: 0 3px 3px 0;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
+.checkbox-hero .checkb:after {
+  left: 6px;
+  top: 3px;
+  width: 7px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
 }
-.checkbox-hero span{
-    display: block;
+.checkbox-hero span {
+  display: block;
 }
-.checkbox-hero input:checked ~ .checkb:after{
-    display: block;
+.checkbox-hero input:checked ~ .checkb:after {
+  display: block;
 }
 
-.reset-hero{
-  background-image: linear-gradient(#F3859C, #7F327C);
+.reset-hero {
+  background-image: linear-gradient(#f3859c, #7f327c);
   border: none;
   padding: 5px 20px;
   font-size: 1.3em;
@@ -899,12 +929,12 @@ export default {
   margin: 0 0 20px 5px;
 }
 
-.checkbox-content{
+.checkbox-content {
   margin-left: 32px;
   font-size: 1.3em;
 }
 
-.hero-selected{
+.hero-selected {
   background-image: url(../assets/v2/bg-weapon.svg);
   background-repeat: no-repeat;
   background-size: cover;
@@ -916,7 +946,7 @@ export default {
   margin-top: 20px;
 }
 
-.hero-selected .bg-hero{
+.hero-selected .bg-hero {
   background-image: url(../assets/v2/bg-select-hero.svg);
   background-repeat: no-repeat;
   background-size: cover;
@@ -925,7 +955,7 @@ export default {
   margin: 0 auto;
 }
 
-.select-hero-to-fight{
+.select-hero-to-fight {
   width: 17rem;
   height: 50px;
   background-color: transparent !important;
@@ -942,7 +972,7 @@ export default {
   display: block;
 }
 
-.nav-line.boder{
+.nav-line.boder {
   width: 2px;
   height: 668px;
   /* position: relative;
@@ -953,20 +983,23 @@ export default {
   background-image: url('../assets/v2/boder.png');
 }
 
-.row-left{
+.row-left {
   display: flex;
   justify-content: space-between;
 }
 
-.nav-option-box{
+.nav-option-box {
   width: calc(100% - 405px);
 }
 
-.create-room{
+.create-room {
   max-width: 80em;
   height: 40em;
-  background-image: linear-gradient(rgba(245, 111, 86, 0.3), rgba(86, 82, 219, 0.3));
-  border: 1px solid #3CDE9B;
+  background-image: linear-gradient(
+    rgba(245, 111, 86, 0.3),
+    rgba(86, 82, 219, 0.3)
+  );
+  border: 1px solid #3cde9b;
   margin-top: 40px;
   margin-bottom: 15em;
   display: flex;
@@ -974,29 +1007,29 @@ export default {
   align-items: center;
 }
 
-.nav-option-box.create{
+.nav-option-box.create {
   max-width: 60em;
 }
 
-.row.container-create-room{
+.row.container-create-room {
   display: flex;
   justify-content: center;
 }
 
-.create-room > div{
+.create-room > div {
   display: flex;
   align-items: center;
 }
 
-.create-room-body > div{
+.create-room-body > div {
   display: flex;
 }
 
-.create-room-body{
+.create-room-body {
   margin: 0 30px;
 }
 
-.create-room-body > div > div{
+.create-room-body > div > div {
   background-image: url(../assets/v2/bg.svg);
   background-size: contain;
   background-repeat: no-repeat;
@@ -1008,28 +1041,28 @@ export default {
   align-items: center;
 }
 
-.create-room-body > div > div > div{
+.create-room-body > div > div > div {
   width: 3em;
   height: 4em;
   margin-right: 10px;
 }
 
-.create-room-body .icon-drag{
+.create-room-body .icon-drag {
   background-image: url(../assets/v2/icon-drag.svg);
 }
 
-.create-room-body .icon-punch{
+.create-room-body .icon-punch {
   background-image: url(../assets/v2/icon-punch.svg);
   background-repeat: no-repeat;
   width: 3.2em;
   height: 3.2em;
 }
 
-.create-room-body .icon-hand{
+.create-room-body .icon-hand {
   background-image: url(../assets/v2/icon-hand.svg);
 }
 
-.create-room-body button{
+.create-room-body button {
   background-color: transparent;
   border: none;
   background-image: url(../assets/v2/Btn-blue.svg);
@@ -1045,12 +1078,12 @@ export default {
   margin-top: 20px;
 }
 
-.btn-leave-room{
+.btn-leave-room {
   display: flex;
   justify-content: flex-end;
 }
 
-.btn-leave-room button{
+.btn-leave-room button {
   /* margin: 0 auto; */
   display: block;
   background-color: transparent;
@@ -1068,183 +1101,183 @@ export default {
   margin-bottom: 20px;
 }
 
-.btn-leave-room button:hover{
+.btn-leave-room button:hover {
   background-image: url(../assets/v2/Btn-fight-opcity.png);
   transition: 0.9s;
 }
 
 @media (max-width: 767.98px) {
-  .search-hero{
+  .search-hero {
     margin-bottom: 10px;
     display: flex;
     justify-content: center;
   }
-  .search-hero input{
+  .search-hero input {
     width: 100%;
   }
 
-  .info-user-btn{
+  .info-user-btn {
     display: flex;
     flex-direction: column;
     align-items: center;
   }
-  .nav-line.boder{
+  .nav-line.boder {
     height: 0;
   }
-  .row-left{
-  justify-content: center;
-}
-.create-room{
-  height: 75em;
-}
+  .row-left {
+    justify-content: center;
+  }
+  .create-room {
+    height: 75em;
+  }
 
-.create-room > div{
-  display: flex;
-  flex-direction: column;
-}
+  .create-room > div {
+    display: flex;
+    flex-direction: column;
+  }
 
-.create-room-body > div > div{
-  width: 5em;
-  height: 5em;
-}
+  .create-room-body > div > div {
+    width: 5em;
+    height: 5em;
+  }
 
-.btn-leave-room{
-  justify-content: center;
-}
+  .btn-leave-room {
+    justify-content: center;
+  }
 
-.nav-option{
-  width: fit-content;
-}
+  .nav-option {
+    width: fit-content;
+  }
 
-.create-room .item{
-  margin-top: 0;
-  margin-bottom: 0;
-}
+  .create-room .item {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
 }
 
 @media (max-width: 575.98px) {
   .quantity-heroes {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.4em;
-}
-.search-hero input{
-  width: 100%;
-}
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4em;
+  }
+  .search-hero input {
+    width: 100%;
+  }
 
-.search-hero{
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: center;
-}
-.nav-option{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  /* width: 200px; */
-}
-.nav-line.boder{
+  .search-hero {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+  }
+  .nav-option {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* width: 200px; */
+  }
+  .nav-line.boder {
     height: 0;
   }
-.row-left{
-  justify-content: center;
-}
-.item-modal{
-  min-width: 18.5em;
-}
+  .row-left {
+    justify-content: center;
+  }
+  .item-modal {
+    min-width: 18.5em;
+  }
 
-.info-user-btn{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.background{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+  .info-user-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .background {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
-.item{
-  margin-top: 70px;
-  margin-bottom: 0;
-}
+  .item {
+    margin-top: 70px;
+    margin-bottom: 0;
+  }
 
-.item-selected{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-right: 0;
-}
+  .item-selected {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 0;
+  }
 
-.info-user{
-  width: 285px;
-  padding: 20px;
-}
+  .info-user {
+    width: 285px;
+    padding: 20px;
+  }
 
-.info-user-footer{
-  width: 230px;
-}
+  .info-user-footer {
+    width: 230px;
+  }
 
-.info-user-title{
-  font-size: 1em;
-}
+  .info-user-title {
+    font-size: 1em;
+  }
 
-.info-user-body span{
-  font-size: 1em;
-  padding: 0;
-}
+  .info-user-body span {
+    font-size: 1em;
+    padding: 0;
+  }
 
-.info-user-body > div{
-  font-size: 1.3em;
-  width: 140px;
-}
+  .info-user-body > div {
+    font-size: 1.3em;
+    width: 140px;
+  }
 
-.info-user-btn button{
-  width: 140px;
-  height: 42px;
-  font-size: 0.8em;
-  background-image: url(../assets/v2/btn-fight.png);
-}
+  .info-user-btn button {
+    width: 140px;
+    height: 42px;
+    font-size: 0.8em;
+    background-image: url(../assets/v2/btn-fight.png);
+  }
 
-.info-user-footer-item > div{
-  font-size: 1em;
-}
+  .info-user-footer-item > div {
+    font-size: 1em;
+  }
 
-.info-user-footer-item > div > div{
-  width: 120px;
-  height: 40px;
-  margin: 0 5px;
-  padding: 0 12px;
-  margin-right: 12px;
-}
+  .info-user-footer-item > div > div {
+    width: 120px;
+    height: 40px;
+    margin: 0 5px;
+    padding: 0 12px;
+    margin-right: 12px;
+  }
 
-.info-user-footer-item > div > div > div{
-  width: 23px;
-  height: 22px;
-}
+  .info-user-footer-item > div > div > div {
+    width: 23px;
+    height: 22px;
+  }
 
-.info-user-footer-item > div > div > span{
-  font-size: 1em;
-}
+  .info-user-footer-item > div > div > span {
+    font-size: 1em;
+  }
 
-.info-user-footer button{
-  font-size: 1em;
-}
+  .info-user-footer button {
+    font-size: 1em;
+  }
 
-.btn-request-fight{
-  font-size: 0.8em;
-}
+  .btn-request-fight {
+    font-size: 0.8em;
+  }
 }
 
 @media (max-width: 375.98px) {
-  .nav-line.boder{
+  .nav-line.boder {
     height: 0;
   }
-    .row-left{
-  justify-content: center;
-}
+  .row-left {
+    justify-content: center;
+  }
 }
 
 @media (min-width: 768px) {

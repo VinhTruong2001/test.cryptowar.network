@@ -19,12 +19,25 @@
         >
       </div>
       <div class="current-promotion">
-        <strong class="upper-text">Mint Hero NFT
-          <span class="price" v-if="referralAddress == '0x0000000000000000000000000000000000000000'">{{recruitCost}}</span>
-          <span class="price"  v-if="referralAddress != '0x0000000000000000000000000000000000000000'">
-            <span style=" text-decoration: line-through;">{{recruitCost}}</span>
-                  {{ (recruitCost * 0.93).toFixed(2) }}</span>
-            xBlade
+        <strong class="upper-text"
+          >Mint Hero NFT
+          <span
+            class="price"
+            v-if="
+              referralAddress == '0x0000000000000000000000000000000000000000'
+            "
+            >{{ recruitCost }}</span
+          >
+          <span
+            class="price"
+            v-if="
+              referralAddress != '0x0000000000000000000000000000000000000000'
+            "
+          >
+            <span style="text-decoration: line-through">{{ recruitCost }}</span>
+            {{ (recruitCost * 0.93).toFixed(2) }}</span
+          >
+          xBlade
         </strong>
       </div>
       <big-button
@@ -45,8 +58,11 @@
       <div v-if="formatSkill() < recruitCost">
         <br />
         You can buy more xBlade from
-        <a v-bind:href="`${getExchangeUrl}`" target="_blank">here</a>.
-         Join <a href="https://t.me/elasticbitcoinxbt" target="_blank" >Telegram community</a> to get support!
+        <a v-bind:href="`${getExchangeUrl}`" target="_blank">here</a>. Join
+        <a href="https://t.me/elasticbitcoinxbt" target="_blank"
+          >Telegram community</a
+        >
+        to get support!
       </div>
     </div>
     <div class="row mt-3" v-if="ownCharacters.length > 0">
@@ -61,7 +77,9 @@
               variant="primary"
               class="ml-auto gtag-link-others"
               @click="openChangeTrait"
-              v-tooltip="'Change character\'s trait'" tagname="change_trait_character">
+              v-tooltip="'Change character\'s trait'"
+              tagname="change_trait_character"
+            >
               Change Trait
             </b-button> -->
             <!-- <b-button
@@ -83,10 +101,20 @@
                 tagname="recruit_character"
               >
                 Recruit (<span
-                  :class="`${referralAddress == '0x0000000000000000000000000000000000000000' ? 'old-price' : ''}`"
+                  :class="`${
+                    referralAddress ==
+                    '0x0000000000000000000000000000000000000000'
+                      ? 'old-price'
+                      : ''
+                  }`"
                   >{{ recruitCost }}</span
                 >
-                <span v-if="referralAddress != '0x0000000000000000000000000000000000000000'">
+                <span
+                  v-if="
+                    referralAddress !=
+                    '0x0000000000000000000000000000000000000000'
+                  "
+                >
                   {{ (recruitCost * 0.93).toFixed(2) }}</span
                 >
                 xBlade)&nbsp;
@@ -162,190 +190,194 @@
   </div>
 </template>
 
-<script lang='ts'>
-import BN from "bignumber.js";
-import BigButton from "../components/BigButton.vue";
-import CharacterList from "../components/smart/CharacterList.vue";
-import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
-import { fromWeiEther, toBN } from "../utils/common";
-import { BModal, BvModalEvent } from "bootstrap-vue";
-import Vue from "vue";
-import { getCleanName, isProfaneIsh } from "../rename-censor";
-import { mapCacheActions } from "vuex-cache";
+<script lang="ts">
+import BN from 'bignumber.js'
+import BigButton from '../components/BigButton.vue'
+import CharacterList from '../components/smart/CharacterList.vue'
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
+import { fromWeiEther, toBN } from '../utils/common'
+import { BModal, BvModalEvent } from 'bootstrap-vue'
+import Vue from 'vue'
+import { getCleanName, isProfaneIsh } from '../rename-censor'
+import { mapCacheActions } from 'vuex-cache'
 
-let getConsumablesCountInterval: any = null;
+let getConsumablesCountInterval: any = null
 
 interface Data {
-  recruitCost: string;
-  haveRename: number;
-  characterRename: string;
-  haveChangeTraitFire: number;
-  haveChangeTraitEarth: number;
-  haveChangeTraitWater: number;
-  haveChangeTraitLightning: number;
-  targetTrait: string;
-  heroAmount: number;
+  recruitCost: string
+  haveRename: number
+  characterRename: string
+  haveChangeTraitFire: number
+  haveChangeTraitEarth: number
+  haveChangeTraitWater: number
+  haveChangeTraitLightning: number
+  targetTrait: string
+  heroAmount: number
 }
 
 export default Vue.extend({
   computed: {
     ...mapState([
-      "characters",
-      "maxStamina",
-      "currentCharacterId",
-      "defaultAccount",
-      "skillBalance",
+      'characters',
+      'maxStamina',
+      'currentCharacterId',
+      'defaultAccount',
+      'skillBalance',
     ]),
     ...mapGetters([
-      "contracts",
-      "ownCharacters",
-      "ownWeapons",
-      "currentCharacter",
-      "currentCharacterStamina",
-      "getCharacterName",
-      "getExchangeUrl",
+      'contracts',
+      'ownCharacters',
+      'ownWeapons',
+      'currentCharacter',
+      'currentCharacterStamina',
+      'getCharacterName',
+      'getExchangeUrl',
     ]),
 
     character(): any {
       if (!this.currentCharacter) {
         return {
           id: null,
-          name: "???",
+          name: '???',
           level: -1,
           experience: -1,
-        };
+        }
       }
 
-      const c = this.currentCharacter;
+      const c = this.currentCharacter
       return {
         id: c.id,
         name: this.getCharacterName(c.id),
         level: c.level,
         experience: c.xp,
-      };
+      }
     },
 
     availableTraits(): string[] {
-      const availableTraits = [];
+      const availableTraits = []
       if (this.haveChangeTraitFire > 0) {
-        availableTraits.push("Fire");
+        availableTraits.push('Fire')
       }
       if (this.haveChangeTraitEarth > 0) {
-        availableTraits.push("Earth");
+        availableTraits.push('Earth')
       }
       if (this.haveChangeTraitWater > 0) {
-        availableTraits.push("Water");
+        availableTraits.push('Water')
       }
       if (this.haveChangeTraitLightning > 0) {
-        availableTraits.push("Lightning");
+        availableTraits.push('Lightning')
       }
 
-      return availableTraits;
+      return availableTraits
     },
 
     isRenameProfanish(): boolean {
-      return isProfaneIsh(this.characterRename);
+      return isProfaneIsh(this.characterRename)
     },
 
     cleanRename(): string {
-      return getCleanName(this.characterRename);
+      return getCleanName(this.characterRename)
     },
     referralAddress(): string {
       // @ts-ignore
-      const referralAddress = this.$route.query.r;
+      const referralAddress = this.$route.query.r
       if (referralAddress && referralAddress !== this.defaultAccount) {
-        return referralAddress;
+        return referralAddress
       }
-      return '0x0000000000000000000000000000000000000000';
+      return '0x0000000000000000000000000000000000000000'
     },
   },
 
   async created() {
     const recruitCost = await this.contracts.CWController.methods
       .getMintPriceByToken()
-      .call({ from: this.defaultAccount });
-    this.recruitCost = new BN(recruitCost).div(new BN(10).pow(18)).toFixed(2);
-    this.loadConsumablesCount();
+      .call({ from: this.defaultAccount })
+    this.recruitCost = new BN(recruitCost).div(new BN(10).pow(18)).toFixed(2)
+    this.loadConsumablesCount()
     getConsumablesCountInterval = setInterval(async () => {
-      this.loadConsumablesCount();
-    }, 3000);
+      this.loadConsumablesCount()
+    }, 3000)
 
     const heroAmount = await this.contracts.Characters.methods
       .availableAmount()
-      .call({ from: this.defaultAccount });
+      .call({ from: this.defaultAccount })
 
-    this.heroAmount = Number(heroAmount);
+    this.heroAmount = Number(heroAmount)
   },
 
   destroyed() {
-    clearInterval(getConsumablesCountInterval);
+    clearInterval(getConsumablesCountInterval)
   },
 
   data() {
     return {
-      recruitCost: "0",
+      recruitCost: '0',
       haveRename: 0,
-      characterRename: "",
+      characterRename: '',
       haveChangeTraitFire: 0,
       haveChangeTraitEarth: 0,
       haveChangeTraitWater: 0,
       haveChangeTraitLightning: 0,
-      targetTrait: "",
-      heroAmount: 0
-    } as Data;
+      targetTrait: '',
+      heroAmount: 0,
+    } as Data
   },
 
   methods: {
-    ...mapMutations(["setCurrentCharacter"]),
+    ...mapMutations(['setCurrentCharacter']),
     ...mapActions([
-      "mintCharacter",
-      "renameCharacter",
-      "changeCharacterTraitLightning",
-      "changeCharacterTraitEarth",
-      "changeCharacterTraitFire",
-      "changeCharacterTraitWater",
+      'mintCharacter',
+      'renameCharacter',
+      'changeCharacterTraitLightning',
+      'changeCharacterTraitEarth',
+      'changeCharacterTraitFire',
+      'changeCharacterTraitWater',
     ]),
     ...mapCacheActions([
-      "fetchTotalRenameTags",
-      "fetchTotalCharacterFireTraitChanges",
-      "fetchTotalCharacterEarthTraitChanges",
-      "fetchTotalCharacterWaterTraitChanges",
-      "fetchTotalCharacterLightningTraitChanges"
+      'fetchTotalRenameTags',
+      'fetchTotalCharacterFireTraitChanges',
+      'fetchTotalCharacterEarthTraitChanges',
+      'fetchTotalCharacterWaterTraitChanges',
+      'fetchTotalCharacterLightningTraitChanges',
     ]),
 
     async onMintCharacter() {
       // await this.mintCharacter(this.referralAddress ? this.referralAddress : '0x0000000000000000000000000000000000000000');
       try {
-        await this.mintCharacter(this.referralAddress ? this.referralAddress : '0x0000000000000000000000000000000000000000');
+        await this.mintCharacter(
+          this.referralAddress
+            ? this.referralAddress
+            : '0x0000000000000000000000000000000000000000'
+        )
       } catch (e) {
-        (this as any).$dialog.notify.error(
-          "Could not mint character: insufficient funds or transaction denied."
-        );
+        ;(this as any).$dialog.notify.error(
+          'Could not mint character: insufficient funds or transaction denied.'
+        )
       }
     },
 
     async onMintCharaterWithBNB() {
       try {
-        await this.onMintCharaterWithBNB();
+        await this.onMintCharaterWithBNB()
       } catch (e) {
-        (this as any).$dialog.notify.error(
-          "Could not mint character: insufficient funds or transaction denied."
-        );
-        console.log(e);
+        ;(this as any).$dialog.notify.error(
+          'Could not mint character: insufficient funds or transaction denied.'
+        )
+        console.log(e)
       }
     },
 
     formatSkill() {
-      return fromWeiEther(this.skillBalance);
+      return fromWeiEther(this.skillBalance)
     },
     canRecruit() {
       const cost =
         toBN(this.recruitCost)
           .div(10 ** 9)
           .toNumber() /
-        10 ** 9;
-      const balance = toBN(this.skillBalance);
-      return balance.isGreaterThanOrEqualTo(cost);
+        10 ** 9
+      const balance = toBN(this.skillBalance)
+      return balance.isGreaterThanOrEqualTo(cost)
     },
     canRename() {
       //console.log('CR '+this.haveRename+' / '+this.currentCharacter+' / '+this.currentCharacter.id);
@@ -353,23 +385,23 @@ export default Vue.extend({
         this.haveRename > 0 &&
         this.currentCharacter !== undefined &&
         this.currentCharacter.id >= 0
-      );
+      )
     },
     openRenameCharacter() {
-      (this.$refs["character-rename-modal"] as BModal).show();
+      ;(this.$refs['character-rename-modal'] as BModal).show()
     },
     async renameCharacterCall(bvModalEvt: BvModalEvent) {
       if (this.characterRename.length < 2 || this.characterRename.length > 24) {
-        bvModalEvt.preventDefault();
-        return;
+        bvModalEvt.preventDefault()
+        return
       }
 
       await this.renameCharacter({
         id: this.currentCharacter.id,
         name: this.characterRename.trim(),
-      });
+      })
       //@ts-ignore
-      this.haveRename = await this.fetchTotalRenameTags();
+      this.haveRename = await this.fetchTotalRenameTags()
     },
 
     canChangeTrait() {
@@ -380,64 +412,64 @@ export default Vue.extend({
           this.haveChangeTraitLightning > 0) &&
         this.currentCharacter !== undefined &&
         this.currentCharacter.id >= 0
-      );
+      )
     },
     openChangeTrait() {
-      (this.$refs["character-change-trait-modal"] as BModal).show();
+      ;(this.$refs['character-change-trait-modal'] as BModal).show()
     },
     async changeCharacterTraitCall(bvModalEvt: BvModalEvent) {
       if (!this.targetTrait) {
-        bvModalEvt.preventDefault();
+        bvModalEvt.preventDefault()
       }
       switch (this.targetTrait) {
-      case "Fire":
-        await this.changeCharacterTraitFire({ id: this.currentCharacter.id });
-        this.haveChangeTraitFire =
+        case 'Fire':
+          await this.changeCharacterTraitFire({ id: this.currentCharacter.id })
+          this.haveChangeTraitFire =
             //@ts-ignore
-            await this.fetchTotalCharacterFireTraitChanges();
-        break;
-      case "Earth":
-        await this.changeCharacterTraitEarth({
-          id: this.currentCharacter.id,
-        });
-        this.haveChangeTraitEarth =
+            await this.fetchTotalCharacterFireTraitChanges()
+          break
+        case 'Earth':
+          await this.changeCharacterTraitEarth({
+            id: this.currentCharacter.id,
+          })
+          this.haveChangeTraitEarth =
             //@ts-ignore
-            await this.fetchTotalCharacterEarthTraitChanges();
-        break;
-      case "Water":
-        await this.changeCharacterTraitWater({
-          id: this.currentCharacter.id,
-        });
-        this.haveChangeTraitWater =
+            await this.fetchTotalCharacterEarthTraitChanges()
+          break
+        case 'Water':
+          await this.changeCharacterTraitWater({
+            id: this.currentCharacter.id,
+          })
+          this.haveChangeTraitWater =
             //@ts-ignore
-            await this.fetchTotalCharacterWaterTraitChanges();
-        break;
-      case "Lightning":
-        await this.changeCharacterTraitLightning({
-          id: this.currentCharacter.id,
-        });
-        this.haveChangeTraitLightning =
+            await this.fetchTotalCharacterWaterTraitChanges()
+          break
+        case 'Lightning':
+          await this.changeCharacterTraitLightning({
+            id: this.currentCharacter.id,
+          })
+          this.haveChangeTraitLightning =
             //@ts-ignore
-            await this.fetchTotalCharacterLightningTraitChanges();
-        break;
+            await this.fetchTotalCharacterLightningTraitChanges()
+          break
       }
     },
 
     async loadConsumablesCount() {
       //@ts-ignore
-      this.haveRename = await this.fetchTotalRenameTags(); // the other type of call returned 0 on testnet but not on local
+      this.haveRename = await this.fetchTotalRenameTags() // the other type of call returned 0 on testnet but not on local
       this.haveChangeTraitFire =
-      //@ts-ignore
-        await this.fetchTotalCharacterFireTraitChanges();
+        //@ts-ignore
+        await this.fetchTotalCharacterFireTraitChanges()
       this.haveChangeTraitEarth =
-      //@ts-ignore
-        await this.fetchTotalCharacterEarthTraitChanges();
+        //@ts-ignore
+        await this.fetchTotalCharacterEarthTraitChanges()
       this.haveChangeTraitWater =
-      //@ts-ignore
-        await this.fetchTotalCharacterWaterTraitChanges();
+        //@ts-ignore
+        await this.fetchTotalCharacterWaterTraitChanges()
       this.haveChangeTraitLightning =
-      //@ts-ignore
-        await this.fetchTotalCharacterLightningTraitChanges();
+        //@ts-ignore
+        await this.fetchTotalCharacterLightningTraitChanges()
     },
   },
 
@@ -445,10 +477,8 @@ export default Vue.extend({
     BigButton,
     CharacterList,
   },
-  mounted() {},
-});
+})
 </script>
-
 
 <style scoped>
 .chara-head-box {
@@ -520,21 +550,21 @@ export default Vue.extend({
   text-decoration: line-through;
   font-size: 14px;
 }
-.price{
-  color:#f58b5b;
+.price {
+  color: #f58b5b;
   text-shadow: 1px 2px 3px #666;
 }
-.mint-hero{
+.mint-hero {
   margin: 0;
 }
 </style>
 <style>
-  .mint-hero h1{
-    margin: 0 !important;
-    padding-top: 4px;
-    padding-bottom: 4px;
-  }
-  .mint-hero h2{
-    margin: 0 !important;
-  }
+.mint-hero h1 {
+  margin: 0 !important;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+.mint-hero h2 {
+  margin: 0 !important;
+}
 </style>

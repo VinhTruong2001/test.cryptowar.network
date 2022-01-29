@@ -6,10 +6,7 @@
       v-if="showFilters"
       @change="saveFilters()"
     >
-      <div
-        class="search-wrap"
-        @click="setFilterOnMobileState(true)"
-      >
+      <div class="search-wrap" @click="setFilterOnMobileState(true)">
         <input
           class="form-control search"
           type="search"
@@ -21,7 +18,11 @@
       <div class="level-filter">
         <span class="filter-title">Level</span>
         <select class="form-control" v-model="levelFilter">
-          <option v-for="x in ['', 1, 11, 21, 31, 41, 51, 61, 71, 81, 91]" :value="x" :key="x">
+          <option
+            v-for="x in ['', 1, 11, 21, 31, 41, 51, 61, 71, 81, 91]"
+            :value="x"
+            :key="x"
+          >
             {{ x ? `${x} - ${x + 9}` : 'Any' }}
           </option>
         </select>
@@ -34,13 +35,14 @@
             class="element-item"
             v-for="element in ['Earth', 'Fire', 'Lightning', 'Water']"
             v-bind:key="element"
-            @click="elementFilter = (element === elementFilter ? '' : element); saveFilters()"
+            @click="
+              elementFilter = element === elementFilter ? '' : element
+              saveFilters()
+            "
             :class="element === elementFilter && 'selected'"
           >
-              <span
-                :class="element.toLowerCase() + '-icon'"
-              ></span>
-              <span class="element-text">{{ element }}</span>
+            <span :class="element.toLowerCase() + '-icon'"></span>
+            <span class="element-text">{{ element }}</span>
           </li>
         </ul>
       </div>
@@ -48,16 +50,30 @@
       <template v-if="isMarket">
         <div>
           <strong>MIN PRICE</strong>
-          <input class="form-control" type="number" v-model.trim="minPriceFilter" :min="0" placeholder="Min" />
+          <input
+            class="form-control"
+            type="number"
+            v-model.trim="minPriceFilter"
+            :min="0"
+            placeholder="Min"
+          />
         </div>
         <div>
           <strong>MAX PRICE</strong>
-          <input class="form-control" type="number" v-model.trim="maxPriceFilter" :min="0" placeholder="Max" />
+          <input
+            class="form-control"
+            type="number"
+            v-model.trim="maxPriceFilter"
+            :min="0"
+            placeholder="Max"
+          />
         </div>
         <div>
           <strong>SORT</strong>
           <select class="form-control" v-model="priceSort">
-            <option v-for="x in sorts" :value="x.dir" :key="x.dir">{{ x.name || 'Any' }}</option>
+            <option v-for="x in sorts" :value="x.dir" :key="x.dir">
+              {{ x.name || 'Any' }}
+            </option>
           </select>
         </div>
       </template>
@@ -72,7 +88,6 @@
       <div class="filters-close" @click="setFilterOnMobileState(false)">
         <i class="fas fa-times"></i>
       </div>
-
 
       <!-- <div class="col-sm-6 col-md-6 col-lg-2 mb-3">
         <strong>Level</strong>
@@ -92,30 +107,12 @@
           <strong>Max Price</strong>
           <input class="form-control" type="number" v-model.trim="maxPriceFilter" :min="0" placeholder="Max" />
         </div> -->
-
-        <!-- <div class="start">
-          <strong>STARS</strong>
-          <div>
-            <div v-for="x in ['1', '2', '3', '4', '5']"
-            :style="starFilter>=x?'background: url('+require('../../assets/v2/market-star-click.svg')+'); background-repeat: no-repeat; background-size: contain; color: black':''"
-            :key="x"
-            @click="starFilter = x"
-            >{{x}}</div>
-          </div>
-        </div>
-
-        <div>
-          <strong>LEVEL</strong>
-          <select class="form-control" v-model="levelFilter">
-            <option v-for="x in ['', 1, 11, 21, 31, 41, 51, 61, 71, 81, 91]" :value="x" :key="x">
-              {{ x ? `${x} - ${x + 9}` : 'Any' }}
-            </option>
-          </select>
-        </div>
-      </template> -->
     </div>
 
-    <div class="col-12 col-xl-9 no-data" v-if="isPage && characterIds.length === 0">
+    <div
+      class="col-12 col-xl-9 no-data"
+      v-if="isPage && characterIds.length === 0"
+    >
       <div>No results found</div>
     </div>
 
@@ -128,23 +125,27 @@
         <div @click="$emit('input', c.id)" class="character-item-wrap">
           <div
             class="character-item"
-            :class="[{ selected: value === c.id }, {isMarket: isSell}]"
+            :class="[{ selected: value === c.id }, { isMarket: isSell }]"
           >
-            <div class="above-wrapper" v-if="$slots.above || $scopedSlots.above">
+            <div
+              class="above-wrapper"
+              v-if="$slots.above || $scopedSlots.above"
+            >
               <slot name="above" :character="c"></slot>
             </div>
             <slot name="sold" :character="c"></slot>
             <div class="art">
-              <CharacterArt :character="c" :isMarket="isMarket"/>
+              <CharacterArt :character="c" :isMarket="isMarket" />
             </div>
             <div class="sell-box" v-if="isSell">
-              <b-button @click="sellClick()">
-                SELL
-              </b-button>
+              <b-button @click="sellClick()"> SELL </b-button>
             </div>
           </div>
           <div v-if="isBtnSell" class="weapon-bt-box">
-            <b-button @click="showListingSetupModal(true)" class="weapon-bt-box">
+            <b-button
+              @click="showListingSetupModal(true)"
+              class="weapon-bt-box"
+            >
               CHANGE PRICE
             </b-button>
           </div>
@@ -168,17 +169,31 @@
               tagname="recruit_character"
             >
               <i class="fas fa-plus"></i>
-              <br>
+              <br />
               Recruit
-              <br>
+              <br />
               <span
-                    :class="`${referralAddress == '0x0000000000000000000000000000000000000000' ? 'price' : ''}`"
-                    v-if="referralAddress == '0x0000000000000000000000000000000000000000'"
-                    >({{ recruitCost }} xBlade)</span
-                  >
-                  <span v-if="referralAddress != '0x0000000000000000000000000000000000000000'" class="price">
-                    {{ (recruitCost * 0.93).toFixed(2) }}xBlade)</span
-                  >
+                :class="`${
+                  referralAddress ==
+                  '0x0000000000000000000000000000000000000000'
+                    ? 'price'
+                    : ''
+                }`"
+                v-if="
+                  referralAddress ==
+                  '0x0000000000000000000000000000000000000000'
+                "
+                >({{ recruitCost }} xBlade)</span
+              >
+              <span
+                v-if="
+                  referralAddress !=
+                  '0x0000000000000000000000000000000000000000'
+                "
+                class="price"
+              >
+                {{ (recruitCost * 0.93).toFixed(2) }}xBlade)</span
+              >
             </b-button>
             <div class="small-hero-left">
               Only
@@ -197,158 +212,171 @@
 </template>
 
 <script>
-import BN from "bignumber.js";
-import { mapActions, mapGetters, mapState } from 'vuex';
-import { getCharacterArt } from '../../character-arts-placeholder';
+import BN from 'bignumber.js'
+import { mapActions, mapGetters, mapState } from 'vuex'
+import { getCharacterArt } from '../../character-arts-placeholder'
 // import BackgroundItem from '../BackgroundItem.vue';
-import CharacterArt from '../CharacterArt.vue';
-import { mapCacheActions } from 'vuex-cache';
+import CharacterArt from '../CharacterArt.vue'
+import { mapCacheActions } from 'vuex-cache'
 
 const sorts = [
   { name: 'Any', dir: '' },
   { name: 'Price: Low -> High', dir: 1 },
   { name: 'Price: High -> Low', dir: -1 },
-];
+]
 
 export default {
   props: {
     value: {},
-    sellClick:{
+    sellClick: {
       type: Function,
-      default: null
+      default: null,
     },
     isSell: {
       type: Boolean,
-      default: false
+      default: false,
     },
     showGivenCharacterIds: {
       type: Boolean,
-      default: false
+      default: false,
     },
     showFilters: {
       type: Boolean,
-      default: false
+      default: false,
     },
     characterIds: {
       type: Array,
-      default() { return []; }
+      default() {
+        return []
+      },
     },
     showLimit: {
       type: Number,
-      default: 0
+      default: 0,
     },
     isMarket: {
       type: Boolean,
-      default: false
+      default: false,
     },
     checklist: {
       type: Boolean,
-      default: true
+      default: true,
     },
     cancelNftListing: {
-      type: ()=>{},
-      default: null
+      type: () => {
+        // Ignore
+      },
+      default: null,
     },
     isBtnSell: {
       type: Boolean,
-      default: false
+      default: false,
     },
     showListingSetupModal: {
-      type: ()=>{},
-      default: null
+      type: () => {
+        // Ignore
+      },
+      default: null,
     },
     isPage: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
   async created() {
-    this.clearFilters();
+    this.clearFilters()
     const recruitCost = await this.contracts.CWController.methods
       .getMintPriceByToken()
-      .call({ from: this.defaultAccount });
-    this.recruitCost = new BN(recruitCost).div(new BN(10).pow(18)).toFixed(2);
-    this.loadConsumablesCount();
+      .call({ from: this.defaultAccount })
+    this.recruitCost = new BN(recruitCost).div(new BN(10).pow(18)).toFixed(2)
+    this.loadConsumablesCount()
     setInterval(async () => {
-      this.loadConsumablesCount();
-    }, 3000);
+      this.loadConsumablesCount()
+    }, 3000)
 
     const heroAmount = await this.contracts.Characters.methods
       .availableAmount()
-      .call({ from: this.defaultAccount });
+      .call({ from: this.defaultAccount })
 
-    this.heroAmount = Number(heroAmount);
+    this.heroAmount = Number(heroAmount)
   },
 
   data() {
     return {
-      recruitCost: "0",
+      recruitCost: '0',
       heroAmount: 0,
       searchValue: '',
       levelFilter: '',
       elementFilter: '',
-      minPriceFilter:'',
-      maxPriceFilter:'',
+      minPriceFilter: '',
+      maxPriceFilter: '',
       priceSort: '',
       sorts,
-    };
+    }
   },
 
   computed: {
-    ...mapState(['maxStamina', 'ownedCharacterIds',  'defaultAccount']),
-    ...mapGetters(["contracts", 'getCharacterName', 'allStaminas', 'charactersWithIds']),
-
+    ...mapState(['maxStamina', 'ownedCharacterIds', 'defaultAccount']),
+    ...mapGetters([
+      'contracts',
+      'getCharacterName',
+      'allStaminas',
+      'charactersWithIds',
+    ]),
 
     characterIdsToDisplay() {
-      if(this.showGivenCharacterIds) {
-        return this.characterIds;
+      if (this.showGivenCharacterIds) {
+        return this.characterIds
       }
 
-      return this.ownedCharacterIds;
+      return this.ownedCharacterIds
     },
 
     displayCharacters() {
-      return this.charactersWithIds(this.characterIdsToDisplay).filter(Boolean);
+      return this.charactersWithIds(this.characterIdsToDisplay).filter(Boolean)
     },
 
     filteredCharacters() {
-      let items = this.displayCharacters;
+      let items = this.displayCharacters
 
-      if(this.showFilters) {
-        if(this.searchValue !== '' && !this.isMarket) {
-          items = items.filter(x => x.id === parseInt(this.searchValue, 10));
+      if (this.showFilters) {
+        if (this.searchValue !== '' && !this.isMarket) {
+          items = items.filter((x) => x.id === parseInt(this.searchValue, 10))
         }
 
-        if(this.elementFilter && !this.isMarket) {
-          items = items.filter(x => x.traitName.includes(this.elementFilter));
+        if (this.elementFilter && !this.isMarket) {
+          items = items.filter((x) => x.traitName.includes(this.elementFilter))
         }
 
-        if(this.levelFilter && !this.isMarket) {
-          items = items.filter(x => x.level >= this.levelFilter - 1 && x.level <= this.levelFilter + 8);
+        if (this.levelFilter && !this.isMarket) {
+          items = items.filter(
+            (x) =>
+              x.level >= this.levelFilter - 1 && x.level <= this.levelFilter + 8
+          )
         }
 
-        if(this.showLimit > 0 && items.length > this.showLimit) {
-          items = items.slice(0, this.showLimit);
+        if (this.showLimit > 0 && items.length > this.showLimit) {
+          items = items.slice(0, this.showLimit)
         }
       }
-      return items;
+      return items
     },
 
     referralAddress() {
       // @ts-ignore
-      const referralAddress = this.$route.query.r;
+      const referralAddress = this.$route.query.r
       if (referralAddress && referralAddress !== this.defaultAccount) {
-        return referralAddress;
+        return referralAddress
       }
-      return '0x0000000000000000000000000000000000000000';
+      return '0x0000000000000000000000000000000000000000'
     },
   },
 
   watch: {
     async characterIdsToDisplay(characterIds) {
-      await this.fetchCharacters(characterIds);
-    }
+      await this.fetchCharacters(characterIds)
+    },
   },
 
   methods: {
@@ -359,48 +387,54 @@ export default {
     async onMintCharacter() {
       // await this.mintCharacter(this.referralAddress ? this.referralAddress : '0x0000000000000000000000000000000000000000');
       try {
-        await this.mintCharacter(this.referralAddress ? this. referralAddress : '0x0000000000000000000000000000000000000000');
+        await this.mintCharacter(
+          this.referralAddress
+            ? this.referralAddress
+            : '0x0000000000000000000000000000000000000000'
+        )
       } catch (e) {
         this.$dialog.notify.error(
-          "Could not mint character: insufficient funds or transaction denied."
-        );
+          'Could not mint character: insufficient funds or transaction denied.'
+        )
       }
     },
 
     setFilterOnMobileState(filterState) {
-      this.$el.getElementsByClassName('filters')[0].classList.toggle('active', filterState);
+      this.$el
+        .getElementsByClassName('filters')[0]
+        .classList.toggle('active', filterState)
     },
 
     saveFilters() {
-      sessionStorage.setItem('character-levelfilter', this.levelFilter);
-      sessionStorage.setItem('character-elementfilter', this.elementFilter);
-      sessionStorage.setItem('character-searchvalue', this.searchValue);
+      sessionStorage.setItem('character-levelfilter', this.levelFilter)
+      sessionStorage.setItem('character-elementfilter', this.elementFilter)
+      sessionStorage.setItem('character-searchvalue', this.searchValue)
 
-      if(this.isMarket) {
-        sessionStorage.setItem('character-price-order', this.priceSort);
-        sessionStorage.setItem('character-price-minfilter', this.minPriceFilter);
-        sessionStorage.setItem('character-price-maxfilter', this.maxPriceFilter);
+      if (this.isMarket) {
+        sessionStorage.setItem('character-price-order', this.priceSort)
+        sessionStorage.setItem('character-price-minfilter', this.minPriceFilter)
+        sessionStorage.setItem('character-price-maxfilter', this.maxPriceFilter)
       }
-      this.$emit('character-filters-changed');
+      this.$emit('character-filters-changed')
     },
 
     clearFilters() {
-      sessionStorage.removeItem('character-levelfilter');
-      sessionStorage.removeItem('character-elementfilter');
-      sessionStorage.removeItem('character-searchvalue');
-      if(this.isMarket) {
-        sessionStorage.removeItem('character-price-order');
-        sessionStorage.removeItem('character-price-minfilter');
-        sessionStorage.removeItem('character-price-maxfilter');
+      sessionStorage.removeItem('character-levelfilter')
+      sessionStorage.removeItem('character-elementfilter')
+      sessionStorage.removeItem('character-searchvalue')
+      if (this.isMarket) {
+        sessionStorage.removeItem('character-price-order')
+        sessionStorage.removeItem('character-price-minfilter')
+        sessionStorage.removeItem('character-price-maxfilter')
       }
 
-      this.elementFilter = '';
-      this.levelFilter = '';
-      this.priceSort = '';
-      this.minPriceFilter = '';
-      this.maxPriceFilter = '';
+      this.elementFilter = ''
+      this.levelFilter = ''
+      this.priceSort = ''
+      this.minPriceFilter = ''
+      this.maxPriceFilter = ''
 
-      this.$emit('character-filters-changed');
+      this.$emit('character-filters-changed')
     },
 
     async loadConsumablesCount() {
@@ -429,19 +463,19 @@ export default {
     //   this.minPriceFilter = sessionStorage.getItem('character-price-minfilter') || '';
     //   this.maxPriceFilter = sessionStorage.getItem('character-price-maxfilter') || '';
     // }
-  }
-};
+  },
+}
 </script>
 
 <style scoped>
-.no-data{
+.no-data {
   display: flex;
   justify-content: center;
   margin-top: 200px;
   font-size: 30px;
 }
 
-.weapon-bt-box{
+.weapon-bt-box {
   margin-top: 15px;
   display: flex;
   justify-content: center;
@@ -449,8 +483,8 @@ export default {
   cursor: pointer;
 }
 
-.weapon-bt-box button{
-  background: url("../../assets/v2/shop_nft_btn.svg");
+.weapon-bt-box button {
+  background: url('../../assets/v2/shop_nft_btn.svg');
   background-repeat: no-repeat;
   background-size: contain;
   width: 170px;
@@ -466,16 +500,16 @@ export default {
   align-items: center;
 }
 
-.filters div strong{
+.filters div strong {
   font-size: 24px;
   font-weight: normal;
 }
 
-.filter-market{
+.filter-market {
   margin-top: 20px;
 }
 
-.filter-market div{
+.filter-market div {
   margin-top: 20px;
   font-weight: bold;
 }
@@ -502,12 +536,12 @@ export default {
   min-width: 294px;
 } */
 
-.title{
+.title {
   font-size: 20px;
   margin-top: 50px;
 }
 
-.clear-filters-button{
+.clear-filters-button {
   align-self: center;
 }
 
@@ -516,10 +550,10 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
 }
 
-.form-control{
+.form-control {
   background-color: transparent;
   color: white;
-  border: 1px solid rgb(17,65,105);
+  border: 1px solid rgb(17, 65, 105);
   border-radius: 10px;
   appearance: none;
   -webkit-appearance: none;
@@ -531,21 +565,21 @@ input::-webkit-inner-spin-button {
   margin-top: 10px;
 }
 
-.form-control:focus{
+.form-control:focus {
   background-color: transparent;
   color: white;
 }
 
-.form-control::placeholder{
+.form-control::placeholder {
   color: rgba(255, 255, 255, 0.6);
 }
 
-.sell-box{
+.sell-box {
   margin-top: 20px;
 }
 
-.sell-box button{
-  background: url("../../assets/v2/shop_nft_btn.svg");
+.sell-box button {
+  background: url('../../assets/v2/shop_nft_btn.svg');
   background-repeat: no-repeat;
   background-size: contain;
   width: 170px;
@@ -582,18 +616,16 @@ input::-webkit-inner-spin-button {
   .character-item-wrap {
     margin-bottom: 0;
   }
-  .character-item.addnew{
+  .character-item.addnew {
     height: 304px;
   }
-  .recruit.btn-secondary{
+  .recruit.btn-secondary {
     width: 117px;
     height: 120px;
     font-size: 18px;
   }
-  .recruit.btn-secondary .price{
+  .recruit.btn-secondary .price {
     font-size: 13px;
   }
 }
-
 </style>
-

@@ -3,20 +3,28 @@
     <claim-rewards-bar />
     <ul class="lobby-box">
       <li>
-        <router-link :to="{ name: 'combat' }" exact class="character-item addnew addmore lobby-box-item-wrap">
+        <router-link
+          :to="{ name: 'combat' }"
+          exact
+          class="character-item addnew addmore lobby-box-item-wrap"
+        >
           <div class="lobby-item-box">
             <b-button
-            class="lobby-item"
-            v-tooltip="'PvE'"
-            tagname="recruit_character"
+              class="lobby-item"
+              v-tooltip="'PvE'"
+              tagname="recruit_character"
             >
-              <img src="../assets/v2/pve.svg" alt="" class="lobby-img">
+              <img src="../assets/v2/pve.svg" alt="" class="lobby-img" />
             </b-button>
           </div>
         </router-link>
       </li>
       <li>
-        <router-link :to="{ name: 'P2P' }" exact class="character-item addnew lobby-box-item-wrap">
+        <router-link
+          :to="{ name: 'P2P' }"
+          exact
+          class="character-item addnew lobby-box-item-wrap"
+        >
           <div class="lobby-item-box">
             <b-button
               class="lobby-item"
@@ -24,13 +32,17 @@
               v-tooltip="'PvP'"
               tagname="recruit_character"
             >
-              <img src="../assets/v2/pvp.svg" alt="" class="lobby-img">
+              <img src="../assets/v2/pvp.svg" alt="" class="lobby-img" />
             </b-button>
           </div>
         </router-link>
       </li>
       <li>
-        <router-link :to="{ name: '' }" exact class="character-item addnew addmore lobby-box-item-wrap">
+        <router-link
+          :to="{ name: '' }"
+          exact
+          class="character-item addnew addmore lobby-box-item-wrap"
+        >
           <div class="lobby-item-box">
             <b-button
               class="lobby-item"
@@ -38,51 +50,42 @@
               v-tooltip="'Raid Boss'"
               tagname="recruit_character"
             >
-              <img src="../assets/v2/raid.svg" alt="" class="lobby-img">
+              <img src="../assets/v2/raid.svg" alt="" class="lobby-img" />
             </b-button>
             <span class="lobby-item-annouce">Coming soon</span>
           </div>
         </router-link>
       </li>
     </ul>
-
   </div>
 </template>
 
 <script>
-import ClaimRewardsBar from "../components/smart/ClaimRewardsBar.vue";
+import ClaimRewardsBar from '../components/smart/ClaimRewardsBar.vue'
 
 export default {
   data() {
-    return {
-    };
+    return {}
   },
 
-  computed: {
+  computed: {},
 
-  },
+  props: {},
 
-  props: {
-  },
-
-  methods: {
-  },
-
-  async mounted() {},
+  methods: {},
 
   components: {
     ClaimRewardsBar,
   },
-};
+}
 </script>
 
 <style>
-
 .character-item {
   position: relative;
 }
 
-.lobby-box{
+.lobby-box {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -90,18 +93,18 @@ export default {
   list-style: none;
 }
 
-.lobby-item.btn-secondary{
+.lobby-item.btn-secondary {
   background: none;
   border: 0px solid;
   position: relative;
   z-index: 2;
 }
-.lobby-box .addmore{
-  width: calc(294px - 294px*20/100);
-  height: calc(398px - 398px*20/100);
+.lobby-box .addmore {
+  width: calc(294px - 294px * 20 / 100);
+  height: calc(398px - 398px * 20 / 100);
 }
-.character-item .lobby-item-box{
-  background-image: radial-gradient(#fdf2be, #C6A02Fee, transparent 60%);
+.character-item .lobby-item-box {
+  background-image: radial-gradient(#fdf2be, #c6a02fee, transparent 60%);
   display: flex;
   height: 100%;
   width: 100%;

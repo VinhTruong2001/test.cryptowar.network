@@ -6,7 +6,11 @@
         Loading...
       </div>
       <b-tabs pills card vertical>
-        <b-tab v-for="leaderboard in leaderboards" :key="leaderboard.key" :title="leaderboard.key">
+        <b-tab
+          v-for="leaderboard in leaderboards"
+          :key="leaderboard.key"
+          :title="leaderboard.key"
+        >
           <b-card-text>
             <div class="offset-md-2 col-md-8 col-sm-12 col-xs-12">
               <div class="row">
@@ -15,11 +19,18 @@
                 </div>
               </div>
 
-              <div class="row mt-2" v-for="(entry, pos) of leaderboard.leaderboard" :key="entry.name">
+              <div
+                class="row mt-2"
+                v-for="(entry, pos) of leaderboard.leaderboard"
+                :key="entry.name"
+              >
                 <div class="col-7">
                   <strong class="mr-2 position-marker">#{{ pos + 1 }}</strong>
                   {{ entry.name }}
-                  <b-icon v-if="matchesCharIdOrWallet(entry.name)" icon="star-fill" />
+                  <b-icon
+                    v-if="matchesCharIdOrWallet(entry.name)"
+                    icon="star-fill"
+                  />
                 </div>
 
                 <div class="col-5 text-right">
@@ -35,36 +46,42 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import { apiUrl, defaultOptions } from '../utils/common';
+import { mapState } from 'vuex'
+import { apiUrl, defaultOptions } from '../utils/common'
 
 export default {
   data() {
     return {
       leaderboards: [],
       waitingLeaderboardOutcome: false,
-    };
+    }
   },
 
   async created() {
-    this.waitingLeaderboardOutcome = true;
-    const leaderboardData = await fetch(apiUrl('static/leaderboard'),defaultOptions);
-    const leaderboards = await leaderboardData.json();
+    this.waitingLeaderboardOutcome = true
+    const leaderboardData = await fetch(
+      apiUrl('static/leaderboard'),
+      defaultOptions
+    )
+    const leaderboards = await leaderboardData.json()
 
-    this.leaderboards = leaderboards.leaderboard;
-    this.waitingLeaderboardOutcome = false;
+    this.leaderboards = leaderboards.leaderboard
+    this.waitingLeaderboardOutcome = false
   },
 
   methods: {
     matchesCharIdOrWallet(str) {
-      return str.includes(this.defaultAcccount) || this.ownedCharacterIds.some(x => str.includes(`(ID ${x})`));
-    }
+      return (
+        str.includes(this.defaultAcccount) ||
+        this.ownedCharacterIds.some((x) => str.includes(`(ID ${x})`))
+      )
+    },
   },
 
   computed: {
     ...mapState(['defaultAccount', 'ownedCharacterIds']),
   },
-};
+}
 </script>
 
 <style scoped>

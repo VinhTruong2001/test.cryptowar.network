@@ -8,19 +8,19 @@
 </template>
 
 <script lang="ts">
-import CharacterDisplay from './smart/CharacterDisplay.vue';
+import CharacterDisplay from './smart/CharacterDisplay.vue'
 
 export default {
   props: {
-    setCountTargetToFight:{
+    setCountTargetToFight: {
       type: Function,
-      default: null
+      default: null,
     },
   },
   components: {
     CharacterDisplay,
   },
-};
+}
 </script>
 
 <style scoped>
@@ -46,7 +46,7 @@ export default {
   height: 1px;
   background: rgb(124, 70, 117);
 }
-.nav-bottom-line{
+.nav-bottom-line {
   width: 105.6%;
   position: relative;
   left: -70px;
@@ -55,20 +55,19 @@ export default {
   border-top: 3px solid;
   border-image-slice: 1;
   border-top-width: 3px;
-  border-image-source: linear-gradient(to left, #3ADD9A, #121154, #A54476);
-  /* background-image: radial-gradient(ellipse at top, #CBA938 -10%, transparent 35%), radial-gradient(ellipse at bottom, transparent, transparent); */
+  border-image-source: linear-gradient(to left, #3add9a, #121154, #a54476);
 }
 
-@media (max-width: 767.98px){
+@media (max-width: 767.98px) {
   .character-bar {
     /* padding: 0.5em 1.2em 0.5em 3.4em; */
     width: 100%;
   }
 
-  .nav-bottom-line{
+  .nav-bottom-line {
     width: 100%;
   }
-/* .character-bar::before{
+  /* .character-bar::before{
   content: "";
   width: 100%;
   height: 61px;
@@ -79,7 +78,7 @@ export default {
   z-index: 1;
   padding: 0;
 } */
-/* .character-bar[data-v-203b7b5a] {
+  /* .character-bar[data-v-203b7b5a] {
   width: 110%;
 } */
 }
@@ -90,7 +89,7 @@ export default {
     width: 100%;
   }
 
-  .nav-bottom-line{
+  .nav-bottom-line {
     width: 100%;
   }
 }
@@ -101,7 +100,7 @@ export default {
     width: 100%;
   }
 
-  .nav-bottom-line{
+  .nav-bottom-line {
     width: 100%;
   }
 }
@@ -111,7 +110,7 @@ export default {
     width: 100%;
   }
 
-  .nav-bottom-line{
+  .nav-bottom-line {
     width: 100%;
   }
 }

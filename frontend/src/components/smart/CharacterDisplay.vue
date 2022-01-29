@@ -1,7 +1,9 @@
 <template>
-  <div class="character-display-container"
+  <div
+    class="character-display-container"
     @mouseover="hover = !isMobile() || true"
-    @mouseleave="hover = !isMobile()">
+    @mouseleave="hover = !isMobile()"
+  >
     <transition name="slide-fade">
       <!-- <div class="row chara-head-box" :class="[getIsCharacterViewExpanded?'':'chara-head-close']">
         <div class="col-sm-12 root main-font">
@@ -75,24 +77,29 @@
           }%;`"
           v-for="c in filteredCharactersForList"
           :key="c.id"
-          @click="!getIsInCombat && setCurrentCharacter(c.id) && alert(c.id), setCountTargetToFight()"
-          v-tooltip="{content: `Power: ${CharacterPower(c.level).toLocaleString()}<br>
+          @click="
+            !getIsInCombat && setCurrentCharacter(c.id) && alert(c.id),
+              setCountTargetToFight()
+          "
+          v-tooltip="{
+            content: `Power: ${CharacterPower(c.level).toLocaleString()}<br>
           <span>Level </span>
           <span
-            >${ c.level + 1 } (${ c.xp } /
-            ${ RequiredXp(c.level).toLocaleString() } XP)
-          </span>`, trigger: (isMobile() ? 'click' : 'hover')}"
+            >${c.level + 1} (${c.xp} /
+            ${RequiredXp(c.level).toLocaleString()} XP)
+          </span>`,
+            trigger: isMobile() ? 'click' : 'hover',
+          }"
         >
-          <div class="element-icon"><span
-            :class="
-              traits[c.trait].toLowerCase() +
-              '-icon trait-icon'
-            "
+          <div class="element-icon">
+            <span
+              :class="traits[c.trait].toLowerCase() + '-icon trait-icon'"
             ></span>
           </div>
           <div>
             <div class="name-list">
-            <div>{{ getCleanCharacterName(c.id) }} </div> Lv.{{ c.level + 1 }}
+              <div>{{ getCleanCharacterName(c.id) }}</div>
+              Lv.{{ c.level + 1 }}
             </div>
             <div
               v-if="getCharacterStamina(c.id) === maxStamina"
@@ -111,8 +118,13 @@
               :style="`--staminaReady: ${
                 (getCharacterStamina(c.id) / maxStamina) * 100
               }%;`"
-              v-tooltip.bottom="{content: toolTipHtml(timeUntilCharacterHasMaxStamina(c.id), getTimeStamina(c.id, c.level + 1)), trigger: (isMobile() ? 'click' : 'hover')}
-              "
+              v-tooltip.bottom="{
+                content: toolTipHtml(
+                  timeUntilCharacterHasMaxStamina(c.id),
+                  getTimeStamina(c.id, c.level + 1)
+                ),
+                trigger: isMobile() ? 'click' : 'hover',
+              }"
             >
               <div class="stamina-text">
                 STA {{ getCharacterStamina(c.id) }} / 200
@@ -147,22 +159,22 @@
 </template>
 
 <script lang="ts">
-import { mapGetters, mapState, mapMutations } from "vuex";
-import { getCharacterArt } from "../../character-arts-placeholder";
+import { mapGetters, mapState, mapMutations } from 'vuex'
+import { getCharacterArt } from '../../character-arts-placeholder'
 // import SmallBar from "../SmallBar.vue";
 // import CharacterArt from "../CharacterArt.vue";
-import { CharacterPower, CharacterTrait } from "../../interfaces";
-import { RequiredXp } from "../../interfaces";
+import { CharacterPower, CharacterTrait } from '../../interfaces'
+import { RequiredXp } from '../../interfaces'
 // import Hint from "../Hint.vue";
-import Vue from "vue";
-import { toBN, fromWeiEther } from "../../utils/common";
-import { getCleanName } from "../../rename-censor";
+import Vue from 'vue'
+import { toBN, fromWeiEther } from '../../utils/common'
+import { getCleanName } from '../../rename-censor'
 
 export default Vue.extend({
   props: {
-    setCountTargetToFight:{
+    setCountTargetToFight: {
       type: Function,
-      default: null
+      default: null,
     },
   },
   components: {
@@ -172,30 +184,35 @@ export default Vue.extend({
   },
 
   computed: {
-    ...mapState(["maxStamina", "currentCharacterId", "ownedCharacterIds", "secondsPerStamina"]),
+    ...mapState([
+      'maxStamina',
+      'currentCharacterId',
+      'ownedCharacterIds',
+      'secondsPerStamina',
+    ]),
     ...mapGetters([
-      "currentCharacter",
-      "currentCharacterStamina",
-      "getCharacterName",
-      "getCharacterStamina",
-      "charactersWithIds",
-      "ownCharacters",
-      "timeUntilCharacterHasMaxStamina",
-      "getSecondPerStamina",
-      "getIsInCombat",
-      "getIsCharacterViewExpanded",
-      "fightGasOffset",
-      "fightBaseline",
-      "minutesPerStamina"
+      'currentCharacter',
+      'currentCharacterStamina',
+      'getCharacterName',
+      'getCharacterStamina',
+      'charactersWithIds',
+      'ownCharacters',
+      'timeUntilCharacterHasMaxStamina',
+      'getSecondPerStamina',
+      'getIsInCombat',
+      'getIsCharacterViewExpanded',
+      'fightGasOffset',
+      'fightBaseline',
+      'minutesPerStamina',
     ]),
 
     isLoadingCharacter(): boolean {
-      return !this.currentCharacter;
+      return !this.currentCharacter
     },
 
     filteredCharactersForList(): any {
-      const items: any = this.ownCharacters;
-      return items;
+      const items: any = this.ownCharacters
+      return items
     },
   },
 
@@ -203,52 +220,41 @@ export default Vue.extend({
     return {
       traits: CharacterTrait,
       isPlaza: false,
-      staminaTimer: 0
-    };
+      staminaTimer: 0,
+    }
   },
   methods: {
-    ...mapMutations(["setCurrentCharacter"]),
+    ...mapMutations(['setCurrentCharacter']),
     getCharacterArt,
     CharacterPower,
     RequiredXp,
 
     setListClassForSelChar(id: string, currentCharId: string): any {
       if (id === currentCharId) {
-        return "character-highlight";
-      } else return "character";
+        return 'character-highlight'
+      } else return 'character'
     },
 
-    getTimeStamina(id: any, level: any){
-      if (!isNaN(this.getSecondPerStamina(id))){
-        return this.getSecondPerStamina(id);
-      }
-
-      else {
-        return this.getTimeStaminaWithLevel(level);
+    getTimeStamina(id: any, level: any) {
+      if (!isNaN(this.getSecondPerStamina(id))) {
+        return this.getSecondPerStamina(id)
+      } else {
+        return this.getTimeStaminaWithLevel(level)
       }
     },
 
-    getTimeStaminaWithLevel(level: any){
-      if(level === 1){
-        return (420 / 60).toFixed(2);
-      }
-
-      else if(level >= 2 && level <= 29){
-        return (((level - 2) *  21 + 462) / 60).toFixed(2);
-      }
-
-      else if(level >= 30 && level <= 54){
-        return (((level - 30) *  81 + 4050) / 60).toFixed(2);
-      }
-
-      else
-        return (6000 / 60).toFixed(2);
+    getTimeStaminaWithLevel(level: any) {
+      if (level === 1) {
+        return (420 / 60).toFixed(2)
+      } else if (level >= 2 && level <= 29) {
+        return (((level - 2) * 21 + 462) / 60).toFixed(2)
+      } else if (level >= 30 && level <= 54) {
+        return (((level - 30) * 81 + 4050) / 60).toFixed(2)
+      } else return (6000 / 60).toFixed(2)
     },
 
     toolTipHtml(time: string, minutesPerStamina: string): string {
-      return (
-        `Regenerates 1 point every ${minutesPerStamina} minutes`
-      );
+      return `Regenerates 1 point every ${minutesPerStamina} minutes`
       // return (
       //   `Regenerates 1 point every ${minutesPerStamina} minutes, stamina bar will be full at: ` +
       //   time
@@ -256,15 +262,15 @@ export default Vue.extend({
     },
 
     formattedSkill(skill: number): number {
-      const skillBalance = fromWeiEther(skill.toString());
-      return toBN(skillBalance).toNumber();
+      const skillBalance = fromWeiEther(skill.toString())
+      return toBN(skillBalance).toNumber()
     },
 
     getCleanCharacterName(id: string): string {
-      return getCleanName(this.getCharacterName(id));
+      return getCleanName(this.getCharacterName(id))
     },
   },
-});
+})
 </script>
 
 <style scoped>
@@ -273,7 +279,7 @@ export default Vue.extend({
   width: 100%;
 }
 
-.chara-head-close{
+.chara-head-close {
   max-height: 0px;
   /* overflow: hidden; */
 }
@@ -313,7 +319,7 @@ ul.character-list {
 }
 
 li.character {
-  background: #F58B5B;
+  background: #f58b5b;
   padding: 0.5rem 0.5rem 0.5rem;
   margin: 5px;
   vertical-align: middle;
@@ -322,10 +328,10 @@ li.character {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  border: 3px solid #F58B5B;
+  border: 3px solid #f58b5b;
 }
 
-li.character .element-icon{
+li.character .element-icon {
   width: 50px;
   height: 45px;
 }
@@ -355,7 +361,7 @@ li.character-highlight {
   border: 3px solid #9e8a57;
 }
 
-li.character-highlight .element-icon{
+li.character-highlight .element-icon {
   width: 50px;
   height: 45px;
 }
@@ -373,13 +379,13 @@ li.character-highlight .element-icon{
   justify-content: center;
 }
 
-.name-list div{
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    width: 140px;
-    margin-right: 10px;
-    /* display: inline-block; */
+.name-list div {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 140px;
+  margin-right: 10px;
+  /* display: inline-block; */
 }
 
 .character-list-mobile {
@@ -414,7 +420,7 @@ li.character-highlight .element-icon{
   list-style: none;
   transition: flex 0.3s ease;
 }
-.move-center{
+.move-center {
   padding-top: 0;
 }
 .character-list {
@@ -476,11 +482,7 @@ li.character-highlight .element-icon{
   height: 18px;
   margin-top: 5px;
   border-radius: 4px;
-  background: linear-gradient(
-    to right,
-    #FBE033 var(--staminaReady),
-    #fff 0
-  );
+  background: linear-gradient(to right, #fbe033 var(--staminaReady), #fff 0);
   border-radius: 10px;
   background-repeat: no-repeat;
   background-size: cover;
@@ -518,18 +520,20 @@ li.character-highlight .element-icon{
   }
 }
 @media (max-width: 992px) {
-  .character-full-list .character, .character-full-list .character-highlight{
+  .character-full-list .character,
+  .character-full-list .character-highlight {
     margin: 8px;
   }
-  .character-display-container{
+  .character-display-container {
     padding: 0;
   }
-  .character-lis{
+  .character-lis {
     padding: 0;
   }
 }
 @media (max-width: 930px) {
-  .character-full-list .character, .character-full-list .character-highlight{
+  .character-full-list .character,
+  .character-full-list .character-highlight {
     width: auto;
   }
   /* li.character .element-icon{
@@ -537,74 +541,81 @@ li.character-highlight .element-icon{
   } */
 }
 @media (max-width: 767.98px) {
-  .character-bar{
+  .character-bar {
     padding: 0;
   }
-  .character-list{
+  .character-list {
     padding: 0.5rem 0;
   }
 }
 @media (max-width: 660px) {
-  .character-full-list .character, .character-full-list .character-highlight{
+  .character-full-list .character,
+  .character-full-list .character-highlight {
     padding: 5px;
   }
-  .name-list{
+  .name-list {
     width: auto;
     justify-content: space-between;
-    font-size: .9em;
+    font-size: 0.9em;
   }
-  .name-list div{
+  .name-list div {
     width: auto;
   }
-  .character-full-list .character .element-icon, .character-full-list .character-highlight .element-icon{
+  .character-full-list .character .element-icon,
+  .character-full-list .character-highlight .element-icon {
     width: 45px;
     height: 45px;
   }
-  .character-full-list .character > div:not(.element-icon), .character-full-list .character-highlight > div:not(.element-icon){
+  .character-full-list .character > div:not(.element-icon),
+  .character-full-list .character-highlight > div:not(.element-icon) {
     width: 180px;
   }
 }
 @media (max-width: 576px) {
-  .character-full-list .character, .character-full-list .character-highlight{
+  .character-full-list .character,
+  .character-full-list .character-highlight {
     margin: 6px;
   }
-  .name-list{
-    font-size: .75em;
+  .name-list {
+    font-size: 0.75em;
   }
-  .character-full-list .character .element-icon, .character-full-list .character-highlight .element-icon{
+  .character-full-list .character .element-icon,
+  .character-full-list .character-highlight .element-icon {
     width: 1rem;
     height: 2.5rem;
     margin-right: 2px;
   }
-  .character-full-list .character > div:not(.element-icon), .character-full-list .character-highlight > div:not(.element-icon){
+  .character-full-list .character > div:not(.element-icon),
+  .character-full-list .character-highlight > div:not(.element-icon) {
     width: 120px;
   }
-  .fire-icon{
+  .fire-icon {
     width: 1rem;
     height: 1rem;
   }
 
-  .earth-icon{
+  .earth-icon {
     width: 1rem;
     height: 1rem;
   }
 
-  .water-icon{
+  .water-icon {
     width: 1rem;
     height: 1rem;
   }
 
-  .lightning-icon{
+  .lightning-icon {
     width: 1rem;
     height: 1rem;
   }
-  .trait-icon{
+  .trait-icon {
     position: static;
   }
-  .small-stamina-char{
+  .small-stamina-char {
     height: 15px;
   }
-  .character-full-list .character, .character-full-list .character-highlight{
+  .character-full-list .character,
+  .character-full-list .character-highlight {
     padding: 2px;
   }
 }

@@ -1,4 +1,3 @@
-
 export enum ShieldElement {
   Fire = 0,
   Earth = 1,
@@ -11,20 +10,20 @@ export enum ShieldTrait {
   DEX = 1,
   CHA = 2,
   INT = 3,
-  DEF = 4
+  DEF = 4,
 }
 export interface IShield {
-  id: number;
-  properties: string;
-  element: string;
-  stat1: string;
-  stat1Value: number;
-  stat1Type: number;
-  stat2: string;
-  stat2Value: number;
-  stat2Type: number;
-  stat3: string;
-  stat3Value: number;
-  stat3Type: number;
-  stars: number;
+  id: number
+  properties: string
+  element: string
+  stat1: string
+  stat1Value: number
+  stat1Type: number
+  stat2: string
+  stat2Value: number
+  stat2Type: number
+  stat3: string
+  stat3Value: number
+  stat3Type: number
+  stars: number
 }

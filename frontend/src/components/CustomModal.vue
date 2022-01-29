@@ -1,38 +1,41 @@
 <template>
-<div class="modal fade" id="myModal" role="dialog">
+  <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <button type="button" class="close" data-dismiss="modal">
+            &times;
+          </button>
           <h4 class="modal-title">Modal Header</h4>
         </div>
         <div class="modal-body">
           <p>Some text in the modal.</p>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-blue-bg" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-pink-bg" data-dismiss="modal">OK</button>
+          <button type="button" class="btn btn-blue-bg" data-dismiss="modal">
+            Close
+          </button>
+          <button type="button" class="btn btn-pink-bg" data-dismiss="modal">
+            OK
+          </button>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
+import Vue from 'vue'
 
-import Vue from "vue";
-
-export default Vue.extend ({
-  props: ['visible', 'title', 'text', "hide"],
+export default Vue.extend({
+  props: ['visible', 'title', 'text', 'hide'],
   data() {
     return {
       // variable that shows/hides modal
-    };
+    }
   },
-  methods: {
-  }
-});
-
+  methods: {},
+})
 </script>
 <style scoped>
 .modal-mask {
@@ -42,9 +45,9 @@ export default Vue.extend ({
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, .5);
+  background-color: rgba(0, 0, 0, 0.5);
   display: table;
-  transition: opacity .3s ease;
+  transition: opacity 0.3s ease;
   display: flex;
   flex: 1;
   justify-content: center;
@@ -57,8 +60,8 @@ export default Vue.extend ({
 .modal-container {
   margin: 0px auto;
   border-radius: 2px;
-  transition: all .3s ease;
-  background-image: url("../assets/images/modal-view.png");
+  transition: all 0.3s ease;
+  background-image: url('../assets/images/modal-view.png');
   background-repeat: no-repeat;
   background-size: 100% 100%;
   width: 100%;
@@ -71,7 +74,7 @@ export default Vue.extend ({
 
 .modal-body {
   margin: 20px 0;
-    display: flex !important;
+  display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
 }

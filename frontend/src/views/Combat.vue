@@ -1,18 +1,27 @@
 <template>
   <div class="body main-font">
-    <character-bar v-if="ownCharacters.length > 0" :setCountTargetToFight="setCountTargetToFight"/>
+    <character-bar
+      v-if="ownCharacters.length > 0"
+      :setCountTargetToFight="setCountTargetToFight"
+    />
     <div class="nav-bottom-line"></div>
     <div v-if="ownWeapons.length > 0 && ownCharacters.length > 0">
       <div class="row" v-if="error !== null">
         <div class="col error">Error: {{ error }}</div>
       </div>
-<!-- v-if="fightResults[0]" -->
+      <!-- v-if="fightResults[0]" -->
       <b-modal id="fightResultsModal" hide-footer centered>
-         <link rel="prefetch" as="image" href="/img/Congrats.5ac13bd5.gif">
-          <img src="../assets/v2/Congrats.gif" class="background-win">
-          <div class="title-results">Fight Results</div>
-          <CombatResults v-if="resultsAvailable" :results="fightResults" />
-          <button class="mt-3 btn-buy btn-close-fight-results" block @click="$bvModal.hide('fightResultsModal'), pauseSound()">Close</button>
+        <link rel="prefetch" as="image" href="/img/Congrats.5ac13bd5.gif" />
+        <img src="../assets/v2/Congrats.gif" class="background-win" />
+        <div class="title-results">Fight Results</div>
+        <CombatResults v-if="resultsAvailable" :results="fightResults" />
+        <button
+          class="mt-3 btn-buy btn-close-fight-results"
+          block
+          @click="$bvModal.hide('fightResultsModal'), pauseSound()"
+        >
+          Close
+        </button>
       </b-modal>
 
       <b-modal
@@ -31,13 +40,25 @@
 
       <div class="row">
         <div class="col">
-          <div class="message-box" v-if="!currentCharacter">You need to select a character to do battle.</div>
+          <div class="message-box" v-if="!currentCharacter">
+            You need to select a character to do battle.
+          </div>
           <div class="row">
             <div class="col-12 text-center out-stamina">
-              <div class="message-box flex-column" v-if="currentCharacter && currentCharacterStamina < staminaPerFight">
+              <div
+                class="message-box flex-column"
+                v-if="
+                  currentCharacter && currentCharacterStamina < staminaPerFight
+                "
+              >
                 You need {{ staminaPerFight }} stamina to do battle.
                 <h4>Stamina Cost Per Fight</h4>
-                <b-form-select v-model="fightMultiplier" :options='setStaminaSelectorValues()' @change="setFightMultiplier()" class="ml-3">
+                <b-form-select
+                  v-model="fightMultiplier"
+                  :options="setStaminaSelectorValues()"
+                  @change="setFightMultiplier()"
+                  class="ml-3"
+                >
                 </b-form-select>
               </div>
             </div>
@@ -67,7 +88,11 @@
           <div class="row">
             <div class="col">
               <div v-if="showModalFight" id="fight-overlay">
-                <div class="waiting animation" v-if="waitingResults" margin="auto">
+                <div
+                  class="waiting animation"
+                  v-if="waitingResults"
+                  margin="auto"
+                >
                   <div class="fighting-img"></div>
                   <!-- <div class="waiting-text">
                     <i class="fas fa-spinner fa-spin"></i>
@@ -81,10 +106,22 @@
             <div class="col weapon-selection">
               <div class="header-row">
                 <div class="info-weapon">
-                  <div :class="['col-12', selectedWeaponId ? 'col-md-6 offset-md-3' : 'col-md-2 offset-md-5']">
+                  <div
+                    :class="[
+                      'col-12',
+                      selectedWeaponId
+                        ? 'col-md-6 offset-md-3'
+                        : 'col-md-2 offset-md-5',
+                    ]"
+                  >
                     <h4>Stamina Cost per Fight</h4>
                     <div>
-                      <b-form-select id="select-stamina" v-model="fightMultiplier" :options='setStaminaSelectorValues()' @change="setFightMultiplier()">
+                      <b-form-select
+                        id="select-stamina"
+                        v-model="fightMultiplier"
+                        :options="setStaminaSelectorValues()"
+                        @change="setFightMultiplier()"
+                      >
                       </b-form-select>
                       <label for="select-stamina" class="dropdown-icon"></label>
                     </div>
@@ -126,8 +163,6 @@
             <div class="row mb-3 enemy-container" v-if="targets.length > 0">
               <div class="col-12 text-center">
                 <div class="combat-hints">
-                  <!-- <span class="fire-icon" /> » <span class="earth-icon" /> » <span class="lightning-icon" /> » <span class="water-icon" /> » -->
-                  <!-- <span class="fire-icon" /> -->
                   <div class="property-icon"></div>
                   <!-- <Hint
                     text="The elements affect power:<br>
@@ -140,34 +175,52 @@
                 <div class="encounter" v-for="(e, i) in targets" :key="i">
                   <div class="encounter-container">
                     <div class="enemy-character">
-                        <div class="encounter-element">
-                          <span :class="getCharacterTrait(e.trait).toLowerCase() + '-icon element-icon circle-element' " />
-                        </div>
-
-                        <div class="enemy-id">ID {{i}}</div>
-
-                        <div class="">
-                          <img class="mx-auto enemy-img" :src="getEnemyArt(e.power)" alt="Enemy" />
-                          <img class="enemy-around-img" :src="getEnemyArtAround(e.trait)" alt="Enemy Around">
-                        </div>
-
-                        <div class="encounter-power">{{ e.power }} Power</div>
-
-                        <div class="xp-gain">+{{ getPotentialXp(e) }} XP</div>
-                      </div>
-
-                      <div class="victory-chance">
-                        {{ getWinChance(e.power, e.trait) }} Victory
-                      </div>
-                      <big-button
-                          style="margin: 0 auto"
-                          class="encounter-button btn-styled"
-                          :mainText="`FIGHT`"
-                          :disabled="(timeMinutes === 59 && timeSeconds >= 30) || waitingResults || !weaponHasDurability(selectedWeaponId) || !charHasStamina()"
-                          @click="onClickEncounter(e), (showModalFight = true)"
+                      <div class="encounter-element">
+                        <span
+                          :class="
+                            getCharacterTrait(e.trait).toLowerCase() +
+                            '-icon element-icon circle-element'
+                          "
                         />
-                      <p v-if="isLoadingTargets">Loading...</p>
+                      </div>
+
+                      <div class="enemy-id">ID {{ i }}</div>
+
+                      <div class="">
+                        <img
+                          class="mx-auto enemy-img"
+                          :src="getEnemyArt(e.power)"
+                          alt="Enemy"
+                        />
+                        <img
+                          class="enemy-around-img"
+                          :src="getEnemyArtAround(e.trait)"
+                          alt="Enemy Around"
+                        />
+                      </div>
+
+                      <div class="encounter-power">{{ e.power }} Power</div>
+
+                      <div class="xp-gain">+{{ getPotentialXp(e) }} XP</div>
                     </div>
+
+                    <div class="victory-chance">
+                      {{ getWinChance(e.power, e.trait) }} Victory
+                    </div>
+                    <big-button
+                      style="margin: 0 auto"
+                      class="encounter-button btn-styled"
+                      :mainText="`FIGHT`"
+                      :disabled="
+                        (timeMinutes === 59 && timeSeconds >= 30) ||
+                        waitingResults ||
+                        !weaponHasDurability(selectedWeaponId) ||
+                        !charHasStamina()
+                      "
+                      @click="onClickEncounter(e), (showModalFight = true)"
+                    />
+                    <p v-if="isLoadingTargets">Loading...</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -197,17 +250,22 @@
 
 <script>
 // import Character from "../components/Character.vue";
-import BigButton from '../components/BigButton.vue';
-import WeaponGrid from '../components/smart/WeaponGrid.vue';
-import {getEnemyArtAround} from '../enemy-art-around';
-import { getEnemyArt } from '../enemy-art';
-import { CharacterPower, CharacterTrait, GetTotalMultiplierForTrait, WeaponElement } from '../interfaces';
+import BigButton from '../components/BigButton.vue'
+import WeaponGrid from '../components/smart/WeaponGrid.vue'
+import { getEnemyArtAround } from '../enemy-art-around'
+import { getEnemyArt } from '../enemy-art'
+import {
+  CharacterPower,
+  CharacterTrait,
+  GetTotalMultiplierForTrait,
+  WeaponElement,
+} from '../interfaces'
 // import Hint from '../components/Hint.vue';
-import CombatResults from '../components/CombatResults.vue';
-import { toBN, fromWeiEther } from '../utils/common';
-import WeaponIcon from '../components/WeaponIcon.vue';
-import { mapGetters, mapState, mapMutations, mapActions } from 'vuex';
-import CharacterBar from "../components/CharacterBar.vue";
+import CombatResults from '../components/CombatResults.vue'
+import { toBN, fromWeiEther } from '../utils/common'
+import WeaponIcon from '../components/WeaponIcon.vue'
+import { mapGetters, mapState, mapMutations, mapActions } from 'vuex'
+import CharacterBar from '../components/CharacterBar.vue'
 
 export default {
   data() {
@@ -223,46 +281,49 @@ export default {
       timeMinutes: null,
       fightXpGain: 16,
       selectedWeapon: null,
-      fightMultiplier: Number(localStorage.getItem("fightMultiplier")),
+      fightMultiplier: Number(localStorage.getItem('fightMultiplier')),
       staminaPerFight: 40,
-      soundFight: new Audio(require("../assets/sound/sound_fight.wav")),
-      soundWin: new Audio(require("../assets/sound/sound_win.wav")),
-      soundLose: new Audio(require("../assets/sound/sound_lose.wav")),
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      soundFight: new Audio(require('../assets/sound/sound_fight.wav')),
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      soundWin: new Audio(require('../assets/sound/sound_win.wav')),
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      soundLose: new Audio(require('../assets/sound/sound_lose.wav')),
       showModalFight: false,
       countTargetToFight: 0,
-    };
+    }
   },
 
   created() {
     this.intervalSeconds = setInterval(
       () => (this.timeSeconds = new Date().getSeconds()),
       5000
-    );
+    )
     this.intervalMinutes = setInterval(
       () => (this.timeMinutes = new Date().getMinutes()),
       20000
-    );
-    this.staminaPerFight = 40 * Number(localStorage.getItem("fightMultiplier"));
+    )
+    this.staminaPerFight = 40 * Number(localStorage.getItem('fightMultiplier'))
   },
 
   computed: {
-    ...mapState(["currentCharacterId"]),
+    ...mapState(['currentCharacterId']),
     ...mapGetters([
-      "getTargetsByCharacterIdAndWeaponId",
-      "ownCharacters",
-      "ownWeapons",
-      "currentCharacter",
-      "currentCharacterStamina",
-      "getWeaponDurability",
-      "fightGasOffset",
-      "fightBaseline",
+      'getTargetsByCharacterIdAndWeaponId',
+      'ownCharacters',
+      'ownWeapons',
+      'currentCharacter',
+      'currentCharacterStamina',
+      'getWeaponDurability',
+      'fightGasOffset',
+      'fightBaseline',
     ]),
 
     targets() {
       return this.getTargetsByCharacterIdAndWeaponId(
         this.currentCharacterId,
         this.selectedWeaponId
-      );
+      )
     },
 
     isLoadingTargets() {
@@ -270,15 +331,15 @@ export default {
         this.targets.length === 0 &&
         this.currentCharacterId &&
         this.selectedWeaponId
-      );
+      )
     },
 
     selections() {
-      return [this.currentCharacterId, this.selectedWeaponId];
+      return [this.currentCharacterId, this.selectedWeaponId]
     },
 
     updateResults() {
-      return [this.fightResults, this.error];
+      return [this.fightResults, this.error]
     },
   },
 
@@ -289,23 +350,23 @@ export default {
           .filter(Boolean)
           .find((weapon) => weapon.id === weaponId)
       ) {
-        this.selectedWeaponId = null;
+        this.selectedWeaponId = null
       }
-      await this.fetchTargets({ characterId, weaponId });
+      await this.fetchTargets({ characterId, weaponId })
     },
 
     async updateResults([fightResults, error]) {
-      this.resultsAvailable = fightResults !== null;
-      this.waitingResults = fightResults === null && error === null;
-      this.setIsInCombat(this.waitingResults);
+      this.resultsAvailable = fightResults !== null
+      this.waitingResults = fightResults === null && error === null
+      this.setIsInCombat(this.waitingResults)
       if (this.resultsAvailable && error === null) {
-        this.$bvModal.show("fightResultsModal");
+        this.$bvModal.show('fightResultsModal')
       }
-      if (localStorage.getItem("changeSound") === "true") {
+      if (localStorage.getItem('changeSound') === 'true') {
         if (fightResults[0] !== false) {
-          this.soundWin.play();
+          this.soundWin.play()
         } else {
-          this.soundLose.play();
+          this.soundLose.play()
         }
       }
       // if(this.fightResults[0] === true){
@@ -317,183 +378,187 @@ export default {
     },
   },
 
-
   methods: {
-    ...mapActions(["doEncounter", "getXPRewardsIfWin", "fetchTargets", "fetchFightRewardSkill", "fetchFightRewardXp"]),
-    ...mapMutations(["setIsInCombat"]),
+    ...mapActions([
+      'doEncounter',
+      'getXPRewardsIfWin',
+      'fetchTargets',
+      'fetchFightRewardSkill',
+      'fetchFightRewardXp',
+    ]),
+    ...mapMutations(['setIsInCombat']),
     getEnemyArt,
     getEnemyArtAround,
     weaponHasDurability(id) {
-      return this.getWeaponDurability(id) >= this.fightMultiplier * 3;
+      return this.getWeaponDurability(id) >= this.fightMultiplier * 3
     },
 
-    setCountTargetToFight(){
-      this.countTargetToFight = 0;
+    setCountTargetToFight() {
+      this.countTargetToFight = 0
     },
 
     pauseSound() {
-      this.soundWin.pause();
-      this.soundWin.currentTime = 0;
+      this.soundWin.pause()
+      this.soundWin.currentTime = 0
 
-      this.soundLose.pause();
-      this.soundLose.currentTime = 0;
+      this.soundLose.pause()
+      this.soundLose.currentTime = 0
     },
 
     charHasStamina() {
-      return this.currentCharacterStamina >= this.staminaPerFight;
+      return this.currentCharacterStamina >= this.staminaPerFight
     },
     getCharacterTrait(trait) {
-      return CharacterTrait[trait];
+      return CharacterTrait[trait]
     },
     getWinChance(enemyPower, enemyElement) {
-      const characterPower = CharacterPower(this.currentCharacter.level);
-      const playerElement = parseInt(this.currentCharacter.trait, 10);
+      const characterPower = CharacterPower(this.currentCharacter.level)
+      const playerElement = parseInt(this.currentCharacter.trait, 10)
       const selectedWeapon = this.ownWeapons
         .filter(Boolean)
-        .find((weapon) => weapon.id === this.selectedWeaponId);
-      this.selectedWeapon = selectedWeapon;
-      const weaponElement = parseInt(WeaponElement[selectedWeapon.element], 10);
+        .find((weapon) => weapon.id === this.selectedWeaponId)
+      this.selectedWeapon = selectedWeapon
+      const weaponElement = parseInt(WeaponElement[selectedWeapon.element], 10)
       const weaponMultiplier = GetTotalMultiplierForTrait(
         selectedWeapon,
         playerElement
-      );
+      )
       const totalPower =
-        characterPower * weaponMultiplier + selectedWeapon.bonusPower;
+        characterPower * weaponMultiplier + selectedWeapon.bonusPower
       const totalMultiplier =
         1 +
         0.075 * (weaponElement === playerElement ? 1 : 0) +
-        0.075 * this.getElementAdvantage(playerElement, enemyElement);
-      const playerMin = totalPower * totalMultiplier * 0.9;
-      const playerMax = totalPower * totalMultiplier * 1.1;
-      const playerRange = playerMax - playerMin;
-      const enemyMin = enemyPower * 0.9;
-      const enemyMax = enemyPower * 1.1;
-      const enemyRange = enemyMax - enemyMin;
-      let rollingTotal = 0;
+        0.075 * this.getElementAdvantage(playerElement, enemyElement)
+      const playerMin = totalPower * totalMultiplier * 0.9
+      const playerMax = totalPower * totalMultiplier * 1.1
+      const playerRange = playerMax - playerMin
+      const enemyMin = enemyPower * 0.9
+      const enemyMax = enemyPower * 1.1
+      const enemyRange = enemyMax - enemyMin
+      let rollingTotal = 0
       // shortcut: if it is impossible for one side to win, just say so
-      if (playerMin > enemyMax) return "Very Likely";
-      if (playerMax < enemyMin) return "Unlikely";
+      if (playerMin > enemyMax) return 'Very Likely'
+      if (playerMax < enemyMin) return 'Unlikely'
 
       // case 1: player power is higher than enemy power
       if (playerMin >= enemyMin) {
         // case 1: enemy roll is lower than player's minimum
-        rollingTotal = (playerMin - enemyMin) / enemyRange;
+        rollingTotal = (playerMin - enemyMin) / enemyRange
         // case 2: 1 is not true, and player roll is higher than enemy maximum
         rollingTotal +=
-          (1 - rollingTotal) * ((playerMax - enemyMax) / playerRange);
+          (1 - rollingTotal) * ((playerMax - enemyMax) / playerRange)
         // case 3: 1 and 2 are not true, both values are in the overlap range. Since values are basically continuous, we assume 50%
-        rollingTotal += (1 - rollingTotal) * 0.5;
+        rollingTotal += (1 - rollingTotal) * 0.5
       } // otherwise, enemy power is higher
       else {
         // case 1: player rolls below enemy minimum
-        rollingTotal = (enemyMin - playerMin) / playerRange;
+        rollingTotal = (enemyMin - playerMin) / playerRange
         // case 2: enemy rolls above player maximum
         rollingTotal +=
-          (1 - rollingTotal) * ((enemyMax - playerMax) / enemyRange);
+          (1 - rollingTotal) * ((enemyMax - playerMax) / enemyRange)
         // case 3: 1 and 2 are not true, both values are in the overlap range
-        rollingTotal += (1 - rollingTotal) * 0.5;
+        rollingTotal += (1 - rollingTotal) * 0.5
         //since this is chance the enemy wins, we negate it
-        rollingTotal = 1 - rollingTotal;
+        rollingTotal = 1 - rollingTotal
       }
-      if (rollingTotal <= 0.3) return "Unlikely";
-      if (rollingTotal <= 0.5) return "Possible";
-      if (rollingTotal <= 0.7) return "Likely";
-      return "Very Likely";
+      if (rollingTotal <= 0.3) return 'Unlikely'
+      if (rollingTotal <= 0.5) return 'Possible'
+      if (rollingTotal <= 0.7) return 'Likely'
+      return 'Very Likely'
     },
     getElementAdvantage(playerElement, enemyElement) {
-      if ((playerElement + 1) % 4 === enemyElement) return 1;
-      if ((enemyElement + 1) % 4 === playerElement) return -1;
-      return 0;
+      if ((playerElement + 1) % 4 === enemyElement) return 1
+      if ((enemyElement + 1) % 4 === playerElement) return -1
+      return 0
     },
     async onClickEncounter(targetToFight) {
       if (this.selectedWeaponId === null || this.currentCharacterId === null) {
-        return;
+        return
       }
 
-      this.waitingResults = true;
+      this.waitingResults = true
 
       // Force a quick refresh of targets
       await this.fetchTargets({
         characterId: this.currentCharacterId,
         weaponId: this.selectedWeaponId,
-      });
+      })
       // If the targets list no longer contains the chosen target, return so a new target can be chosen
       if (
         !this.targets.find(
           (target) => target.original === targetToFight.original
         )
       ) {
-        this.waitingResults = false;
-        return;
+        this.waitingResults = false
+        return
       }
 
-      this.fightResults = null;
-      this.error = null;
-      this.setIsInCombat(this.waitingResults);
+      this.fightResults = null
+      this.error = null
+      this.setIsInCombat(this.waitingResults)
       try {
-        if (localStorage.getItem("changeSound") === "true") {
-          this.soundFight.play();
+        if (localStorage.getItem('changeSound') === 'true') {
+          this.soundFight.play()
         }
         const results = await this.doEncounter({
           characterId: this.currentCharacterId,
           weaponId: this.selectedWeaponId,
           targetString: targetToFight.original,
           fightMultiplier: this.fightMultiplier,
-        });
-        this.showModalFight = false;
-        this.fightResults = results;
+        })
+        this.showModalFight = false
+        this.fightResults = results
 
-        this.soundFight.pause();
-        this.soundFight.currentTime = 0;
+        this.soundFight.pause()
+        this.soundFight.currentTime = 0
 
-        await this.fetchFightRewardSkill();
-        await this.fetchFightRewardXp();
+        await this.fetchFightRewardSkill()
+        await this.fetchFightRewardXp()
 
-        this.error = null;
-
+        this.error = null
       } catch (e) {
-        console.error(e);
-        this.error = e.message;
+        console.error(e)
+        this.error = e.message
 
-        this.soundFight.pause();
-        this.soundFight.currentTime = 0;
-        localStorage.setItem("reject", "false");
+        this.soundFight.pause()
+        this.soundFight.currentTime = 0
+        localStorage.setItem('reject', 'false')
 
-        this.showModalFight = false;
+        this.showModalFight = false
       }
     },
 
     formattedSkill(skill) {
-      const skillBalance = fromWeiEther(skill, "ether");
-      return `${toBN(skillBalance).toFixed(6)} xBlade`;
+      const skillBalance = fromWeiEther(skill, 'ether')
+      return `${toBN(skillBalance).toFixed(6)} xBlade`
     },
 
     getPotentialXp(targetToFight) {
-      const characterPower = CharacterPower(this.currentCharacter.level);
-      const playerElement = parseInt(this.currentCharacter.trait, 10);
+      const characterPower = CharacterPower(this.currentCharacter.level)
+      const playerElement = parseInt(this.currentCharacter.trait, 10)
       const selectedWeapon = this.ownWeapons
         .filter(Boolean)
-        .find((weapon) => weapon.id === this.selectedWeaponId);
+        .find((weapon) => weapon.id === this.selectedWeaponId)
       const weaponMultiplier = GetTotalMultiplierForTrait(
         selectedWeapon,
         playerElement
-      );
+      )
       const totalPower =
-        characterPower * weaponMultiplier + selectedWeapon.bonusPower;
+        characterPower * weaponMultiplier + selectedWeapon.bonusPower
 
       //Formula taken from getXpGainForFight funtion of CryptoWars.sol
-      if(targetToFight.power === null && this.countTargetToFight <= 3){
-        this.countTargetToFight++;
-        this.targets();
+      if (targetToFight.power === null && this.countTargetToFight <= 3) {
+        this.countTargetToFight++
+        this.targets()
       }
       return (
         Math.floor((targetToFight.power / totalPower) * this.fightXpGain) *
         this.fightMultiplier
-      );
+      )
     },
 
     setFightMultiplier() {
-      localStorage.setItem("fightMultiplier", this.fightMultiplier.toString());
+      localStorage.setItem('fightMultiplier', this.fightMultiplier.toString())
     },
 
     setStaminaSelectorValues() {
@@ -501,45 +566,45 @@ export default {
         return [
           {
             value: this.fightMultiplier,
-            text: "You need more stamina to fight!",
+            text: 'You need more stamina to fight!',
             disabled: true,
           },
-        ];
+        ]
       }
 
       const choices = [
         {
           value: null,
-          text: "Please select Stamina Cost per Fight",
+          text: 'Please select Stamina Cost per Fight',
           disabled: true,
         },
-      ];
+      ]
 
-      const addChoices = [];
+      const addChoices = []
 
       if (this.currentCharacterStamina >= 200) {
-        addChoices.push({ value: 5, text: 200 });
+        addChoices.push({ value: 5, text: 200 })
       }
 
       if (this.currentCharacterStamina >= 160) {
-        addChoices.push({ value: 4, text: 160 });
+        addChoices.push({ value: 4, text: 160 })
       }
 
       if (this.currentCharacterStamina >= 120) {
-        addChoices.push({ value: 3, text: 120 });
+        addChoices.push({ value: 3, text: 120 })
       }
 
       if (this.currentCharacterStamina >= 80) {
-        addChoices.push({ value: 2, text: 80 });
+        addChoices.push({ value: 2, text: 80 })
       }
 
       if (this.currentCharacterStamina >= 40) {
-        addChoices.push({ value: 1, text: 40 });
+        addChoices.push({ value: 1, text: 40 })
       }
 
-      choices.push(...addChoices.reverse());
+      choices.push(...addChoices.reverse())
 
-      return choices;
+      return choices
     },
   },
 
@@ -551,11 +616,10 @@ export default {
     WeaponIcon,
     CharacterBar,
   },
-};
+}
 </script>
 
 <style scoped>
-
 #fight-overlay {
   position: fixed;
   z-index: 2;
@@ -568,7 +632,7 @@ export default {
   transition: opacity 0.3s ease;
 }
 
-.background-win{
+.background-win {
   background-size: 100%;
   background-repeat: no-repeat;
   width: 473px;
@@ -576,7 +640,7 @@ export default {
   position: fixed;
 }
 
-.title-results{
+.title-results {
   font-size: 1.3em;
   color: #fff;
   margin-left: 5px;
@@ -585,7 +649,7 @@ export default {
   text-align: center;
 }
 
-.btn-close-fight-results{
+.btn-close-fight-results {
   border-radius: 0;
   border: none;
   background-image: url(../assets/v2/btn-fight.png);
@@ -615,7 +679,7 @@ export default {
   align-items: center;
 }
 
-.enemy-around{
+.enemy-around {
   background-repeat: no-repeat;
   background-size: contain;
   background-image: url('../assets/images/bg-item-top.png');
@@ -651,7 +715,7 @@ export default {
   align-items: center;
 }
 
-.combat-hints .property-icon{
+.combat-hints .property-icon {
   background-repeat: no-repeat;
   background-size: contain;
   background-image: url(../assets/v2/Property-system.svg);
@@ -675,7 +739,7 @@ export default {
   z-index: 3;
 }
 
-.animation{
+.animation {
   top: 0;
   left: 0;
   right: 0;
@@ -710,7 +774,7 @@ export default {
   font-size: 2em;
 }
 
-.info-weapon > div > div{
+.info-weapon > div > div {
   display: flex;
   flex-direction: column;
   /* justify-content: center; */
@@ -719,7 +783,7 @@ export default {
   text-align: end;
 }
 
-.info-weapon > div > div > .dropdown-icon{
+.info-weapon > div > div > .dropdown-icon {
   background-repeat: no-repeat;
   background-size: contain;
   background-image: url('../assets/v2/dropdown-icon.svg');
@@ -741,12 +805,12 @@ export default {
 }
 
 .combat-enemy-container h4[data-v-067077ae] {
-    font-size: 1.2rem;
-    font-weight: 300;
-    margin: 20px 0;
+  font-size: 1.2rem;
+  font-weight: 300;
+  margin: 20px 0;
 }
 
-.custom-select{
+.custom-select {
   cursor: pointer;
   background-color: #000;
   border: 1px solid #5bc7f5;
@@ -757,8 +821,8 @@ export default {
   color: #fff;
 }
 
-.custom-select::before{
-  content: "";
+.custom-select::before {
+  content: '';
   background-image: url('../assets/v2/dropdown-icon.svg');
   background-repeat: no-repeat;
   background-size: contain;
@@ -785,7 +849,7 @@ div.encounter.text-center {
   box-shadow: none!important;
 } */
 
-.list-enemy{
+.list-enemy {
   display: flex;
   justify-content: center;
   width: 100%;
@@ -860,7 +924,7 @@ div.encounter.text-center {
   margin-top: 50px;
 }
 
-.combat-enemy-container .weapon-icon-wrapper{
+.combat-enemy-container .weapon-icon-wrapper {
   height: 24rem;
   width: 16.5rem;
 }
@@ -873,7 +937,7 @@ div.encounter.text-center {
   font-size: 1.3rem;
 }
 
-.nav-line.boder{
+.nav-line.boder {
   width: 2px;
   height: 668px;
   /* position: relative;
@@ -915,7 +979,7 @@ div.encounter.text-center {
   position: relative;
 }
 
-.enemy-id{
+.enemy-id {
   position: absolute;
   top: 22px;
   right: 38px;
@@ -950,7 +1014,7 @@ button.encounter-button {
   border-radius: 0;
 }
 
-button.encounter-button:hover{
+button.encounter-button:hover {
   background-image: url(../assets/v2/Btn-fight-opcity.png);
   transition: 0.9s;
   background-color: transparent;
@@ -970,12 +1034,12 @@ button.btn.button.main-font.dark-bg-text.encounter-button.btn-styled.encounter-b
   z-index: 1;
 }
 
-.enemy-around-img{
+.enemy-around-img {
   position: relative;
   top: -129px;
 }
 
-.choose_weapon{
+.choose_weapon {
   width: 15rem;
   height: 46px;
   background-color: transparent !important;
@@ -991,31 +1055,37 @@ button.btn.button.main-font.dark-bg-text.encounter-button.btn-styled.encounter-b
   margin-top: 20px;
 }
 
-.out-stamina{
+.out-stamina {
   margin: 0 auto !important;
 }
 
-.out-stamina .message-box.flex-column{
+.out-stamina .message-box.flex-column {
   align-items: center;
   min-height: 70vh;
 }
 
-.weapon-icon-wrapper.combat{
+.weapon-icon-wrapper.combat {
   height: 370px;
   background-repeat: no-repeat;
   margin-top: 50px;
   background-size: 100% 100%;
   position: relative;
-  border: 1px solid #F2BE3E;
+  border: 1px solid #f2be3e;
   border-radius: 15px 40px 15px 15px;
   /* background: #0D2F9Cbb; */
-  background-image: linear-gradient(to bottom, #F56F56, #8e5662, #281c44, #050320);
+  background-image: linear-gradient(
+    to bottom,
+    #f56f56,
+    #8e5662,
+    #281c44,
+    #050320
+  );
   will-change: border-color;
   transition: all 0.3s;
   padding: 10px 20px 20px 20px;
 }
 
-.weapon-icon-wrapper.combat::after{
+.weapon-icon-wrapper.combat::after {
   content: '';
   position: absolute;
   /* z-index: -1; */
@@ -1032,7 +1102,7 @@ button.btn.button.main-font.dark-bg-text.encounter-button.btn-styled.encounter-b
   border-bottom-right-radius: 50%;
 }
 
-.weapon-icon-wrapper.combat::before{
+.weapon-icon-wrapper.combat::before {
   content: ' ';
   width: 76px;
   height: 72px;
@@ -1043,10 +1113,9 @@ button.btn.button.main-font.dark-bg-text.encounter-button.btn-styled.encounter-b
   top: -8px;
   will-change: background;
   transition: all 0.3s;
-
 }
 
-.nav-bottom-line{
+.nav-bottom-line {
   width: 102%;
   position: relative;
   left: -16px;
@@ -1055,15 +1124,14 @@ button.btn.button.main-font.dark-bg-text.encounter-button.btn-styled.encounter-b
   border-top: 3px solid;
   border-image-slice: 1;
   border-top-width: 3px;
-  border-image-source: linear-gradient(to left, #3ADD9A, #121154, #A54476);
-  /* background-image: radial-gradient(ellipse at top, #CBA938 -10%, transparent 35%), radial-gradient(ellipse at bottom, transparent, transparent); */
+  border-image-source: linear-gradient(to left, #3add9a, #121154, #a54476);
 }
 
-#fightResultsModal .results-panel{
+#fightResultsModal .results-panel {
   width: 26em;
 }
 
-.text-center{
+.text-center {
   padding: 0;
 }
 
@@ -1078,10 +1146,10 @@ button.btn.button.main-font.dark-bg-text.encounter-button.btn-styled.encounter-b
   .encounter-button {
     margin-top: 1.35em;
   }
-  .nav-line.boder{
+  .nav-line.boder {
     height: 0;
   }
-  .nav-bottom-line{
+  .nav-bottom-line {
     width: 115.5%;
   }
 }
@@ -1091,9 +1159,9 @@ button.btn.button.main-font.dark-bg-text.encounter-button.btn-styled.encounter-b
   /* .encounter img {
     width: calc(100% - 60px);
   } */
-  .enemy-list{
-    flex-direction:column;
-    align-items:center;
+  .enemy-list {
+    flex-direction: column;
+    align-items: center;
   }
   .combat-enemy-container {
     flex-direction: column;
@@ -1105,7 +1173,7 @@ button.btn.button.main-font.dark-bg-text.encounter-button.btn-styled.encounter-b
   .results-panel {
     width: 100%;
   }
-  .nav-line.boder{
+  .nav-line.boder {
     height: 0;
   }
   /* .nav-bottom-line{
@@ -1146,71 +1214,71 @@ button.btn.button.main-font.dark-bg-text.encounter-button.btn-styled.encounter-b
   width: 500px;
 }
 
-@media (max-width: 767.98px){
-  .button.encounter-button{
+@media (max-width: 767.98px) {
+  .button.encounter-button {
     top: 10vw;
   }
   .small-durability-bar {
     top: 35px;
   }
-  .waiting.animation .fighting-img{
+  .waiting.animation .fighting-img {
     width: 32em;
     height: 16em;
   }
-  .nav-line.boder{
+  .nav-line.boder {
     height: 0;
   }
-  .content{
+  .content {
     padding: 0;
   }
-  .out-stamina .message-box.flex-column{
-  font-size: 1.3em;
-}
-  .out-stamina .message-box.flex-column h4{
-  font-size: 1em;
-}
-  .nav-bottom-line{
+  .out-stamina .message-box.flex-column {
+    font-size: 1.3em;
+  }
+  .out-stamina .message-box.flex-column h4 {
+    font-size: 1em;
+  }
+  .nav-bottom-line {
     width: 102.3%;
   }
 }
 
 @media (max-width: 575.98px) {
-  .info-weapon > div > div > .dropdown-icon{
+  .info-weapon > div > div > .dropdown-icon {
     width: 16px;
     height: 16px;
     margin-left: 196px;
     margin-top: -28px;
   }
-  .custom-select{
+  .custom-select {
     width: 230px;
     height: 45px;
   }
-  .combat-enemy-container h4{
+  .combat-enemy-container h4 {
     margin: 0 !important;
   }
-  .choose_weapon{
+  .choose_weapon {
     width: 13rem;
     height: 38px;
     font-size: 1em;
   }
-  .enemy-id{
+  .enemy-id {
     top: 14px;
     right: 20px;
     font-size: 1em;
   }
-  .encounter img{
+  .encounter img {
     width: 120px;
   }
-  .enemy-img{
+  .enemy-img {
     top: 70px;
   }
-  .enemy-around-img{
+  .enemy-around-img {
     top: -110px;
   }
-  .weapon-icon-wrapper.combat{
+  .weapon-icon-wrapper.combat {
     height: 270px;
   }
-  .combat-enemy-container .weapon-icon-wrapper{
+  .combat-enemy-container .weapon-icon-wrapper {
     width: 13rem;
   }
   .show-reforged {
@@ -1218,36 +1286,36 @@ button.btn.button.main-font.dark-bg-text.encounter-button.btn-styled.encounter-b
     justify-content: center;
     display: block;
   }
-  .encounter-power{
+  .encounter-power {
     bottom: 35px;
     font-size: 1em;
   }
-  .enemy-character{
+  .enemy-character {
     width: 11.5em;
     height: 16em;
   }
-  .xp-gain{
+  .xp-gain {
     bottom: 20px;
-    font-size: .8em;
+    font-size: 0.8em;
   }
-  .victory-chance{
+  .victory-chance {
     font-size: 1em;
   }
-  .circle-element{
+  .circle-element {
     width: 2.8rem !important;
     height: 2.8rem !important;
   }
-  .button.encounter-button{
+  .button.encounter-button {
     width: 120px !important;
     height: 46px;
   }
-  .combat-hints .property-icon{
+  .combat-hints .property-icon {
     width: 260px;
   }
-  .row{
+  .row {
     margin: 0;
   }
-  .nav-line.boder{
+  .nav-line.boder {
     height: 0;
   }
 
@@ -1256,28 +1324,28 @@ button.btn.button.main-font.dark-bg-text.encounter-button.btn-styled.encounter-b
     width: 100%;
   }
 
-  .nav-bottom-line{
+  .nav-bottom-line {
     width: 103.5%;
   }
 
-  .btn-close-fight-results{
+  .btn-close-fight-results {
     display: none;
     width: 110px;
     height: 37px;
   }
 
-  #fightResultsModal .results-panel{
+  #fightResultsModal .results-panel {
     margin-bottom: 40px;
     width: 21em;
   }
 
-  .btn-close-fight-results{
+  .btn-close-fight-results {
     margin: 0 auto !important;
     margin-top: 10px !important;
     margin-bottom: 20px !important;
   }
 
-  .title-results{
+  .title-results {
     /* display: none; */
     top: 2px;
   }
@@ -1286,7 +1354,7 @@ button.btn.button.main-font.dark-bg-text.encounter-button.btn-styled.encounter-b
   width: 3em;
   height: 3em;
 }
-@media (min-width: 768px){
+@media (min-width: 768px) {
   .offset-md-3 {
     margin: 0;
   }
@@ -1308,7 +1376,7 @@ button.btn.button.main-font.dark-bg-text.encounter-button.btn-styled.encounter-b
     width: 103.9%;
   } */
 
-  .nav-bottom-line{
+  .nav-bottom-line {
     width: 103.8%;
   }
 }
@@ -1318,7 +1386,7 @@ button.btn.button.main-font.dark-bg-text.encounter-button.btn-styled.encounter-b
     width: 100%;
   }
 
-  .nav-bottom-line{
+  .nav-bottom-line {
     width: 104.2%;
   }
 }

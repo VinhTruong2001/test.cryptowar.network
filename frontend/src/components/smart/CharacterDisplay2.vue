@@ -58,7 +58,11 @@
       </div> -->
     </transition>
 
-    <div class="character-full-list" :class="[getIsCharacterViewExpanded? '': 'hidden']" v-if="!isMobile()">
+    <div
+      class="character-full-list"
+      :class="[getIsCharacterViewExpanded ? '' : 'hidden']"
+      v-if="!isMobile()"
+    >
       <ul
         class="character-list"
         v-bind:class="[
@@ -75,16 +79,14 @@
           :key="c.id"
           @click="!getIsInCombat && setCurrentCharacter(c.id) && alert(c.id)"
         >
-          <div class="element-icon"><span
-                :class="
-                  traits[c.trait].toLowerCase() +
-                  '-icon trait-icon'
-                "
-              ></span>
+          <div class="element-icon">
+            <span
+              :class="traits[c.trait].toLowerCase() + '-icon trait-icon'"
+            ></span>
           </div>
           <div>
             <div class="name-list">
-            {{ getCleanCharacterName(c.id) }} Lv.{{ c.level + 1 }}
+              {{ getCleanCharacterName(c.id) }} Lv.{{ c.level + 1 }}
             </div>
             <div
               class="small-stamina-char"
@@ -92,7 +94,10 @@
                 (getCharacterStamina(c.id) / maxStamina) * 100
               }%;`"
               v-tooltip.bottom="
-                toolTipHtml(timeUntilCharacterHasMaxStamina(c.id), getSecondPerStamina(c.id))
+                toolTipHtml(
+                  timeUntilCharacterHasMaxStamina(c.id),
+                  getSecondPerStamina(c.id)
+                )
               "
             >
               <div class="stamina-text">
@@ -128,16 +133,16 @@
 </template>
 
 <script lang="ts">
-import { mapGetters, mapState, mapMutations } from "vuex";
-import { getCharacterArt } from "../../character-arts-placeholder";
-import SmallBar from "../SmallBar.vue";
+import { mapGetters, mapState, mapMutations } from 'vuex'
+import { getCharacterArt } from '../../character-arts-placeholder'
+import SmallBar from '../SmallBar.vue'
 // import CharacterArt from "../CharacterArt.vue";
-import { CharacterPower, CharacterTrait } from "../../interfaces";
-import { RequiredXp } from "../../interfaces";
+import { CharacterPower, CharacterTrait } from '../../interfaces'
+import { RequiredXp } from '../../interfaces'
 // import Hint from "../Hint.vue";
-import Vue from "vue";
-import { toBN, fromWeiEther } from "../../utils/common";
-import { getCleanName } from "../../rename-censor";
+import Vue from 'vue'
+import { toBN, fromWeiEther } from '../../utils/common'
+import { getCleanName } from '../../rename-censor'
 
 export default Vue.extend({
   components: {
@@ -147,30 +152,35 @@ export default Vue.extend({
   },
 
   computed: {
-    ...mapState(["maxStamina", "currentCharacterId", "ownedCharacterIds", "secondsPerStamina"]),
+    ...mapState([
+      'maxStamina',
+      'currentCharacterId',
+      'ownedCharacterIds',
+      'secondsPerStamina',
+    ]),
     ...mapGetters([
-      "currentCharacter",
-      "currentCharacterStamina",
-      "getCharacterName",
-      "getCharacterStamina",
-      "charactersWithIds",
-      "ownCharacters",
-      "timeUntilCharacterHasMaxStamina",
-      "getSecondPerStamina",
-      "getIsInCombat",
-      "getIsCharacterViewExpanded",
-      "fightGasOffset",
-      "fightBaseline",
-      "minutesPerStamina"
+      'currentCharacter',
+      'currentCharacterStamina',
+      'getCharacterName',
+      'getCharacterStamina',
+      'charactersWithIds',
+      'ownCharacters',
+      'timeUntilCharacterHasMaxStamina',
+      'getSecondPerStamina',
+      'getIsInCombat',
+      'getIsCharacterViewExpanded',
+      'fightGasOffset',
+      'fightBaseline',
+      'minutesPerStamina',
     ]),
 
     isLoadingCharacter(): boolean {
-      return !this.currentCharacter;
+      return !this.currentCharacter
     },
 
     filteredCharactersForList(): any {
-      const items: any = this.ownCharacters;
-      return items;
+      const items: any = this.ownCharacters
+      return items
     },
   },
 
@@ -178,38 +188,38 @@ export default Vue.extend({
     return {
       traits: CharacterTrait,
       isPlaza: false,
-      staminaTimer: 0
-    };
+      staminaTimer: 0,
+    }
   },
   methods: {
-    ...mapMutations(["setCurrentCharacter"]),
+    ...mapMutations(['setCurrentCharacter']),
     getCharacterArt,
     CharacterPower,
     RequiredXp,
 
     setListClassForSelChar(id: string, currentCharId: string): any {
       if (id === currentCharId) {
-        return "character-highlight";
-      } else return "character";
+        return 'character-highlight'
+      } else return 'character'
     },
 
     toolTipHtml(time: string, minutesPerStamina: string): string {
       return (
         `Regenerates 1 point every ${minutesPerStamina} minutes, stamina bar will be full at: ` +
         time
-      );
+      )
     },
 
     formattedSkill(skill: number): number {
-      const skillBalance = fromWeiEther(skill.toString());
-      return toBN(skillBalance).toNumber();
+      const skillBalance = fromWeiEther(skill.toString())
+      return toBN(skillBalance).toNumber()
     },
 
     getCleanCharacterName(id: string): string {
-      return getCleanName(this.getCharacterName(id));
+      return getCleanName(this.getCharacterName(id))
     },
   },
-});
+})
 </script>
 
 <style scoped>
@@ -218,7 +228,7 @@ export default Vue.extend({
   width: 100%;
 }
 
-.chara-head-close{
+.chara-head-close {
   max-height: 0px;
   /* overflow: hidden; */
 }
@@ -258,7 +268,7 @@ ul.character-list {
 }
 
 li.character {
-  background: #F58B5B;
+  background: #f58b5b;
   padding: 0.5rem 0.5rem 0.5rem;
   margin: 5px;
   vertical-align: middle;
@@ -270,7 +280,7 @@ li.character {
   /* border: 2px solid #5D5A62; */
 }
 
-li.character .element-icon{
+li.character .element-icon {
   width: 50px;
   height: 45px;
 }
@@ -289,11 +299,10 @@ li.character-highlight {
   align-items: center;
 }
 
-li.character-highlight .element-icon{
+li.character-highlight .element-icon {
   width: 50px;
   height: 45px;
 }
-
 
 .name-list {
   margin: auto;
@@ -329,7 +338,6 @@ li.character-highlight .element-icon{
   margin: 0 auto;
 }
 
-
 .centered-list {
   justify-content: center;
 }
@@ -339,7 +347,7 @@ li.character-highlight .element-icon{
   list-style: none;
   transition: flex 0.3s ease;
 }
-.move-center{
+.move-center {
   padding-top: 0;
 }
 .character-list {
@@ -403,11 +411,7 @@ li.character-highlight .element-icon{
   height: 18px;
   margin-top: 5px;
   border-radius: 4px;
-  background: linear-gradient(
-    to right,
-    #FBE033 var(--staminaReady),
-    #fff 0
-  );
+  background: linear-gradient(to right, #fbe033 var(--staminaReady), #fff 0);
   border-radius: 10px;
   /* background: linear-gradient(
     to right,

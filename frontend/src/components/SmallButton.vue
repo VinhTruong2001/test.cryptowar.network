@@ -1,5 +1,9 @@
 <template>
-  <button :disabled="disabled" class="button main-font dark-bg-text" @click="$emit('click')">
+  <button
+    :disabled="disabled"
+    class="button main-font dark-bg-text"
+    @click="$emit('click')"
+  >
     {{ text }}
   </button>
 </template>
@@ -7,7 +11,7 @@
 <script lang="ts">
 export default {
   props: ['text', 'disabled'],
-};
+}
 </script>
 
 <style>
@@ -28,5 +32,4 @@ export default {
 .button:disabled {
   opacity: 0.4 !important;
 }
-
 </style>

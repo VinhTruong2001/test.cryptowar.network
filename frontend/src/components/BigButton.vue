@@ -12,8 +12,8 @@
 
 <script lang="ts">
 export default {
-  props: ["mainText", "subText", "disabled"],
-};
+  props: ['mainText', 'subText', 'disabled'],
+}
 </script>
 
 <style>
@@ -95,7 +95,7 @@ h2 {
   }
 }
 @media (max-width: 575.98px) {
-  .button.encounter-button h1{
+  .button.encounter-button h1 {
     font-size: 1em;
   }
 }

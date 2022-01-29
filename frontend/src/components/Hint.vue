@@ -9,10 +9,10 @@ export default {
   props: ['text'],
   computed: {
     tooltipHtml() {
-      return this.text;
-    }
+      return this.text
+    },
   },
-};
+}
 </script>
 
 <style>

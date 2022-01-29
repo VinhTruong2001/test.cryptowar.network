@@ -1,15 +1,12 @@
 <template>
   <div class="row">
     <div
-      class="filters market-active pl-2 col-12 "
+      class="filters market-active pl-2 col-12"
       :class="isBlacksmith ? 'filters-blacksmith col-xl-4' : 'col-xl-3'"
       @change="saveFilters()"
       v-if="showFilters"
     >
-      <div
-        class="search-wrap"
-        @click="setFilterOnMobileState(true)"
-      >
+      <div class="search-wrap" @click="setFilterOnMobileState(true)">
         <input
           class="form-control search"
           type="search"
@@ -25,10 +22,13 @@
             class="star-item"
             v-for="star in 5"
             v-bind:key="star"
-            @click="starFilter = star.toString() === starFilter ? '' : star.toString(); saveFilters()"
+            @click="
+              starFilter = star.toString() === starFilter ? '' : star.toString()
+              saveFilters()
+            "
             :class="star.toString() === starFilter && 'selected'"
           >
-              <span>{{ star }}</span>
+            <span>{{ star }}</span>
           </li>
         </ul>
       </div>
@@ -40,13 +40,14 @@
             class="element-item"
             v-for="element in ['Earth', 'Fire', 'Lightning', 'Water']"
             v-bind:key="element"
-            @click="elementFilter = (element === elementFilter ? '' : element); saveFilters()"
+            @click="
+              elementFilter = element === elementFilter ? '' : element
+              saveFilters()
+            "
             :class="element === elementFilter && 'selected'"
           >
-              <span
-                :class="element.toLowerCase() + '-icon'"
-              ></span>
-              <span class="element-text">{{ element }}</span>
+            <span :class="element.toLowerCase() + '-icon'"></span>
+            <span class="element-text">{{ element }}</span>
           </li>
         </ul>
       </div>
@@ -54,17 +55,31 @@
       <template v-if="isMarket">
         <div>
           <strong>MIN PRICE</strong>
-          <input class="form-control" type="number" v-model.trim="minPriceFilter" :min="0" placeholder="Min" />
+          <input
+            class="form-control"
+            type="number"
+            v-model.trim="minPriceFilter"
+            :min="0"
+            placeholder="Min"
+          />
         </div>
         <div>
           <strong>MAX PRICE</strong>
-          <input class="form-control" type="number" v-model.trim="maxPriceFilter" :min="0" placeholder="Max" />
+          <input
+            class="form-control"
+            type="number"
+            v-model.trim="maxPriceFilter"
+            :min="0"
+            placeholder="Max"
+          />
         </div>
 
         <div>
           <strong>SORT</strong>
-          <select class="form-control" v-model="priceSort" >
-            <option v-for="x in sorts" :value="x.dir" :key="x.dir">{{ x.name || 'Any' }}</option>
+          <select class="form-control" v-model="priceSort">
+            <option v-for="x in sorts" :value="x.dir" :key="x.dir">
+              {{ x.name || 'Any' }}
+            </option>
           </select>
         </div>
       </template>
@@ -81,12 +96,16 @@
       </div>
     </div>
 
-    <div class="col-12 col-xl-9 no-data" v-if="isPage && weaponIds.length === 0">
+    <div
+      class="col-12 col-xl-9 no-data"
+      v-if="isPage && weaponIds.length === 0"
+    >
       <div>No results found</div>
     </div>
 
     <ul
-      class="weapon-grid row" :class="showFilters && 'col-12 col-xl-9'"
+      class="weapon-grid row"
+      :class="showFilters && 'col-12 col-xl-9'"
       v-if="!isBlacksmith && !isBurnWeapon"
     >
       <li
@@ -96,23 +115,41 @@
       >
         <div
           class="character-item-wrap"
-          @click="(!checkForDurability || getWeaponDurability(weapon.id) > 0) && onWeaponClick(weapon.id)"
+          @click="
+            ;(!checkForDurability || getWeaponDurability(weapon.id) > 0) &&
+              onWeaponClick(weapon.id)
+          "
           @contextmenu="canFavorite && toggleFavorite($event, weapon.id)"
         >
           <div
             class="character-item weapon"
-            :class="[{ selected: highlight !== null && weapon.id === highlight },isSell?'weapon-market':'']"
+            :class="[
+              { selected: highlight !== null && weapon.id === highlight },
+              isSell ? 'weapon-market' : '',
+            ]"
           >
             <div class="weapon-icon-wrapper">
-              <weapon-icon class="weapon-icon" :weapon="weapon" :favorite="isFavorite(weapon.id)" :isSell="isSell" :sellClick="sellClick"/>
+              <weapon-icon
+                class="weapon-icon"
+                :weapon="weapon"
+                :favorite="isFavorite(weapon.id)"
+                :isSell="isSell"
+                :sellClick="sellClick"
+              />
             </div>
-            <div class="above-wrapper" v-if="$slots.above || $scopedSlots.above">
+            <div
+              class="above-wrapper"
+              v-if="$slots.above || $scopedSlots.above"
+            >
               <slot name="above" :weapon="weapon"></slot>
             </div>
             <slot name="sold" :weapon="weapon"></slot>
           </div>
           <div v-if="isBtnSell" class="weapon-bt-box">
-            <b-button @click="showListingSetupModal(true)" class="weapon-bt-box">
+            <b-button
+              @click="showListingSetupModal(true)"
+              class="weapon-bt-box"
+            >
               CHANGE PRICE
             </b-button>
           </div>
@@ -130,21 +167,34 @@
         class="col-6 col-lg-6 d-flex justify-content-center"
         v-for="(weapon, index) in nonIgnoredWeapons"
         :key="index"
-        @click="(!checkForDurability || getWeaponDurability(weapon.id) > 0) && onWeaponClick(weapon.id)"
+        @click="
+          ;(!checkForDurability || getWeaponDurability(weapon.id) > 0) &&
+            onWeaponClick(weapon.id)
+        "
         @contextmenu="canFavorite && toggleFavorite($event, weapon.id)"
       >
         <div
           class="character-item weapon no-corner"
-          :class="[{ selected: highlight !== null && weapon.id === highlight },isSell?'weapon-market':'']"
+          :class="[
+            { selected: highlight !== null && weapon.id === highlight },
+            isSell ? 'weapon-market' : '',
+          ]"
         >
           <div class="weapon-icon-wrapper">
-            <weapon-icon class="weapon-icon" :weapon="weapon" :favorite="isFavorite(weapon.id)" :isSell="isSell" :sellClick="sellClick" :isBlacksmith="true"/>
+            <weapon-icon
+              class="weapon-icon"
+              :weapon="weapon"
+              :favorite="isFavorite(weapon.id)"
+              :isSell="isSell"
+              :sellClick="sellClick"
+              :isBlacksmith="true"
+            />
           </div>
           <div class="above-wrapper" v-if="$slots.above || $scopedSlots.above">
             <slot name="above" :weapon="weapon"></slot>
           </div>
           <slot name="sold" :weapon="weapon"></slot>
-          </div>
+        </div>
       </li>
     </ul>
 
@@ -153,7 +203,7 @@
       v-if="isBlacksmith && !isBurnWeapon"
     >
       <div class="weapon-list col-xl-12">
-        <h2>Weapon list ({{nonIgnoredWeapons.length}})</h2>
+        <h2>Weapon list ({{ nonIgnoredWeapons.length }})</h2>
         <div
           class="weapon-pagination-btn weapon-pagination-prev disabled"
           @click="prevWeaponList"
@@ -163,22 +213,40 @@
             class="col-6 col-2xl-4 d-flex justify-content-center"
             v-for="(weapon, index) in nonIgnoredWeapons"
             :key="index"
-            @click="(!checkForDurability || getWeaponDurability(weapon.id) > 0) && onWeaponClick(weapon.id)"
+            @click="
+              ;(!checkForDurability || getWeaponDurability(weapon.id) > 0) &&
+                onWeaponClick(weapon.id)
+            "
             @contextmenu="canFavorite && toggleFavorite($event, weapon.id)"
           >
             <div
               class="character-item weapon"
-              :class="[{ selected: highlight !== null && weapon.id === highlight },isSell?'weapon-market':'',isBlacksmith?'no-corner':'']"
-              v-if="index > weaponPaginationPrev && index < weaponPaginationNext"
+              :class="[
+                { selected: highlight !== null && weapon.id === highlight },
+                isSell ? 'weapon-market' : '',
+                isBlacksmith ? 'no-corner' : '',
+              ]"
+              v-if="
+                index > weaponPaginationPrev && index < weaponPaginationNext
+              "
             >
               <div class="weapon-icon-wrapper">
-                <weapon-icon class="weapon-icon" :weapon="weapon" :favorite="isFavorite(weapon.id)" :isSell="isSell" :sellClick="sellClick" :isBlacksmith="isBlacksmith"/>
+                <weapon-icon
+                  class="weapon-icon"
+                  :weapon="weapon"
+                  :favorite="isFavorite(weapon.id)"
+                  :isSell="isSell"
+                  :sellClick="sellClick"
+                  :isBlacksmith="isBlacksmith"
+                />
               </div>
-              <div class="above-wrapper" v-if="$slots.above || $scopedSlots.above">
+              <div
+                class="above-wrapper"
+                v-if="$slots.above || $scopedSlots.above"
+              >
                 <slot name="above" :weapon="weapon"></slot>
               </div>
               <slot name="sold" :weapon="weapon"></slot>
-
             </div>
           </li>
         </ul>
@@ -191,52 +259,55 @@
 
       <div class="dust-wrap col-xl-12">
         <h2>Dust list</h2>
-        <dust-balance-display class="dust-list-wrap" :isBlacksmith="isBlacksmith"/>
+        <dust-balance-display
+          class="dust-list-wrap"
+          :isBlacksmith="isBlacksmith"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import Events from '../../events';
-import { Accessors, PropType } from 'vue/types/options';
-import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
-import { IState, IWeapon } from '../../interfaces';
-import WeaponIcon from '../WeaponIcon.vue';
-import DustBalanceDisplay from '../smart/DustBalanceDisplay.vue';
+import Vue from 'vue'
+import Events from '../../events'
+import { Accessors, PropType } from 'vue/types/options'
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
+import { IState, IWeapon } from '../../interfaces'
+import WeaponIcon from '../WeaponIcon.vue'
+import DustBalanceDisplay from '../smart/DustBalanceDisplay.vue'
 // import { mapCacheActions } from 'vuex-cache';
 
-type StoreMappedState = Pick<IState, 'ownedWeaponIds'>;
+type StoreMappedState = Pick<IState, 'ownedWeaponIds'>
 
 interface StoreMappedGetters {
-  weaponsWithIds(weaponIds: (string | number)[]): IWeapon[];
+  weaponsWithIds(weaponIds: (string | number)[]): IWeapon[]
 }
 
 interface StoreMappedActions {
-  fetchWeapons(weaponIds: string[]): Promise<void>;
+  fetchWeapons(weaponIds: string[]): Promise<void>
 }
 
 interface Data {
-  searchValue: string;
-  starFilter: string;
-  elementFilter: string;
-  minPriceFilter: string;
-  maxPriceFilter: string;
-  favorites: Record<number, boolean>;
-  priceSort: string;
-  showReforgedWeapons: boolean;
-  showFavoriteWeapons: boolean;
-  weaponPaginationPrev: number;
-  weaponPaginationNext: number;
-  numberWeaponsShow: number;
+  searchValue: string
+  starFilter: string
+  elementFilter: string
+  minPriceFilter: string
+  maxPriceFilter: string
+  favorites: Record<number, boolean>
+  priceSort: string
+  showReforgedWeapons: boolean
+  showFavoriteWeapons: boolean
+  weaponPaginationPrev: number
+  weaponPaginationNext: number
+  numberWeaponsShow: number
 }
 
 const sorts = [
   { name: 'Any', dir: '' },
   { name: 'Price: Low -> High', dir: 1 },
   { name: 'Price: High -> Low', dir: -1 },
-];
+]
 
 export default Vue.extend({
   model: {
@@ -249,8 +320,8 @@ export default Vue.extend({
       // without us specifying a "type" property;
       // Vue's "type" property is not as flexible as we need it here
       validator(x: string | number | null) {
-        void x;
-        return true;
+        void x
+        return true
       },
       default: null,
     },
@@ -259,8 +330,8 @@ export default Vue.extend({
       // without us specifying a "type" property;
       // Vue's "type" property is not as flexible as we need it here
       validator(x: string | number | null) {
-        void x;
-        return true;
+        void x
+        return true
       },
       default: null,
     },
@@ -271,7 +342,7 @@ export default Vue.extend({
     weaponIds: {
       type: Array as PropType<string[]>,
       default() {
-        return [];
+        return []
       },
     },
     showLimit: {
@@ -300,15 +371,15 @@ export default Vue.extend({
     },
     isBlacksmith: {
       type: Boolean,
-      default: false
+      default: false,
     },
     isBurnWeapon: {
       type: Boolean,
-      default: false
+      default: false,
     },
     isMarket: {
       type: Boolean,
-      default: false
+      default: false,
     },
     checkForDurability: {
       type: Boolean,
@@ -318,34 +389,40 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
-    isSell:{
-      type:Boolean,
-      default: false
+    isSell: {
+      type: Boolean,
+      default: false,
     },
-    sellClick:{
-      type: ()=>{},
-      default: null
+    sellClick: {
+      type: () => {
+        // Ignore
+      },
+      default: null,
     },
     showFilters: {
       type: Boolean,
-      default: false
+      default: false,
     },
     cancelNftListing: {
-      type: ()=>{},
-      default: null
+      type: () => {
+        // Ignore
+      },
+      default: null,
     },
     isBtnSell: {
       type: Boolean,
-      default: false
+      default: false,
     },
     showListingSetupModal: {
-      type: ()=>{},
-      default: null
+      type: () => {
+        // Ignore
+      },
+      default: null,
     },
     isPage: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
   data() {
@@ -353,8 +430,8 @@ export default Vue.extend({
       searchValue: '',
       starFilter: '',
       elementFilter: '',
-      minPriceFilter:'',
-      maxPriceFilter:'',
+      minPriceFilter: '',
+      maxPriceFilter: '',
       favorites: {},
       priceSort: '',
       sorts,
@@ -364,7 +441,7 @@ export default Vue.extend({
       weaponPaginationNext: 6,
       numberWeaponsShow: 6,
       windowWidth: window.innerWidth,
-    } as Data;
+    } as Data
   },
 
   components: {
@@ -374,243 +451,270 @@ export default Vue.extend({
 
   computed: {
     ...(mapState(['ownedWeaponIds']) as Accessors<StoreMappedState>),
-    ...(mapGetters(['weaponsWithIds','getWeaponDurability',]) as Accessors<StoreMappedGetters>),
+    ...(mapGetters([
+      'weaponsWithIds',
+      'getWeaponDurability',
+    ]) as Accessors<StoreMappedGetters>),
 
     weaponIdsToDisplay(): string[] {
       if (this.showGivenWeaponIds) {
-        return this.weaponIds;
+        return this.weaponIds
       }
 
-      return this.ownedWeaponIds?.map((id) => id.toString());
+      return this.ownedWeaponIds?.map((id) => id.toString())
     },
 
     displayWeapons(): IWeapon[] {
-      return this.weaponsWithIds(this.weaponIdsToDisplay).filter(Boolean);
+      return this.weaponsWithIds(this.weaponIdsToDisplay).filter(Boolean)
     },
 
     nonIgnoredWeapons(): IWeapon[] {
       if (this.newWeapon) {
-        return this.displayWeapons;
+        return this.displayWeapons
       }
 
-      let items: IWeapon[] = [];
-      this.displayWeapons.forEach((x) => items.push(x));
+      let items: IWeapon[] = []
+      this.displayWeapons.forEach((x) => items.push(x))
 
-      const allIgnore: string[] = [];
+      const allIgnore: string[] = []
       if (this.ignore) {
         //@ts-ignore
-        allIgnore.push((this.ignore || '').toString());
+        allIgnore.push((this.ignore || '').toString())
       }
       if (!this.showFavoriteWeapons) {
         for (const key in this.favorites) {
-          allIgnore.push(key);
+          allIgnore.push(key)
         }
       }
-      items = items.filter((x) => allIgnore.findIndex((y) => y === x.id.toString()) < 0);
-
+      items = items.filter(
+        (x) => allIgnore.findIndex((y) => y === x.id.toString()) < 0
+      )
 
       if (this.searchValue !== '' && !this.isMarket) {
-        items = items.filter((x) => x.id === parseInt(this.searchValue, 10));
+        items = items.filter((x) => x.id === parseInt(this.searchValue, 10))
       }
 
       if (this.starFilter && !this.isMarket) {
-        items = items.filter((x) => x.stars === +this.starFilter - 1);
+        items = items.filter((x) => x.stars === +this.starFilter - 1)
       }
 
       if (this.elementFilter && !this.isMarket) {
-        items = items.filter((x) => x.element.includes(this.elementFilter));
+        items = items.filter((x) => x.element.includes(this.elementFilter))
       }
 
       if (!this.showReforgedWeapons) {
-        items = items.filter((x) => x.bonusPower === 0);
+        items = items.filter((x) => x.bonusPower === 0)
       }
 
       if (this.showLimit > 0 && items.length > this.showLimit) {
-        items = items.slice(0, this.showLimit);
+        items = items.slice(0, this.showLimit)
       }
 
-      const favoriteWeapons: IWeapon[] = [];
+      const favoriteWeapons: IWeapon[] = []
       for (const key in this.favorites) {
-        const i = items.findIndex((y) => y.id === +key);
+        const i = items.findIndex((y) => y.id === +key)
         if (i !== -1) {
-          favoriteWeapons.push(items[i]);
-          items.splice(i, 1);
+          favoriteWeapons.push(items[i])
+          items.splice(i, 1)
         }
       }
 
-      return favoriteWeapons.concat(items);
+      return favoriteWeapons.concat(items)
     },
   },
 
   watch: {
     async weaponIdsToDisplay(newWeaponIds: string[]) {
-      await this.fetchWeapons(newWeaponIds);
+      await this.fetchWeapons(newWeaponIds)
     },
     windowWidth(newWidth) {
       if (newWidth < 1700) {
-        this.weaponPaginationNext = 4;
-        this.numberWeaponsShow = 4;
+        this.weaponPaginationNext = 4
+        this.numberWeaponsShow = 4
       } else {
-        this.weaponPaginationNext = 6;
-        this.numberWeaponsShow = 6;
+        this.weaponPaginationNext = 6
+        this.numberWeaponsShow = 6
       }
-    }
+    },
   },
 
   methods: {
     ...(mapActions(['fetchWeapons']) as StoreMappedActions),
-    ...(mapMutations(['setCurrentWeapon'])),
+    ...mapMutations(['setCurrentWeapon']),
 
     setFilterOnMobileState(filterState: boolean) {
-      this.$el.getElementsByClassName('filters')[0].classList.toggle('active', filterState);
+      this.$el
+        .getElementsByClassName('filters')[0]
+        .classList.toggle('active', filterState)
     },
 
     saveFilters() {
-      if(this.isMarket) {
-        sessionStorage.setItem('market-weapon-starfilter', this.starFilter);
-        sessionStorage.setItem('market-weapon-elementfilter', this.elementFilter);
-        sessionStorage.setItem('market-weapon-price-order', this.priceSort);
-        sessionStorage.setItem('market-weapon-price-minfilter', this.minPriceFilter?''+this.minPriceFilter:'');
-        sessionStorage.setItem('market-weapon-price-maxfilter', this.maxPriceFilter?''+this.maxPriceFilter:'');
-        sessionStorage.setItem('market-weapon-searchvalue', this.searchValue);
+      if (this.isMarket) {
+        sessionStorage.setItem('market-weapon-starfilter', this.starFilter)
+        sessionStorage.setItem(
+          'market-weapon-elementfilter',
+          this.elementFilter
+        )
+        sessionStorage.setItem('market-weapon-price-order', this.priceSort)
+        sessionStorage.setItem(
+          'market-weapon-price-minfilter',
+          this.minPriceFilter ? '' + this.minPriceFilter : ''
+        )
+        sessionStorage.setItem(
+          'market-weapon-price-maxfilter',
+          this.maxPriceFilter ? '' + this.maxPriceFilter : ''
+        )
+        sessionStorage.setItem('market-weapon-searchvalue', this.searchValue)
       } else {
-        sessionStorage.setItem('weapon-starfilter', this.starFilter);
-        sessionStorage.setItem('weapon-elementfilter', this.elementFilter);
+        sessionStorage.setItem('weapon-starfilter', this.starFilter)
+        sessionStorage.setItem('weapon-elementfilter', this.elementFilter)
       }
-      this.$emit('weapon-filters-changed');
+      this.$emit('weapon-filters-changed')
     },
 
     toggleFavorite(e: Event, weaponId: number) {
-      e.preventDefault();
+      e.preventDefault()
       if (this.favorites[weaponId]) {
-        this.$delete(this.favorites, weaponId);
+        this.$delete(this.favorites, weaponId)
       } else {
-        this.$set(this.favorites, weaponId, true);
+        this.$set(this.favorites, weaponId, true)
       }
 
-      localStorage.setItem('favorites', this.getFavoritesString(this.favorites));
+      localStorage.setItem('favorites', this.getFavoritesString(this.favorites))
 
-      Events.$emit('weapon:newFavorite', { value: weaponId });
+      Events.$emit('weapon:newFavorite', { value: weaponId })
     },
 
     getFavoritesString(favorites: Record<number, boolean>): string {
-      return JSON.stringify(favorites);
+      return JSON.stringify(favorites)
     },
 
     getFavoritesMap(favorites: string): Record<number, boolean> {
       if (!favorites) {
-        return {};
+        return {}
       }
 
-      const favoritesMap: Record<number, boolean> = {};
-      favorites.split(',').forEach((x) => (favoritesMap[+x] = true));
-      return favoritesMap;
+      const favoritesMap: Record<number, boolean> = {}
+      favorites.split(',').forEach((x) => (favoritesMap[+x] = true))
+      return favoritesMap
     },
 
     isFavorite(weaponId: number): boolean {
-      return this.favorites[weaponId];
+      return this.favorites[weaponId]
     },
 
     clearFilters() {
-      if(this.isMarket) {
-        sessionStorage.removeItem('market-weapon-starfilter');
-        sessionStorage.removeItem('market-weapon-elementfilter');
-        sessionStorage.removeItem('market-weapon-price-order');
-        sessionStorage.removeItem('market-weapon-price-minfilter');
-        sessionStorage.removeItem('market-weapon-price-maxfilter');
-        sessionStorage.removeItem('market-weapon-searchvalue');
+      if (this.isMarket) {
+        sessionStorage.removeItem('market-weapon-starfilter')
+        sessionStorage.removeItem('market-weapon-elementfilter')
+        sessionStorage.removeItem('market-weapon-price-order')
+        sessionStorage.removeItem('market-weapon-price-minfilter')
+        sessionStorage.removeItem('market-weapon-price-maxfilter')
+        sessionStorage.removeItem('market-weapon-searchvalue')
       } else {
-        sessionStorage.removeItem('weapon-starfilter');
-        sessionStorage.removeItem('weapon-elementfilter');
+        sessionStorage.removeItem('weapon-starfilter')
+        sessionStorage.removeItem('weapon-elementfilter')
       }
-      this.elementFilter = '';
-      this.starFilter = '';
-      this.priceSort = '';
-      this.minPriceFilter= '';
-      this.maxPriceFilter= '';
+      this.elementFilter = ''
+      this.starFilter = ''
+      this.priceSort = ''
+      this.minPriceFilter = ''
+      this.maxPriceFilter = ''
 
-      this.$emit('weapon-filters-changed');
+      this.$emit('weapon-filters-changed')
     },
 
     onWeaponClick(id: number) {
-      this.setCurrentWeapon(id);
-      this.$emit('chooseweapon', id);
-      this.$emit('choose-weapon', id);
+      this.setCurrentWeapon(id)
+      this.$emit('chooseweapon', id)
+      this.$emit('choose-weapon', id)
     },
 
     checkStorageFavorite() {
-      const favoritesFromStorage = localStorage.getItem('favorites');
+      const favoritesFromStorage = localStorage.getItem('favorites')
       if (favoritesFromStorage) {
-        this.favorites = JSON.parse(favoritesFromStorage);
+        this.favorites = JSON.parse(favoritesFromStorage)
       }
     },
 
     prevWeaponList() {
       if (this.weaponPaginationPrev !== -1) {
-        this.weaponPaginationPrev -= this.numberWeaponsShow;
-        this.weaponPaginationNext -= this.numberWeaponsShow;
-        this.$el.querySelector(".weapon-pagination-next")?.classList.remove("disabled");
+        this.weaponPaginationPrev -= this.numberWeaponsShow
+        this.weaponPaginationNext -= this.numberWeaponsShow
+        this.$el
+          .querySelector('.weapon-pagination-next')
+          ?.classList.remove('disabled')
       }
-      this.$el.querySelector(".weapon-pagination-prev")?.classList.toggle("disabled", this.weaponPaginationPrev === -1);
+      this.$el
+        .querySelector('.weapon-pagination-prev')
+        ?.classList.toggle('disabled', this.weaponPaginationPrev === -1)
     },
 
     nextWeaponList() {
       if (this.weaponPaginationNext <= this.nonIgnoredWeapons.length) {
-        this.weaponPaginationPrev += this.numberWeaponsShow;
-        this.weaponPaginationNext += this.numberWeaponsShow;
-        this.$el.querySelector(".weapon-pagination-prev")?.classList.remove("disabled");
+        this.weaponPaginationPrev += this.numberWeaponsShow
+        this.weaponPaginationNext += this.numberWeaponsShow
+        this.$el
+          .querySelector('.weapon-pagination-prev')
+          ?.classList.remove('disabled')
       }
-      this.$el.querySelector(".weapon-pagination-next")?.classList.toggle("disabled", this.weaponPaginationNext > this.nonIgnoredWeapons.length);
+      this.$el
+        .querySelector('.weapon-pagination-next')
+        ?.classList.toggle(
+          'disabled',
+          this.weaponPaginationNext > this.nonIgnoredWeapons.length
+        )
     },
 
     onResize() {
-      (this as any).windowWidth = window.innerWidth;
-    }
+      ;(this as any).windowWidth = window.innerWidth
+    },
   },
 
-  created(){
-    this.clearFilters();
+  created() {
+    this.clearFilters()
   },
 
   mounted() {
+    this.checkStorageFavorite()
 
-    this.checkStorageFavorite();
-
-    Events.$on('weapon:newFavorite', () => this.checkStorageFavorite());
+    Events.$on('weapon:newFavorite', () => this.checkStorageFavorite())
 
     if (screen.width < 1700) {
-      this.weaponPaginationNext = 4;
-      this.numberWeaponsShow = 4;
+      this.weaponPaginationNext = 4
+      this.numberWeaponsShow = 4
     } else {
-      this.weaponPaginationNext = 6;
-      this.numberWeaponsShow = 6;
+      this.weaponPaginationNext = 6
+      this.numberWeaponsShow = 6
     }
 
-    if(this.isMarket) {
-      this.starFilter = sessionStorage.getItem('market-weapon-starfilter') || '';
-      this.elementFilter = sessionStorage.getItem('market-weapon-elementfilter') || '';
-      this.priceSort = sessionStorage.getItem('market-weapon-price-order') || '';
-      this.minPriceFilter = sessionStorage.getItem('market-weapon-price-minfilter') || '';
-      this.maxPriceFilter = sessionStorage.getItem('market-weapon-price-maxfilter') || '';
+    if (this.isMarket) {
+      this.starFilter = sessionStorage.getItem('market-weapon-starfilter') || ''
+      this.elementFilter =
+        sessionStorage.getItem('market-weapon-elementfilter') || ''
+      this.priceSort = sessionStorage.getItem('market-weapon-price-order') || ''
+      this.minPriceFilter =
+        sessionStorage.getItem('market-weapon-price-minfilter') || ''
+      this.maxPriceFilter =
+        sessionStorage.getItem('market-weapon-price-maxfilter') || ''
     } else {
-      this.starFilter = sessionStorage.getItem('weapon-starfilter') || '';
-      this.elementFilter = sessionStorage.getItem('weapon-elementfilter') || '';
+      this.starFilter = sessionStorage.getItem('weapon-starfilter') || ''
+      this.elementFilter = sessionStorage.getItem('weapon-elementfilter') || ''
     }
 
     this.$nextTick(() => {
-      window.addEventListener('resize', this.onResize);
-    });
+      window.addEventListener('resize', this.onResize)
+    })
   },
 
   beforeDestroy() {
-    window.removeEventListener('resize', this.onResize);
+    window.removeEventListener('resize', this.onResize)
   },
-});
+})
 </script>
 
 <style scoped>
-
-.no-data{
+.no-data {
   display: flex;
   justify-content: center;
   margin-top: 200px;
@@ -623,11 +727,11 @@ export default Vue.extend({
   width: fit-content;
 }
 
-.weapon-grid.row{
+.weapon-grid.row {
   flex: 1;
 }
 
-.weapon-bt-box{
+.weapon-bt-box {
   margin-top: 15px;
   display: flex;
   justify-content: center;
@@ -635,8 +739,8 @@ export default Vue.extend({
   cursor: pointer;
 }
 
-.weapon-bt-box button{
-  background: url("../../assets/v2/shop_nft_btn.svg");
+.weapon-bt-box button {
+  background: url('../../assets/v2/shop_nft_btn.svg');
   background-repeat: no-repeat;
   background-size: contain;
   width: 170px;
@@ -652,20 +756,20 @@ export default Vue.extend({
   align-items: center;
 }
 
-.filters div strong{
+.filters div strong {
   font-size: 24px;
   font-weight: normal;
 }
 
 input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button{
+input::-webkit-inner-spin-button {
   -webkit-appearance: none;
 }
 
-.form-control{
+.form-control {
   background-color: transparent;
   color: white;
-  border: 1px solid rgb(17,65,105);
+  border: 1px solid rgb(17, 65, 105);
   border-radius: 10px;
   appearance: none;
   -webkit-appearance: none;
@@ -677,12 +781,12 @@ input::-webkit-inner-spin-button{
   margin-top: 10px;
 }
 
-.form-control:focus{
+.form-control:focus {
   background-color: transparent;
   color: white;
 }
 
-.form-control::placeholder{
+.form-control::placeholder {
   color: rgba(255, 255, 255, 0.6);
 }
 
@@ -706,26 +810,26 @@ input::-webkit-inner-spin-button{
 } */
 
 .sold {
-    height: 40px;
-    width: 230px;
-    background-color: rgb(187, 33, 0);
-    transform: rotate(15deg);
-    left: -20px;
-    position: absolute;
-    top: 110px;
-    z-index: 100;
+  height: 40px;
+  width: 230px;
+  background-color: rgb(187, 33, 0);
+  transform: rotate(15deg);
+  left: -20px;
+  position: absolute;
+  top: 110px;
+  z-index: 100;
 }
 
 .sold span {
-    text-align: center;
-    width: auto;
-    color: white;
-    display: block;
-    font-size: 30px;
-    font-weight: bold;
-    line-height: 40px;
-    text-shadow: 0 0 5px #333, 0 0 10px #333, 0 0 15px #333, 0 0 10px #333;
-    text-transform: uppercase;
+  text-align: center;
+  width: auto;
+  color: white;
+  display: block;
+  font-size: 30px;
+  font-weight: bold;
+  line-height: 40px;
+  text-shadow: 0 0 5px #333, 0 0 10px #333, 0 0 15px #333, 0 0 10px #333;
+  text-transform: uppercase;
 }
 
 .fix-h24 {
@@ -781,15 +885,15 @@ input::-webkit-inner-spin-button{
 
 .weapon-pagination-btn.weapon-pagination-prev {
   left: 28px;
-  background-image: url("../../assets/v2/weapon-pagination-prev.svg");
+  background-image: url('../../assets/v2/weapon-pagination-prev.svg');
 }
 
 .weapon-pagination-btn.weapon-pagination-next {
   right: 28px;
-  background-image: url("../../assets/v2/weapon-pagination-next.svg");
+  background-image: url('../../assets/v2/weapon-pagination-next.svg');
 }
 
-.filters.market-active.active{
+.filters.market-active.active {
   height: 1100px;
 }
 
@@ -807,7 +911,7 @@ input::-webkit-inner-spin-button{
   .filters.filters-blacksmith {
     max-height: 867px;
     height: 867px !important;
-    border: 0.5px solid #3CDE9B;
+    border: 0.5px solid #3cde9b;
   }
 }
 
@@ -820,11 +924,11 @@ input::-webkit-inner-spin-button{
 @media (min-width: 576px) {
   .weapon-grid.blacksmith .weapon-list {
     min-height: 504px;
-    border: 0.5px solid #3CDE9B;
+    border: 0.5px solid #3cde9b;
   }
 
   .weapon-grid.blacksmith .dust-wrap {
-    border: 0.5px solid #3CDE9B;
+    border: 0.5px solid #3cde9b;
   }
 }
 
@@ -836,10 +940,10 @@ input::-webkit-inner-spin-button{
   .ml-3 {
     margin-left: 0 !important;
   }
-  h1{
+  h1 {
     font-size: 2rem;
   }
-  .main-font .nav-tabs a.nav-link{
+  .main-font .nav-tabs a.nav-link {
     padding-left: 0.2rem;
     padding-right: 0.2rem;
   }
@@ -888,15 +992,12 @@ input::-webkit-inner-spin-button{
     margin-top: 20px !important;
   }
 
-  .character-item-wrap{
+  .character-item-wrap {
     margin-bottom: 0;
   }
 }
 
 /* Needed to adjust weapon list */
-
-
-
 
 @media (max-width: 1400px) {
   .weapon-grid.blacksmith .dust-wrap {
@@ -904,8 +1005,8 @@ input::-webkit-inner-spin-button{
   }
 }
 
-@media (max-width: 1200px){
-  .filters.market-active{
+@media (max-width: 1200px) {
+  .filters.market-active {
     max-width: inherit;
   }
 }
@@ -927,7 +1028,7 @@ input::-webkit-inner-spin-button{
     display: inline-block;
     margin: auto;
   }
-  .weapon{
+  .weapon {
     padding: 40px 0 60px 0;
   }
 }
@@ -936,5 +1037,4 @@ input::-webkit-inner-spin-button{
     padding-left: 0;
   }
 }
-
 </style>

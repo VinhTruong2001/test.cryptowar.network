@@ -4,14 +4,17 @@
       <!-- <b-icon-exclamation-circle-fill class="rewards-claimable-icon" scale="1.2"
       variant="success" :hidden="!canClaimTokens && !canClaimXp" v-tooltip.bottom="'Rewards ready to claim!'"/> -->
 
-      <div
-        :disabled="!canClaimTokens"
-        @click="claimSkill(ClaimStage.Claim)"
-      >
+      <div :disabled="!canClaimTokens" @click="claimSkill(ClaimStage.Claim)">
         <b-button
           class="gtag-link-others btn-pink-bg btn-claim-reward"
           v-html="`Claim Rewards`"
-          v-tooltip.bottom="'Tax is being reduced by 1% per day.' + getTaxTimerNextTick + '<br> Rewards: ' + formattedXBladeRewardNoTax + ' xBlade'"
+          v-tooltip.bottom="
+            'Tax is being reduced by 1% per day.' +
+            getTaxTimerNextTick +
+            '<br> Rewards: ' +
+            formattedXBladeRewardNoTax +
+            ' xBlade'
+          "
         ></b-button>
       </div>
 
@@ -39,8 +42,8 @@
         <br />No thanks, I'd rather
         {{
           this.rewardsClaimTaxAsFactorBN > 0
-            ? "pay " + this.formattedTaxAmount + " in taxes and "
-            : ""
+            ? 'pay ' + this.formattedTaxAmount + ' in taxes and '
+            : ''
         }}forfeit my bonus
       </a>
     </b-modal>
@@ -53,76 +56,78 @@
       @ok="onClaimTokens()"
     >
       <div>
-       <div class="claim-xblade-reward-info">
-        <div class="text-center" style="font-weight: bold">Hold Reminder</div>
-        A percentage of your earning goes back to the community,
-        <u>if you withdraw early</u>
-        <div>
-          Your early withdraw tax
-          <span class="text-danger font-weight-bold"
-            >{{ formattedRewardsClaimTax }}
-          </span>
-          . Reduces 1% per day. Reset to 15% after withdraw
-        </div>
-        <div>
+        <div class="claim-xblade-reward-info">
+          <div class="text-center" style="font-weight: bold">Hold Reminder</div>
+          A percentage of your earning goes back to the community,
+          <u>if you withdraw early</u>
           <div>
-            Number of xBlade miss out:
-            <span class="text-danger font-weight-bold">
-              {{formattedTaxAmount}}
+            Your early withdraw tax
+            <span class="text-danger font-weight-bold"
+              >{{ formattedRewardsClaimTax }}
             </span>
-            xBlade tax
+            . Reduces 1% per day. Reset to 15% after withdraw
           </div>
           <div>
-            Number of xBlade claim:
-            <span class="text-danger font-weight-bold">
-              {{formattedXBladeRewardWithTax}}
-            </span>
-            xBlade
+            <div>
+              Number of xBlade miss out:
+              <span class="text-danger font-weight-bold">
+                {{ formattedTaxAmount }}
+              </span>
+              xBlade tax
+            </div>
+            <div>
+              Number of xBlade claim:
+              <span class="text-danger font-weight-bold">
+                {{ formattedXBladeRewardWithTax }}
+              </span>
+              xBlade
+            </div>
+          </div>
+          <hr class="hr-divider" />
+          <div class="claim-xblade-reward-reminder">
+            {{
+              this.rewardsClaimTaxAsFactorBN > 0
+                ? 'You are about to pay ' +
+                  formattedRewardsClaimTax +
+                  ' tax for early withdrawal, costing you ' +
+                  this.formattedTaxAmount +
+                  ' xBlade'
+                : ''
+            }}
+            <br />
+            Are you sure you wish to continue?<br />
+            <b>This action cannot be undone.</b>
           </div>
         </div>
-        <hr class="hr-divider" />
-        <div class="claim-xblade-reward-reminder">
-          {{
-            this.rewardsClaimTaxAsFactorBN > 0
-              ? "You are about to pay " +
-                formattedRewardsClaimTax +
-                " tax for early withdrawal, costing you " +
-                this.formattedTaxAmount + " xBlade"
-              : ""
-          }}
-          <br>
-          Are you sure you wish to continue?<br> <b>This action cannot be undone.</b>
-        </div>
-       </div>
       </div>
     </b-modal>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { Accessors } from "vue/types/options";
-import { mapActions, mapGetters, mapState } from "vuex";
-import BigNumber from "bignumber.js";
-import { RequiredXp } from "../../interfaces";
-import { ICharacter } from "@/interfaces";
-import { toBN, fromWeiEther } from "../../utils/common";
-import { secondsToDDHHMMSS } from "../../utils/date-time";
-import { getCleanName } from "../../rename-censor";
+import Vue from 'vue'
+import { Accessors } from 'vue/types/options'
+import { mapActions, mapGetters, mapState } from 'vuex'
+import BigNumber from 'bignumber.js'
+import { RequiredXp } from '../../interfaces'
+import { ICharacter } from '@/interfaces'
+import { toBN, fromWeiEther } from '../../utils/common'
+import { secondsToDDHHMMSS } from '../../utils/date-time'
+import { getCleanName } from '../../rename-censor'
 
 interface StoreMappedState {
-  skillRewards: string;
-  xpRewards: Record<string, string>;
-  ownedCharacterIds: string[];
-  directStakeBonusPercent: number;
+  skillRewards: string
+  xpRewards: Record<string, string>
+  ownedCharacterIds: string[]
+  directStakeBonusPercent: number
 }
 
 interface StoreMappedGetters {
-  ownCharacters: ICharacter[];
-  currentCharacter: ICharacter | null;
-  maxRewardsClaimTaxAsFactorBN: BigNumber;
-  rewardsClaimTaxAsFactorBN: BigNumber;
-  getCharacterName(id: number): string;
+  ownCharacters: ICharacter[]
+  currentCharacter: ICharacter | null
+  maxRewardsClaimTaxAsFactorBN: BigNumber
+  rewardsClaimTaxAsFactorBN: BigNumber
+  getCharacterName(id: number): string
 }
 
 enum ClaimStage {
@@ -132,35 +137,35 @@ enum ClaimStage {
 }
 
 interface StoreMappedActions {
-  claimTokenRewards(): Promise<void>;
-  claimXpRewards(): Promise<void>;
+  claimTokenRewards(): Promise<void>
+  claimXpRewards(): Promise<void>
 }
 
 export default Vue.extend({
   data() {
     return {
       ClaimStage,
-    };
+    }
   },
 
   computed: {
     ...(mapState([
-      "skillRewards",
-      "xpRewards",
-      "ownedCharacterIds",
-      "directStakeBonusPercent",
+      'skillRewards',
+      'xpRewards',
+      'ownedCharacterIds',
+      'directStakeBonusPercent',
     ]) as Accessors<StoreMappedState>),
     ...(mapGetters([
-      "ownCharacters",
-      "currentCharacter",
-      "maxRewardsClaimTaxAsFactorBN",
-      "rewardsClaimTaxAsFactorBN",
-      "getCharacterName",
+      'ownCharacters',
+      'currentCharacter',
+      'maxRewardsClaimTaxAsFactorBN',
+      'rewardsClaimTaxAsFactorBN',
+      'getCharacterName',
     ]) as Accessors<StoreMappedGetters>),
 
     formattedXBladeRewardNoTax(): string {
-      const skillRewards = fromWeiEther(this.skillRewards);
-      return `${toBN(skillRewards).toFixed(2)}`;
+      const skillRewards = fromWeiEther(this.skillRewards)
+      return `${toBN(skillRewards).toFixed(2)}`
     },
 
     formattedXBladeRewardWithTax(): string {
@@ -168,10 +173,10 @@ export default Vue.extend({
         (
           parseFloat(this.skillRewards) -
           parseFloat(this.skillRewards) *
-          parseFloat(String(this.rewardsClaimTaxAsFactorBN))
+            parseFloat(String(this.rewardsClaimTaxAsFactorBN))
         ).toString()
-      );
-      return `${toBN(skillRewards).toFixed(2)}`;
+      )
+      return `${toBN(skillRewards).toFixed(2)}`
     },
 
     formattedTaxAmount(): string {
@@ -180,8 +185,8 @@ export default Vue.extend({
           parseFloat(this.skillRewards) *
           parseFloat(String(this.rewardsClaimTaxAsFactorBN))
         ).toString()
-      );
-      return `${toBN(skillRewards).toFixed(4)}`;
+      )
+      return `${toBN(skillRewards).toFixed(4)}`
     },
 
     formattedBonusLost(): string {
@@ -190,119 +195,119 @@ export default Vue.extend({
           (parseFloat(this.skillRewards) * this.directStakeBonusPercent) /
           100
         ).toString()
-      );
-      return `${toBN(xBladeLost).toFixed(2)}`;
+      )
+      return `${toBN(xBladeLost).toFixed(2)}`
     },
 
     formattedRewardsClaimTax(): string {
       const frac =
-        this.skillRewards === "0"
+        this.skillRewards === '0'
           ? this.maxRewardsClaimTaxAsFactorBN
-          : this.rewardsClaimTaxAsFactorBN;
+          : this.rewardsClaimTaxAsFactorBN
 
       return `${frac
         .multipliedBy(100)
-        .decimalPlaces(0, BigNumber.ROUND_HALF_UP)}%`;
+        .decimalPlaces(0, BigNumber.ROUND_HALF_UP)}%`
     },
 
     getTaxTimerNextTick(): string {
-      let frac: BigNumber;
+      let frac: BigNumber
 
       // if has no skill rewards do not display timer next tick.
-      if (this.skillRewards === "0") {
-        return "";
+      if (this.skillRewards === '0') {
+        return ''
       } else {
-        frac = this.rewardsClaimTaxAsFactorBN;
+        frac = this.rewardsClaimTaxAsFactorBN
       }
 
       // get 2 decimal values
       const decVal = toBN(
-        frac.multipliedBy(100).decimalPlaces(2).toString().split(".")[1]
-      );
+        frac.multipliedBy(100).decimalPlaces(2).toString().split('.')[1]
+      )
       // convert to seconds
       const toSec = decVal
         .dividedBy(100)
         .multipliedBy(24)
         .multipliedBy(60)
-        .multipliedBy(60);
+        .multipliedBy(60)
       // return message
-      if(!toSec.toNumber()){
-        return "";
+      if (!toSec.toNumber()) {
+        return ''
       }
       return ` Next -1% reduction happens in ${secondsToDDHHMMSS(
         toSec.toNumber()
-      )}.`;
+      )}.`
     },
 
     xpRewardsForOwnedCharacters(): string[] {
       return this.ownedCharacterIds.map(
-        (charaId) => this.xpRewards[charaId] || "0"
-      );
+        (charaId) => this.xpRewards[charaId] || '0'
+      )
     },
 
     formattedXpRewards(): string {
       return this.xpRewardsForOwnedCharacters
         .map((xp, i) => {
-          const currentCharacter = this.currentCharacter || { id: null };
-          if (!this.ownCharacters[i]) return `${xp}`;
+          const currentCharacter = this.currentCharacter || { id: null }
+          if (!this.ownCharacters[i]) return `${xp}`
           return (
             `${
               ((this.ownCharacters[i].xp +
                 this.xpRewards[this.ownCharacters[i].id]) as any) >
               RequiredXp(this.ownCharacters[i].level)
-                ? ""
-                : ""
+                ? ''
+                : ''
             }` +
             `${this.getCleanCharacterName(this.ownCharacters[i].id)} ${xp}` +
             `${
               ((this.ownCharacters[i].xp +
                 this.xpRewards[this.ownCharacters[i].id]) as any) >
               RequiredXp(this.ownCharacters[i].level)
-                ? ""
-                : ""
+                ? ''
+                : ''
             }` +
-            `${this.ownCharacters[i].id === currentCharacter.id ? "" : ""}`
-          );
+            `${this.ownCharacters[i].id === currentCharacter.id ? '' : ''}`
+          )
         })
-        .join(", ");
+        .join(', ')
     },
 
     canClaimTokens(): boolean {
       if (toBN(this.skillRewards).lte(0)) {
-        return false;
+        return false
       }
 
-      return true;
+      return true
     },
 
     canClaimXp(): boolean {
       const allXpsAreZeroOrLess = this.xpRewardsForOwnedCharacters.every((xp) =>
         toBN(xp).lte(0)
-      );
+      )
       if (allXpsAreZeroOrLess) {
-        return false;
+        return false
       }
 
-      return true;
+      return true
     },
   },
 
   methods: {
     ...(mapActions([
-      "addMoreSkill",
-      "claimTokenRewards",
-      "claimXpRewards",
+      'addMoreSkill',
+      'claimTokenRewards',
+      'claimXpRewards',
     ]) as StoreMappedActions),
 
     async onClaimTokens() {
       if (this.canClaimTokens) {
-        await this.claimTokenRewards();
+        await this.claimTokenRewards()
       }
     },
 
     async onClaimXp() {
       if (this.canClaimXp) {
-        await this.claimXpRewards();
+        await this.claimXpRewards()
       }
     },
 
@@ -311,16 +316,16 @@ export default Vue.extend({
       //   (this.$refs['stake-suggestion-modal'] as any).show();
       // }
       if (stage === ClaimStage.Claim) {
-        (this.$refs["stake-suggestion-modal"] as any).hide();
-        (this.$refs["claim-confirmation-modal"] as any).show();
+        ;(this.$refs['stake-suggestion-modal'] as any).hide()
+        ;(this.$refs['claim-confirmation-modal'] as any).show()
       }
     },
 
     getCleanCharacterName(id: number): string {
-      return getCleanName(this.getCharacterName(id));
+      return getCleanName(this.getCharacterName(id))
     },
   },
-});
+})
 </script>
 
 <style scoped>
@@ -377,7 +382,7 @@ export default Vue.extend({
   }
   .navbar-expand {
     justify-content: center;
-    text-align: center
+    text-align: center;
   }
 
   .btn-claim-xp,

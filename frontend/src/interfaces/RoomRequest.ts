@@ -1,5 +1,5 @@
 interface RoomRequest {
-  id: number;
+  id: number
   weaponId: string
   heroId: string
   requester: string
@@ -9,4 +9,4 @@ interface RoomRequest {
   totalDeposit: number
 }
 
-export default RoomRequest;
+export default RoomRequest
