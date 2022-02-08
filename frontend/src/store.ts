@@ -2772,14 +2772,12 @@ export function createStore(web3: Web3) {
       async claimTokenRewards({ state }) {
         const { CryptoWars: CryptoBlades } = state.contracts()
         if (!CryptoBlades) return
-
         await CryptoBlades.methods.claimTokenRewards().send({
           from: state.defaultAccount,
         })
-
         await Promise.all([
+          this.dispatch('fetchFightRewardSkill'),
           this.cache.dispatch('fetchSkillBalance'),
-          this.cache.dispatch('fetchFightRewardSkill'),
         ])
       },
 
