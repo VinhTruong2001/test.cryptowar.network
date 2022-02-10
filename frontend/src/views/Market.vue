@@ -119,7 +119,7 @@
                       <b-icon-question-circle
                         v-if="!canPurchase"
                         v-tooltip.bottom="
-                          'You already have max amount of characters (8).'
+                          'You already have max amount of characters.'
                         "
                       />
                     </button>
@@ -1045,7 +1045,7 @@ export default Vue.extend({
       return (
         this.activeType === 'weapon' ||
         this.activeType === 'shield' ||
-        this.ownCharacters.length < 8
+        this.ownCharacters.length < 369
       )
     },
 
