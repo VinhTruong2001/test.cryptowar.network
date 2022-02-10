@@ -363,7 +363,6 @@ export default Vue.extend({
         ;(this as any).$dialog.notify.error(
           'Could not mint character: insufficient funds or transaction denied.'
         )
-        console.log(e)
       }
     },
 
@@ -380,7 +379,6 @@ export default Vue.extend({
       return balance.isGreaterThanOrEqualTo(cost)
     },
     canRename() {
-      //console.log('CR '+this.haveRename+' / '+this.currentCharacter+' / '+this.currentCharacter.id);
       return (
         this.haveRename > 0 &&
         this.currentCharacter !== undefined &&
