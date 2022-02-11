@@ -143,7 +143,6 @@ async function setUpStakingContracts(web3: Web3) {
       ),
     }
   }
-  // consoqle.log('process.env.VUE_APP_XBLADE_TOKEN_CONTRACT_ADDRESS', process.env.VUE_APP_XBLADE_TOKEN_CONTRACT_ADDRESS);
   const xBladeTokenAddress =
     expectedNetwork.VUE_APP_XBLADE_TOKEN_CONTRACT_ADDRESS ||
     (xBladeTokenNetworks as Networks)[networkId]!.address
@@ -157,11 +156,6 @@ async function setUpStakingContracts(web3: Web3) {
 }
 
 export async function setUpContracts(web3: Web3): Promise<Contracts> {
-  const stakingContracts = await setUpStakingContracts(web3)
-
-  if (featureFlagStakeOnly) {
-    return stakingContracts
-  }
   const expectedNetwork = await getAddressesAuto()
   const networkId = expectedNetwork.VUE_APP_NETWORK_ID || '5777'
   const cryptoBladesContractAddr =
@@ -301,7 +295,6 @@ export async function setUpContracts(web3: Web3): Promise<Contracts> {
   }
 
   return {
-    ...stakingContracts,
     CryptoWars,
     Randoms,
     Characters,

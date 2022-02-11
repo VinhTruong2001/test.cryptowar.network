@@ -71,10 +71,7 @@
         class="fullscreen-warning"
         v-if="
           !hideWalletWarning &&
-          (errorMessage ||
-            (ownCharacters.length === 0 &&
-              skillBalance === '0' &&
-              !hasStakedBalance))
+          (errorMessage || (ownCharacters.length === 0 && skillBalance === '0'))
         "
       >
         <div class="starter-panel connect-wallet">
@@ -134,12 +131,12 @@
             <big-button
               v-bind:class="[isConnecting ? 'disabled' : '']"
               class="btn btn-pink-bg modal-btn"
-              v-html="`Connect via Walletconnect`"
-              @click="connectWalletconnect"
+              v-html="`Connect via WalletConnect`"
+              @click="connectWalletConnect"
             />
             <big-button
               class="btn btn-pink-bg modal-btn"
-              v-html="`Connect via metamask`"
+              v-html="`Connect via MetaMask`"
               @click="checkMetamask"
             />
           </div>
@@ -174,25 +171,26 @@ import MetaMaskOnboarding from '@metamask/onboarding'
 import BigButton from './components/BigButton.vue'
 import SmallButton from './components/SmallButton.vue'
 import NavBar from './components/NavBar.vue'
-// import CharacterBar from "./components/CharacterBar.vue";
-// import { apiUrl, defaultOptions } from "./utils/common";
 import { getAddresses } from './addresses'
 
 Vue.directive('visible', (el, bind) => {
   el.style.visibility = bind.value ? 'visible' : 'hidden'
 })
 
+const xBladeAsset = {
+  type: 'ERC20',
+  options: {
+    address: '0xcaf53066e36eef55ed0663419adff6e503bd134f',
+    symbol: 'xBlade',
+    decimals: 18,
+    image: 'https://cryptowar.network/android-chrome-512x512.png',
+  },
+}
+
 export default {
-  inject: [
-    'web3',
-    'walletConnectProvider',
-    'featureFlagStakeOnly',
-    // "expectedNetworkId",
-    // "expectedNetworkName",
-  ],
+  inject: ['web3', 'walletConnectProvider'],
   components: {
     NavBar,
-    // CharacterBar,
     BigButton,
     SmallButton,
   },
@@ -221,13 +219,7 @@ export default {
       'currentCharacterId',
       'staking',
     ]),
-    ...mapGetters([
-      'contracts',
-      'ownCharacters',
-      'getExchangeUrl',
-      'availableStakeTypes',
-      'hasStakedBalance',
-    ]),
+    ...mapGetters(['contracts', 'ownCharacters', 'getExchangeUrl']),
 
     canShowApp() {
       return (
@@ -267,7 +259,7 @@ export default {
           this.$route.name === 'lobby' || this.$route.name === 'arena'
         )
       // react to route changes
-      window.gtag('event', 'page_view', {
+      window?.gtag?.('event', 'page_view', {
         page_title: to.name,
         page_location: to.fullPath,
         page_path: to.path,
@@ -298,8 +290,6 @@ export default {
     },
 
     async updateCharacterStamina(id) {
-      if (this.featureFlagStakeOnly) return
-
       if (id !== null) {
         await this.fetchCharacterStamina(id)
       }
@@ -373,18 +363,10 @@ export default {
         try {
           await web3.request({
             method: 'wallet_watchAsset',
-            params: {
-              type: 'ERC20',
-              options: {
-                address: '0xcaf53066e36eef55ed0663419adff6e503bd134f',
-                symbol: 'xBlade',
-                decimals: 18,
-                image: 'https://cryptowar.network/android-chrome-512x512.png',
-              },
-            },
+            params: xBladeAsset,
           })
         } catch (error) {
-          console.error(error)
+          console.error(`Watch asset error: ${error}`)
         }
       } else {
         {
@@ -419,15 +401,7 @@ export default {
           try {
             await web3.request({
               method: 'wallet_watchAsset',
-              params: {
-                type: 'ERC20',
-                options: {
-                  address: '0x27a339d9B59b21390d7209b78a839868E319301B',
-                  symbol: 'xBlade',
-                  decimals: 18,
-                  image: 'https://cryptowar.network/android-chrome-512x512.png',
-                },
-              },
+              params: xBladeAsset,
             })
           } catch (error) {
             console.error(error)
@@ -459,9 +433,9 @@ export default {
       this.errorMessage = 'Connecting to MetaMask...'
     },
 
-    async connectWalletconnect() {
+    async connectWalletConnect() {
       this.isConnecting = true
-      this.errorMessage = 'Connecting to Walletconnect...'
+      this.errorMessage = 'Connecting to WalletConnect...'
 
       this.web3.setProvider(this.walletConnectProvider)
       await this.walletConnectProvider.enable()
@@ -481,7 +455,7 @@ export default {
         web3
           .request({ method: 'eth_getAccounts' })
           .then(() => {
-            this.errorMessage = 'Success: Walletconnect connected.'
+            this.errorMessage = 'Success: WalletConnect connected.'
             this.isConnecting = false
 
             this.initializeStore()
@@ -489,11 +463,11 @@ export default {
           })
           .catch(() => {
             this.errorMessage =
-              'Error: Walletconnect could not get permissions.'
+              'Error: WalletConnect could not get permissions.'
             this.isConnecting = false
           })
       })
-      this.errorMessage = 'Success: Walletconnect connected.'
+      this.errorMessage = 'Success: WalletConnect connected.'
       this.isConnecting = false
       this.hideWalletWarning = true
     },
@@ -517,9 +491,7 @@ export default {
         !this.showMetamaskWarning &&
         (this.errorMessage ||
           this.showNetworkError ||
-          (this.ownCharacters.length === 0 &&
-            this.skillBalance === '0' &&
-            !this.hasStakedBalance))
+          (this.ownCharacters.length === 0 && this.skillBalance === '0'))
       ) {
         this.$dialog.notify.warning(
           `You have hidden the wallet warning and it would now be displayed. If you are trying to play,
@@ -544,13 +516,13 @@ export default {
       if (!tagname) return
 
       if (e.target.nodeName === 'BUTTON') {
-        window.gtag('event', 'button_clicked', {
+        window?.gtag?.('event', 'button_clicked', {
           value: tagname,
         })
       }
 
       if (e.target.className.includes('gtag-link-others')) {
-        window.gtag('event', 'nav', {
+        window?.gtag?.('event', 'nav', {
           event_category: 'navigation',
           event_label: 'navbar',
           value: tagname,
@@ -560,12 +532,12 @@ export default {
 
     this.showWarningDialog()
     if (this.connector.connected) {
-      this.connectWalletconnect()
+      this.connectWalletConnect()
     }
   },
 
   async created() {
-    // this.isMaintenance = process.env.VUE_APP_MAINTAINANCE;
+    // this.isMaintenance = process.env.VITE_MAINTAINANCE;
     // if(window.location.pathname !== '/maintenance'){
     //   window.location.href = 'maintenance';
     // }
@@ -593,17 +565,13 @@ export default {
       this.ownCharacters.forEach(async (c) => {
         await this.updateCharacterStamina(c.id)
       })
-    }, 3000)
+    }, 5000)
 
-    this.availableStakeTypes.forEach((item) => {
-      this.fetchStakeDetails({ stakeType: item })
-    })
-
+    // TODO: Debug 3 function to get error reason
     this.slowPollIntervalId = setInterval(async () => {
       await Promise.all([
         this.fetchCharacterTransferCooldownForOwnCharacters(),
         this.setupWeaponDurabilities(),
-        // this.fetchWaxBridgeDetails(),
         this.fetchRewardsClaimTax(),
       ])
     }, 10 * 1000)
