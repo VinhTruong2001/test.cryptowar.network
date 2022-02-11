@@ -334,7 +334,7 @@ export function createStore(web3: Web3) {
         return (weaponIds: (string | number)[]) => {
           const weapons = weaponIds.map((id) => state.weapons[+id])
           if (weapons.some((w) => w === null)) return []
-          return weapons
+          return weapons.filter(Boolean)
         }
       },
 
