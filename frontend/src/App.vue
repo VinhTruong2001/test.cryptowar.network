@@ -67,6 +67,16 @@
           </div>
         </div>
       </div>
+      <b-modal id="warning" hide-footer centered>
+        <div class="instructions-list">
+          <p>
+            To recruit your first character you need {{ recruitCost }} xBlade
+            and .001 BNB for gas. You will also need .0015 BNB to do your first
+            few battles, but don't worry, you earn the battle fees back in
+            xBlade rewards immediately!
+          </p>
+        </div>
+      </b-modal>
       <div
         class="fullscreen-warning"
         v-if="
@@ -79,12 +89,12 @@
             errorMessage || 'Get Started With CryptoWars'
           }}</span>
           <div class="instructions-list">
-            <p>
+            <!-- <p>
               To recruit your first character you need {{ recruitCost }} xBlade
               and .001 BNB for gas. You will also need .0015 BNB to do your
               first few battles, but don't worry, you earn the battle fees back
               in xBlade rewards immediately!
-            </p>
+            </p> -->
             <!-- <ul class="unstyled-list">
             <li>1. Buying BNB with fiat: <a href="https://youtu.be/6-sUDUE2RPA" target="_blank" rel="noopener noreferrer">Watch Video</a></li>
             <li>
@@ -134,10 +144,16 @@
               v-html="`Connect via WalletConnect`"
               @click="connectWalletConnect"
             />
-            <big-button
+            <!-- <big-button
               class="btn btn-pink-bg modal-btn"
               v-html="`Connect via MetaMask`"
               @click="checkMetamask"
+            /> -->
+            <big-button
+              v-bind:class="[isConnecting ? 'disabled' : '']"
+              class="btn btn-pink-bg modal-btn"
+              v-html="`Connect via metamask`"
+              @click="connectMetamask"
             />
           </div>
           <div class="button-div" v-if="isMetamask">
@@ -209,6 +225,7 @@ export default {
     expectedNetworkId: 0,
     expectedNetworkName: '',
     checkIncorectNetwork: true,
+    checkRefreshPage: false,
   }),
 
   computed: {
@@ -422,7 +439,7 @@ export default {
         .then(() => {
           this.errorMessage = 'Success: MetaMask connected.'
           this.isConnecting = false
-
+          localStorage.setItem('checkRefreshPage', 'true')
           this.initializeStore()
           this.toggleHideWalletWarning()
         })
@@ -506,7 +523,26 @@ export default {
     },
   },
 
+  updated() {
+    if (this.ownCharacters.length !== 0) {
+      this.$bvModal.hide('warning')
+    }
+    if (localStorage.getItem('checkRefreshPage') === 'true') {
+      localStorage.setItem('checkRefreshPage', 'false')
+      location.reload()
+    }
+  },
+
   async mounted() {
+    setTimeout(() => {
+      if (
+        this.ownCharacters.length === 0 &&
+        this.skillBalance === '0' &&
+        this.hideWalletWarning
+      ) {
+        this.$bvModal.show('warning')
+      }
+    }, 2000)
     document
       .querySelector('.app.app-v2')
       .classList.toggle(
@@ -1069,6 +1105,12 @@ button.close {
   color: #fff;
 }
 
+#warning .modal-content {
+  display: flex;
+  justify-content: center;
+  width: 750px;
+}
+
 @media (max-width: 577px) {
   #listHeroToCareerModal .modal-body {
     width: 300px;
@@ -1138,6 +1180,24 @@ button.close {
   #selectHeroOrWeaponModal .close,
   #selectHeroModal .close {
     z-index: 1;
+  }
+}
+
+@media (max-width: 767.98px) {
+  #warning .modal-header {
+    position: relative;
+  }
+
+  #warning .modal-header .close {
+    position: absolute;
+    top: -30px;
+    right: -5px;
+  }
+
+  #warning .modal-content {
+    // padding: 0;
+    width: 360px;
+    height: 240px;
   }
 }
 
@@ -1235,6 +1295,9 @@ div.bg-success {
   text-align: center;
   overflow: auto auto;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .starter-panel.not-connect {
@@ -1334,13 +1397,16 @@ div.bg-success {
 
 @media (max-width: 767.98px) {
   .hide-modal {
-    right: 0;
-    top: 20px;
+    right: 4px;
+    top: 0;
   }
 
   .starter-panel {
-    padding-top: 1.4em;
-    background-size: cover;
+    /* padding-top: 0; */
+    width: 400px;
+    height: 260px;
+    /* padding-top: 1.4em;
+    background-size: cover; */
   }
 
   .starter-panel.not-connect {
@@ -1349,13 +1415,19 @@ div.bg-success {
   }
 
   .starter-panel-heading {
-    font-size: 32px;
+    font-size: 21px;
     margin-top: 0;
+    padding: 0px 10px;
+  }
+
+  .starter-panel p {
+    margin-bottom: 0;
   }
 
   .instructions-list {
     font-size: 16px;
     padding-bottom: 5px;
+    padding: 10px;
   }
 
   .button-div {
@@ -1382,6 +1454,11 @@ div.bg-success {
   .starter-panel.connect-wallet .modal-btn::after {
     bottom: -4px;
     right: 0;
+  }
+
+  .back-btn {
+    top: 20px;
+    left: 25px;
   }
 }
 
