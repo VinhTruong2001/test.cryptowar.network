@@ -1,7 +1,6 @@
 const { upgradeProxy } = require("@openzeppelin/truffle-upgrades");
 
 const CryptoWars = artifacts.require("CryptoWars");
-let PancakeUtil = artifacts.require("PancakeUtil");
 
 module.exports = async function (deployer, network, accounts) {
   let proxyAddress;
@@ -10,6 +9,10 @@ module.exports = async function (deployer, network, accounts) {
   }
   if (network === "bscmainnet") {
     proxyAddress = "0x8BA9f0841cFA75d7e2c7a316b048b04c98C95cA4";
+  }
+
+  if (network === "thundercore") {
+    proxyAddress = "0x5AAB818289B8e18DFb5c1d03994Ec070d4977929";
   }
 
   await upgradeProxy(proxyAddress, CryptoWars, {
