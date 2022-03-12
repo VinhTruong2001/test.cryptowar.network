@@ -42,7 +42,7 @@ export async function calculateFightTax(
   function getTax(level, marketPrice) {
     const bnbTax = fightGas + fightTaxBase * (1 + (level * 3) / 100)
     const change = marketPrice / baseBNBPrice
-    return bnbTax / change
+    return (bnbTax / change) * 15/10
   }
 
   function getTaxNeedToSend(level, marketPrice) {
