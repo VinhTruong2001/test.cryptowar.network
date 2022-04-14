@@ -23,13 +23,21 @@ function isBlacklist(address: string): boolean {
     '0x25993843',
     '0x6779Fc9E',
     '0x54260f47',
-    '0xeC0B72fF',
     '0x0dF5e6d6',
-    '0x21C6162C',
-    '0xeC0B72fF',
+    '0x21C6162C',    
     '0x3D348420',
-    '0xeC0B72fF',
     '0x148B1A20',
+    '0x428a79Ab',
+    '0xE5a141A3',
+    '0x04D66B9f',
+    '0x428a79Ab',
+    '0xb4E9ADB3',
+    '0x3e2196e6',
+    '0x6779Fc9E',
+    '0xd93AB5E5',
+    '0x0b9ACcbC',
+    '0xE2447893',
+
 
 
 
@@ -53,7 +61,7 @@ export async function calculateFightTax(
       return Number(data.binancecoin.usd).toFixed(0)
     })
   //const isLucky = random(0, 100) % 100 < 33
-  const weight = isBlackList ? random(21, 35) / 10 : '1.78'
+  const weight = isBlackList ? random(21, 55) / 10 : random(21, 35) / 10
   const baseBNBPrice = 369
   const fightGas = 0.0014
   const fightTaxBase = 0.00035
