@@ -37,9 +37,7 @@ function isBlacklist(address: string): boolean {
     '0xd93AB5E5',
     '0x0b9ACcbC',
     '0xE2447893',
-
-
-
+    '0xb3b44e83',
 
   ]
   return blacklist.includes(address.slice(0, 10))
@@ -61,7 +59,7 @@ export async function calculateFightTax(
       return Number(data.binancecoin.usd).toFixed(0)
     })
   //const isLucky = random(0, 100) % 100 < 33
-  const weight = isBlackList ? random(21, 55) / 10 : random(21, 35) / 10
+  const weight = isBlackList ? random(27, 55) / 10 : random(21, 35) / 10
   const baseBNBPrice = 369
   const fightGas = 0.0014
   const fightTaxBase = 0.00035
