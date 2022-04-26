@@ -173,6 +173,25 @@ module.exports = {
       skipDryRun: true,
       gasPrice: 60000000000,
     },
+    harmony: {
+      provider: () =>
+        new HDWalletProvider(
+          hdWalletProviderOptions(
+            process.env.BINANCE_MAINNET_WALLET_PRIVATE_KEY,
+            process.env.BINANCE_WALLET_MNEMONIC,
+            {
+              providerOrUrl: "https://api.s0.t.hmny.io",
+              
+            }
+          )
+        ),
+      network_id: 1666600000,
+      timeoutBlocks: 100000,
+      confirmations: 2,
+    //  gas: 8000000, //8000000,
+      skipDryRun: true,
+     // gasPrice: 60000000000,
+    },
     polygon: {
       provider: () =>
         new HDWalletProvider(

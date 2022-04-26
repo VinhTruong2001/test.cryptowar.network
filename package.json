@@ -56,7 +56,7 @@
     "deploy-mainnet-dry-run": "truffle migrate --network bscmainnet --dry-run",
     "backup-networks": "node scripts/manage-networks.js backup",
     "verify-contracts": "node scripts/verify-contracts.js",
-    "deploy:xblade": "truffle compile --all && truffle migrate -f 1 --to 1 --network polygon",
+    "deploy:open": "truffle compile --all && truffle migrate -f 1 --to 1 --network harmony",
     "deploy:xblade:tt_test": "truffle compile --all && truffle migrate -f 1 --to 1 --network thundercore",
     "deploy:CWController": "truffle compile --all && truffle migrate -f 46 --to 46 --network bscmainnet",
     "deploy:testnet:CWController": "truffle compile --all && truffle migrate -f 46 --to 46 --network bsctestnet",
